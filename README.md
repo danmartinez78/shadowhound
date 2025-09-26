@@ -1,55 +1,41 @@
-# ShadowHound (Meta-Repo)
+# ShadowHound
 _Last updated: 2025-09-26_
 
-This is the **top-level workspace** for ShadowHound. It treats your fork of **dimos-unitree** and the active **go2_ros2_sdk** as **first-class dependencies** via **vcstool**.
-We keep a thin compatibility layer so agents are backend-agnostic, and we support two profiles:
-- **Laptop-first (WebRTC)**
-- **Thor (Ethernet)**
+ShadowHound is a Unitree GO2 project that pairs **LLM/VLM/VLA planning** with a **classic ROS 2 skill stack**. We start laptop‑first over **WebRTC**, then run fully **onboard Jetson AGX Thor**. The workspace is managed as a **meta‑repo** with `vcstool`, flattening `go2_ros2_sdk` as a first‑class dependency.
 
-## Quickstart
+- Project context: see **project_context.md**
+- Agent guide for Copilot/VS Code: see **AGENTS.md**
+
+## Quickstart (native)
 ```bash
-git clone https://github.com/<you>/shadowhound
-cd shadowhound
 vcs import src < shadowhound.repos
 rosdep install --from-paths src -iry
 colcon build --symlink-install
 source install/setup.bash
+ros2 launch shadowhound_bringup shadowhound_bringup.launch.py profile:=laptop_webrtc backend:=cloud
 ```
 
-## Profiles
+## Containers
 ```bash
-# Laptop-first (WebRTC)
-ros2 launch shadowhound_bringup bringup.launch.py profile:=laptop_webrtc backend:=cloud
+cp .env.example .env
 
-# Thor (Ethernet)
-ros2 launch shadowhound_bringup bringup.launch.py profile:=thor_ethernet backend:=local llm_endpoint:=http://127.0.0.1:8000
+# Laptop (WebRTC + cloud)
+docker compose --profile laptop up --build
+
+# Thor (Ethernet + local)
+docker compose --profile thor up --build
 ```
+> Ensure NVIDIA Container Runtime on Thor and that your JetPack version matches `docker/Dockerfile.thor`.
 
+## Repos
+- `dimos-unitree` (your fork; minimal patches)
+- `go2_ros2_sdk` (pinned, active)
+- `shadowhound_utils` (Skill registry, RobotIface, QoS, thumbnails)
+- `shadowhound_mission_agent` (planner/orchestrator)
+- (later) media, voice, and policy packages
 
-## Wiring dimos-unitree bring-up
-This workspace **includes** the `dimos-unitree` driver in the bring-up launch.
-
-- We assume a launch file at: `share/dimos_unitree/launch/bringup.launch.py` with an argument like `comm_mode := webrtc|ethernet`.
-- If your fork uses a different filename or arg names, edit:
-  `launch/shadowhound_bringup.launch.py` → `include_dimos_driver()`.
-
-### WebRTC Development (Laptop-first)
-1. Ensure the GO2 and your laptop are on the same Wi‑Fi and that WebRTC permissions are granted per the `dimos-unitree` README.
-2. Launch:
-   ```bash
-   ros2 launch shadowhound_bringup shadowhound_bringup.launch.py profile:=laptop_webrtc backend:=cloud
-   ```
-3. In another terminal:
-   ```bash
-   ros2 topic list
-   rviz2
-   ```
-
-### Thor (Ethernet) Runtime
-1. Set static IPs (e.g., GO2 `192.168.50.2`, Thor `192.168.50.4`) and plug Ethernet.
-2. Launch:
-   ```bash
-   ros2 launch shadowhound_bringup shadowhound_bringup.launch.py profile:=thor_ethernet backend:=local llm_endpoint:=http://127.0.0.1:8000
-   ```
-
-> Tip: If Wi‑Fi multicast is flaky for RViz, consider a DDS discovery server or pin DDS to the right NIC.
+## Status
+- Meta‑repo scaffolded (launch, configs, CI).
+- Dockerfiles + compose ready.
+- `RobotIface` shim in place; skills connect here.
+- Mission agent skeleton responds to `/shadowhound/instruction` (“spin”), to verify end‑to‑end wiring.
