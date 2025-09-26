@@ -1,17 +1,12 @@
+# shadowhound.repos (minimal, safe)
 repositories:
   dimos-unitree:
     type: git
-    url: https://github.com/danmartinez78/dimos-unitree.git
-    version: shadowhound/dev  # or a pinned commit SHA
+    url: https://github.com/<your-username>/dimos-unitree.git
+    # Use the default branch or, better, PIN a commit SHA once you decide:
+    # version: <commit-sha>
   go2_ros2_sdk:
     type: git
-    url: https://github.com/abizovnuralem/go2_ros2_sdk.git  # or your fork
-    version: main  # pin to tag/commit after initial bring-up
-  shadowhound_mission_agent:
-    type: git
-    url: https://github.com/danmartinez78/shadowhound_mission_agent.git
-    version: main
-  shadowhound_utils:
-    type: git
-    url: https://github.com/danmartinez78/shadowhound_utils.git
-    version: main
+    url: https://github.com/abizovnuralem/go2_ros2_sdk.git
+    # Same here: omit to use default branch, or pin a commit:
+    # version: <commit-sha>
