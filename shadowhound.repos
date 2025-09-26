@@ -2,7 +2,7 @@
 repositories:
   dimos-unitree:
     type: git
-    url: https://github.com/<your-username>/dimos-unitree.git
+    url: https://github.com/danmartinez78/dimos-unitree.git
     # Use the default branch or, better, PIN a commit SHA once you decide:
     # version: <commit-sha>
   go2_ros2_sdk:
