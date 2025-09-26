@@ -1,7 +1,7 @@
 repositories:
   dimos-unitree:
     type: git
-    url: https://github.com/<you>/dimos-unitree.git
+    url: https://github.com/danmartinez78/dimos-unitree.git
     version: shadowhound/dev  # or a pinned commit SHA
   go2_ros2_sdk:
     type: git
@@ -9,9 +9,9 @@ repositories:
     version: main  # pin to tag/commit after initial bring-up
   shadowhound_mission_agent:
     type: git
-    url: https://github.com/<you>/shadowhound_mission_agent.git
+    url: https://github.com/danmartinez78/shadowhound_mission_agent.git
     version: main
   shadowhound_utils:
     type: git
-    url: https://github.com/<you>/shadowhound_utils.git
+    url: https://github.com/danmartinez78/shadowhound_utils.git
     version: main
