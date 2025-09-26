@@ -63,6 +63,7 @@ Create shadowhound_policy_lab/align_policy.py (stub) and register:
 
 ## Acceptance checklist (PRs)
 - [ ] Builds on laptop & Thor (`colcon build` and compose profiles).
+- [ ] Documentation is created or updated whenever relevant, not only when behavior changes.
 - [ ] Skills call RobotIface (no direct driver coupling), with explicit QoS/timeouts.
 - [ ] No large ROS payloads (thumbnails/URIs only).
 - [ ] Mission Agent logs step latency; exports /shadowhound/metrics.
