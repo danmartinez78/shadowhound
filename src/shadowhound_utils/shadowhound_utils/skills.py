@@ -118,11 +118,11 @@ def _get_robot_iface() -> "RobotIface":
 
 
 def _navigation_rotate(*, yaw: float) -> Dict[str, Any]:
+    import rclpy
     robot = _get_robot_iface()
     angular_speed = 0.6 * (1 if yaw >= 0 else -1)
     remaining = abs(float(yaw))
     step = 0.05
-    import rclpy
 
     while remaining > 0:
         robot.cmd_vel(0.0, 0.0, angular_speed)
