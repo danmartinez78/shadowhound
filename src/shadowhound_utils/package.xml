@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>shadowhound_utils</name>
+  <version>0.0.1</version>
+  <description>Utilities for ShadowHound (QoS, image, robot interface shim)</description>
+  <maintainer email="you@example.com">You</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+</package>

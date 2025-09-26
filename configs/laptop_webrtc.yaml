@@ -1,0 +1,11 @@
+# Laptop-first profile (WebRTC)
+ros_domain_id: 7
+rmw_implementation: rmw_cyclonedds_cpp
+comms:
+  mode: webrtc
+agent:
+  backend: cloud
+  model: gpt-4o-mini  # example placeholder; configure via env provider settings
+video:
+  thumbnails:
+    jpeg_quality: 70

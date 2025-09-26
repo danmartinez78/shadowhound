@@ -1,0 +1,23 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: humble
+      - name: Install vcstool
+        run: sudo apt-get update && sudo apt-get install -y python3-vcstool
+      - name: Import sources
+        run: mkdir -p src && vcs import src < shadowhound.repos
+      - name: Rosdep
+        run: rosdep install --from-paths src -iry || true
+      - name: Build
+        uses: ros-tooling/action-ros-ci@v0.4
+        with:
+          target-ros2-distro: humble
+          package-name: |
+            shadowhound_mission_agent
+            shadowhound_utils

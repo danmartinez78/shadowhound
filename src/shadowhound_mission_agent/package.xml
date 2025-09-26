@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>shadowhound_mission_agent</name>
+  <version>0.0.1</version>
+  <description>Mission/Conversation agent that calls skills and uses RobotIface.</description>
+  <maintainer email="you@example.com">You</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>shadowhound_utils</depend>
+</package>

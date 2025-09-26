@@ -1,0 +1,14 @@
+# Thor-onboard profile (Ethernet)
+ros_domain_id: 7
+rmw_implementation: rmw_cyclonedds_cpp
+network:
+  thor_eth_ip: 192.168.50.4
+  go2_eth_ip:  192.168.50.2
+comms:
+  mode: ethernet
+agent:
+  backend: local
+  llm_endpoint: http://127.0.0.1:8000
+video:
+  thumbnails:
+    jpeg_quality: 70
