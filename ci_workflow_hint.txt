@@ -1,0 +1,5 @@
+# .github/workflows/ci.yml (ensure triggers include push + PR)
+# on:
+#   push:
+#     branches: ["**"]
+#   pull_request:

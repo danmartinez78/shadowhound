@@ -1,0 +1,29 @@
+{
+  "name": "shadowhound (ROS 2 Humble)",
+  "image": "osrf/ros:humble-ros-base",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "remoteEnv": {
+    "RMW_IMPLEMENTATION": "rmw_cyclonedds_cpp",
+    "ROS_DOMAIN_ID": "7"
+  },
+  "postCreateCommand": "apt-get update && apt-get install -y python3-vcstool ros-humble-rmw-cyclonedds-cpp && chmod +x scripts/ci_preflight.sh && ./scripts/ci_preflight.sh",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "ms-iot.vscode-ros",
+        "github.copilot-chat",
+        "github.vscode-github-actions"
+      ]
+    }
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder}/.ros,target=/root/.ros,type=bind"
+  ]
+}
