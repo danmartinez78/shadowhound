@@ -10,4 +10,7 @@
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>shadowhound_utils</depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
 </package>
