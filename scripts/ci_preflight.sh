@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # scripts/ci_preflight.sh
 # Last updated: 2025-09-26
-set -euo pipefail
+set -eo pipefail
 
-export RMW_IMPLEMENTATION="${RMW_IMPLEMENTATION:-rmw_cyclonedds_cpp}"
+## Force the known-good RMW implementation; ignore any pre-set (possibly mistyped) value
+export RMW_IMPLEMENTATION="rmw_cyclonedds_cpp"
 export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-7}"
 
 echo "==> ShadowHound CI preflight starting"

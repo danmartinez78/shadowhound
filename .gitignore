@@ -1,0 +1,67 @@
+.ros/
+
+# --- ROS 2 build artifacts ---
+build/
+install/
+log/
+.colcon*/
+
+# --- Python bytecode & caches ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+
+# --- Virtual environments ---
+venv/
+.venv/
+env/
+
+# --- Packaging / distribution ---
+dist/
+*.egg-info/
+*.egg
+
+# --- Coverage / test reports ---
+.coverage
+coverage.xml
+htmlcov/
+pytest-debug.log
+
+# --- Editor / IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS / tooling noise ---
+.DS_Store
+Thumbs.db
+
+# --- Model / data heavy (optional re‑download) ---
+*.ckpt
+*.pth
+*.pt
+*.onnx
+*.tflite
+models/cache/
+data/cache/
+
+# --- Node / web (if added later) ---
+node_modules/
+
+# --- Misc ---
+*.log
+*.tmp
+*.bak
+*.orig
+
+# --- External dependency repos (pulled via shadowhound.repos) ---
+src/dimos-unitree/
+src/go2_ros2_sdk/
+
+# Keep shadowhound.repos committed
+!shadowhound.repos

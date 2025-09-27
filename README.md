@@ -39,3 +39,23 @@ docker compose --profile thor up --build
 - Dockerfiles + compose ready.
 - `RobotIface` shim in place; skills connect here.
 - Mission agent skeleton responds to `/shadowhound/instruction` (“spin”), to verify end‑to‑end wiring.
+
+## Optional: Enabling Torch / Detic Models
+For a fast initial devcontainer build the vendored `Detic` model stack is ignored via a `COLCON_IGNORE` file:
+
+`src/dimos-unitree/dimos/models/Detic/COLCON_IGNORE`
+
+Remove that file if you need advanced perception / TorchScript export utilities. Then inside the container install Torch (Python) and the C++ libtorch distribution if you need C++/TorchScript binaries:
+
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+curl -L https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-latest.zip -o /tmp/libtorch.zip \
+	&& unzip /tmp/libtorch.zip -d /opt \
+	&& echo 'export Torch_DIR=/opt/libtorch/share/cmake/Torch' >> ~/.bashrc
+```
+
+Reopen the shell (or `source ~/.bashrc`) and rebuild:
+```bash
+colcon build --symlink-install
+```
+If you only require Python inference in pure Python nodes, the `pip install torch` step alone is sufficient; keep the `COLCON_IGNORE` file to avoid lengthy C++ model build steps.

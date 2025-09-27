@@ -13,7 +13,8 @@ jobs:
       - name: Import sources
         run: mkdir -p src && vcs import src < shadowhound.repos
       - name: Rosdep
-        run: rosdep install --from-paths src -iry || true
+        run: rosdep install --from-paths src -iry
+
       - name: Build
         uses: ros-tooling/action-ros-ci@v0.4
         with:
@@ -21,3 +22,19 @@ jobs:
           package-name: |
             shadowhound_mission_agent
             shadowhound_utils
+
+      - name: Test
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon test --event-handlers console_direct+
+          colcon test-result --verbose
+
+      - name: Upload build and test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-and-test-logs
+          path: |
+            log/
+            build/
+            test_results/
