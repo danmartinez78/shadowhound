@@ -742,22 +742,64 @@ check_llm_backend() {
         fi
         print_success "Model '$ollama_model' is available"
         
-        # Step 3: Quick test prompt (optional, can be slow)
-        print_info "3. Testing model response (this may take a few seconds)..."
-        local test_start=$(date +%s 2>/dev/null || echo 0)
-        local test_response=$(curl -s --max-time 30 "$ollama_url/api/generate" \
-            -d "{\"model\": \"$ollama_model\", \"prompt\": \"Say OK\", \"stream\": false}" 2>/dev/null)
-        local test_end=$(date +%s 2>/dev/null || echo 0)
-        local test_duration=$((test_end - test_start))
+        # Step 3: Test model inference (REQUIRED - with retry for cold start)
+        print_info "3. Testing model inference (required for startup)..."
+        print_info "Note: First request after model pull may take 30-60s (loading into VRAM)"
         
-        if echo "$test_response" | grep -q '"response"'; then
-            print_success "Model responded successfully (${test_duration}s)"
-            local response_text=$(echo "$test_response" | grep -o '"response":"[^"]*"' | cut -d'"' -f4 | head -c 50)
-            print_info "Response: $response_text"
-        else
-            print_warning "Model test prompt timed out or failed"
-            print_info "Model may be cold-loading (first request after pull)"
-            print_warning "Mission agent startup may be slow on first run"
+        local max_retries=2
+        local retry_count=0
+        local test_success=false
+        
+        while [ $retry_count -lt $max_retries ]; do
+            if [ $retry_count -gt 0 ]; then
+                print_info "Retry $retry_count/$((max_retries-1)): Waiting for model to warm up..."
+            fi
+            
+            local test_start=$(date +%s 2>/dev/null || echo 0)
+            local test_response=$(curl -s --max-time 60 "$ollama_url/api/generate" \
+                -d "{\"model\": \"$ollama_model\", \"prompt\": \"Say OK\", \"stream\": false}" 2>/dev/null)
+            local test_end=$(date +%s 2>/dev/null || echo 0)
+            local test_duration=$((test_end - test_start))
+            
+            if echo "$test_response" | grep -q '"response"'; then
+                print_success "Model responded successfully (${test_duration}s)"
+                local response_text=$(echo "$test_response" | grep -o '"response":"[^"]*"' | cut -d'"' -f4 | head -c 50)
+                print_info "Response preview: $response_text"
+                test_success=true
+                break
+            fi
+            
+            retry_count=$((retry_count + 1))
+            if [ $retry_count -lt $max_retries ]; then
+                print_warning "Model test failed, retrying..."
+                sleep 5
+            fi
+        done
+        
+        if [ "$test_success" = false ]; then
+            print_error "Model inference test FAILED after $max_retries attempts"
+            echo ""
+            echo "Model is not responding to test prompts."
+            echo ""
+            echo "Possible issues:"
+            echo "  • Model failed to load into GPU memory"
+            echo "  • Insufficient VRAM on Thor (check with jtop)"
+            echo "  • Ollama container crash (check: docker logs ollama)"
+            echo "  • Model corrupted (try: ollama pull $ollama_model)"
+            echo ""
+            print_info "To diagnose:"
+            echo "  • Check GPU: ssh thor 'jtop'"
+            echo "  • Check logs: ssh thor 'docker logs ollama'"
+            echo "  • Test manually: curl -X POST $ollama_url/api/generate -d '{\"model\":\"$ollama_model\",\"prompt\":\"test\"}'"
+            echo ""
+            
+            read -p "Continue anyway? (Mission agent WILL fail) [y/N]: " continue_choice
+            if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
+                print_info "Exiting. Fix model inference and try again."
+                exit 1
+            fi
+            print_error "⚠ WARNING: Continuing with broken model - mission agent will fail ⚠"
+            return 0
         fi
         
         echo ""
