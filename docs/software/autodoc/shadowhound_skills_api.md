@@ -29,16 +29,13 @@ These skills leverage DIMOS's existing vision infrastructure:
 - Simple, synchronous API for easy testing and integration
 - Structured output for agent consumption
 
-
 ### Class: `SkillResult`
 
 Result from skill execution.
 
-
 ### Class: `VisionSkillBase`
 
 Base class for vision skills.
-
 
 #### Methods
 
@@ -46,17 +43,15 @@ Base class for vision skills.
 
 Initialize vision skill.
 
-**Parameters:**
-- `image_dir`: Directory to save captured images (default: /tmp/shadowhound/images)
-- `require_dimos`: Whether this skill requires DIMOS vision APIs
-
+Args:
+image_dir: Directory to save captured images (default: /tmp/shadowhound/images)
+require_dimos: Whether this skill requires DIMOS vision APIs
 
 ### Class: `SnapshotSkill`
 
 **Inherits:** `VisionSkillBase`
 
 Capture and save current camera frame. Does not require DIMOS.
-
 
 #### Methods
 
@@ -68,20 +63,18 @@ Capture and save current camera frame. Does not require DIMOS.
 
 Capture current frame and save with metadata.
 
-**Parameters:**
-- `image`: Current camera frame (numpy array or PIL Image)
-- `**kwargs`: Optional metadata (pose, timestamp, etc.)
+Args:
+image: Current camera frame (numpy array or PIL Image)
+**kwargs: Optional metadata (pose, timestamp, etc.)
 
-**Returns:**
-- SkillResult with image path and metadata
-
+Returns:
+SkillResult with image path and metadata
 
 ### Class: `DescribeSceneSkill`
 
 **Inherits:** `VisionSkillBase`
 
 Use VLM to describe what's in the image. Requires DIMOS.
-
 
 #### Methods
 
@@ -93,22 +86,20 @@ Use VLM to describe what's in the image. Requires DIMOS.
 
 Get VLM description of the scene.
 
-**Parameters:**
-- `image`: Current camera frame
-- `query`: Custom query (default: "Describe what you see in detail")
-- `save_image`: Whether to save the image
-- `**kwargs`: Additional parameters
+Args:
+image: Current camera frame
+query: Custom query (default: "Describe what you see in detail")
+save_image: Whether to save the image
+**kwargs: Additional parameters
 
-**Returns:**
-- SkillResult with VLM description
-
+Returns:
+SkillResult with VLM description
 
 ### Class: `LocateObjectSkill`
 
 **Inherits:** `VisionSkillBase`
 
 Find specific object and return bounding box. Requires DIMOS.
-
 
 #### Methods
 
@@ -120,22 +111,20 @@ Find specific object and return bounding box. Requires DIMOS.
 
 Locate specific object in the scene.
 
-**Parameters:**
-- `image`: Current camera frame
-- `object_name`: Name of object to locate (e.g., "person", "chair")
-- `save_image`: Whether to save the image
-- `**kwargs`: Additional parameters
+Args:
+image: Current camera frame
+object_name: Name of object to locate (e.g., "person", "chair")
+save_image: Whether to save the image
+**kwargs: Additional parameters
 
-**Returns:**
-- SkillResult with bounding box if found
-
+Returns:
+SkillResult with bounding box if found
 
 ### Class: `DetectObjectsSkill`
 
 **Inherits:** `VisionSkillBase`
 
 Detect all prominent objects in the scene. Requires DIMOS.
-
 
 #### Methods
 
@@ -147,14 +136,13 @@ Detect all prominent objects in the scene. Requires DIMOS.
 
 Detect all prominent objects in the scene.
 
-**Parameters:**
-- `image`: Current camera frame
-- `save_image`: Whether to save the image
-- `**kwargs`: Additional parameters
+Args:
+image: Current camera frame
+save_image: Whether to save the image
+**kwargs: Additional parameters
 
-**Returns:**
-- SkillResult with list of detected objects
-
+Returns:
+SkillResult with list of detected objects
 
 ### Functions
 
@@ -162,11 +150,9 @@ Detect all prominent objects in the scene.
 
 Get skill by name.
 
-
 #### `list_skills() -> list`
 
 List all available skills.
-
 
 ---
 
