@@ -1,5 +1,26 @@
+---
+tags: [project, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # Push Summary - October 7, 2025
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 ## ✅ Successfully Pushed to `origin/feature/dimos-integration`
 
 **Commits Pushed**: 5 commits (28 objects, 7.00 KiB)
@@ -133,3 +154,12 @@ All fixes have been successfully pushed to the remote repository. The system is 
 - ✅ Well-documented with troubleshooting guides
 
 **The multi-step command issue you identified is FIXED and pushed!** 🎉
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[index|Knowledge Base Index]]

@@ -44,7 +44,7 @@ Try a mission: "rotate to the right and take a step back" 🤖
 
 ### 📚 For More Control
 
-See [`SCRIPTS.md`](SCRIPTS.md) for all available scripts and options:
+See [Script Catalog](docs/software/scripts.md) for all available scripts and options:
 - `./start.sh` - Smart interactive launcher
 - `./scripts/quick-start-dev.sh` - One-command development start
 - `./scripts/check-deps.sh` - Verify dependencies
@@ -74,6 +74,39 @@ source-ws       # Source the workspace (alias for source install/setup.bash)
 # Verify setup
 ros2 pkg list | grep shadowhound
 ```
+
+### Documentation Workflow Quick Start
+
+```bash
+# Install MkDocs tooling (first time only)
+pip install mkdocs mkdocs-material pyyaml
+
+# Regenerate package references and converted docs
+python tools/ros2_autodoc.py
+python tools/link_convert.py docs docs_web
+
+# Preview the Material site locally
+mkdocs serve
+```
+
+The conversion step writes GitHub-friendly Markdown into `docs_web/`, which MkDocs consumes for local previews and GitHub Pages deployments.
+
+## For Agents & Copilots
+
+- Follow [`AGENTS.md`](AGENTS.md) for repository-wide authoring rules.
+- Review [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for AI and automation-specific guidance.
+- Use the `docs(<scope>): ...` commit prefix when landing documentation updates.
+
+## Documentation Ecosystem
+
+ShadowHound maintains a single Obsidian vault under `docs/`, then converts it for every public surface to guarantee consistent rendering:
+
+1. **Authoring:** Write Markdown in `docs/` with wikilinks, embeds, and the required front-matter. Media belongs in `docs/_assets/`.
+2. **Autodoc:** Run `python tools/ros2_autodoc.py` whenever ROS 2 packages change. This regenerates package references in `docs/software/autodoc/`.
+3. **Conversion:** `python tools/link_convert.py docs docs_web` rewrites wikilinks to standard Markdown and mirrors the tree for MkDocs.
+4. **Publishing:** The `Documentation` GitHub Action builds MkDocs Material from `docs_web/`, uploads the site to GitHub Pages, and syncs the converted docs to the GitHub Wiki via `tools/wiki_sync.py`.
+
+Because every outward-facing site consumes the converted Markdown, links and media render identically on GitHub, Pages, and the Wiki.
 
 ---
 
@@ -252,7 +285,7 @@ AGENT_MODEL=gpt-4-turbo               # LLM model (gpt-4-turbo, gpt-3.5-turbo)
 - [ ] Multi-robot coordination
 - [ ] Persistent memory and learning
 
-See [TODO.md](TODO.md) for detailed task tracking and [DEVLOG.md](DEVLOG.md) for development history.
+See [Project TODO Backlog](docs/project_overview/todo.md) for detailed task tracking and [Development Log](docs/research/devlog.md) for development history.
 
 ---
 
@@ -290,7 +323,7 @@ See [TODO.md](TODO.md) for detailed task tracking and [DEVLOG.md](DEVLOG.md) for
 - Web UI shows agent duration, overhead, and total execution time with color-coded indicators
 - Performance averages calculated over last 50 commands for trend analysis
 
-See [DEVLOG.md](DEVLOG.md) for complete development history.
+See [Development Log](docs/research/devlog.md) for complete development history.
 
 ---
 
@@ -404,13 +437,13 @@ echo $ALIBABA_API_KEY
 
 We maintain organized tracking of development progress and tasks:
 
-- **[`DEVLOG.md`](DEVLOG.md)** - Chronological record of what was done and why
+- **[Development Log](docs/research/devlog.md)** - Chronological record of what was done and why
   - Major features and fixes
   - Technical decisions
   - Key learnings
   - Add entries after completing significant work
 
-- **[`TODO.md`](TODO.md)** - Organized task list with priorities
+- **[Project TODO Backlog](docs/project_overview/todo.md)** - Organized task list with priorities
   - 🔴 High / 🟡 Medium / 🟢 Low priority
   - Clear acceptance criteria
   - Recently completed section
@@ -427,10 +460,10 @@ We maintain organized tracking of development progress and tasks:
 ./scripts/add-devlog-entry.sh
 
 # View priorities
-grep -A 3 "## 🔴 High Priority" TODO.md
+grep -A 3 "## 🔴 High Priority" docs/project_overview/todo.md
 
 # View recent entries
-head -n 50 DEVLOG.md
+head -n 50 docs/research/devlog.md
 ```
 
 ---

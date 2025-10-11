@@ -1,5 +1,26 @@
+---
+tags: [hardware, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # Omni Vision + Context Layer (360° / Parabolic Camera)
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 ## Purpose & Role in Sensor Stack
 
 This document describes the proposed **omnidirectional vision layer** for the ShadowHound system. The configuration complements the existing sensors as follows:
@@ -90,3 +111,13 @@ Below is a curated list of **parabolic and 360° cameras** suitable for indoor r
 ---
 
 *Document prepared for the ShadowHound Project — Omni Vision Integration Layer (v0.1)*
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[hardware/README|Hardware Stack Overview]]
+- [[index|Knowledge Base Index]]

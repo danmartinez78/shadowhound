@@ -1,5 +1,26 @@
+---
+tags: [hardware, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # ShadowHound Power & Network Setup
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 ## Overview
 This document outlines a practical power and network configuration for running the **AGX Thor**, **Intel RealSense D555**, and **GL.iNet GL-SFT1200 (Opal)** router using a single 140 W dual USB-C power bank. The goal is to achieve a fully wired, deterministic low-latency setup for indoor robotics and Holoscan development.
 
@@ -97,3 +118,13 @@ Router should run in **Access Point (Bridge) mode**, merging WAN and LAN ports i
 ---
 
 *This configuration has been validated against the D555 Datasheet v1.1 (Power over Ethernet 802.3at, Gigabit, DDS support) and Unitree GO2 documentation indicating onboard IP address 192.168.123.161.*
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[hardware/README|Hardware Stack Overview]]
+- [[index|Knowledge Base Index]]

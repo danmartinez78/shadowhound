@@ -1,5 +1,26 @@
+---
+tags: [project, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # Command Mode Conflict Issue
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 **Date:** October 6, 2025  
 **Status:** 🔴 Critical Issue - Needs Investigation  
 **Severity:** High - Breaks navigation after skills execution
@@ -382,3 +403,12 @@ If WebRTC commands "lock" the robot into sport mode:
 ---
 
 **Status:** Critical issue discovered. Nav2/teleop breaks after WebRTC skills. Need to investigate mode switching mechanism and update queue implementation if mode restore is required. This could be the missing piece of our queue hanging puzzle. 🔴
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[index|Knowledge Base Index]]

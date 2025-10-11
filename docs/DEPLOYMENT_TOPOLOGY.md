@@ -1,5 +1,26 @@
+---
+tags: [project, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # ShadowHound Deployment Topology
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 **IMPORTANT**: Read this file before making assumptions about the runtime environment!
 
 ## Environment Overview
@@ -125,3 +146,12 @@ When user reports an issue:
 **Last Updated**: October 8, 2025  
 **Maintainer**: Development team  
 **Purpose**: Help AI assistant remember deployment topology
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[index|Knowledge Base Index]]

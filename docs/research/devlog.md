@@ -1,4 +1,27 @@
-# ShadowHound Development Log
+---
+tags: [research, history]
+status: draft
+related: []
+summary: >
+  Chronological development log capturing milestones, decisions, and learnings across the ShadowHound project.
+---
+
+# Development Log
+
+## Purpose
+Maintain a single source of truth for major development events, including fixes, design shifts, and future follow-ups.
+
+## Prerequisites
+- Repository cloned with commit history accessible for cross-referencing.
+- Familiarity with the contribution workflow outlined in [[project_overview/roadmap|Project Roadmap]].
+- Awareness of logging etiquette documented in [[software/scripts|Script Catalog]] via `scripts/add-devlog-entry.sh`.
+
+## Steps
+1. Use `scripts/add-devlog-entry.sh` to capture new updates with consistent formatting.
+2. Summarize the change, validation steps, and lessons learned in each entry.
+3. Append updates under **Log Entries** below and ensure the latest entry appears first.
+
+### Log Entries
 
 A chronological record of development milestones, decisions, and learnings.
 
@@ -131,7 +154,7 @@ Successfully completed major refactor separating ROS concerns from business logi
 - **ROS reserved attributes**: Node.executor is used internally by rclpy
 
 ### Next Steps
-See [TODO.md](./TODO.md) for upcoming work.
+See [[project_overview/todo|Project TODO Backlog]] for upcoming work.
 
 ---
 
@@ -161,3 +184,13 @@ Brief description of work completed.
 - Follow-up work needed
 - Related tasks
 ```
+
+## Validation
+- [ ] Latest entries include validation evidence for each change.
+- [ ] DevLog entries reference related documentation or commits where applicable.
+- [ ] Historical entries reviewed periodically for archival or follow-up actions.
+
+## References
+- [[software/scripts|Script Catalog]]
+- [[project_overview/roadmap|Project Roadmap]]
+- [[index|Knowledge Base Index]]
