@@ -206,8 +206,8 @@ If you see these, check:
 
 1. **Check this file first** for known issues
 2. **Review documentation**:
-   - `docs/LAPTOP_SETUP.md` - Setup guide
-   - `docs/INTEGRATION_STATUS.md` - Architecture
+   - `docs/laptop_setup.md` - Setup guide
+   - `docs/integration_status.md` - Architecture
    - Package READMEs in `src/shadowhound_*/`
 3. **Check logs**:
    - ROS logs: `~/.ros/log/`

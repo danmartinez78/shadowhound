@@ -187,9 +187,9 @@ This is different from Python files, which use `--symlink-install` and update im
 ## Related Documentation
 
 - Performance Metrics: See commit `0790578` for implementation details
-- Timing Display Fix: See `docs/TIMING_DISPLAY_FIX.md`
-- Browser Cache: See `docs/CACHE_CLEARING_GUIDE.md`
-- Deployment Sync: See `docs/LAPTOP_DIAGNOSTIC.md`
+- Timing Display Fix: See `docs/timing_display_fix.md`
+- Browser Cache: See `docs/cache_clearing_guide.md`
+- Deployment Sync: See `docs/laptop_diagnostic.md`
 
 
 ## Validation

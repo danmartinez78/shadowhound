@@ -59,13 +59,13 @@ From DIMOS out-of-the-box:
    - Custom skill templates
    - Updated implementation phases
 
-2. **docs/DIMOS_INTEGRATION.md** (NEW - 250+ lines)
+2. **docs/dimos_integration.md** (NEW - 250+ lines)
    - Detailed integration plan
    - Week-by-week implementation guide
    - Code examples for each phase
    - Key DIMOS component reference
 
-3. **docs/ARCH_UPDATE_SUMMARY.md** (THIS FILE)
+3. **docs/arch_update_summary.md** (THIS FILE)
 
 ### Files to Update Next
 - `.github/copilot-instructions.md` - Update with DIMOS patterns
@@ -147,7 +147,7 @@ Hardware (go2_ros2_sdk)
 
 - **DIMOS GitHub**: https://github.com/dimensionalOS/dimos-unitree
 - **Project Context**: docs/project.md
-- **Integration Plan**: docs/DIMOS_INTEGRATION.md
+- **Integration Plan**: docs/dimos_integration.md
 - **Original Design**: docs/project.md.backup (v0.1.0)
 
 ## ✅ Verification
@@ -156,7 +156,7 @@ To verify this update is working:
 
 ```bash
 # 1. Check docs are updated
-ls -lh docs/project.md docs/DIMOS_INTEGRATION.md
+ls -lh docs/project.md docs/dimos_integration.md
 
 # 2. Verify architecture diagrams show DIMOS layers
 grep -A 10 "Layer Overview" docs/project.md
@@ -165,7 +165,7 @@ grep -A 10 "Layer Overview" docs/project.md
 grep -A 20 "Package Structure" docs/project.md
 
 # 4. Review integration plan
-less docs/DIMOS_INTEGRATION.md
+less docs/dimos_integration.md
 ```
 
 ## 🚀 Next Actions

@@ -412,7 +412,7 @@ Create beginner-friendly quick start guide for hardware setup.
 7. **Troubleshooting** (common issues + solutions)
 
 #### Deliverables
-1. `docs/QUICK_START_HARDWARE.md`
+1. `docs/quick_start_hardware.md`
 2. ASCII/Mermaid diagrams for network topology
 3. Troubleshooting flowchart (Mermaid)
 4. Photo requirement list (for user to fill in later)

@@ -418,8 +418,8 @@ See DIMOS documentation for full API reference.
 
 ## Reference Documentation
 
-- **Architecture Deep Dive:** `docs/WEBRTC_DISCOVERY.md`
-- **Debugging Guide:** `docs/DEBUGGING_ROBOT_COMMANDS.md`
+- **Architecture Deep Dive:** `docs/webrtc_discovery.md`
+- **Debugging Guide:** `docs/debugging_robot_commands.md`
 - **DIMOS Documentation:** `src/dimos-unitree/README.md`
 - **Go2 SDK:** `external/go2_ros2_sdk/README.md`
 
@@ -442,8 +442,8 @@ Before launching with WebRTC mode:
 ---
 
 **For issues not covered here, see:**
-- `docs/WEBRTC_DISCOVERY.md` - Complete investigation documentation
-- `docs/DEBUGGING_ROBOT_COMMANDS.md` - Step-by-step debugging guide
+- `docs/webrtc_discovery.md` - Complete investigation documentation
+- `docs/debugging_robot_commands.md` - Step-by-step debugging guide
 - ShadowHound Issues: https://github.com/your-org/shadowhound/issues
 
 

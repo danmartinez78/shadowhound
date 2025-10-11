@@ -148,7 +148,7 @@ Just type in the command input at the bottom of the terminal and press Enter:
 
 ## Files Modified
 - `dashboard_template.html` - Complete UI redesign
-- `docs/WEB_UI_CLEANUP.md` - Initial cleanup documentation
+- `docs/web_ui_cleanup.md` - Initial cleanup documentation
 - `scripts/diagnose_camera.sh` - Camera diagnostic tool
 
 ## Commits

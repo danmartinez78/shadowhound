@@ -320,7 +320,7 @@ ros2 topic echo /mission_status
 
 Issues? Check:
 1. This guide's troubleshooting section
-2. `docs/INTEGRATION_STATUS.md` for architecture
+2. `docs/integration_status.md` for architecture
 3. Package READMEs in `src/shadowhound_*/`
 4. DIMOS documentation: https://github.com/dimensionalOS/dimos-unitree
 

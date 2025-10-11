@@ -109,9 +109,9 @@ camera_qos = QoSProfile(
 - **DEVLOG.md**: Comprehensive entry with technical details
 
 ### New Documentation
-- `docs/DEPLOYMENT_TOPOLOGY.md` - Desktop/laptop environment differences
-- `docs/UI_OPTIMIZATION_IMPLEMENTATION.md` - UI redesign details
-- `docs/MULTI_STEP_EXECUTION_ISSUE.md` - PlanningAgent explanation
+- `docs/deployment_topology.md` - Desktop/laptop environment differences
+- `docs/ui_optimization_implementation.md` - UI redesign details
+- `docs/multi_step_execution_issue.md` - PlanningAgent explanation
 
 ---
 

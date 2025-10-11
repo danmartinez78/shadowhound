@@ -348,7 +348,7 @@ ros2 run shadowhound_mission_agent mission_agent
 - **Agent**: `src/shadowhound_mission_agent/shadowhound_mission_agent/mission_agent.py`
 - **Web Interface**: `src/shadowhound_mission_agent/shadowhound_mission_agent/web_interface.py`
 - **Dashboard**: `src/shadowhound_mission_agent/shadowhound_mission_agent/dashboard_template.html`
-- **Analysis Plan**: `docs/PERFORMANCE_ANALYSIS_PLAN.md`
+- **Analysis Plan**: `docs/performance_analysis_plan.md`
 
 ---
 

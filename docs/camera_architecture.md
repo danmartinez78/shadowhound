@@ -374,7 +374,7 @@ ros2 launch shadowhound_mission_agent bringup.launch.py
 - **go2_ros2_sdk**: `src/dimos-unitree/dimos/robot/unitree/external/go2_ros2_sdk/`
 - **Image Transport**: http://wiki.ros.org/image_transport
 - **ROS2 QoS**: https://docs.ros.org/en/humble/Concepts/About-Quality-of-Service-Settings.html
-- **Web UI Implementation**: `docs/WEB_UI_ENHANCEMENTS.md` (if exists)
+- **Web UI Implementation**: `docs/web_ui_enhancements.md` (if exists)
 
 ---
 

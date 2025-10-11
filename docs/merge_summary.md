@@ -141,7 +141,7 @@ All dependencies documented in setup guides.
 
 For new installations on Ubuntu laptop:
 
-1. Follow `docs/LAPTOP_SETUP.md`
+1. Follow `docs/laptop_setup.md`
 2. Use `shadowhound.repos` for correct submodule configuration
 3. Build ShadowHound packages only (skip DIMOS perception models)
 4. Set environment variables for robot connection
@@ -155,7 +155,7 @@ For new installations on Ubuntu laptop:
 - ⚠️ CUDA errors for perception models (expected, not needed)
 - ⚠️ Detached HEAD in submodules (expected)
 
-See `docs/KNOWN_ISSUES.md` for details.
+See `docs/known_issues.md` for details.
 
 ---
 

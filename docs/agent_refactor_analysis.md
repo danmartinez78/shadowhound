@@ -359,8 +359,8 @@ response = agent.query("What do you see?")
 ## 📚 References
 
 - **DIMOS Agent Examples**: `src/dimos-unitree/tests/test_unitree_agent.py`
-- **DIMOS Skills Integration**: `docs/DIMOS_INTEGRATION.md`
-- **Skills Pattern**: `docs/DIMOS_CAPABILITIES.md`
+- **DIMOS Skills Integration**: `docs/dimos_integration.md`
+- **Skills Pattern**: `docs/dimos_capabilities.md`
 - **Our Wrapper**: `src/shadowhound_mission_agent/shadowhound_mission_agent/agent/`
 
 ---

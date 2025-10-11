@@ -424,9 +424,9 @@ echo "RMW_IMPLEMENTATION: $RMW_IMPLEMENTATION"
 
 ## References
 
-- **WebRTC Discovery Investigation**: `docs/WEBRTC_DISCOVERY.md`
-- **WebRTC Configuration Guide**: `docs/WEBRTC_CONFIGURATION.md`
-- **General Debugging**: `docs/DEBUGGING_ROBOT_COMMANDS.md`
+- **WebRTC Discovery Investigation**: `docs/webrtc_discovery.md`
+- **WebRTC Configuration Guide**: `docs/webrtc_configuration.md`
+- **General Debugging**: `docs/debugging_robot_commands.md`
 - **Test Script**: `scripts/test_webrtc_direct.sh`
 
 ---
