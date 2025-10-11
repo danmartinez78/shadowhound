@@ -404,7 +404,7 @@ logs for that name from being published on the rosout topic.
 
 Many tasks in this roadmap can be delegated to **Codex agents** working in limited Ubuntu 24.04 containers without ROS2 dependencies.
 
-**See**: [`AGENT_TASKS.md`](AGENT_TASKS.md) for ready-to-assign work packages including:
+**See**: [`agent_tasks.md`](agent_tasks.md) for ready-to-assign work packages including:
 - 🎨 **Web UI components** (terminal, LiDAR BEV, camera feed)
 - 🧠 **AI/Agent logic** (personality system, RAG implementation)
 - 📚 **Documentation** (hardware guides, API reference)
@@ -421,7 +421,7 @@ To add items to the roadmap:
 2. Tag with appropriate priority/status labels
 3. Link to relevant documentation or research
 4. Update this roadmap document
-5. If agent-friendly, add to `AGENT_TASKS.md`
+5. If agent-friendly, add to `agent_tasks.md`
 
 To update status:
 1. Change status emoji and description

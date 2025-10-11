@@ -432,7 +432,7 @@ ros2 launch launch/go2_sdk/robot.launch.py
 - `docs/topic_diagnostics.md` - Topic checking details
 - `docs/auto_update.md` - Auto-update feature
 - `docs/qol_improvements.md` - All QoL features
-- `QUICK_REFERENCE.md` - Command cheat sheet
+- `quick_reference.md` - Command cheat sheet
 
 
 ## Validation
