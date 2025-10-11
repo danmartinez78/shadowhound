@@ -228,6 +228,9 @@ def find_python_modules(package_dir: Path, package_name: str) -> List[Path]:
         # Skip hidden files
         if py_file.name.startswith("."):
             continue
+        # Skip files in directories named 'test*'
+        if py_file.parent.name.lower().startswith("test"):
+            continue
         modules.append(py_file)
     
     return sorted(modules)
