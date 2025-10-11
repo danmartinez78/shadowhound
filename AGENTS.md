@@ -21,6 +21,11 @@ These rules apply to the entire repository.
 
 ## Automation & Tooling
 - After adding or modifying ROS 2 packages, run `python tools/ros2_autodoc.py` to regenerate autodoc stubs under `docs/software/autodoc/`.
+- To generate Python API reference documentation with docstrings, run `python tools/ros2_autodoc.py --api`.
+  - This extracts classes, functions, methods with type hints and docstrings
+  - Supports Google-style and NumPy-style docstrings
+  - Generates `{package_name}_api.md` files with full API documentation
+  - Requires `docstring_parser` library: `pip install docstring_parser`
 - Do **not** push directly to the GitHub Wiki; CI handles synchronization through `tools/wiki_sync.py`.
 - Use `tools/link_convert.py` for any manual exports to ensure wikilinks and embeds become GitHub-compatible links.
 

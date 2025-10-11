@@ -51,4 +51,5 @@ Launch files and configurations for ShadowHound autonomous robot system
 ## References
 
 - Source directory: `src/shadowhound_bringup`
+- [[shadowhound_bringup_api|API Reference]] (if Python package)
 - [[_index|Return to Autodoc Index]]
