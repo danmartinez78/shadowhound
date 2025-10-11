@@ -75,6 +75,39 @@ source-ws       # Source the workspace (alias for source install/setup.bash)
 ros2 pkg list | grep shadowhound
 ```
 
+### Documentation Workflow Quick Start
+
+```bash
+# Install MkDocs tooling (first time only)
+pip install mkdocs mkdocs-material pyyaml
+
+# Regenerate package references and converted docs
+python tools/ros2_autodoc.py
+python tools/link_convert.py docs docs_web
+
+# Preview the Material site locally
+mkdocs serve
+```
+
+The conversion step writes GitHub-friendly Markdown into `docs_web/`, which MkDocs consumes for local previews and GitHub Pages deployments.
+
+## For Agents & Copilots
+
+- Follow [`AGENTS.md`](AGENTS.md) for repository-wide authoring rules.
+- Review [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for AI and automation-specific guidance.
+- Use the `docs(<scope>): ...` commit prefix when landing documentation updates.
+
+## Documentation Ecosystem
+
+ShadowHound maintains a single Obsidian vault under `docs/`, then converts it for every public surface to guarantee consistent rendering:
+
+1. **Authoring:** Write Markdown in `docs/` with wikilinks, embeds, and the required front-matter. Media belongs in `docs/_assets/`.
+2. **Autodoc:** Run `python tools/ros2_autodoc.py` whenever ROS 2 packages change. This regenerates package references in `docs/software/autodoc/`.
+3. **Conversion:** `python tools/link_convert.py docs docs_web` rewrites wikilinks to standard Markdown and mirrors the tree for MkDocs.
+4. **Publishing:** The `Documentation` GitHub Action builds MkDocs Material from `docs_web/`, uploads the site to GitHub Pages, and syncs the converted docs to the GitHub Wiki via `tools/wiki_sync.py`.
+
+Because every outward-facing site consumes the converted Markdown, links and media render identically on GitHub, Pages, and the Wiki.
+
 ---
 
 ## Architecture Overview

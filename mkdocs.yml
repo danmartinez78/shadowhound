@@ -1,0 +1,40 @@
+site_name: ShadowHound Documentation
+site_description: "ShadowHound / Robot Dog knowledge base"
+docs_dir: docs_web
+site_url: ""
+theme:
+  name: material
+  features:
+    - navigation.expand
+    - navigation.sections
+    - navigation.tabs
+    - content.code.copy
+    - toc.integrate
+nav:
+  - Home: index.md
+  - Project Overview:
+      - Roadmap: project_overview/roadmap.md
+  - Hardware:
+      - Overview: hardware/README.md
+  - Software:
+      - Overview: software/README.md
+      - ROS 2 Workstation Setup: software/ros2_setup.md
+      - Isaac Sim Remote Streaming: software/isaac_sim_remote.md
+      - Autodoc:
+          - Index: software/autodoc/_index.md
+  - Networking:
+      - Overview: networking/README.md
+  - Simulation:
+      - Overview: simulation/README.md
+  - Troubleshooting:
+      - Overview: troubleshooting/README.md
+  - Research:
+      - Overview: research/README.md
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - tables
+  - footnotes
+plugins:
+  - search
