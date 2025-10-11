@@ -1166,11 +1166,39 @@ launch_mission_agent() {
     # Build launch command
     local launch_cmd="ros2 launch shadowhound_mission_agent mission_agent.launch.py"
     
-    # Add parameters
+    # Add agent backend parameters
+    local agent_backend=${AGENT_BACKEND:-openai}
+    launch_cmd="$launch_cmd agent_backend:=$agent_backend"
+    
+    if [ "$agent_backend" = "ollama" ]; then
+        # Ollama-specific parameters
+        if [ -n "$OLLAMA_BASE_URL" ]; then
+            launch_cmd="$launch_cmd ollama_base_url:=$OLLAMA_BASE_URL"
+        fi
+        if [ -n "$OLLAMA_MODEL" ]; then
+            launch_cmd="$launch_cmd ollama_model:=$OLLAMA_MODEL"
+        fi
+    elif [ "$agent_backend" = "openai" ]; then
+        # OpenAI-specific parameters
+        if [ -n "$OPENAI_MODEL" ]; then
+            launch_cmd="$launch_cmd openai_model:=$OPENAI_MODEL"
+        fi
+        if [ -n "$OPENAI_BASE_URL" ]; then
+            launch_cmd="$launch_cmd openai_base_url:=$OPENAI_BASE_URL"
+        fi
+    fi
+    
+    # Add robot parameters
     if [ -n "$MOCK_ROBOT" ]; then
         launch_cmd="$launch_cmd mock_robot:=$MOCK_ROBOT"
     fi
     
+    # Add planning agent parameter
+    if [ -n "$USE_PLANNING_AGENT" ]; then
+        launch_cmd="$launch_cmd use_planning_agent:=$USE_PLANNING_AGENT"
+    fi
+    
+    # Add web interface parameters
     if [ -n "$WEB_INTERFACE" ]; then
         launch_cmd="$launch_cmd enable_web_interface:=$WEB_INTERFACE"
     fi
