@@ -22,7 +22,7 @@ Shadow Hound's planning agent requires **function calling** (also known as **too
 
 | Model | Size | Tool Support | Notes |
 |-------|------|--------------|-------|
-| **phi4:14b** | 9GB | ❌ No | Reasoning-focused, no function calling training |
+| **phi4:14b** | 9GB | ❌ No | Reasoning-focused, no function calling. **⚠️ UNSTABLE on Jetson AGX Orin** - crashes frequently (see #18) |
 | **llama3.2:3b** | 2GB | ❌ No | Too small |
 | **phi3:3.8b** | 2.3GB | ❌ No | Chat only |
 
@@ -102,7 +102,15 @@ For each model, measure:
 
 ## Known Limitations
 
-### Phi4:14b
+### Phi4:14b (⚠️ Jetson AGX Orin Issue)
+- ❌ **UNSTABLE on ARM64/Jetson** - llama runner crashes with exit status 2
+- ❌ Cannot use with planning agent (no tool support)
+- ❌ Transient HTTP 500 errors during inference
+- ✅ Can use with simple agent (USE_PLANNING_AGENT=false) when it works
+- **Recommendation**: Use qwen2.5-coder:7b instead on Thor
+- **Tracking**: Issue #18
+
+### Phi4:14b (General)
 - ❌ Cannot use with planning agent
 - ✅ Can use with simple agent (USE_PLANNING_AGENT=false)
 - Strong at reasoning, weak at structured output
