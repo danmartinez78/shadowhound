@@ -202,7 +202,7 @@ shadowhound/
 │   ├── auto_update.md               # Git auto-update guide
 │   ├── topic_diagnostics.md         # Topic checking guide
 │   └── qol_improvements.md          # Summary of all features
-└── QUICK_REFERENCE.md                # Command cheat sheet
+└── quick_reference.md                # Command cheat sheet
 ```
 
 ## Cleanup on Exit
@@ -304,7 +304,7 @@ All pushed to `origin/feature/dimos-integration` ✅
 - **📖 Auto-Update**: `docs/auto_update.md`
 - **📖 Topic Diagnostics**: `docs/topic_diagnostics.md`
 - **📖 QoL Summary**: `docs/qol_improvements.md`
-- **📖 Quick Reference**: `QUICK_REFERENCE.md`
+- **📖 Quick Reference**: `quick_reference.md`
 
 ## The Result
 

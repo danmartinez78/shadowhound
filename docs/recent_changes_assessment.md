@@ -258,10 +258,10 @@ ws.onmessage = (event) => {
 - [[research/devlog|Development Log]] - Development journal
 - [[project_overview/todo|Project TODO Backlog]] - Task tracking
 - [[software/scripts|Script Catalog]] - Script documentation
-- `docs/AGENT_REFACTOR_ANALYSIS.md` - Architecture analysis
-- `docs/DEVELOPMENT_TRACKING.md` - Progress tracking
-- `docs/VISION_INTEGRATION_DESIGN.md` - Vision design (630 lines!)
-- `docs/WEB_UI_MOCK_IMAGE_TESTING.md` - Image upload testing
+- `docs/agent_refactor_analysis.md` - Architecture analysis
+- `docs/development_tracking.md` - Progress tracking
+- `docs/vision_integration_design.md` - Vision design (630 lines!)
+- `docs/web_ui_mock_image_testing.md` - Image upload testing
 
 **Why This is Excellent:**
 
@@ -536,7 +536,7 @@ test_mission_executor.py::test_telemetry SKIPPED (integration test)
 
 ## 🎨 Vision Integration Design
 
-**File:** `docs/VISION_INTEGRATION_DESIGN.md` (630 lines)
+**File:** `docs/vision_integration_design.md` (630 lines)
 
 This is a **comprehensive design document** for adding vision to ShadowHound.
 
@@ -852,7 +852,7 @@ If you want to dive deeper:
 
 1. **Architecture:**
    - `src/shadowhound_mission_agent/AGENT_ARCHITECTURE.md` - Complete architecture overview
-   - `docs/AGENT_REFACTOR_ANALYSIS.md` - Analysis of refactor decisions
+   - `docs/agent_refactor_analysis.md` - Analysis of refactor decisions
 
 2. **Code:**
    - `src/shadowhound_mission_agent/shadowhound_mission_agent/mission_executor.py` - Core business logic
@@ -860,8 +860,8 @@ If you want to dive deeper:
    - `src/shadowhound_mission_agent/test/test_mission_executor.py` - Test suite
 
 3. **Design:**
-   - `docs/VISION_INTEGRATION_DESIGN.md` - Vision architecture (630 lines!)
-   - `docs/WEB_UI_MOCK_IMAGE_TESTING.md` - Mock image testing
+   - `docs/vision_integration_design.md` - Vision architecture (630 lines!)
+   - `docs/web_ui_mock_image_testing.md` - Mock image testing
 
 4. **Process:**
    - [[research/devlog|Development Log]] - Development journal

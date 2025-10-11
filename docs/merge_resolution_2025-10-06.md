@@ -139,7 +139,7 @@ ws.onmessage = (event) => {
 
 - ✅ `src/shadowhound_mission_agent/shadowhound_mission_agent/mission_agent.py` - Merged camera subscription and callbacks
 - ✅ `src/shadowhound_mission_agent/shadowhound_mission_agent/web_interface.py` - Added camera frame handling to WebSocket
-- ✅ `docs/CAMERA_FEED_INTEGRATION.md` - New file with camera integration guide
+- ✅ `docs/camera_feed_integration.md` - New file with camera integration guide
 
 ## Testing Checklist
 

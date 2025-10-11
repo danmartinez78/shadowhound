@@ -37,7 +37,7 @@ Successfully integrated ShadowHound with the DIMOS framework, creating a minimal
 
 ### 1. ✅ DIMOS Capabilities Documentation
 
-**File**: `docs/DIMOS_CAPABILITIES.md`
+**File**: `docs/dimos_capabilities.md`
 
 Comprehensive analysis of DIMOS framework showing:
 - 40+ Unitree Go2 skills (locomotion, dynamic maneuvers, expressions)

@@ -308,7 +308,7 @@ ros2 topic pub /mission_command std_msgs/String "data: 'take one step forward'"
 - **Timing code**: `mission_executor.py` line 214
 - **Agent call**: `run_observable_query().run()` (DIMOS OpenAIAgent)
 - **Vision skills**: `src/shadowhound_skills/shadowhound_skills/vision.py`
-- **DIMOS docs**: `docs/DIMOS_VISION_CAPABILITIES.md`
+- **DIMOS docs**: `docs/dimos_vision_capabilities.md`
 
 ---
 

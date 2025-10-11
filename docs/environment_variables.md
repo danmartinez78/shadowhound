@@ -317,8 +317,8 @@ The scripts handle the `ROBOT_IP` translation for SDK compatibility, so you neve
 
 ## Related Documentation
 
-- **WebRTC Configuration**: `docs/WEBRTC_CONFIGURATION.md`
-- **WebRTC Testing**: `docs/WEBRTC_DIRECT_TEST.md`
+- **WebRTC Configuration**: `docs/webrtc_configuration.md`
+- **WebRTC Testing**: `docs/webrtc_direct_test.md`
 - **Environment Setup**: `.env.development`, `.env.production`
 
 

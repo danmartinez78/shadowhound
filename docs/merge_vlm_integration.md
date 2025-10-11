@@ -75,12 +75,12 @@ git push origin feature/dimos-integration
 ### New Files (14 files, 1,878 lines)
 
 #### Documentation (3 files, 1,079 lines)
-- `docs/DIMOS_VISION_CAPABILITIES.md` (427 lines)
+- `docs/dimos_vision_capabilities.md` (427 lines)
   - Complete documentation of DIMOS vision infrastructure
   - Qwen VLM API examples and usage
   - Cost comparisons and recommendations
 
-- `docs/VLM_INTEGRATION_SUMMARY.md` (289 lines)
+- `docs/vlm_integration_summary.md` (289 lines)
   - Phase 1 completion summary
   - Architecture and design decisions
   - Next steps for Phase 2
@@ -271,8 +271,8 @@ feature/dimos-integration (17a0542) ← MERGE COMMIT
 ## References
 
 - **Vision Skills README**: `src/shadowhound_skills/README.md`
-- **DIMOS Capabilities**: `docs/DIMOS_VISION_CAPABILITIES.md`
-- **Phase 1 Summary**: `docs/VLM_INTEGRATION_SUMMARY.md`
+- **DIMOS Capabilities**: `docs/dimos_vision_capabilities.md`
+- **Phase 1 Summary**: `docs/vlm_integration_summary.md`
 - **Merge Commit**: `17a0542`
 - **Feature Branch**: `feature/vlm-integration` (a60aa6b)
 

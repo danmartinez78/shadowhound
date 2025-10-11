@@ -120,10 +120,10 @@ ros2 launch shadowhound_mission_agent mission_agent.launch.py
 
 ## Files Created
 - `scripts/diagnose_camera.sh` - Diagnostic tool for camera troubleshooting
-- `docs/WEB_UI_CLEANUP.md` - This document
+- `docs/web_ui_cleanup.md` - This document
 
 ## Related Documentation
-- `docs/CAMERA_FEED_INTEGRATION.md` - Camera streaming technical details
+- `docs/camera_feed_integration.md` - Camera streaming technical details
 - `docs/MERGE_RESOLUTION_2025-10-06.md` - Details of feature branch merge
 
 

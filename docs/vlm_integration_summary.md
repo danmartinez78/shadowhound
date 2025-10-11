@@ -234,7 +234,7 @@ Test vision missions:
 
 ### 4. Documentation Updates
 
-- Update `docs/VISION_INTEGRATION_DESIGN.md` with implementation details
+- Update `docs/vision_integration_design.md` with implementation details
 - Add vision mission examples to main README
 - Document API key setup process
 
@@ -284,7 +284,7 @@ Test vision missions:
 - `src/shadowhound_skills/README.md` - 363 lines of documentation
 - `src/shadowhound_skills/shadowhound_skills/vision.py` - 427 lines of code
 - `src/shadowhound_skills/test/test_vision.py` - Comprehensive test suite
-- `docs/DIMOS_VISION_CAPABILITIES.md` - 427 lines of discovery documentation
+- `docs/dimos_vision_capabilities.md` - 427 lines of discovery documentation
 
 ### Modified Files
 - None (all new package)
@@ -297,9 +297,9 @@ Test vision missions:
 ## Resources & References
 
 - [Package README](../src/shadowhound_skills/README.md)
-- [DIMOS Vision Discovery](../docs/DIMOS_VISION_CAPABILITIES.md)
-- [Vision Integration Design](../docs/VISION_INTEGRATION_DESIGN.md)
-- [Camera Architecture](../docs/CAMERA_ARCHITECTURE.md)
+- [DIMOS Vision Discovery](../docs/dimos_vision_capabilities.md)
+- [Vision Integration Design](../docs/vision_integration_design.md)
+- [Camera Architecture](../docs/camera_architecture.md)
 
 ## Summary
 

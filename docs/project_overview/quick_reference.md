@@ -25,8 +25,8 @@ Aggregate frequently used commands, environment tweaks, and emergency actions so
 ### Common Commands
 ```bash
 # Repository updates
-./scripts/update_repos.sh
-./scripts/update_repos.sh --auto
+scripts/update_repos.sh
+scripts/update_repos.sh --auto
 
 # Topic checks
 python3 scripts/check_topics.py
@@ -41,11 +41,19 @@ python3 scripts/check_topics.py
 
 ### Build & Source
 ```bash
+# Quick build commands (from devcontainer aliases)
+cb              # colcon build --symlink-install
+cbr             # colcon build --symlink-install && source install/setup.bash
+source-ws       # source install/setup.bash
+
+# Specific packages
 colcon build --packages-select shadowhound_mission_agent --symlink-install
-colcon build --packages-select go2_interfaces unitree_go go2_robot_sdk --symlink-install
+colcon build --packages-select shadowhound_skills shadowhound_bringup --symlink-install
+
+# Manual setup
 source /opt/ros/humble/setup.bash
 source install/setup.bash
-export PYTHONPATH="$HOME/shadowhound/src/dimos-unitree:$PYTHONPATH"
+export PYTHONPATH="/workspaces/shadowhound/src/dimos-unitree:$PYTHONPATH"
 ```
 
 ### Git Operations
@@ -57,28 +65,37 @@ git submodule update --init --remote
 
 ### Environment Variables
 ```bash
-export GO2_IP=192.168.10.167
-export ROS_DOMAIN_ID=0
+# Robot connection
+export ROBOT_IP=192.168.1.103
+export CONN_TYPE=webrtc
+export MOCK_ROBOT=false
+
+# ROS configuration
+export ROS_DOMAIN_ID=42
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+# LLM configuration
 export OPENAI_API_KEY=sk-...
+export OPENAI_MODEL=gpt-4o
 ```
 
 ### Troubleshooting Snippets
 - **No robot topics:**
   ```bash
-  ros2 topic list | grep go2
-  ros2 launch go2_robot_sdk robot.launch.py
+  ros2 topic list | grep camera
+  # Check DIMOS connection
+  cd src/dimos-unitree && python3 tests/test_robot.py
   ```
 - **Submodule drift:**
   ```bash
   cd src/dimos-unitree
-  git submodule update --remote --merge
+  git submodule update --init --remote --recursive
   ```
 - **Build failures:**
   ```bash
   rm -rf build install log
-  colcon build --symlink-install
-  rosdep install --from-paths src --ignore-src -r -y
+  rosdep-install  # or: rosdep install --from-paths src --ignore-src -r -y
+  cb              # or: colcon build --symlink-install
   ```
 - **Update conflicts:**
   ```bash
@@ -90,16 +107,18 @@ export OPENAI_API_KEY=sk-...
 ### Emergency Reset
 ```bash
 git fetch origin
-git reset --hard origin/feature/dimos-integration
-git submodule update --init --remote
+git reset --hard origin/main
+git submodule update --init --remote --recursive
 rm -rf build install log
 ./start.sh --dev --auto-update
 ```
 
 ## Validation
-- [ ] Command snippets verified against the current repository structure.
-- [ ] Environment variable recommendations align with the active deployment templates.
-- [ ] Troubleshooting steps reflect the latest known issues and resolutions.
+- [x] Command snippets verified against the current repository structure.
+- [x] Environment variable recommendations align with the active deployment templates.
+- [x] Troubleshooting steps reflect the latest known issues and resolutions.
+- [x] Updated to use devcontainer aliases (cb, cbr, source-ws, rosdep-install).
+- [x] Updated to reflect DIMOS integration and current package structure.
 
 ## References
 - [[software/scripts|Script Catalog]]

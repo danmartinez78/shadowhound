@@ -25,7 +25,7 @@ Preserve historical context while signaling that this page requires verification
 The current developer workflow relies on a VS Code devcontainer built on Ubuntu 22.04 with ROS 2 Humble, Navigation2, CycloneDDS, and the DIMOS framework preinstalled to support the Unitree Go2 mission stack.【F:README.md†L48-L66】 Codex workspaces, however, currently default to Ubuntu 24.04 images where ROS 2 Humble is unsupported, which prevents agents from reproducing the full container setup. This document maps out what Codex agents *can* do inside the 24.04 environment and where human-in-the-loop validation inside the 22.04/ROS container remains necessary.
 
 ## Project Snapshot
-- The `feature/dimos-integration` branch delivered the DIMOS-based mission agent and bringup packages along with extensive documentation, enabling natural-language mission execution by reusing DIMOS’s 40+ Unitree skills and infrastructure.【F:docs/MERGE_SUMMARY.md†L3-L115】
+- The `feature/dimos-integration` branch delivered the DIMOS-based mission agent and bringup packages along with extensive documentation, enabling natural-language mission execution by reusing DIMOS’s 40+ Unitree skills and infrastructure.【F:docs/merge_summary.md†L3-L115】
 - The recent `feature/agent-refactor` work split the mission agent into a pure-Python `MissionExecutor` (business logic) and a thin ROS node wrapper, backed by 14 unit tests that run without ROS dependencies.【F:DEVLOG.md†L7-L45】【F:src/shadowhound_mission_agent/test/test_mission_executor.py†L1-L200】
 - The MVP plan now emphasizes Nav2-based autonomy with add-on vision skills (snapshot, detect, describe) and future lidar integrations to support missions such as “explore the kitchen and report back.”【F:docs/mvp_plan_pivot.md†L1-L111】
 
@@ -42,13 +42,13 @@ The current developer workflow relies on a VS Code devcontainer built on Ubuntu
 ## High-Value Tasks Suitable for Codex Agents
 1. **Finish high-priority unit tests.** TODOs call out four skipped tests covering mission pause/resume, error recovery, and telemetry.【F:TODO.md†L15-L18】 Codex can flesh out these tests by mocking DIMOS interfaces in 24.04, improving coverage without ROS.
 2. **Implement mission history and replay.** Recording mission logs and providing replay/export features is a pure-Python problem aligned with existing TODOs, ideal for Codex to prototype alongside the web interface.【F:TODO.md†L20-L23】
-3. **Enhance vision utilities.** With snapshot skills already independent of DIMOS, Codex can add panorama stitching, file management, or NumPy-based analysis that run locally, and write unit tests against stored mock frames.【F:src/shadowhound_skills/shadowhound_skills/vision.py†L47-L134】【F:docs/VISION_INTEGRATION_DESIGN.md†L9-L122】
+3. **Enhance vision utilities.** With snapshot skills already independent of DIMOS, Codex can add panorama stitching, file management, or NumPy-based analysis that run locally, and write unit tests against stored mock frames.【F:src/shadowhound_skills/shadowhound_skills/vision.py†L47-L134】【F:docs/vision_integration_design.md†L9-L122】
 4. **Extend the FastAPI dashboard.** Codex can enrich the mission control UI (e.g., mission queue management, telemetry graphs) because the server is pure Python and ships with mock-image upload hooks for testing.【F:src/shadowhound_mission_agent/shadowhound_mission_agent/web_interface.py†L38-L200】
 5. **Documentation and tooling updates.** Medium-priority tasks include README and skill reference refreshes, which Codex can draft directly in Markdown without ROS access.【F:TODO.md†L51-L66】
 
 ## Work Requiring the 22.04/ROS Container or Hardware
 - ROS launch flows, Nav2 behavior trees, and hardware-level skill validation remain tied to ROS Humble and real Go2 access.【F:TODO.md†L25-L41】【F:docs/mvp_plan_pivot.md†L36-L64】
-- DIMOS perception stacks that depend on CUDA or rosdep resolution (documented as non-blocking issues during the integration merge) cannot be exercised inside Codex’s 24.04 images.【F:docs/MERGE_SUMMARY.md†L55-L138】
+- DIMOS perception stacks that depend on CUDA or rosdep resolution (documented as non-blocking issues during the integration merge) cannot be exercised inside Codex’s 24.04 images.【F:docs/merge_summary.md†L55-L138】
 
 ## Recommended Workflow Split
 1. **Codex (Ubuntu 24.04) Responsibilities**

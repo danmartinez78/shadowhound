@@ -431,9 +431,9 @@ export ALIBABA_API_KEY="sk-..."  # Get from Alibaba Cloud
 - `dimos/perception/detection2d/yolo_2d_det.py` - YOLO detector
 
 ### ShadowHound Design Docs
-- `docs/VISION_INTEGRATION_DESIGN.md` - Original design (630 lines)
+- `docs/vision_integration_design.md` - Original design (630 lines)
 - `docs/mvp_plan_pivot.md` - MVP vision plan
-- `docs/CAMERA_ARCHITECTURE.md` - Camera pipeline
+- `docs/camera_architecture.md` - Camera pipeline
 
 ---
 
