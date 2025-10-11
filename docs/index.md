@@ -11,6 +11,28 @@ summary: >
 ## Purpose
 Provide a curated entry point into the Obsidian vault and downstream public documentation surfaces.
 
+## Architecture Overview
+
+ShadowHound is an autonomous mobile robot system combining ROS2 navigation with LLM/VLM-driven planning. The system architecture is built on four main layers:
+
+![System Architecture](_assets/system-architecture.png)
+*Figure 1: System Architecture - The layered design from Web UI through Mission Agent, DIMOS Skills Engine, ROS2 Bridge, to the Unitree GO2 hardware.*
+
+### Key Data Flows
+
+![Data Flow Architecture](_assets/data-flow.png)
+*Figure 2: Data Flow - Mission commands flow top-down, telemetry flows bottom-up, camera feeds use WebRTC, and skills execute with feedback loops.*
+
+### Network Topology
+
+![Network Topology](_assets/network-topology.png)
+*Figure 3: Network Topology - Development laptop, Thor (Jetson Orin), and GO2 robot connected via WiFi network with optional direct Ethernet.*
+
+### Documentation Workflow
+
+![Documentation Ecosystem](_assets/docs-ecosystem.png)
+*Figure 4: Documentation Ecosystem - Obsidian vault authoring through automation tools and CI/CD to multiple publication targets.*
+
 ## Prerequisites
 - Clone the repository and open the `/docs` directory as an Obsidian vault.
 - Install the Obsidian Markdown Links core plugin (enabled by default).

@@ -23,6 +23,10 @@ Capture the decisions and follow-up actions from the October 3, 2025 architectur
 4. Record verification in the **Validation** checklist when packages or processes meet the revised expectations.
 
 ### Layered Architecture
+
+![System Architecture](../_assets/system-architecture.png)
+*Figure 1: Complete system architecture showing the layered design from Web UI through Mission Agent, DIMOS Skills, ROS2 Bridge, to GO2 hardware.*
+
 - **Application** — Launch files, configuration, and deployment tooling.
 - **Agent** — LLM/VLM mission planning and orchestration.
 - **Skills** — Validated execution layer with telemetry and safety guards.

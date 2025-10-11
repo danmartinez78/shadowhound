@@ -117,11 +117,28 @@ ShadowHound maintains a single Obsidian vault under `docs/`, then converts it fo
 
 Because every outward-facing site consumes the converted Markdown, links and media render identically on GitHub, Pages, and the Wiki.
 
+### Architecture Diagrams
+
+Visual architecture diagrams are available in `docs/_assets/`:
+- **`system-architecture.png`** - Layered architecture from Web UI to hardware
+- **`data-flow.png`** - Mission commands, telemetry, camera feeds, and skill execution flows
+- **`network-topology.png`** - Network connections between laptop, Thor (Jetson), and GO2 robot
+- **`docs-ecosystem.png`** - Documentation authoring workflow and publication pipeline
+
+These diagrams are embedded in:
+- [`docs/index.md`](docs/index.md) - Main documentation landing page
+- [`docs/project_overview/architecture_review_summary.md`](docs/project_overview/architecture_review_summary.md) - Architecture review details
+- [`docs/networking/README.md`](docs/networking/README.md) - Networking guide
+
 ---
 
 ## Architecture Overview
 
-ShadowHound uses a **four-layer architecture**:
+ShadowHound uses a **four-layer architecture** built on the DIMOS framework:
+
+![System Architecture](docs/_assets/system-architecture.png)
+
+*System architecture showing the layered design from Web UI through Mission Agent, DIMOS Skills Engine, ROS2 Bridge, to the Unitree GO2 hardware. See [full documentation](docs/index.md) for detailed architecture diagrams including data flow and network topology.*
 
 ```
 ┌─ Application ─┐  Launch files, configs, deployment
