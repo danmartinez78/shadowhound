@@ -76,6 +76,47 @@ OLLAMA_MODEL=phi4:14b  # Can use non-tool models
 USE_PLANNING_AGENT=false  # Text-only responses
 ```
 
+### Keep Model Loaded (Prevent Cold Start 500 Errors)
+
+By default, Ollama unloads models after 5 minutes of inactivity. This causes HTTP 500 errors on the next request while the model reloads.
+
+**Option 1: Container Environment Variable (Recommended for Development)**
+
+Edit `scripts/setup_ollama_thor.sh` to add `OLLAMA_KEEP_ALIVE` environment variable:
+
+```bash
+docker run -d \
+  --name "$CONTAINER_NAME" \
+  --gpus all \
+  --tty \
+  -p ${OLLAMA_PORT}:11434 \
+  -v "${DATA_DIR}:/data" \
+  -e OLLAMA_KEEP_ALIVE=-1 \  # Add this line - keeps model loaded indefinitely
+  --restart unless-stopped \
+  "$OLLAMA_IMAGE"
+```
+
+Values:
+- `-1`: Keep loaded forever (good for active development/testing)
+- `30m`: Keep for 30 minutes (balanced)
+- `0`: Unload immediately after each request (good for benchmarking cold starts)
+
+**Option 2: Per-Request Keep-Alive (Automatic)**
+
+The `start.sh` validation automatically includes `keep_alive: 30m` in test requests to keep the model loaded for 30 minutes after validation. This happens automatically when you run `./start.sh`.
+
+**Impact on Benchmarking:**
+- The `scripts/benchmark_ollama_models.sh` script has `UNLOAD_BETWEEN_MODELS=true` by default
+- This ensures accurate measurements by unloading models between tests
+- Setting `OLLAMA_KEEP_ALIVE=-1` on the container does NOT interfere with manual `ollama pull/rm` commands
+- Benchmark script explicitly unloads models for clean measurements
+
+**Impact on Robot Restarts:**
+- ✅ **No impact** - Keep-alive only affects model memory, not robot driver
+- ✅ Robot driver runs separately from Ollama
+- ✅ Restarting robot driver (`start.sh` stop/start) does not affect Ollama
+- ⚠️ Only restarting Thor itself or the Ollama container will clear loaded models
+
 ## Performance Benchmarking Targets
 
 Based on tool support, focus benchmarking on:

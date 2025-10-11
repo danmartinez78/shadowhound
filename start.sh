@@ -756,8 +756,9 @@ check_llm_backend() {
             fi
             
             local test_start=$(date +%s 2>/dev/null || echo 0)
+            # Include keep_alive to keep model loaded for subsequent requests
             local test_response=$(curl -s --max-time 60 "$ollama_url/api/generate" \
-                -d "{\"model\": \"$ollama_model\", \"prompt\": \"Say OK\", \"stream\": false}" 2>/dev/null)
+                -d "{\"model\": \"$ollama_model\", \"prompt\": \"Say OK\", \"stream\": false, \"keep_alive\": \"30m\"}" 2>/dev/null)
             local test_end=$(date +%s 2>/dev/null || echo 0)
             local test_duration=$((test_end - test_start))
             
