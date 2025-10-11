@@ -17,7 +17,6 @@ except ImportError as exc:  # pragma: no cover - dependency hint
 
 try:
     from docstring_parser import parse as parse_docstring
-    from docstring_parser.common import Docstring
     DOCSTRING_PARSER_AVAILABLE = True
 except ImportError:
     DOCSTRING_PARSER_AVAILABLE = False
