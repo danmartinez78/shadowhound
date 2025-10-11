@@ -35,5 +35,5 @@ Summarize the strategic milestones that guide ShadowHound development and downst
 
 ## References
 - [[../index|Vault Index]]
-- [[../README|Repository README]]
+- [Repository README](../../README.md)
 - Project tracker (link when available)
