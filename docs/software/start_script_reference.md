@@ -50,9 +50,10 @@ Explain how the `start.sh` orchestration script and its helpers prepare, validat
 - Inspect generated `.shadowhound_env` to confirm environment exports.
 
 ## Validation
-- [ ] `start.sh` completes without errors for both development and production presets.
-- [ ] Quick-start helpers (`quick-start-dev.sh`, `quick-start-prod.sh`) reflect the latest supported flags.
-- [ ] Troubleshooting tips validated against recent incidents and updated as needed.
+- [x] `start.sh` completes without errors for both development and production presets.
+- [x] Quick-start helpers (`quick-start-dev.sh`, `quick-start-prod.sh`) reflect the latest supported flags.
+- [x] Troubleshooting tips validated against recent incidents and updated as needed.
+- [x] Verified all referenced scripts exist in the repository.
 
 ## References
 - [[scripts|Script Catalog]]

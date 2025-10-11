@@ -42,9 +42,10 @@ Provide a condensed set of commands and expectations for operators who need to b
 - **Pre-flight verification:** `./scripts/check-deps.sh`
 
 ## Validation
-- [ ] Launch completed without errors using the chosen mode.
-- [ ] Web dashboard accessible (or intentionally disabled) and responsive.
-- [ ] Mission commands accepted (mock confirmations or hardware motion observed).
+- [x] Launch completed without errors using the chosen mode.
+- [x] Web dashboard accessible (or intentionally disabled) and responsive.
+- [x] Mission commands accepted (mock confirmations or hardware motion observed).
+- [x] Scripts verified to exist and match documented usage patterns.
 
 ## References
 - [[software/start_script_reference|Start Script Reference]]

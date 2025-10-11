@@ -73,9 +73,10 @@ ENABLE_WEB_INTERFACE=false
 ```
 
 ## Validation
-- [ ] `.env` derived from the correct template for the current mission.
-- [ ] Mandatory secrets populated and stored securely (no accidental commits).
-- [ ] Launch scripts read the updated environment without warnings.
+- [x] `.env` derived from the correct template for the current mission.
+- [x] Mandatory secrets populated and stored securely (no accidental commits).
+- [x] Launch scripts read the updated environment without warnings.
+- [x] Verified .env templates exist in repository root.
 
 ## References
 - [[scripts|Script Catalog]]
