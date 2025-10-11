@@ -188,15 +188,21 @@ class MissionExecutor:
         if not self.robot:
             raise RuntimeError("Robot must be initialized before skills")
 
-        self.logger.info("Initializing skill library...")
-        self.skills = MyUnitreeSkills(robot=self.robot)
-        skill_count = len(self.skills.get())
-        self.logger.info(f"Loaded {skill_count} skills")
+        # Only initialize skills if using planning agent (requires function calling)
+        if self.config.use_planning_agent:
+            self.logger.info("Initializing skill library...")
+            self.skills = MyUnitreeSkills(robot=self.robot)
+            skill_count = len(self.skills.get())
+            self.logger.info(f"Loaded {skill_count} skills")
+        else:
+            self.logger.info("Skipping skill initialization (planning agent disabled)")
+            self.skills = None
 
     def _init_agent(self) -> None:
         """Initialize DIMOS agent with appropriate backend."""
-        if not self.skills:
-            raise RuntimeError("Skills must be initialized before agent")
+        # Skills only required for planning agent
+        if self.config.use_planning_agent and not self.skills:
+            raise RuntimeError("Skills must be initialized before planning agent")
 
         self.logger.info(
             f"Initializing {self.config.agent_backend} agent "
@@ -240,10 +246,11 @@ class MissionExecutor:
             )
             self.logger.info("DIMOS PlanningAgent initialized")
         else:
+            # Don't pass skills to OpenAIAgent - Ollama models may not support tools/functions
+            # Skills are only needed for PlanningAgent which uses function calling
             self.agent = OpenAIAgent(
                 dev_name="shadowhound",
                 agent_type="Mission",
-                skills=self.skills,
                 model_name=model_name,
                 openai_client=client,  # Pass custom client for backend flexibility
                 max_output_tokens_per_request=self.config.max_output_tokens,
