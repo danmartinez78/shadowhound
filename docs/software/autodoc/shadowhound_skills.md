@@ -46,5 +46,4 @@ Vision and perception skills for ShadowHound autonomous robot
 ## References
 
 - Source directory: `src/shadowhound_skills`
-- [[shadowhound_skills_api|API Reference]] (if Python package)
 - [[_index|Return to Autodoc Index]]

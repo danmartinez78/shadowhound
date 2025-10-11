@@ -47,5 +47,5 @@ Provide a curated entry point into the Obsidian vault and downstream public docu
 - [ ] Link conversion step renders correctly on GitHub Pages and Wiki.
 
 ## References
-- [[AGENTS|Authoring Guidelines]]
-- [[../README|Repository README]]
+- [Authoring Guidelines](../AGENTS.md)
+- [Repository README](../README.md)

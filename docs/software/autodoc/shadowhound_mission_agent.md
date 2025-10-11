@@ -46,5 +46,4 @@ ShadowHound mission agent for autonomous robot control using DIMOS framework
 ## References
 
 - Source directory: `src/shadowhound_mission_agent`
-- [[shadowhound_mission_agent_api|API Reference]] (if Python package)
 - [[_index|Return to Autodoc Index]]

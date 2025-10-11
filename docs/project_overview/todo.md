@@ -24,7 +24,7 @@ Track high, medium, and low priority tasks for the ShadowHound program while cap
 
 ### 🔴 High Priority
 - Agent System
-  - [ ] Add vision integration to mission executor (link: [[VISION_INTEGRATION_DESIGN|Vision Integration Design]]).
+  - [ ] Add vision integration to mission executor (see vision integration documentation).
   - [ ] Implement remaining unit tests for pause/resume, recovery, telemetry.
   - [ ] Add mission history and replay capability with export tooling.
 - Robot Integration

@@ -87,9 +87,18 @@ python tools/link_convert.py docs docs_web
 
 # Preview the Material site locally
 mkdocs serve
+
+# Validate wikilinks before committing
+python tools/validate_wikilinks.py --docs docs
 ```
 
 The conversion step writes GitHub-friendly Markdown into `docs_web/`, which MkDocs consumes for local previews and GitHub Pages deployments.
+
+**CI Validation**: All pull requests that modify `docs/**` automatically run wikilink validation to prevent broken internal links. The validator checks:
+- All wikilink targets exist
+- Relative paths (e.g., `[[../file]]`) resolve correctly
+- Same-directory references (e.g., `[[sibling]]`) are valid
+- Cross-directory absolute paths (e.g., `[[software/scripts]]`) point to existing files
 
 ## For Agents & Copilots
 

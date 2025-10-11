@@ -29,7 +29,7 @@ def normalize_target(target: str) -> str:
     return target.strip()
 
 
-def convert_match(match: re.Match[str]) -> str:
+def convert_match(match: re.Match[str], current_file_depth: int = 0) -> str:
     is_embed = match.group(1) == "!"
     raw = match.group(2)
     if "|" in raw:
@@ -54,6 +54,16 @@ def convert_match(match: re.Match[str]) -> str:
     else:
         href = target_part
 
+    # Adjust relative path based on current file depth
+    # If the target starts with ../ or ./, keep it as-is (already relative)
+    # If the target contains /, it's an absolute path from docs root - adjust for depth
+    # If the target has no /, it's a same-directory reference - no adjustment needed
+    if not (target_part.startswith("../") or target_part.startswith("./")):
+        if "/" in target_part and current_file_depth > 0:
+            # Absolute path from docs root - prepend ../ for each level of depth
+            href = "../" * current_file_depth + href
+        # else: same-directory reference, no adjustment needed
+
     if anchor_slug:
         href = f"{href}#{anchor_slug}"
 
@@ -69,16 +79,20 @@ def convert_match(match: re.Match[str]) -> str:
     return f"[{label}]({href})"
 
 
-def convert_text(content: str) -> str:
-    return WIKILINK_PATTERN.sub(convert_match, content)
+def convert_text(content: str, current_file_depth: int = 0) -> str:
+    return WIKILINK_PATTERN.sub(lambda m: convert_match(m, current_file_depth), content)
 
 
-def convert_file(input_path: Path, output_path: Path) -> None:
+def convert_file(input_path: Path, output_path: Path, input_root: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     if input_path.suffix.lower() == ".md":
+        # Calculate depth of current file relative to input root
+        rel_path = input_path.relative_to(input_root)
+        current_file_depth = len(rel_path.parent.parts)
+        
         with input_path.open("r", encoding="utf-8") as handle:
             content = handle.read()
-        converted = convert_text(content)
+        converted = convert_text(content, current_file_depth)
         with output_path.open("w", encoding="utf-8") as handle:
             handle.write(converted)
     else:
@@ -99,7 +113,7 @@ def convert_tree(input_dir: Path, output_dir: Path) -> None:
     for input_path in iter_files(input_dir):
         rel_path = input_path.relative_to(input_dir)
         output_path = output_dir / rel_path
-        convert_file(input_path, output_path)
+        convert_file(input_path, output_path, input_dir)
 
 
 def main() -> None:
