@@ -241,8 +241,11 @@ class MissionExecutor:
 
         # Create DIMOS agent based on type
         if self.config.use_planning_agent:
+            # PlanningAgent needs skills parameter, not robot
             self.agent = PlanningAgent(
-                robot=self.robot, dev_name="shadowhound", agent_type="Mission"
+                dev_name="shadowhound",
+                model_name=model_name,
+                skills=self.skills,
             )
             self.logger.info("DIMOS PlanningAgent initialized")
         else:

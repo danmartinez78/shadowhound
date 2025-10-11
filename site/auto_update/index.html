@@ -1,0 +1,1810 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="ShadowHound / Robot Dog knowledge base">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>Repository Auto-Update Features - ShadowHound Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2a3383ac.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#repository-auto-update-features" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ShadowHound Documentation" class="md-header__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ShadowHound Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Repository Auto-Update Features
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../project_overview/roadmap/" class="md-tabs__link">
+          
+  
+  
+  Project Overview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../hardware/" class="md-tabs__link">
+          
+  
+  
+  Hardware
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../software/" class="md-tabs__link">
+          
+  
+  
+  Software
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../networking/" class="md-tabs__link">
+          
+  
+  
+  Networking
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../simulation/" class="md-tabs__link">
+          
+  
+  
+  Simulation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../troubleshooting/" class="md-tabs__link">
+          
+  
+  
+  Troubleshooting
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../research/" class="md-tabs__link">
+          
+  
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ShadowHound Documentation" class="md-nav__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ShadowHound Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Project Overview
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Project Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Roadmap
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start Launch Checklist
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/setup_status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project Setup Status (Oct 4 2025)
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/architecture_review_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Review Summary
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/todo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project TODO Backlog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Hardware
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Software
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Software
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Script Catalog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/environment_configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Environment Configuration
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/start_script_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Start Script Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/dimos_quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DIMOS Integration Quick Start
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/ros2_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ROS 2 Workstation Setup
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/isaac_sim_remote/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Isaac Sim Remote Streaming
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Autodoc
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            Autodoc
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/autodoc/_index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Index
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Networking
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/webrtc_direct_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    WebRTC Direct Test
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Simulation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Simulation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Troubleshooting
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Research
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Research
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/devlog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Development Log
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="repository-auto-update-features">Repository Auto-Update Features<a class="headerlink" href="#repository-auto-update-features" title="Permanent link">&para;</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>Preserve historical context while signaling that this page requires verification against the current workflow.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Review the legacy notes below to understand original assumptions and instructions.</li>
+<li>Cross-check commands and links with the latest tooling before execution.</li>
+</ul>
+<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Read through the legacy notes captured under <strong>Legacy Notes</strong> and flag outdated guidance.</li>
+<li>Update or replace the content with validated procedures as time permits.</li>
+<li>Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.</li>
+</ol>
+<h3 id="legacy-notes">Legacy Notes<a class="headerlink" href="#legacy-notes" title="Permanent link">&para;</a></h3>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>The start script now automatically checks for updates in both the main repository and all submodules (including <code>dimos-unitree</code> and <code>go2_ros2_sdk</code>) before launching.</p>
+<h2 id="features-added">Features Added<a class="headerlink" href="#features-added" title="Permanent link">&para;</a></h2>
+<h3 id="1-automatic-update-detection">1. <strong>Automatic Update Detection</strong><a class="headerlink" href="#1-automatic-update-detection" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Checks main repo against remote</li>
+<li>Checks all submodules for updates</li>
+<li>Shows how many commits behind/ahead</li>
+<li>Displays recent commit messages</li>
+</ul>
+<h3 id="2-smart-update-prompts">2. <strong>Smart Update Prompts</strong><a class="headerlink" href="#2-smart-update-prompts" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Interactive: Prompts to pull if updates available</li>
+<li>Auto mode: Pulls automatically without prompting</li>
+<li>Skip mode: Bypasses update check entirely</li>
+</ul>
+<h3 id="3-safe-handling-of-local-changes">3. <strong>Safe Handling of Local Changes</strong><a class="headerlink" href="#3-safe-handling-of-local-changes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Detects uncommitted changes</li>
+<li>Offers to stash before pulling</li>
+<li>Optionally restores stashed changes after update</li>
+</ul>
+<h3 id="4-automatic-rebuild-trigger">4. <strong>Automatic Rebuild Trigger</strong><a class="headerlink" href="#4-automatic-rebuild-trigger" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Sets <code>FORCE_REBUILD=true</code> when code is pulled</li>
+<li>Ensures packages are rebuilt after updates</li>
+</ul>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<h3 id="start-script-with-update-check">Start Script with Update Check<a class="headerlink" href="#start-script-with-update-check" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Interactive mode (default) - prompts if updates available
+./start.sh --dev
+
+# Auto-update mode - pulls automatically
+./start.sh --dev --auto-update
+
+# Skip update check - faster startup
+./start.sh --dev --skip-update
+</code></pre>
+<h3 id="standalone-update-script">Standalone Update Script<a class="headerlink" href="#standalone-update-script" title="Permanent link">&para;</a></h3>
+<p>For when you just want to update repos without launching:</p>
+<pre><code class="language-bash"># Interactive update check
+./scripts/update_repos.sh
+
+# Automatic update (no prompts)
+./scripts/update_repos.sh --auto
+
+# Only fetch, don't pull
+./scripts/update_repos.sh --fetch-only
+
+# Only update submodules
+./scripts/update_repos.sh --submodules
+</code></pre>
+<h2 id="command-line-options">Command-Line Options<a class="headerlink" href="#command-line-options" title="Permanent link">&para;</a></h2>
+<h3 id="startsh-options">start.sh Options<a class="headerlink" href="#startsh-options" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--skip-update</code></td>
+<td>Skip git repository update check</td>
+</tr>
+<tr>
+<td><code>--auto-update</code></td>
+<td>Automatically pull updates without prompting</td>
+</tr>
+<tr>
+<td><code>--dev</code></td>
+<td>Use development configuration</td>
+</tr>
+<tr>
+<td><code>--prod</code></td>
+<td>Use production configuration</td>
+</tr>
+<tr>
+<td><code>--mock</code></td>
+<td>Force mock robot mode</td>
+</tr>
+<tr>
+<td><code>--no-web</code></td>
+<td>Disable web interface</td>
+</tr>
+<tr>
+<td><code>--web-port N</code></td>
+<td>Set web port (default: 8080)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="update_repossh-options">update_repos.sh Options<a class="headerlink" href="#update_repossh-options" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--auto</code></td>
+<td>Automatically update without prompting</td>
+</tr>
+<tr>
+<td><code>--fetch-only</code></td>
+<td>Only fetch, don't pull changes</td>
+</tr>
+<tr>
+<td><code>--submodules</code></td>
+<td>Only update submodules, skip main repo</td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>Show help message</td>
+</tr>
+</tbody>
+</table>
+<h2 id="workflow-examples">Workflow Examples<a class="headerlink" href="#workflow-examples" title="Permanent link">&para;</a></h2>
+<h3 id="daily-development-workflow">Daily Development Workflow<a class="headerlink" href="#daily-development-workflow" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Morning: Pull latest changes from team
+./scripts/update_repos.sh --auto
+
+# Work on your changes...
+
+# Afternoon: Test with latest code
+./start.sh --dev --auto-update
+</code></pre>
+<h3 id="working-on-go2_ros2_sdk-improvements">Working on go2_ros2_sdk Improvements<a class="headerlink" href="#working-on-go2_ros2_sdk-improvements" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># 1. Make changes to go2_ros2_sdk
+cd src/dimos-unitree/dimos/robot/unitree/external/go2_ros2_sdk
+# ... edit files ...
+
+# 2. Test locally
+cd ~/shadowhound
+./start.sh --dev --skip-update  # Don't pull over your changes
+
+# 3. Commit your improvements
+cd src/dimos-unitree/dimos/robot/unitree/external/go2_ros2_sdk
+git add .
+git commit -m &quot;Improve lidar processing&quot;
+git push origin your-branch
+
+# 4. Later, pull team's updates to other parts
+./scripts/update_repos.sh  # Will show your go2_ros2_sdk is ahead
+</code></pre>
+<h3 id="cicd-pipeline">CI/CD Pipeline<a class="headerlink" href="#cicd-pipeline" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Always pull latest before testing
+./start.sh --auto-update --dev --no-web
+</code></pre>
+<h2 id="what-gets-updated">What Gets Updated<a class="headerlink" href="#what-gets-updated" title="Permanent link">&para;</a></h2>
+<h3 id="main-repository-shadowhound">Main Repository (<code>shadowhound</code>)<a class="headerlink" href="#main-repository-shadowhound" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Your mission agent code</li>
+<li>Launch files</li>
+<li>Configuration files</li>
+<li>Documentation</li>
+<li>Start scripts</li>
+</ul>
+<h3 id="submodule-dimos-unitree">Submodule: <code>dimos-unitree</code><a class="headerlink" href="#submodule-dimos-unitree" title="Permanent link">&para;</a></h3>
+<ul>
+<li>DIMOS framework</li>
+<li>Unitree robot interface</li>
+<li>Skills library</li>
+<li>Agent implementations</li>
+</ul>
+<h3 id="nested-submodule-go2_ros2_sdk">Nested Submodule: <code>go2_ros2_sdk</code><a class="headerlink" href="#nested-submodule-go2_ros2_sdk" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Go2 driver node</li>
+<li>Robot interfaces (go2_interfaces)</li>
+<li>Lidar processor</li>
+<li>WebRTC communication</li>
+</ul>
+<h2 id="update-check-output">Update Check Output<a class="headerlink" href="#update-check-output" title="Permanent link">&para;</a></h2>
+<h3 id="example-no-updates">Example: No Updates<a class="headerlink" href="#example-no-updates" title="Permanent link">&para;</a></h3>
+<pre><code>── Repository Update Check ──────────────────────────────────
+ℹ Current branch: feature/dimos-integration
+ℹ Checking for updates from remote...
+✓ Main repo is up to date
+ℹ Checking submodules...
+  ✓ dimos-unitree: up to date
+  ✓ go2_ros2_sdk: up to date
+</code></pre>
+<h3 id="example-updates-available">Example: Updates Available<a class="headerlink" href="#example-updates-available" title="Permanent link">&para;</a></h3>
+<pre><code>── Repository Update Check ──────────────────────────────────
+ℹ Current branch: feature/dimos-integration
+ℹ Checking for updates from remote...
+⚠ Main repo is 2 commit(s) behind remote
+  Latest changes:
+    d5ae2ba Format diagnostic code with black/isort
+    ad48e43 Add topic visibility diagnostics
+
+ℹ Checking submodules...
+  ⚠️  dimos-unitree: 1 commit(s) behind
+      a3f4b7d Fix costmap subscription QoS
+  ✓ go2_ros2_sdk: up to date
+
+⚠ Updates are available!
+
+Pull latest changes from remote? [Y/n]:
+</code></pre>
+<h3 id="example-local-changes">Example: Local Changes<a class="headerlink" href="#example-local-changes" title="Permanent link">&para;</a></h3>
+<pre><code>⚠ You have uncommitted changes
+
+ M src/shadowhound_mission_agent/mission_agent.py
+ M scripts/check_topics.py
+
+Stash changes before pulling? [Y/n]: y
+✓ Changes stashed
+ℹ Pulling latest changes...
+✓ Main repo updated
+✓ Submodules updated
+
+Restore your stashed changes? [Y/n]: y
+✓ Changes restored
+</code></pre>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="merge-conflicts-after-pull">Merge Conflicts After Pull<a class="headerlink" href="#merge-conflicts-after-pull" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># If auto-update causes conflicts
+git status  # See conflicted files
+
+# Resolve conflicts manually, then:
+git add &lt;resolved-files&gt;
+git commit -m &quot;Resolve merge conflicts&quot;
+
+# Or abort and go back to before update:
+git merge --abort
+</code></pre>
+<h3 id="submodule-detached-head">Submodule Detached HEAD<a class="headerlink" href="#submodule-detached-head" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># If submodule shows &quot;HEAD detached&quot;
+cd src/dimos-unitree
+git checkout main  # or your branch
+git pull origin main
+
+cd ../..
+git add src/dimos-unitree
+git commit -m &quot;Update submodule pointer&quot;
+</code></pre>
+<h3 id="update-script-hangs">Update Script Hangs<a class="headerlink" href="#update-script-hangs" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># If update check takes too long (network issues)
+# Use --skip-update flag:
+./start.sh --dev --skip-update
+
+# Or set short timeout in git config:
+git config --global http.timeout 10
+</code></pre>
+<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Start of Day</strong>: Run <code>./scripts/update_repos.sh</code> to sync with team</li>
+<li><strong>Before Committing</strong>: Check you're not behind with <code>git fetch origin</code></li>
+<li><strong>CI/CD</strong>: Use <code>--auto-update</code> for automated environments</li>
+<li><strong>Development</strong>: Use <code>--skip-update</code> when testing local changes</li>
+<li><strong>Submodule Work</strong>: Always commit and push submodule changes separately</li>
+</ol>
+<h2 id="integration-with-other-tools">Integration with Other Tools<a class="headerlink" href="#integration-with-other-tools" title="Permanent link">&para;</a></h2>
+<h3 id="with-ros2-build">With ROS2 Build<a class="headerlink" href="#with-ros2-build" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Update and rebuild in one go
+./start.sh --auto-update --dev
+# Automatically rebuilds if code changed
+</code></pre>
+<h3 id="with-git-hooks">With Git Hooks<a class="headerlink" href="#with-git-hooks" title="Permanent link">&para;</a></h3>
+<p>Create <code>.git/hooks/post-merge</code>:</p>
+<pre><code class="language-bash">#!/bin/bash
+# Remind to rebuild after pulling
+echo &quot;⚠️  Code was updated - consider rebuilding:&quot;
+echo &quot;   colcon build --symlink-install&quot;
+</code></pre>
+<pre><code class="language-bash">chmod +x .git/hooks/post-merge
+</code></pre>
+<h2 id="related-documentation">Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>docs/topic_diagnostics.md</code> - Topic visibility checking</li>
+<li><code>README.md</code> - General setup</li>
+<li><code>.env.development</code> - Development configuration</li>
+<li><code>.env.production</code> - Production configuration</li>
+</ul>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.</li>
+<li>[ ] Links updated to use vault-friendly wikilinks or confirmed for external references.</li>
+<li>[ ] Outstanding migration work captured as tasks in the backlog.</li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../">Knowledge Base Index</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.sections", "navigation.tabs", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1887 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="ShadowHound / Robot Dog knowledge base">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>How ShadowHound Works with ChatGPT API - ShadowHound Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2a3383ac.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#how-shadowhound-works-with-chatgpt-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ShadowHound Documentation" class="md-header__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ShadowHound Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              How ShadowHound Works with ChatGPT API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../project_overview/roadmap/" class="md-tabs__link">
+          
+  
+  
+  Project Overview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../hardware/" class="md-tabs__link">
+          
+  
+  
+  Hardware
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../software/" class="md-tabs__link">
+          
+  
+  
+  Software
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../networking/" class="md-tabs__link">
+          
+  
+  
+  Networking
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../simulation/" class="md-tabs__link">
+          
+  
+  
+  Simulation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../troubleshooting/" class="md-tabs__link">
+          
+  
+  
+  Troubleshooting
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../research/" class="md-tabs__link">
+          
+  
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ShadowHound Documentation" class="md-nav__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ShadowHound Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Project Overview
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Project Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Roadmap
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start Launch Checklist
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/setup_status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project Setup Status (Oct 4 2025)
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/architecture_review_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Review Summary
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/todo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project TODO Backlog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Hardware
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Software
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Software
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Script Catalog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/environment_configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Environment Configuration
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/start_script_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Start Script Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/dimos_quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DIMOS Integration Quick Start
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/ros2_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ROS 2 Workstation Setup
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/isaac_sim_remote/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Isaac Sim Remote Streaming
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Autodoc
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            Autodoc
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/autodoc/_index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Index
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Networking
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/webrtc_direct_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    WebRTC Direct Test
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Simulation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Simulation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Troubleshooting
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Research
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Research
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/devlog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Development Log
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="how-shadowhound-works-with-chatgpt-api">How ShadowHound Works with ChatGPT API<a class="headerlink" href="#how-shadowhound-works-with-chatgpt-api" title="Permanent link">&para;</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>Preserve historical context while signaling that this page requires verification against the current workflow.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Review the legacy notes below to understand original assumptions and instructions.</li>
+<li>Cross-check commands and links with the latest tooling before execution.</li>
+</ul>
+<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Read through the legacy notes captured under <strong>Legacy Notes</strong> and flag outdated guidance.</li>
+<li>Update or replace the content with validated procedures as time permits.</li>
+<li>Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.</li>
+</ol>
+<h3 id="legacy-notes">Legacy Notes<a class="headerlink" href="#legacy-notes" title="Permanent link">&para;</a></h3>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>ShadowHound uses the <strong>DIMOS framework's OpenAIAgent</strong> to communicate with ChatGPT. Your web interface and ROS topics send natural language commands that get processed through multiple layers before reaching OpenAI's API.</p>
+<h2 id="architecture-flow">Architecture Flow<a class="headerlink" href="#architecture-flow" title="Permanent link">&para;</a></h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│ 1. USER INPUT                                                   │
+│    - Web Dashboard: http://localhost:8080                       │
+│    - ROS Topic: ros2 topic pub /mission_command                 │
+└────────────────┬────────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 2. SHADOWHOUND MISSION AGENT (Your Code)                       │
+│    - mission_agent.py: MissionAgentNode                         │
+│    - Receives command: &quot;stand up and wave hello&quot;                │
+│    - Calls: self.agent.process_text(command)                    │
+└────────────────┬────────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 3. DIMOS OPENAI AGENT (DIMOS Framework)                        │
+│    - agent.py: OpenAIAgent class                                │
+│    - Builds prompt with:                                        │
+│      • System prompt (robot capabilities)                       │
+│      • Available skills (40+ robot actions)                     │
+│      • Conversation history                                     │
+│      • Memory context (RAG)                                     │
+└────────────────┬────────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 4. OPENAI API CALL                                              │
+│    - client.chat.completions.create()                           │
+│    - Model: gpt-4o (default) or gpt-4                           │
+│    - Tools: Skill library (function calling)                    │
+│    - Max tokens: 16,384 output                                  │
+└────────────────┬────────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 5. CHATGPT RESPONSE                                             │
+│    - Returns: Function call(s) to execute                       │
+│    - Example: {&quot;name&quot;: &quot;stand&quot;, &quot;args&quot;: {}}                     │
+│              {&quot;name&quot;: &quot;wave&quot;, &quot;args&quot;: {&quot;leg&quot;: &quot;front_right&quot;}}   │
+└────────────────┬────────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 6. SKILL EXECUTION (DIMOS)                                      │
+│    - DIMOS executes the skills on the robot                     │
+│    - Sends commands to Unitree Go2 hardware                     │
+│    - Monitors execution and reports results                     │
+└────────────────┬────────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 7. RESULT BACK TO USER                                          │
+│    - ROS topic: /mission_status                                 │
+│    - Web dashboard: WebSocket update                            │
+│    - Status: &quot;COMPLETED: stand up and wave hello&quot;               │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h2 id="code-path">Code Path<a class="headerlink" href="#code-path" title="Permanent link">&para;</a></h2>
+<h3 id="1-your-mission-agent-node">1. Your Mission Agent Node<a class="headerlink" href="#1-your-mission-agent-node" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>src/shadowhound_mission_agent/shadowhound_mission_agent/mission_agent.py</code></p>
+<pre><code class="language-python">def mission_callback(self, msg: String):
+    command = msg.data  # &quot;stand up and wave hello&quot;
+
+    # Call DIMOS agent
+    result = self.agent.process_text(command)  # ← Goes to DIMOS
+</code></pre>
+<h3 id="2-dimos-openaiagent-initialization">2. DIMOS OpenAIAgent Initialization<a class="headerlink" href="#2-dimos-openaiagent-initialization" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>src/dimos-unitree/dimos/agents/agent.py</code> (lines 660-750)</p>
+<pre><code class="language-python">class OpenAIAgent(LLMAgent):
+    def __init__(self,
+                 model_name: str = &quot;gpt-4o&quot;,  # ChatGPT model
+                 skills: Optional[SkillLibrary] = None,  # Robot skills
+                 ...):
+
+        # Initialize OpenAI client (uses OPENAI_API_KEY env var)
+        self.client = openai_client or OpenAI()
+
+        # Set up skill library for function calling
+        self.skill_library = SkillLibrary(skills)
+</code></pre>
+<h3 id="3-processing-text-commands">3. Processing Text Commands<a class="headerlink" href="#3-processing-text-commands" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>src/dimos-unitree/dimos/agents/agent.py</code></p>
+<p>When you call <code>agent.process_text(command)</code>:</p>
+<ol>
+<li><strong>Builds message list</strong> with:</li>
+<li>System prompt describing robot capabilities</li>
+<li>Available skills as OpenAI "tools" (function calling format)</li>
+<li>Conversation history</li>
+<li>
+<p>RAG context from semantic memory</p>
+</li>
+<li>
+<p><strong>Calls <code>_send_query(messages)</code></strong>:</p>
+</li>
+</ol>
+<pre><code class="language-python">def _send_query(self, messages: list) -&gt; Any:
+    &quot;&quot;&quot;Sends the query to OpenAI's API.&quot;&quot;&quot;
+
+    # Make API call to ChatGPT
+    response = self.client.chat.completions.create(
+        model=self.model_name,        # &quot;gpt-4o&quot;
+        messages=messages,             # Conversation with context
+        max_tokens=16384,              # Output limit
+        tools=self.skill_library.get_tools()  # Robot skills
+    )
+
+    return response.choices[0].message
+</code></pre>
+<h3 id="4-chatgpt-response-processing">4. ChatGPT Response Processing<a class="headerlink" href="#4-chatgpt-response-processing" title="Permanent link">&para;</a></h3>
+<p>ChatGPT responds with <strong>function calls</strong> (tool calls):</p>
+<pre><code class="language-json">{
+  &quot;role&quot;: &quot;assistant&quot;,
+  &quot;content&quot;: null,
+  &quot;tool_calls&quot;: [
+    {
+      &quot;id&quot;: &quot;call_abc123&quot;,
+      &quot;type&quot;: &quot;function&quot;,
+      &quot;function&quot;: {
+        &quot;name&quot;: &quot;stand&quot;,
+        &quot;arguments&quot;: &quot;{}&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;call_def456&quot;,
+      &quot;type&quot;: &quot;function&quot;,
+      &quot;function&quot;: {
+        &quot;name&quot;: &quot;wave&quot;,
+        &quot;arguments&quot;: &quot;{\&quot;leg\&quot;: \&quot;front_right\&quot;}&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<p>DIMOS then:
+1. <strong>Parses the tool calls</strong>
+2. <strong>Executes each skill</strong> from the library
+3. <strong>Sends results back</strong> to ChatGPT (for multi-turn reasoning)
+4. <strong>Returns final result</strong> to your mission agent</p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="required-environment-variable">Required Environment Variable<a class="headerlink" href="#required-environment-variable" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">export OPENAI_API_KEY=&quot;sk-proj-...&quot;
+</code></pre>
+<p>Without this, you'll get a warning:</p>
+<pre><code>OPENAI_API_KEY not set, agent may not function
+</code></pre>
+<h3 id="model-selection">Model Selection<a class="headerlink" href="#model-selection" title="Permanent link">&para;</a></h3>
+<p>Default model is <strong>gpt-4o</strong> (fast, multimodal). You can change it:</p>
+<pre><code class="language-python"># In DIMOS agent initialization
+agent = OpenAIAgent(
+    robot=self.robot,
+    model_name=&quot;gpt-4&quot;,           # Use GPT-4 instead
+    # or model_name=&quot;gpt-4-turbo&quot;,
+    # or model_name=&quot;gpt-3.5-turbo&quot;,
+    ...
+)
+</code></pre>
+<h3 id="token-limits">Token Limits<a class="headerlink" href="#token-limits" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">max_input_tokens_per_request: int = 128000   # Input context
+max_output_tokens_per_request: int = 16384   # ChatGPT response
+</code></pre>
+<p>These are set in DIMOS and match gpt-4o's capabilities.</p>
+<h2 id="skills-as-openai-tools">Skills as OpenAI Tools<a class="headerlink" href="#skills-as-openai-tools" title="Permanent link">&para;</a></h2>
+<p>DIMOS converts robot skills into OpenAI's function calling format. Example:</p>
+<h3 id="skill-definition-python">Skill Definition (Python)<a class="headerlink" href="#skill-definition-python" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">class StandSkill(AbstractSkill):
+    name = &quot;stand&quot;
+    description = &quot;Make the robot stand up from sitting position&quot;
+
+    def execute(self, **kwargs):
+        self.robot.stand()
+        return &quot;Robot standing&quot;
+</code></pre>
+<h3 id="openai-tool-format-json">OpenAI Tool Format (JSON)<a class="headerlink" href="#openai-tool-format-json" title="Permanent link">&para;</a></h3>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;function&quot;,
+  &quot;function&quot;: {
+    &quot;name&quot;: &quot;stand&quot;,
+    &quot;description&quot;: &quot;Make the robot stand up from sitting position&quot;,
+    &quot;parameters&quot;: {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: {},
+      &quot;required&quot;: []
+    }
+  }
+}
+</code></pre>
+<p>ChatGPT sees these as available functions it can call!</p>
+<h2 id="example-full-flow">Example: Full Flow<a class="headerlink" href="#example-full-flow" title="Permanent link">&para;</a></h2>
+<h3 id="user-input">User Input<a class="headerlink" href="#user-input" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">curl -X POST http://localhost:8080/api/mission \
+  -d '{&quot;command&quot;: &quot;stand up and do a little dance&quot;}'
+</code></pre>
+<h3 id="1-mission-agent-receives">1. Mission Agent Receives<a class="headerlink" href="#1-mission-agent-receives" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">command = &quot;stand up and do a little dance&quot;
+result = self.agent.process_text(command)
+</code></pre>
+<h3 id="2-dimos-builds-prompt">2. DIMOS Builds Prompt<a class="headerlink" href="#2-dimos-builds-prompt" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">messages = [
+    {
+        &quot;role&quot;: &quot;system&quot;,
+        &quot;content&quot;: &quot;You are controlling a Unitree Go2 quadruped robot. Available skills: stand, sit, wave, dance, ...&quot;
+    },
+    {
+        &quot;role&quot;: &quot;user&quot;,
+        &quot;content&quot;: &quot;stand up and do a little dance&quot;
+    }
+]
+
+tools = [
+    {&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {&quot;name&quot;: &quot;stand&quot;, ...}},
+    {&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {&quot;name&quot;: &quot;dance&quot;, ...}},
+    # ... 40+ skills
+]
+</code></pre>
+<h3 id="3-sends-to-openai">3. Sends to OpenAI<a class="headerlink" href="#3-sends-to-openai" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">response = client.chat.completions.create(
+    model=&quot;gpt-4o&quot;,
+    messages=messages,
+    tools=tools,
+    max_tokens=16384
+)
+</code></pre>
+<h3 id="4-chatgpt-responds">4. ChatGPT Responds<a class="headerlink" href="#4-chatgpt-responds" title="Permanent link">&para;</a></h3>
+<pre><code class="language-json">{
+  &quot;tool_calls&quot;: [
+    {&quot;function&quot;: {&quot;name&quot;: &quot;stand&quot;, &quot;arguments&quot;: &quot;{}&quot;}},
+    {&quot;function&quot;: {&quot;name&quot;: &quot;dance&quot;, &quot;arguments&quot;: &quot;{\&quot;dance_id\&quot;: 1}&quot;}}
+  ]
+}
+</code></pre>
+<h3 id="5-dimos-executes">5. DIMOS Executes<a class="headerlink" href="#5-dimos-executes" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python"># Execute skill 1
+skill_registry.execute(&quot;stand&quot;)
+
+# Execute skill 2
+skill_registry.execute(&quot;dance&quot;, dance_id=1)
+</code></pre>
+<h3 id="6-result-to-user">6. Result to User<a class="headerlink" href="#6-result-to-user" title="Permanent link">&para;</a></h3>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;message&quot;: &quot;Mission completed: Executed stand, dance&quot;
+}
+</code></pre>
+<h2 id="advanced-features">Advanced Features<a class="headerlink" href="#advanced-features" title="Permanent link">&para;</a></h2>
+<h3 id="1-conversation-memory">1. Conversation Memory<a class="headerlink" href="#1-conversation-memory" title="Permanent link">&para;</a></h3>
+<p>DIMOS maintains conversation history, so ChatGPT remembers context:</p>
+<pre><code class="language-bash"># First command
+&quot;stand up&quot;
+
+# Second command (ChatGPT knows robot is already standing)
+&quot;now wave&quot;
+</code></pre>
+<h3 id="2-semantic-memory-rag">2. Semantic Memory (RAG)<a class="headerlink" href="#2-semantic-memory-rag" title="Permanent link">&para;</a></h3>
+<p>DIMOS uses ChromaDB to store and retrieve context:</p>
+<pre><code class="language-python">agent_memory.add_vector(
+    &quot;id0&quot;,
+    &quot;Optical Flow tracks object movement in video&quot;
+)
+
+# Later, relevant context is automatically retrieved and added to prompt
+</code></pre>
+<h3 id="3-planning-agent">3. Planning Agent<a class="headerlink" href="#3-planning-agent" title="Permanent link">&para;</a></h3>
+<p>For complex missions, use <code>PlanningAgent</code> instead:</p>
+<pre><code class="language-python"># In mission_agent.py
+self.agent = PlanningAgent(...)  # Instead of OpenAIAgent
+
+# This agent creates a plan first, then executes
+result = self.agent.plan_and_execute(&quot;patrol the perimeter&quot;)
+</code></pre>
+<p>Planning flow:
+1. <strong>Generate plan</strong>: ChatGPT creates step-by-step plan
+2. <strong>Review plan</strong>: User or system validates
+3. <strong>Execute plan</strong>: Each step executed sequentially
+4. <strong>Adapt</strong>: Can replan if steps fail</p>
+<h2 id="api-costs">API Costs<a class="headerlink" href="#api-costs" title="Permanent link">&para;</a></h2>
+<p><strong>Important</strong>: Every command costs OpenAI API tokens!</p>
+<h3 id="typical-command-cost">Typical Command Cost<a class="headerlink" href="#typical-command-cost" title="Permanent link">&para;</a></h3>
+<pre><code>Input tokens:  ~1,500-3,000   (system prompt + skills + history)
+Output tokens: ~100-500       (response with tool calls)
+Cost per call: ~$0.01-0.05    (with gpt-4o)
+</code></pre>
+<h3 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Use gpt-3.5-turbo</strong> for simple commands (10x cheaper)</li>
+<li><strong>Reduce skill library</strong> size (fewer tools = smaller context)</li>
+<li><strong>Clear conversation history</strong> periodically</li>
+<li><strong>Use mock robot</strong> for testing (free!)</li>
+</ol>
+<h2 id="switching-to-local-models">Switching to Local Models<a class="headerlink" href="#switching-to-local-models" title="Permanent link">&para;</a></h2>
+<p>To avoid API costs, you can use local models:</p>
+<pre><code class="language-python"># Option 1: Use local OpenAI-compatible server
+client = OpenAI(
+    base_url=&quot;http://localhost:8000/v1&quot;,  # Local LLM server
+    api_key=&quot;not-needed&quot;
+)
+
+# Option 2: Use different provider
+from anthropic import Anthropic
+# DIMOS also supports Claude via ClaudeAgent
+</code></pre>
+<h2 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h2>
+<h3 id="see-chatgpt-prompts">See ChatGPT Prompts<a class="headerlink" href="#see-chatgpt-prompts" title="Permanent link">&para;</a></h3>
+<p>Enable logging in DIMOS:</p>
+<pre><code class="language-python">import logging
+logging.basicConfig(level=logging.DEBUG)
+
+# You'll see full prompts and responses in logs
+</code></pre>
+<h3 id="test-without-robot">Test Without Robot<a class="headerlink" href="#test-without-robot" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">ros2 launch shadowhound_mission_agent bringup.launch.py \
+    mock_robot:=true
+
+# Commands go to ChatGPT but robot execution is mocked
+</code></pre>
+<h3 id="inspect-tool-calls">Inspect Tool Calls<a class="headerlink" href="#inspect-tool-calls" title="Permanent link">&para;</a></h3>
+<p>Check DIMOS logs for tool call details:</p>
+<pre><code>[INFO] Tool call: stand()
+[INFO] Tool call: wave(leg='front_right')
+[INFO] Skill execution: stand -&gt; Success
+[INFO] Skill execution: wave -&gt; Success
+</code></pre>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p><strong>Your Integration</strong>:</p>
+<pre><code>Web/ROS → mission_agent.py → agent.process_text()
+</code></pre>
+<p><strong>DIMOS Does</strong>:
+1. Builds prompt with system context + skills
+2. Calls OpenAI API with function calling
+3. Parses ChatGPT's tool call responses
+4. Executes skills on robot
+5. Returns results</p>
+<p><strong>ChatGPT Does</strong>:
+- Understands natural language command
+- Reasons about which skills to use
+- Returns function calls in correct order
+- Maintains conversation context</p>
+<p><strong>Key Files</strong>:
+- <code>mission_agent.py</code> (yours): ROS/Web → DIMOS bridge
+- <code>dimos/agents/agent.py</code>: OpenAIAgent implementation
+- <code>dimos/agents/planning_agent.py</code>: PlanningAgent for complex missions
+- <code>dimos/skills/skills.py</code>: Skill library management</p>
+<p><strong>Environment</strong>:</p>
+<pre><code class="language-bash">export OPENAI_API_KEY=&quot;sk-...&quot;  # Required!
+</code></pre>
+<p><strong>Models Supported</strong>:
+- gpt-4o (default, fastest, multimodal)
+- gpt-4 (most capable, slower)
+- gpt-4-turbo (balanced)
+- gpt-3.5-turbo (cheapest, good for simple tasks)</p>
+<p>Your ShadowHound web interface makes all of this accessible through a beautiful UI - users just type commands, and the entire ChatGPT → Skills → Robot chain happens automatically! 🚀</p>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.</li>
+<li>[ ] Links updated to use vault-friendly wikilinks or confirmed for external references.</li>
+<li>[ ] Outstanding migration work captured as tasks in the backlog.</li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../">Knowledge Base Index</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.sections", "navigation.tabs", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

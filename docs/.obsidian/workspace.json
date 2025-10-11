@@ -1,0 +1,206 @@
+{
+  "main": {
+    "id": "b483cca89dab5160",
+    "type": "split",
+    "children": [
+      {
+        "id": "e8e316bf25d49759",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1b11e2a82b2fc7f4",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1be22e4ceaadbbc0",
+    "type": "split",
+    "children": [
+      {
+        "id": "eeec71ee5512fd61",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "11782e383755777d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "888f61f010df1dc7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "a9356300a15a5c7a",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6507726b73b9f977",
+    "type": "split",
+    "children": [
+      {
+        "id": "e1b5e308302f1f3c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "77d67a035d276ae9",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "20f6aaadbc88bc80",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "2dfd7dad1c811593",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "ab836c657aece413",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "github-sync:Sync with Remote": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "1b11e2a82b2fc7f4",
+  "lastOpenFiles": [
+    "ollama_model_selection.md",
+    "Untitled.canvas",
+    "THOR_RESOURCES.md",
+    "THOR_PERFORMANCE_NOTES.md",
+    "TESTING_GUIDE_OLLAMA.md",
+    "STARTUP_VALIDATION.md",
+    "SECURITY_ANALYSIS_JTOP.md",
+    "QUICK_START_ROBOT_TEST.md",
+    "QUALITY_SCORING_SUMMARY.md",
+    "OLLAMA_STATUS_AND_TODOS.md",
+    "OLLAMA_SETUP.md",
+    "OLLAMA_QUALITY_SCORING.md",
+    "OLLAMA_MODEL_COMPARISON.md",
+    "OLLAMA_MODELS.md",
+    "OLLAMA_DEPLOYMENT_CHECKLIST.md",
+    "OLLAMA_BENCHMARK_RESULTS.md",
+    "OLLAMA_BENCHMARK_MEMORY_MANAGEMENT.md",
+    "OLLAMA_BENCHMARKING.md",
+    "OLLAMA_BACKEND_INTEGRATION.md",
+    "LLM_BACKEND_VALIDATION.md",
+    "FEATURE_COMPLETE_OLLAMA.md",
+    "EOD_SUMMARY_2025-10-10.md",
+    "BACKEND_VALIDATION_SUMMARY.md",
+    "BACKEND_QUICK_REFERENCE.md",
+    "software/autodoc/shadowhound_skills.md",
+    "software/autodoc/shadowhound_mission_agent.md",
+    "software/autodoc/shadowhound_bringup.md",
+    "troubleshooting",
+    "software/autodoc",
+    "software",
+    "simulation",
+    "research",
+    "project_overview",
+    "networking",
+    "_templates",
+    "_assets",
+    "web_ui/terminal_demo.html"
+  ]
+}

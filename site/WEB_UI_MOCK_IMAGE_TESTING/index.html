@@ -1,0 +1,1817 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="ShadowHound / Robot Dog knowledge base">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>Web UI Redesign & Mock Image Testing - ShadowHound Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2a3383ac.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#web-ui-redesign-mock-image-testing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ShadowHound Documentation" class="md-header__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ShadowHound Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Web UI Redesign &amp; Mock Image Testing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../project_overview/roadmap/" class="md-tabs__link">
+          
+  
+  
+  Project Overview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../hardware/" class="md-tabs__link">
+          
+  
+  
+  Hardware
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../software/" class="md-tabs__link">
+          
+  
+  
+  Software
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../networking/" class="md-tabs__link">
+          
+  
+  
+  Networking
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../simulation/" class="md-tabs__link">
+          
+  
+  
+  Simulation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../troubleshooting/" class="md-tabs__link">
+          
+  
+  
+  Troubleshooting
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../research/" class="md-tabs__link">
+          
+  
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ShadowHound Documentation" class="md-nav__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ShadowHound Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Project Overview
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Project Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Roadmap
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start Launch Checklist
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/setup_status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project Setup Status (Oct 4 2025)
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/architecture_review_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Review Summary
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/todo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project TODO Backlog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Hardware
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Software
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Software
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Script Catalog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/environment_configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Environment Configuration
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/start_script_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Start Script Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/dimos_quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DIMOS Integration Quick Start
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/ros2_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ROS 2 Workstation Setup
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/isaac_sim_remote/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Isaac Sim Remote Streaming
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Autodoc
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            Autodoc
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/autodoc/_index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Index
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Networking
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/webrtc_direct_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    WebRTC Direct Test
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Simulation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Simulation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Troubleshooting
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Research
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Research
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/devlog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Development Log
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="web-ui-redesign-mock-image-testing">Web UI Redesign &amp; Mock Image Testing<a class="headerlink" href="#web-ui-redesign-mock-image-testing" title="Permanent link">&para;</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>Preserve historical context while signaling that this page requires verification against the current workflow.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Review the legacy notes below to understand original assumptions and instructions.</li>
+<li>Cross-check commands and links with the latest tooling before execution.</li>
+</ul>
+<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Read through the legacy notes captured under <strong>Legacy Notes</strong> and flag outdated guidance.</li>
+<li>Update or replace the content with validated procedures as time permits.</li>
+<li>Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.</li>
+</ol>
+<h3 id="legacy-notes">Legacy Notes<a class="headerlink" href="#legacy-notes" title="Permanent link">&para;</a></h3>
+<p><strong>Date:</strong> October 6, 2025<br />
+<strong>Status:</strong> ✅ Complete - Ready for testing<br />
+<strong>Branch:</strong> feature/dimos-integration</p>
+<hr />
+<h2 id="what-we-built">What We Built<a class="headerlink" href="#what-we-built" title="Permanent link">&para;</a></h2>
+<h3 id="1-sci-fi-mission-control-ui">1. <strong>Sci-Fi Mission Control UI</strong> 🎨<a class="headerlink" href="#1-sci-fi-mission-control-ui" title="Permanent link">&para;</a></h3>
+<p>Complete redesign from "cutesy" purple theme to professional sci-fi aesthetic:</p>
+<p><strong>Visual Design:</strong>
+- ✅ Dark background (#0a0e1a) with subtle grid overlay
+- ✅ Electric blue (#00d4ff) and cyan (#00ccaa) accents
+- ✅ Monospace fonts (Roboto Mono) for technical feel
+- ✅ Glowing borders and animated scan lines
+- ✅ Angular panels (no rounded corners)
+- ✅ Professional "NASA mission control" aesthetic</p>
+<p><strong>UI Layout:</strong></p>
+<pre><code>┌─────────────────────────────────────────────────┐
+│ SHADOWHOUND // MISSION CONTROL    [STATUS]      │
+├────────────────────┬────────────────────────────┤
+│  VISUAL FEED       │   MISSION CONTROL          │
+│  [Camera Display]  │   [Command Log]            │
+│  [Camera Selector] │   [Command Input]          │
+│  [Mock Upload]     │   [Execute Button]         │
+├────────────────────┴────────────────────────────┤
+│  SYSTEM DIAGNOSTICS                             │
+│  Status | Battery | Position | Connection       │
+└─────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Removed:</strong>
+- ❌ WebRTC skill buttons (sit, stand, wave, etc.)
+- ❌ Purple gradient background
+- ❌ Rounded, "friendly" design elements</p>
+<hr />
+<h2 id="2-mock-image-upload-system">2. <strong>Mock Image Upload System</strong> 📸<a class="headerlink" href="#2-mock-image-upload-system" title="Permanent link">&para;</a></h2>
+<p>Full implementation for testing vision/VLM features without robot hardware:</p>
+<h3 id="backend-features-web_interfacepy">Backend Features (web_interface.py)<a class="headerlink" href="#backend-features-web_interfacepy" title="Permanent link">&para;</a></h3>
+<p><strong>New API Endpoints:</strong></p>
+<pre><code class="language-python">POST /api/mock/image
+  - Upload test images
+  - Parameters: image (file), camera (front/left/right)
+  - Returns: success, filename, size, camera
+
+GET /api/mock/image/{camera}
+  - Retrieve uploaded mock image
+  - Returns: base64 encoded image data
+</code></pre>
+<p><strong>Storage:</strong>
+- Images saved to: <code>~/.shadowhound/mock_images/</code>
+- In-memory cache: <code>self.mock_images</code> dict
+- Accessible to vision skills via <code>get_mock_image(camera)</code></p>
+<p><strong>Methods for Vision Skills:</strong></p>
+<pre><code class="language-python">web.get_mock_image(camera=&quot;front&quot;)  → bytes or None
+web.has_mock_image(camera=&quot;front&quot;)  → bool
+</code></pre>
+<h3 id="frontend-features-javascript">Frontend Features (JavaScript)<a class="headerlink" href="#frontend-features-javascript" title="Permanent link">&para;</a></h3>
+<p><strong>Camera Feed Display:</strong>
+- Live preview of uploaded images
+- Camera selector (Front/Left/Right)
+- "NO SIGNAL" placeholder when empty</p>
+<p><strong>Upload Interface:</strong>
+- File upload button with drag-and-drop styling
+- Instant preview in camera feed
+- Upload to backend with camera selection
+- Real-time status logging</p>
+<p><strong>WebSocket Updates:</strong>
+- Live connection status
+- Command execution logging
+- Mock image upload notifications
+- System diagnostics</p>
+<hr />
+<h2 id="how-to-test">How to Test<a class="headerlink" href="#how-to-test" title="Permanent link">&para;</a></h2>
+<h3 id="1-start-web-interface">1. Start Web Interface<a class="headerlink" href="#1-start-web-interface" title="Permanent link">&para;</a></h3>
+<p><strong>Option A: Standalone (what we just did)</strong></p>
+<pre><code class="language-bash">cd /home/daniel/shadowhound
+python3 src/shadowhound_mission_agent/shadowhound_mission_agent/web_interface.py
+</code></pre>
+<p><strong>Option B: With Mission Agent (when robot is available)</strong></p>
+<pre><code class="language-bash">ros2 launch shadowhound_bringup shadowhound_bringup.launch.py
+</code></pre>
+<h3 id="2-open-browser">2. Open Browser<a class="headerlink" href="#2-open-browser" title="Permanent link">&para;</a></h3>
+<p>Navigate to: http://localhost:8080</p>
+<p>You should see:
+- Dark sci-fi themed interface
+- "SHADOWHOUND // AUTONOMOUS MISSION CONTROL" header
+- Camera feed panel (top-left)
+- Mission control panel (right side)
+- System diagnostics panel (bottom-left)</p>
+<h3 id="3-test-mock-image-upload">3. Test Mock Image Upload<a class="headerlink" href="#3-test-mock-image-upload" title="Permanent link">&para;</a></h3>
+<p><strong>Step-by-step:</strong>
+1. Click "UPLOAD TEST IMAGE" button in camera feed panel
+2. Select any image from your laptop
+3. Image should appear in camera feed immediately
+4. Check mission log for "MOCK IMAGE UPLOADED" confirmation
+5. Try switching cameras (Front/Left/Right)
+6. Upload different images for each camera</p>
+<p><strong>What to use as test images:</strong>
+- Photos of rooms in your house
+- Stock images from the internet
+- Screenshots
+- Any JPG/PNG file</p>
+<p><strong>Example workflow:</strong></p>
+<pre><code>1. Upload kitchen photo → Front camera
+2. Upload living room photo → Left camera
+3. Upload hallway photo → Right camera
+4. Switch between cameras to see different views
+</code></pre>
+<h3 id="4-test-command-interface">4. Test Command Interface<a class="headerlink" href="#4-test-command-interface" title="Permanent link">&para;</a></h3>
+<p><strong>Try these commands:</strong></p>
+<pre><code>&quot;navigate to kitchen&quot;
+&quot;what do you see?&quot;
+&quot;rotate 90 degrees&quot;
+&quot;take a photo&quot;
+</code></pre>
+<p>The commands will execute through the mission agent (when connected).</p>
+<h3 id="5-verify-mock-image-access">5. Verify Mock Image Access<a class="headerlink" href="#5-verify-mock-image-access" title="Permanent link">&para;</a></h3>
+<p><strong>From Python (later when we build vision skills):</strong></p>
+<pre><code class="language-python">from shadowhound_mission_agent.web_interface import WebInterface
+
+# Get mock image
+image_data = web_interface.get_mock_image(&quot;front&quot;)
+if image_data:
+    print(f&quot;Retrieved {len(image_data)} bytes&quot;)
+    # Use with VLM API, save to disk, etc.
+</code></pre>
+<hr />
+<h2 id="next-steps-vision-skills-integration">Next Steps: Vision Skills Integration<a class="headerlink" href="#next-steps-vision-skills-integration" title="Permanent link">&para;</a></h2>
+<p>Now that we have mock image capability, we can build vision skills:</p>
+<h3 id="phase-1-vision-skill-visionpy">Phase 1: Vision Skill (vision.py)<a class="headerlink" href="#phase-1-vision-skill-visionpy" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">@register_skill(&quot;vision.snapshot&quot;)
+class SnapshotSkill(Skill):
+    &quot;&quot;&quot;Capture image from camera (mock or real).&quot;&quot;&quot;
+
+    def execute(self, camera: str = &quot;front&quot;) -&gt; SkillResult:
+        # Check if mock mode
+        if web_interface.has_mock_image(camera):
+            image_data = web_interface.get_mock_image(camera)
+            # Save to disk, return path
+        else:
+            # Subscribe to ROS camera topic
+            pass
+</code></pre>
+<h3 id="phase-2-vlm-integration">Phase 2: VLM Integration<a class="headerlink" href="#phase-2-vlm-integration" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">@register_skill(&quot;vision.describe&quot;)
+class DescribeSkill(Skill):
+    &quot;&quot;&quot;Use GPT-4 Vision to describe image.&quot;&quot;&quot;
+
+    def execute(self) -&gt; SkillResult:
+        # Get latest snapshot
+        image_path = get_latest_snapshot()
+
+        # Send to OpenAI GPT-4 Vision
+        response = openai.chat.completions.create(
+            model=&quot;gpt-4-vision-preview&quot;,
+            messages=[{
+                &quot;role&quot;: &quot;user&quot;,
+                &quot;content&quot;: [
+                    {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;Describe what you see&quot;},
+                    {&quot;type&quot;: &quot;image_url&quot;, &quot;image_url&quot;: {&quot;url&quot;: f&quot;data:image/jpeg;base64,{base64_image}&quot;}}
+                ]
+            }]
+        )
+
+        return SkillResult(
+            success=True,
+            data={&quot;description&quot;: response.choices[0].message.content}
+        )
+</code></pre>
+<h3 id="phase-3-test-full-flow">Phase 3: Test Full Flow<a class="headerlink" href="#phase-3-test-full-flow" title="Permanent link">&para;</a></h3>
+<pre><code>1. Upload test image via web UI
+2. Send command: &quot;what do you see?&quot;
+3. Mission agent:
+   - Calls vision.snapshot skill
+   - Retrieves mock image
+   - Calls vision.describe skill
+   - Sends image to GPT-4 Vision
+   - Returns description
+4. Result appears in mission log
+</code></pre>
+<hr />
+<h2 id="technical-details">Technical Details<a class="headerlink" href="#technical-details" title="Permanent link">&para;</a></h2>
+<h3 id="files-modified">Files Modified<a class="headerlink" href="#files-modified" title="Permanent link">&para;</a></h3>
+<pre><code>src/shadowhound_mission_agent/shadowhound_mission_agent/web_interface.py
+  - Added imports: os, base64, Path, File, UploadFile, Form
+  - Added mock_images dict and mock_image_dir
+  - Added POST /api/mock/image endpoint
+  - Added GET /api/mock/image/{camera} endpoint
+  - Added get_mock_image() method
+  - Added has_mock_image() method
+  - Complete HTML/CSS redesign (500+ lines)
+  - Updated JavaScript for image upload
+</code></pre>
+<h3 id="mock-image-storage">Mock Image Storage<a class="headerlink" href="#mock-image-storage" title="Permanent link">&para;</a></h3>
+<pre><code>~/.shadowhound/mock_images/
+├── mock_front_kitchen.jpg
+├── mock_left_livingroom.jpg
+└── mock_right_hallway.png
+</code></pre>
+<h3 id="api-examples">API Examples<a class="headerlink" href="#api-examples" title="Permanent link">&para;</a></h3>
+<p><strong>Upload Image (curl):</strong></p>
+<pre><code class="language-bash">curl -X POST http://localhost:8080/api/mock/image \
+  -F &quot;image=@/path/to/test.jpg&quot; \
+  -F &quot;camera=front&quot;
+</code></pre>
+<p><strong>Get Image (curl):</strong></p>
+<pre><code class="language-bash">curl http://localhost:8080/api/mock/image/front
+</code></pre>
+<hr />
+<h2 id="benefits-of-this-approach">Benefits of This Approach<a class="headerlink" href="#benefits-of-this-approach" title="Permanent link">&para;</a></h2>
+<p>✅ <strong>No Robot Required</strong>: Test vision/VLM integration from your laptop
+✅ <strong>Instant Feedback</strong>: Upload image and see it immediately
+✅ <strong>Multiple Cameras</strong>: Test all three camera angles
+✅ <strong>Realistic Testing</strong>: Use real-world images similar to robot's view
+✅ <strong>VLM Development</strong>: Build and test AI image understanding offline
+✅ <strong>Professional UI</strong>: Demo-ready interface for presentations</p>
+<hr />
+<h2 id="known-limitations">Known Limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
+<p>⚠️ <strong>Current State:</strong>
+- Web UI redesigned ✅
+- Mock image upload implemented ✅
+- Vision skills not yet implemented 🔨
+- VLM integration not yet implemented 🔨</p>
+<p>⚠️ <strong>Future Work:</strong>
+- Build vision.py skills module
+- Integrate with OpenAI GPT-4 Vision API
+- Add real camera feed from robot (when connected)
+- Add BEV lidar visualization
+- Add battery/position telemetry from robot</p>
+<hr />
+<h2 id="testing-checklist">Testing Checklist<a class="headerlink" href="#testing-checklist" title="Permanent link">&para;</a></h2>
+<p>Before declaring success, verify:</p>
+<ul>
+<li>[ ] Web UI loads at http://localhost:8080</li>
+<li>[ ] Dark sci-fi theme displays correctly</li>
+<li>[ ] WebSocket connection shows "CONNECTED"</li>
+<li>[ ] Can upload image via "UPLOAD TEST IMAGE" button</li>
+<li>[ ] Image appears in camera feed</li>
+<li>[ ] Mission log shows "MOCK IMAGE UPLOADED" message</li>
+<li>[ ] Can switch between Front/Left/Right cameras</li>
+<li>[ ] Different images can be uploaded per camera</li>
+<li>[ ] Command input accepts text</li>
+<li>[ ] Diagnostics panel displays status</li>
+<li>[ ] No console errors in browser</li>
+</ul>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="web-ui-doesnt-load">Web UI doesn't load<a class="headerlink" href="#web-ui-doesnt-load" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Check if port is in use
+lsof -i :8080
+
+# Kill existing process
+pkill -f web_interface.py
+
+# Restart
+python3 src/shadowhound_mission_agent/shadowhound_mission_agent/web_interface.py
+</code></pre>
+<h3 id="websocket-wont-connect">WebSocket won't connect<a class="headerlink" href="#websocket-wont-connect" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Check firewall settings</li>
+<li>Verify port 8080 is accessible</li>
+<li>Check browser console for errors</li>
+</ul>
+<h3 id="image-upload-fails">Image upload fails<a class="headerlink" href="#image-upload-fails" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Verify directory exists
+ls -la ~/.shadowhound/mock_images/
+
+# Check permissions
+chmod 755 ~/.shadowhound/mock_images/
+</code></pre>
+<h3 id="ui-looks-broken">UI looks broken<a class="headerlink" href="#ui-looks-broken" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Clear browser cache (Ctrl+Shift+R)</li>
+<li>Check browser console for errors</li>
+<li>Verify HTML loaded correctly (view source)</li>
+</ul>
+<hr />
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>We've successfully built a <strong>professional sci-fi themed web UI</strong> with <strong>mock image upload capability</strong> that enables you to:</p>
+<ol>
+<li>✅ Test and develop vision/VLM features without robot hardware</li>
+<li>✅ Upload test images from your laptop</li>
+<li>✅ See realistic camera feed simulation</li>
+<li>✅ Have a demo-ready interface for presentations</li>
+</ol>
+<p><strong>Next milestone:</strong> Build vision skills that use these mock images with GPT-4 Vision API.</p>
+<p><strong>Time saved:</strong> Days of debugging robot hardware, can now work on couch! 🛋️</p>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.</li>
+<li>[ ] Links updated to use vault-friendly wikilinks or confirmed for external references.</li>
+<li>[ ] Outstanding migration work captured as tasks in the backlog.</li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../">Knowledge Base Index</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.sections", "navigation.tabs", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
