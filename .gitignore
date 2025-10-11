@@ -58,7 +58,8 @@ Thumbs.db
 *.tmp
 *.temp
 *.bak
-*.backuppatches/
+*.backup
+patches/
 /docs_web/
 /wiki/
 /site/
