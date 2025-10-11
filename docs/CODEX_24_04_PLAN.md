@@ -1,5 +1,26 @@
+---
+tags: [project, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # Codex 24.04 Enablement Plan
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 ## 1. Environment Reality
 - The project devcontainer is pinned to **ROS 2 Humble** images (`ros:${ROS_DISTRO}-${VARIANT}`) which are based on Ubuntu 22.04, so Humble tooling is expected in local development. 【F:.devcontainer/Dockerfile†L2-L107】
 - Codex only exposes an Ubuntu 24.04 base image. Because Humble packages and binaries target 22.04, we need to focus Codex tasks on components that either avoid ROS entirely or can be exercised with mocks/stubs.
@@ -33,3 +54,12 @@
 - ROS-specific testing (topics, launch files, DDS settings) remains outside Codex scope and should stay in the 22.04 devcontainer.
 
 By focusing Codex runs on the pure-Python layers, we can continue delivering value—tests, docs, utilities, and mock integrations—without waiting on Humble support in Ubuntu 24.04.
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[index|Knowledge Base Index]]

@@ -44,7 +44,7 @@ Try a mission: "rotate to the right and take a step back" 🤖
 
 ### 📚 For More Control
 
-See [`SCRIPTS.md`](SCRIPTS.md) for all available scripts and options:
+See [Script Catalog](docs/software/scripts.md) for all available scripts and options:
 - `./start.sh` - Smart interactive launcher
 - `./scripts/quick-start-dev.sh` - One-command development start
 - `./scripts/check-deps.sh` - Verify dependencies
@@ -285,7 +285,7 @@ AGENT_MODEL=gpt-4-turbo               # LLM model (gpt-4-turbo, gpt-3.5-turbo)
 - [ ] Multi-robot coordination
 - [ ] Persistent memory and learning
 
-See [TODO.md](TODO.md) for detailed task tracking and [DEVLOG.md](DEVLOG.md) for development history.
+See [Project TODO Backlog](docs/project_overview/todo.md) for detailed task tracking and [Development Log](docs/research/devlog.md) for development history.
 
 ---
 
@@ -323,7 +323,7 @@ See [TODO.md](TODO.md) for detailed task tracking and [DEVLOG.md](DEVLOG.md) for
 - Web UI shows agent duration, overhead, and total execution time with color-coded indicators
 - Performance averages calculated over last 50 commands for trend analysis
 
-See [DEVLOG.md](DEVLOG.md) for complete development history.
+See [Development Log](docs/research/devlog.md) for complete development history.
 
 ---
 
@@ -437,13 +437,13 @@ echo $ALIBABA_API_KEY
 
 We maintain organized tracking of development progress and tasks:
 
-- **[`DEVLOG.md`](DEVLOG.md)** - Chronological record of what was done and why
+- **[Development Log](docs/research/devlog.md)** - Chronological record of what was done and why
   - Major features and fixes
   - Technical decisions
   - Key learnings
   - Add entries after completing significant work
 
-- **[`TODO.md`](TODO.md)** - Organized task list with priorities
+- **[Project TODO Backlog](docs/project_overview/todo.md)** - Organized task list with priorities
   - 🔴 High / 🟡 Medium / 🟢 Low priority
   - Clear acceptance criteria
   - Recently completed section
@@ -460,10 +460,10 @@ We maintain organized tracking of development progress and tasks:
 ./scripts/add-devlog-entry.sh
 
 # View priorities
-grep -A 3 "## 🔴 High Priority" TODO.md
+grep -A 3 "## 🔴 High Priority" docs/project_overview/todo.md
 
 # View recent entries
-head -n 50 DEVLOG.md
+head -n 50 docs/research/devlog.md
 ```
 
 ---

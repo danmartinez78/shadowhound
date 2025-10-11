@@ -14,22 +14,33 @@ nav:
   - Home: index.md
   - Project Overview:
       - Roadmap: project_overview/roadmap.md
+      - Quick Start Launch Checklist: project_overview/quick_start.md
+      - Quick Reference: project_overview/quick_reference.md
+      - Project Setup Status (Oct 4 2025): project_overview/setup_status.md
+      - Architecture Review Summary: project_overview/architecture_review_summary.md
+      - Project TODO Backlog: project_overview/todo.md
   - Hardware:
       - Overview: hardware/README.md
   - Software:
       - Overview: software/README.md
+      - Script Catalog: software/scripts.md
+      - Environment Configuration: software/environment_configuration.md
+      - Start Script Reference: software/start_script_reference.md
+      - DIMOS Integration Quick Start: software/dimos_quick_start.md
       - ROS 2 Workstation Setup: software/ros2_setup.md
       - Isaac Sim Remote Streaming: software/isaac_sim_remote.md
       - Autodoc:
           - Index: software/autodoc/_index.md
   - Networking:
       - Overview: networking/README.md
+      - WebRTC Direct Test: networking/webrtc_direct_test.md
   - Simulation:
       - Overview: simulation/README.md
   - Troubleshooting:
       - Overview: troubleshooting/README.md
   - Research:
       - Overview: research/README.md
+      - Development Log: research/devlog.md
 markdown_extensions:
   - admonition
   - toc:

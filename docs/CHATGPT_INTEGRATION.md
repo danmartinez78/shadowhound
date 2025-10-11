@@ -1,5 +1,26 @@
+---
+tags: [project, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # How ShadowHound Works with ChatGPT API
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 ## Overview
 
 ShadowHound uses the **DIMOS framework's OpenAIAgent** to communicate with ChatGPT. Your web interface and ROS topics send natural language commands that get processed through multiple layers before reaching OpenAI's API.
@@ -443,3 +464,12 @@ export OPENAI_API_KEY="sk-..."  # Required!
 - gpt-3.5-turbo (cheapest, good for simple tasks)
 
 Your ShadowHound web interface makes all of this accessible through a beautiful UI - users just type commands, and the entire ChatGPT → Skills → Robot chain happens automatically! 🚀
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[index|Knowledge Base Index]]

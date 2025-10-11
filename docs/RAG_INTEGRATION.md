@@ -1,5 +1,26 @@
+---
+tags: [project, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # RAG (Retrieval-Augmented Generation) Integration Guide
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 ## Overview
 
 **Yes!** DIMOS agents have built-in RAG support using **ChromaDB** vector databases. You can supply your own knowledge base, and the agent will automatically retrieve relevant context before querying ChatGPT.
@@ -606,3 +627,12 @@ class CustomMemory(AbstractAgentSemanticMemory):
 4. Test with queries that need context
 
 Your RAG-enhanced agent will be much smarter about your specific robot and missions! 🚀
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[index|Knowledge Base Index]]

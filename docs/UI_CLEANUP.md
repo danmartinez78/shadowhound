@@ -1,5 +1,26 @@
+---
+tags: [project, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # UI Cleanup - Remove Old "Cutesy" Elements
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 **Date**: October 8, 2025  
 **Branch**: `feature/dimos-integration`  
 **Commits**: `9a66364` (dog emoji + quick commands), `5f0a5e4` (terminal integration)
@@ -169,3 +190,12 @@ This is different from Python files, which use `--symlink-install` and update im
 - Timing Display Fix: See `docs/TIMING_DISPLAY_FIX.md`
 - Browser Cache: See `docs/CACHE_CLEARING_GUIDE.md`
 - Deployment Sync: See `docs/LAPTOP_DIAGNOSTIC.md`
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[index|Knowledge Base Index]]

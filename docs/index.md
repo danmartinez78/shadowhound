@@ -22,12 +22,24 @@ Provide a curated entry point into the Obsidian vault and downstream public docu
 
 ### Category Quick Links
 - [[project_overview/roadmap|Project Overview & Roadmap]]
+- [[project_overview/quick_start|Quick Start Launch Checklist]]
+- [[project_overview/quick_reference|Quick Reference]]
+- [[project_overview/todo|Project TODO Backlog]]
+- [[project_overview/setup_status|Project Setup Status (Oct 4 2025)]]
+- [[project_overview/architecture_review_summary|Architecture Review Summary]]
 - [[hardware/README|Hardware Stack]]
 - [[software/README|Software Stack]]
+- [[software/scripts|Script Catalog]]
+- [[software/environment_configuration|Environment Configuration Guide]]
+- [[software/start_script_reference|Start Script Reference]]
+- [[software/dimos_quick_start|DIMOS Integration Quick Start]]
 - [[networking/README|Networking]]
+- [[networking/webrtc_direct_test|WebRTC Direct Test]]
 - [[simulation/README|Simulation]]
 - [[troubleshooting/README|Troubleshooting]]
 - [[research/README|Research Log]]
+- [[research/devlog|Development Log]]
+
 
 ## Validation
 - [ ] Vault opens in Obsidian without warnings.

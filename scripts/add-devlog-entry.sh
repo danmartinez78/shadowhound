@@ -3,8 +3,8 @@
 
 set -e
 
-DEVLOG_FILE="DEVLOG.md"
-TODO_FILE="TODO.md"
+DEVLOG_FILE="docs/research/devlog.md"
+TODO_FILE="docs/project_overview/todo.md"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -66,15 +66,23 @@ fi
 
 ENTRY+="---\n\n"
 
-# Insert after the header (line 5)
-# Create a temp file with the new entry
-{
-    head -n 5 "$DEVLOG_FILE"
-    echo -e "$ENTRY"
-    tail -n +6 "$DEVLOG_FILE"
-} > "${DEVLOG_FILE}.tmp"
+export ENTRY
+python - "$DEVLOG_FILE" <<'PY'
+import os
+import sys
+from pathlib import Path
 
-mv "${DEVLOG_FILE}.tmp" "$DEVLOG_FILE"
+devlog_path = Path(sys.argv[1])
+marker = "### Log Entries\n"
+entry = os.environ["ENTRY"]
+text = devlog_path.read_text()
+if marker not in text:
+    raise SystemExit(f"Marker '{marker.strip()}' not found in {devlog_path}")
+head, tail = text.split(marker, 1)
+updated = head + marker + "\n" + entry + tail
+devlog_path.write_text(updated)
+PY
+unset ENTRY
 
 echo -e "\n${GREEN}✓ Entry added to $DEVLOG_FILE${NC}\n"
 
@@ -82,14 +90,14 @@ echo -e "\n${GREEN}✓ Entry added to $DEVLOG_FILE${NC}\n"
 read -p "Commit changes? (y/n): " COMMIT_CHOICE
 if [ "$COMMIT_CHOICE" = "y" ] || [ "$COMMIT_CHOICE" = "Y" ]; then
     git add "$DEVLOG_FILE"
-    
-    # Check if TODO.md has changes
+
+    # Check if TODO backlog has changes
     if git diff --cached --quiet "$TODO_FILE" 2>/dev/null || ! git ls-files --error-unmatch "$TODO_FILE" >/dev/null 2>&1; then
         echo -e "${YELLOW}Note: $TODO_FILE has no staged changes${NC}"
     else
         git add "$TODO_FILE"
     fi
-    
+
     COMMIT_MSG="docs: DevLog entry for $TODAY - $TITLE"
     git commit -m "$COMMIT_MSG"
     echo -e "${GREEN}✓ Changes committed${NC}"

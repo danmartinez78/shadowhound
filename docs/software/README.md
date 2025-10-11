@@ -22,6 +22,10 @@ Organize the ShadowHound software stack documentation, including ROS 2 packages,
 
 ### Quick Links
 - [[software/ros2_setup|ROS 2 Workstation Setup]]
+- [[software/scripts|Script Catalog]]
+- [[software/environment_configuration|Environment Configuration Guide]]
+- [[software/start_script_reference|Start Script Reference]]
+- [[software/dimos_quick_start|DIMOS Integration Quick Start]]
 - [[software/isaac_sim_remote|Isaac Sim Remote Streaming]]
 - [[software/autodoc/_index|Autodoc Index]]
 

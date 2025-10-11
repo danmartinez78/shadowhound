@@ -20,12 +20,15 @@ Catalog networking guides for remote teleoperation, telemetry streaming, and sec
 2. Use `_assets/` for topology diagrams and link them via relative paths.
 3. Verify all IP ranges and credentials are stored in secure vaults, not inline Markdown.
 
+### Featured Guides
+- [[networking/webrtc_direct_test|WebRTC Direct Test]]
+
 ## Validation
 - [ ] Each environment has a validated connection checklist.
 - [ ] Sensitive secrets are stored outside of the repo.
 - [ ] Converted Markdown renders without Obsidian-only syntax.
 
 ## References
-- [[../index|Vault Index]]
-- [[../software/README|Software Index]]
+- [[index|Vault Index]]
+- [[software/README|Software Index]]
 - Network monitoring dashboards (link when available)

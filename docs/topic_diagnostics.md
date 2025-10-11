@@ -1,5 +1,26 @@
+---
+tags: [project, legacy]
+status: draft
+related: []
+summary: >
+  Legacy documentation preserved from earlier phases for review and migration.
+---
+
 # Topic Visibility Diagnostics
 
+## Purpose
+Preserve historical context while signaling that this page requires verification against the current workflow.
+
+## Prerequisites
+- Review the legacy notes below to understand original assumptions and instructions.
+- Cross-check commands and links with the latest tooling before execution.
+
+## Steps
+1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
+2. Update or replace the content with validated procedures as time permits.
+3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
+
+### Legacy Notes
 ## Purpose
 
 These tools help diagnose whether the mission agent can see the required ROS2 topics and action servers before attempting to initialize DIMOS.
@@ -154,3 +175,12 @@ export ROS_DOMAIN_ID=0  # or whatever your robot uses
 The diagnostics will help us understand whether the mission agent initialization hang is:
 - **Pre-DIMOS**: Topics not visible to the node
 - **In-DIMOS**: DIMOS can't subscribe/connect even though topics exist
+
+
+## Validation
+- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
+- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
+- [ ] Outstanding migration work captured as tasks in the backlog.
+
+## References
+- [[index|Knowledge Base Index]]
