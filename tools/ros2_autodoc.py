@@ -343,11 +343,17 @@ def extract_module_api(module_path: Path) -> Dict[str, Any]:
     try:
         with module_path.open("r", encoding="utf-8") as f:
             source_code = f.read()
-        
-        tree = ast.parse(source_code)
-    except Exception as e:
+    except (UnicodeDecodeError, FileNotFoundError) as e:
         return {
-            "error": f"Failed to parse {module_path.name}: {e}",
+            "error": f"Failed to read {module_path.name}: {e}",
+            "classes": [],
+            "functions": [],
+        }
+    try:
+        tree = ast.parse(source_code)
+    except SyntaxError as e:
+        return {
+            "error": f"Syntax error in {module_path.name}: {e}",
             "classes": [],
             "functions": [],
         }
