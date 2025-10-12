@@ -2,36 +2,75 @@
 
 Scripts for setting up local LLM inference on Thor (Jetson AGX Orin).
 
-## llama.cpp Setup
+## vLLM Setup (RECOMMENDED)
 
-**Recommended:** Use llama.cpp for stable local inference
-
-### Option 1: Full Setup with Systemd (Recommended)
+**Fastest and most stable** - Uses NVIDIA's official vLLM container
 
 ```bash
 # On Thor
-./setup_llamacpp_thor.sh
+./setup_vllm_thor.sh
 ```
 
-Creates systemd service that auto-starts on boot. Includes health checks and service management.
+**Why vLLM:**
+- Official NVIDIA support for Thor
+- 3.5x performance improvement (NVIDIA tested)
+- Pre-built container (no compilation)
+- Best memory management
 
-**Service commands:**
+**Laptop .env:**
 ```bash
-sudo systemctl status llamacpp   # Check status
-sudo systemctl start llamacpp    # Start server
-sudo systemctl stop llamacpp     # Stop server
-sudo systemctl restart llamacpp  # Restart server
-sudo journalctl -u llamacpp -f   # View logs
+AGENT_BACKEND=openai
+OPENAI_BASE_URL=http://192.168.10.116:8000/v1
+OPENAI_MODEL=Qwen/Qwen2.5-Coder-7B-Instruct
+USE_PLANNING_AGENT=false
 ```
 
-### Option 2: Quick Manual Setup
+See: `docs/vllm_quickstart.md`
+
+## llama.cpp Setup (BACKUP)
+
+**Use if vLLM has issues** - Uses official llama.cpp container
 
 ```bash
-# On Thor (runs in foreground)
-./setup_thor_llamacpp_quick.sh
+# On Thor
+./setup_llamacpp_docker_thor.sh
 ```
 
-Runs server in current terminal. Press Ctrl+C to stop. Good for testing.
+**Why llama.cpp:**
+- More stable than Ollama
+- Lower memory usage (GGUF quantization)
+- OpenAI-compatible API
+- No host installation needed
+
+**Laptop .env:**
+```bash
+AGENT_BACKEND=openai
+OPENAI_BASE_URL=http://192.168.10.116:8080/v1
+OPENAI_MODEL=qwen2.5-coder-7b-instruct-q4_k_m.gguf
+USE_PLANNING_AGENT=false
+```
+
+## ~~Ollama Setup~~ (DEPRECATED)
+
+**DO NOT USE** - Ollama is unstable on Thor with critical bugs:
+- Frequent crashes and 500 errors
+- 'GGGGG' bug (all responses are repeated 'G' characters)
+- Requires Thor reboots
+- phi4:14b causes segfaults
+
+See `docs/llama_cpp_migration.md` for details.
+
+## Quick Comparison
+
+| Feature | vLLM | llama.cpp | Ollama |
+|---------|------|-----------|--------|
+| **Status** | ✅ Recommended | ✅ Backup | ❌ Deprecated |
+| **Stability** | Excellent | Good | Poor |
+| **Performance** | Fastest (3.5x) | Fast | Slow |
+| **Memory** | Efficient | Very Efficient | Problematic |
+| **Setup Time** | 15-20 min | 15-20 min | 10 min |
+| **NVIDIA Support** | Official | Community | Community |
+| **Port** | 8000 | 8080 | 11434 |
 
 ## Configuration
 
