@@ -292,7 +292,18 @@ class MissionExecutor:
             # Execute through DIMOS agent
             agent_start = time.time()
             if self.config.use_planning_agent:
-                response = self.agent.plan_and_execute(command)
+                # PlanningAgent uses process_user_input() for interaction
+                # Since we're in web mode (not terminal), we call it directly
+                # and then get the response from the observable
+                self.agent.process_user_input(command)
+                # Get response from the observable stream
+                response = ""
+                if self.agent.latest_response:
+                    if self.agent.latest_response.get("type") == "dialogue":
+                        response = self.agent.latest_response.get("content", "")
+                    elif self.agent.latest_response.get("type") == "plan":
+                        steps = self.agent.latest_response.get("content", [])
+                        response = "Plan:\n" + "\n".join(f"{i+1}. {step}" for i, step in enumerate(steps))
             else:
                 # OpenAIAgent uses run_observable_query() which returns an Observable
                 response = self.agent.run_observable_query(command).run()
