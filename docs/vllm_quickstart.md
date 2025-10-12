@@ -33,7 +33,8 @@ That's it! The script will:
 1. Check for HuggingFace authentication (warns if missing)
 2. Pull NVIDIA's vLLM container (~10GB)
 3. Start server with Qwen2.5-Coder-7B-Instruct
-4. Expose OpenAI-compatible API on port 8000
+4. **Enable tool calling support** (required for robot control)
+5. Expose OpenAI-compatible API on port 8000
 
 **First run takes longer** while downloading the model (~5GB).
 
@@ -89,6 +90,7 @@ curl -X POST http://192.168.10.116:8000/v1/chat/completions \
 ✅ **Pre-built container** - no compilation needed  
 ✅ **OpenAI-compatible API** - seamless integration  
 ✅ **Better memory management** than Ollama  
+✅ **Tool calling support** - enables robot control via function calls  
 
 ## Stopping the Server
 

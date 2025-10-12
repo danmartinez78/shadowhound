@@ -126,7 +126,9 @@ VLLM_ATTENTION_BACKEND=FLASHINFER vllm serve "$1" \
   --trust-remote-code \
   --max-model-len $2 \
   --gpu-memory-utilization $3 \
-  --tensor-parallel-size 1
+  --tensor-parallel-size 1 \
+  --enable-auto-tool-choice \
+  --tool-call-parser hermes
 EOF
 chmod +x /tmp/start_vllm.sh
 
