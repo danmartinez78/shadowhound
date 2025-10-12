@@ -43,9 +43,15 @@ AGENT_BACKEND=openai
 OPENAI_BASE_URL=http://192.168.10.116:8000/v1
 OPENAI_MODEL=Qwen/Qwen2.5-Coder-7B-Instruct
 USE_PLANNING_AGENT=false
+
+# CRITICAL: vLLM doesn't support embeddings API
+USE_LOCAL_EMBEDDINGS=true
+OPENAI_API_KEY=sk-dummy-key-for-vllm
 ```
 
-See: `docs/vllm_quickstart.md`
+**Important:** Must set `USE_LOCAL_EMBEDDINGS=true` - vLLM doesn't support `/v1/embeddings` endpoint.
+
+See: `docs/vllm_quickstart.md` and `docs/vllm_env_example.txt`
 
 ## llama.cpp Setup (BACKUP)
 
@@ -68,6 +74,10 @@ AGENT_BACKEND=openai
 OPENAI_BASE_URL=http://192.168.10.116:8080/v1
 OPENAI_MODEL=qwen2.5-coder-7b-instruct-q4_k_m.gguf
 USE_PLANNING_AGENT=false
+
+# Also requires local embeddings
+USE_LOCAL_EMBEDDINGS=true
+OPENAI_API_KEY=sk-dummy-key
 ```
 
 ## ~~Ollama Setup~~ (DEPRECATED)

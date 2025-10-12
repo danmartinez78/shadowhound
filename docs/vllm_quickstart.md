@@ -39,12 +39,26 @@ That's it! The script will:
 
 ## On Your Laptop
 
-Update `.env`:
+Update `.env` (**IMPORTANT** - must include `USE_LOCAL_EMBEDDINGS`):
 ```bash
 AGENT_BACKEND=openai
 OPENAI_BASE_URL=http://192.168.10.116:8000/v1
 OPENAI_MODEL=Qwen/Qwen2.5-Coder-7B-Instruct
 USE_PLANNING_AGENT=false
+
+# CRITICAL: vLLM doesn't support embeddings API
+USE_LOCAL_EMBEDDINGS=true
+
+# Dummy key (required by DIMOS but not used)
+OPENAI_API_KEY=sk-dummy-key-for-vllm
+```
+
+See [docs/vllm_env_example.txt](./vllm_env_example.txt) for complete configuration.
+
+**Why `USE_LOCAL_EMBEDDINGS=true`?**  
+vLLM doesn't implement the `/v1/embeddings` endpoint. Without this setting, you'll get:
+```
+ValueError: No embedding data received
 ```
 
 Rebuild and test:
@@ -88,6 +102,15 @@ curl -X POST http://192.168.10.116:8000/v1/chat/completions \
 Press `Ctrl+C` in the terminal running the script.
 
 ## Troubleshooting
+
+### "ValueError: No embedding data received"
+**Cause:** Missing `USE_LOCAL_EMBEDDINGS=true` in `.env`  
+**Solution:** Add to laptop's `.env` file:
+```bash
+USE_LOCAL_EMBEDDINGS=true
+OPENAI_API_KEY=sk-dummy-key-for-vllm
+```
+Then rebuild: `colcon build --packages-select shadowhound_mission_agent`
 
 ### Out of memory
 Edit script, reduce `GPU_MEMORY=0.8` to `0.6` or `0.5`
