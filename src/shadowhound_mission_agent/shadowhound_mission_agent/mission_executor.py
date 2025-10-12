@@ -301,9 +301,7 @@ class MissionExecutor:
                     self.logger.warning(
                         "⚠ LocalSemanticMemory dependencies not installed"
                     )
-                    self.logger.warning(
-                        f"  Missing: {str(e)}"
-                    )
+                    self.logger.warning(f"  Missing: {str(e)}")
                     self.logger.warning(
                         "  Install with: pip install chromadb langchain-chroma langchain-openai sentence-transformers"
                     )
@@ -313,7 +311,7 @@ class MissionExecutor:
                     agent_memory = None
                 except Exception as e:
                     # Handle DIMOS AgentMemoryConnectionError bug or other initialization errors
-                    error_msg = str(e) if hasattr(e, '__str__') else type(e).__name__
+                    error_msg = str(e) if hasattr(e, "__str__") else type(e).__name__
                     self.logger.warning(
                         f"⚠ Failed to initialize LocalSemanticMemory: {error_msg}"
                     )

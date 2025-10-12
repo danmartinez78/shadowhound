@@ -1,6 +1,9 @@
 #!/bin/bash
 # Quick sync script to pull changes from GitHub to laptop host
 # Run this ON THE LAPTOP HOST: /home/daniel/shadowhound/
+#
+# CRITICAL: This script is for PULLING changes only, never for making edits!
+# DO NOT edit files in src/dimos-unitree/ - it's a git submodule
 
 set -e
 

@@ -1,8 +1,12 @@
-# Thor Setup Scripts
+# ShadowHound Scripts
+
+Utility scripts for setup, deployment, and maintenance of the ShadowHound system.
+
+## Setup Scripts (Thor)
 
 Scripts for setting up local LLM inference on Thor (Jetson AGX Orin).
 
-## Prerequisites
+### Prerequisites
 
 ### HuggingFace Authentication (One-time Setup)
 
@@ -256,3 +260,89 @@ If you were using Ollama:
 - [llama.cpp Docs](https://github.com/ggerganov/llama.cpp)
 - [Qwen2.5 Models](https://huggingface.co/Qwen)
 - [Issue #12: LLM Alternatives](https://github.com/danmartinez78/shadowhound/issues/12)
+
+---
+
+## Deployment Scripts (Laptop Host)
+
+Scripts for syncing and deploying code to the laptop host where ROS2 runs.
+
+### sync_laptop_host.sh
+
+Pulls latest changes from GitHub to laptop host and updates submodules.
+
+**Run on laptop host:**
+```bash
+cd /home/daniel/shadowhound
+./scripts/sync_laptop_host.sh
+```
+
+**What it does:**
+1. Checks for uncommitted changes
+2. Offers to stash/discard/abort
+3. Pulls latest shadowhound changes
+4. Updates DIMOS submodule
+5. Clears Python cache
+6. Verifies critical fixes are present
+7. Restores stashed changes if any
+
+**When to use:**
+- After making changes in devcontainer
+- Before testing on laptop host
+- When error tracebacks show old code
+
+### check_laptop_changes.sh
+
+Shows what files are modified on laptop host.
+
+**Run on laptop host:**
+```bash
+cd /home/daniel/shadowhound
+./scripts/check_laptop_changes.sh
+```
+
+**Output:**
+- Main repo uncommitted changes
+- DIMOS submodule changes
+- Specific file diffs
+
+**When to use:**
+- Before running sync script
+- To see why git pull failed
+- To decide whether to stash or commit
+
+---
+
+## Dependency Scripts
+
+### test_embeddings_deps.sh
+
+Checks if local embeddings dependencies are installed.
+
+**Run anywhere:**
+```bash
+./scripts/test_embeddings_deps.sh
+```
+
+**Checks for:**
+- chromadb
+- langchain-chroma
+- sentence-transformers
+
+**When to use:**
+- Before testing local LLM with embeddings
+- After running start.sh
+- To verify dependency installation
+
+---
+
+## Script Organization Rules
+
+1. **All scripts go in `scripts/` directory** (not root)
+2. **Scripts use snake_case naming** (e.g., `sync_laptop_host.sh`)
+3. **Scripts include header comments** explaining usage
+4. **Scripts are executable** (`chmod +x`)
+
+See: `docs/submodule_policy.md` for git submodule rules
+See: `docs/deployment_sync.md` for sync workflow details
+
