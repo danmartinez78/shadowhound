@@ -165,12 +165,13 @@
   },
   "active": "1b11e2a82b2fc7f4",
   "lastOpenFiles": [
+    "embeddings_auto_detection.md",
+    "llama_cpp_migration.md",
     "vllm_env_example.txt",
     "vllm_huggingface_auth.md",
     "issues/thor_system_utilities.md",
     "issues",
     "vllm_quickstart.md",
-    "llama_cpp_migration.md",
     "ollama_model_selection.md",
     "Untitled.canvas",
     "THOR_RESOURCES.md",
@@ -200,7 +201,6 @@
     "research",
     "project_overview",
     "networking",
-    "_templates",
-    "_assets"
+    "_templates"
   ]
 }

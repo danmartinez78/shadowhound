@@ -255,24 +255,28 @@ class MissionExecutor:
             # 1. If USE_LOCAL_EMBEDDINGS explicitly set, honor it
             # 2. If using local LLM (non-OpenAI base URL), default to local embeddings
             # 3. If using OpenAI cloud (api.openai.com), default to OpenAI embeddings
-            
+
             use_local_env = os.getenv("USE_LOCAL_EMBEDDINGS", "").lower()
-            
+
             if use_local_env in ("true", "false"):
                 # User explicitly set preference
                 use_local_embeddings = use_local_env == "true"
-                self.logger.info(f"Embeddings: Using explicit setting USE_LOCAL_EMBEDDINGS={use_local_embeddings}")
+                self.logger.info(
+                    f"Embeddings: Using explicit setting USE_LOCAL_EMBEDDINGS={use_local_embeddings}"
+                )
             else:
                 # Auto-detect based on backend
                 is_openai_cloud = (
-                    self.config.agent_backend == "openai" and 
-                    "api.openai.com" in self.config.openai_base_url
+                    self.config.agent_backend == "openai"
+                    and "api.openai.com" in self.config.openai_base_url
                 )
-                
+
                 if is_openai_cloud:
                     # OpenAI cloud supports embeddings API
                     use_local_embeddings = False
-                    self.logger.info("Embeddings: Auto-detected OpenAI cloud, using OpenAI embeddings API")
+                    self.logger.info(
+                        "Embeddings: Auto-detected OpenAI cloud, using OpenAI embeddings API"
+                    )
                 else:
                     # Local LLM (vLLM, llama.cpp, Ollama) - use local embeddings
                     use_local_embeddings = True
@@ -280,21 +284,51 @@ class MissionExecutor:
                         f"Embeddings: Auto-detected local LLM backend "
                         f"({self.config.agent_backend}), using local embeddings"
                     )
-            
+
             if use_local_embeddings:
                 # Use local embeddings (sentence-transformers)
                 # Works with: vLLM, llama.cpp, Ollama, or any local LLM
-                agent_memory = LocalSemanticMemory(
-                    collection_name="shadowhound_memory",
-                    model_name="sentence-transformers/all-MiniLM-L6-v2"
-                )
-                self.logger.info("✓ Agent memory: LocalSemanticMemory (sentence-transformers/all-MiniLM-L6-v2)")
+                try:
+                    agent_memory = LocalSemanticMemory(
+                        collection_name="shadowhound_memory",
+                        model_name="sentence-transformers/all-MiniLM-L6-v2",
+                    )
+                    self.logger.info(
+                        "✓ Agent memory: LocalSemanticMemory (sentence-transformers/all-MiniLM-L6-v2)"
+                    )
+                except ImportError as e:
+                    # Missing dependencies for ChromaDB/sentence-transformers
+                    self.logger.warning(
+                        "⚠ LocalSemanticMemory dependencies not installed"
+                    )
+                    self.logger.warning(
+                        f"  Missing: {str(e)}"
+                    )
+                    self.logger.warning(
+                        "  Install with: pip install chromadb langchain-chroma langchain-openai sentence-transformers"
+                    )
+                    self.logger.warning(
+                        "  Continuing without persistent memory (agent will work but no RAG)"
+                    )
+                    agent_memory = None
+                except Exception as e:
+                    # Handle DIMOS AgentMemoryConnectionError bug or other initialization errors
+                    error_msg = str(e) if hasattr(e, '__str__') else type(e).__name__
+                    self.logger.warning(
+                        f"⚠ Failed to initialize LocalSemanticMemory: {error_msg}"
+                    )
+                    self.logger.warning(
+                        "  Continuing without persistent memory (agent will work but no RAG)"
+                    )
+                    agent_memory = None
             else:
                 # Use OpenAI embeddings API
                 # Works with: OpenAI cloud API only
                 agent_memory = None  # Let DIMOS use default OpenAISemanticMemory
-                self.logger.info("✓ Agent memory: OpenAISemanticMemory (text-embedding-3-large)")
-            
+                self.logger.info(
+                    "✓ Agent memory: OpenAISemanticMemory (text-embedding-3-large)"
+                )
+
             # OpenAIAgent with skills for function calling
             # Both OpenAI and Ollama (with tool-capable models) support this
             self.agent = OpenAIAgent(
