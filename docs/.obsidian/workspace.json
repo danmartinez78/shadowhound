@@ -165,6 +165,7 @@
   },
   "active": "1b11e2a82b2fc7f4",
   "lastOpenFiles": [
+    "local_llm_integration_summary.md",
     "issues/forcing_function_calling_with_prompts.md",
     "issues/vllm_mistral_tokenizer_hang.md",
     "issues/vllm_tool_calling_not_executing.md",
@@ -193,7 +194,6 @@
     "THOR_PERFORMANCE_NOTES.md",
     "TESTING_GUIDE_OLLAMA.md",
     "STARTUP_VALIDATION.md",
-    "SECURITY_ANALYSIS_JTOP.md",
     "troubleshooting",
     "software/autodoc",
     "software",
