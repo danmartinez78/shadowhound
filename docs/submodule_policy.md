@@ -1,6 +1,31 @@
 # Git Submodule Policy
 
-## CRITICAL RULE: Never Edit DIMOS Submodule on Laptop Host
+## Repository Management: Git Submodules (Not vcs!)
+
+**IMPORTANT:** As of commit `fbe527e`, ShadowHound uses **standard git submodules**, not vcstool (`.repos` files).
+
+**Why We Switched:**
+- ✅ Standard git workflow (better tooling support)
+- ✅ Automatic nested submodule handling (`--recursive`)
+- ✅ Less confusion for AI agents and developers
+- ✅ Better IDE integration (VS Code, GitHub)
+- ❌ vcs was causing sync issues and headaches
+
+**Current Configuration:**
+```bash
+# .gitmodules
+[submodule "src/dimos-unitree"]
+    path = src/dimos-unitree
+    url = https://github.com/danmartinez78/dimos-unitree.git
+    branch = fix/webrtc-instant-commands-and-progress
+```
+
+**Nested Submodules:**
+- `src/dimos-unitree/dimos/robot/unitree/external/go2_ros2_sdk/` (Go2 SDK)
+- `src/dimos-unitree/dimos/robot/unitree/external/go2_webrtc_connect/` (WebRTC)
+- These are automatically handled with `git submodule update --init --recursive`
+
+## CRITICAL RULE: Never Edit DIMOS Submodule Directly
 
 ### The Problem We Hit
 
@@ -10,6 +35,7 @@ We applied a bug fix to `src/dimos-unitree/dimos/exceptions/agent_memory_excepti
 2. Git wouldn't let us pull updates without stashing/committing
 3. The submodule changes were stuck and hard to reject
 4. Error persisted even though fix was committed to GitHub
+5. Led to "nuclear option" that broke Go2 SDK packages (later fixed by submodule conversion)
 
 ### The Rule
 
@@ -110,11 +136,27 @@ git checkout -b temp-fixes
 git add .
 git commit -m "Temp DIMOS fixes"
 # Then switch back
-git checkout main  # or original branch
+git checkout fix/webrtc-instant-commands-and-progress  # or original branch
 
-# Then sync
+# Then sync submodules
 cd ../..
-git submodule update --remote
+git submodule sync
+git submodule update --init --recursive
+```
+
+### Syncing Submodules After Conversion
+
+**On laptop host after pulling the conversion:**
+```bash
+cd /home/daniel/shadowhound
+git pull origin feature/local-llm-support  # Get fbe527e
+git submodule sync                          # Update URLs
+git submodule update --init --recursive     # Clone and init all
+
+# Verify
+git submodule status
+ls src/dimos-unitree/dimos/robot/unitree/external/go2_ros2_sdk/
+# Should see: go2_interfaces, unitree_go, go2_robot_sdk, etc.
 ```
 
 ### Current Status

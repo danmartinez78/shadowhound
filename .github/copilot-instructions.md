@@ -42,6 +42,14 @@ Desktop (VS Code) ←─────→ Laptop (Host: 192.168.10.167) ←──�
 - Build artifacts (`install/`, `build/`) are on the host
 - ROS2 runs on the host, not in devcontainer
 
+### Git Submodules (Not vcs!)
+**IMPORTANT:** This project uses **git submodules**, not vcstool (.repos files).
+
+- DIMOS is a git submodule: `src/dimos-unitree/`
+- To sync: `git submodule update --init --recursive`
+- Never edit submodule files directly (see `docs/submodule_policy.md`)
+- AI agents: Use standard git submodule commands
+
 ---
 
 ## Architecture Quick Reference
