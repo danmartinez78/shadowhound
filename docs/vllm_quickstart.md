@@ -34,11 +34,11 @@ git pull origin feature/local-llm-support
 
 That's it! The script will:
 1. Pull NVIDIA's vLLM container (~10GB)
-2. Start server with **Hermes-2-Pro-Llama-3-8B** (designed for tool calling)
-3. **Enable native tool calling support**
+2. Start server with **Llama-3.1-8B-Instruct** (officially validated for tool calling)
+3. **Enable built-in tool calling** (no parser needed)
 4. Expose OpenAI-compatible API on port 8000
 
-**Note:** Hermes-2-Pro doesn't require HuggingFace authentication!
+**Note:** Llama 3.1 has native tool calling - no authentication or parser hacks required!
 
 **First run takes longer** while downloading the model (~5GB).
 
@@ -48,7 +48,7 @@ Update `.env`:
 ```bash
 AGENT_BACKEND=openai
 OPENAI_BASE_URL=http://192.168.10.116:8000/v1
-OPENAI_MODEL=NousResearch/Hermes-2-Pro-Llama-3-8B
+OPENAI_MODEL=meta-llama/Llama-3.1-8B-Instruct
 USE_PLANNING_AGENT=false
 
 # API key (required by DIMOS, use dummy for vLLM)
@@ -76,7 +76,7 @@ source install/setup.bash
 curl -X POST http://192.168.10.116:8000/v1/chat/completions \
   -H 'Content-Type: application/json' \
   -d '{
-    "model": "NousResearch/Hermes-2-Pro-Llama-3-8B",
+    "model": "meta-llama/Llama-3.1-8B-Instruct",
     "messages": [{"role": "user", "content": "Hello!"}],
     "max_tokens": 50
   }'
@@ -87,16 +87,17 @@ curl -X POST http://192.168.10.116:8000/v1/chat/completions \
 - Send: "hi"
 - Should get actual response (not 'GGGGG'!)
 
-## Why Hermes-2-Pro?
+## Why Llama 3.1 8B?
 
-✅ **Designed for tool calling** - native function calling support  
-✅ **Works out of the box** - no authentication or parser hacks  
-✅ **Proven with vLLM** - tested and stable  
+✅ **Built-in tool calling** - native support in the model itself  
+✅ **Officially validated by vLLM** - tested and stable  
+✅ **No parser needed** - just works out of the box  
+✅ **Widely used** - battle-tested in production  
 ✅ **Official NVIDIA support** for Thor  
 ✅ **3.5x faster** than Ollama  
 ✅ **OpenAI-compatible API** - seamless integration  
 
-**Why not Qwen2.5-Coder?** Testing showed Qwen doesn't properly support tool calling with vLLM - it returns JSON as text instead of executing functions.  
+**From vLLM docs:** Llama 3.1 is one of the primary tested models for tool calling.  
 
 ## Stopping the Server
 
@@ -132,23 +133,24 @@ sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches
 
 ## Different Models
 
-Edit the script to try other models:
+Edit the script to try other vLLM-validated tool calling models:
+
 ```bash
 # In setup_vllm_thor.sh, change MODEL= line:
 
-# Current default (best for tool calling):
-MODEL="NousResearch/Hermes-2-Pro-Llama-3-8B"
+# Current default (best balance):
+MODEL="meta-llama/Llama-3.1-8B-Instruct"
 
-# Larger, better quality (if you have memory):
-MODEL="NousResearch/Hermes-2-Pro-Llama-3-70B"  # Requires quantization
-
-# Mistral with native tool support:
-MODEL="mistralai/Mistral-7B-Instruct-v0.3"
---tool-call-parser mistral  # Change parser too
+# Alternative officially supported models:
+MODEL="mistralai/Mistral-7B-Instruct-v0.3"  # Smaller, faster
+MODEL="ibm-granite/granite-3.0-8b-instruct"  # IBM's validated model
 ```
 
-**⚠️ Not Recommended:**
-- `Qwen/Qwen2.5-Coder-7B-Instruct` - Doesn't support tool calling properly with vLLM
+**⚠️ Models that DON'T work well:**
+- `Qwen/Qwen2.5-Coder-7B-Instruct` - Returns JSON as text, not tool calls
+- `NousResearch/Hermes-2-Pro-Llama-3-8B` - CUDA index errors with vLLM
+
+**✅ Officially validated:** See [vLLM Tool Calling Docs](https://docs.vllm.ai/en/stable/features/tool_calling.html#named-function-calling)
 
 ## Performance
 

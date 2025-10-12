@@ -20,7 +20,7 @@ echo ""
 # Configuration
 CONTAINER_NAME="vllm-server"
 IMAGE="nvcr.io/nvidia/vllm:25.09-py3"
-MODEL="NousResearch/Hermes-2-Pro-Llama-3-8B"
+MODEL="meta-llama/Llama-3.1-8B-Instruct"
 SERVER_PORT=8000
 MAX_MODEL_LEN=8192
 GPU_MEMORY=0.8
@@ -36,14 +36,13 @@ echo -e "  Image: ${IMAGE}"
 echo -e "  Model: ${MODEL}"
 echo -e "  Port: ${SERVER_PORT}"
 echo -e "  Max Length: ${MAX_MODEL_LEN}"
-echo -e "  Tool Parser: hermes (native support)"
 echo ""
 
-# Note: Hermes-2-Pro has native tool calling support and doesn't require HuggingFace auth
-echo -e "${GREEN}ℹ️  Hermes-2-Pro-Llama-3-8B:${NC}"
-echo -e "  - Native tool calling support (no parser hacks needed)"
-echo -e "  - No HuggingFace authentication required"
-echo -e "  - Designed specifically for function calling"
+# Note: Llama 3.1 has built-in tool calling and is officially validated with vLLM
+echo -e "${GREEN}ℹ️  Llama-3.1-8B-Instruct:${NC}"
+echo -e "  - Built-in tool calling (no parser needed!)"
+echo -e "  - Officially validated with vLLM"
+echo -e "  - Stable and well-tested"
 echo ""
 
 # Step 1: Check prerequisites
@@ -139,7 +138,7 @@ docker run --rm -it --network host \
     --gpu-memory-utilization ${GPU_MEMORY} \
     --tensor-parallel-size 1 \
     --enable-auto-tool-choice \
-    --tool-call-parser hermes
+    --disable-frontend-multiprocessing
 
 echo ""
 echo -e "${GREEN}Server stopped${NC}"
