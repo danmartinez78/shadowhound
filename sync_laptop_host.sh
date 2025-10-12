@@ -24,6 +24,57 @@ echo ""
 # Show current status
 echo "1️⃣  Checking current status..."
 git status --short
+
+# Check for uncommitted changes
+if ! git diff-index --quiet HEAD -- 2>/dev/null; then
+    echo ""
+    echo "⚠️  You have uncommitted changes on laptop host!"
+    echo ""
+    git status --short
+    echo ""
+    echo "Options:"
+    echo "  1) Stash changes and continue (recommended)"
+    echo "  2) Abort and let me commit manually"
+    echo "  3) Discard all local changes (DANGEROUS)"
+    echo ""
+    read -p "Choose [1-3]: " choice
+    
+    case $choice in
+        1)
+            echo "📦 Stashing changes..."
+            if git stash push -m "Auto-stash before sync at $(date)"; then
+                echo "✅ Changes stashed"
+                STASHED=true
+            else
+                echo "❌ Failed to stash"
+                exit 1
+            fi
+            ;;
+        2)
+            echo "🛑 Aborting. Please commit or stash your changes first."
+            echo ""
+            echo "To stash: git stash"
+            echo "To commit: git add . && git commit -m 'your message'"
+            exit 0
+            ;;
+        3)
+            echo "⚠️  WARNING: This will discard ALL local changes!"
+            read -p "Are you absolutely sure? Type 'yes' to confirm: " confirm
+            if [ "$confirm" = "yes" ]; then
+                git reset --hard HEAD
+                git clean -fd
+                echo "✅ Local changes discarded"
+            else
+                echo "🛑 Aborted"
+                exit 0
+            fi
+            ;;
+        *)
+            echo "❌ Invalid choice"
+            exit 1
+            ;;
+    esac
+fi
 echo ""
 
 # Show current commit
@@ -53,10 +104,33 @@ echo ""
 
 # Update submodules (including DIMOS)
 echo "4️⃣  Updating submodules (including DIMOS)..."
+
+# Stash submodule changes if any
+cd src/dimos-unitree
+if ! git diff-index --quiet HEAD -- 2>/dev/null; then
+    echo "   ⚠️  DIMOS submodule has uncommitted changes"
+    if git stash push -m "Auto-stash DIMOS before sync at $(date)"; then
+        echo "   📦 DIMOS changes stashed"
+        DIMOS_STASHED=true
+    fi
+fi
+cd ../..
+
 if git submodule update --init --remote; then
     echo "✅ Submodules updated"
 else
     echo "⚠️  Submodule update had issues"
+fi
+
+# Restore DIMOS stash if needed
+if [ "$DIMOS_STASHED" = true ]; then
+    cd src/dimos-unitree
+    if git stash pop; then
+        echo "   ✅ DIMOS changes restored"
+    else
+        echo "   ⚠️  DIMOS stash conflicts - run manually: cd src/dimos-unitree && git stash pop"
+    fi
+    cd ../..
 fi
 echo ""
 
@@ -91,6 +165,24 @@ echo ""
 echo "8️⃣  Updated to commit:"
 git log -1 --oneline
 echo ""
+
+# Restore stashed changes if we stashed
+if [ "$STASHED" = true ]; then
+    echo "9️⃣  Restoring your stashed changes..."
+    echo ""
+    if git stash pop; then
+        echo "✅ Changes restored"
+        echo ""
+        echo "⚠️  Note: Review for any merge conflicts!"
+        git status --short
+    else
+        echo "⚠️  Conflicts while restoring stash!"
+        echo "   Your changes are still in the stash"
+        echo "   Run: git stash list"
+        echo "   Then: git stash pop (after resolving conflicts)"
+    fi
+    echo ""
+fi
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ Sync complete!"
