@@ -1,3 +1,12 @@
+---
+tags: [project, index]
+status: draft
+related: []
+aliases: [Docs Index, Documentation Index]
+summary: >
+  Landing page for the ShadowHound documentation vault with quick links and navigation.
+---
+
 # ShadowHound Documentation
 
 Welcome to the ShadowHound documentation! This guide helps you navigate the complete documentation structure.

@@ -2,6 +2,7 @@
 tags: [research, index]
 status: draft
 related: []
+aliases: [Research Index]
 summary: >
   Research index tracking experiments, benchmarks, and external findings relevant to ShadowHound.
 ---

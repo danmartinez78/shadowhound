@@ -2,6 +2,7 @@
 tags: [hardware, legacy]
 status: draft
 related: []
+aliases: [Network & Power Topologies]
 summary: >
   Legacy documentation preserved from earlier phases for review and migration.
 ---
@@ -41,14 +42,9 @@ All designs assume the **GL.iNet GL‑SFT1200 (Opal)** in AP/Bridge mode acting 
 ## 1) Baseline: Thor ⇄ GO2 Pro via Travel Router
 
 ### Diagram
-```
-     [140W PD Bank]
-        |           +------------------ wired LAN ------------------+
-USB‑C PD(20V)       |                                                |
-        v           v                                                v
-     [AGX Thor] —— (LAN1)    GL‑SFT1200 (AP/Bridge)    (LAN2) —— [Unitree GO2]
-                         (USB‑A 5V power input)
-```
+
+![Router Topology](../_assets/router-topology.svg)
+*Baseline topology: GL‑SFT1200 in AP/Bridge mode, Thor on Ethernet, GO2 on Wi‑Fi (and factory Ethernet).* 
 
 ### Static IP Plan
 | Device | Interface | IP |

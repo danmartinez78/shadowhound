@@ -2,6 +2,7 @@
 tags: [simulation, index]
 status: draft
 related: []
+aliases: [Simulation Index]
 summary: >
   Simulation documentation index covering Isaac Sim, Gazebo, and digital twins.
 ---

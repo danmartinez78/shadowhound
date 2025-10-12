@@ -112,7 +112,7 @@ Preserve historical context while signaling that this page requires verification
    - `.env.development`
    - `.env.production`
    - `.env.example`
-   - `.env.webrtc_test`
+   - Use a single `.env` committed from a template; avoid bespoke per-test env files
 
 2. **Startup Scripts**:
    - `start.sh` (5 locations)
@@ -126,7 +126,7 @@ Preserve historical context while signaling that this page requires verification
 4. **Test Scripts**:
    - `test_topic_visibility.sh`
    - `scripts/test_webrtc_direct.sh`
-   - `scripts/setup_webrtc_test.sh`
+   - Prefer scripts that read the standard `.env`; avoid generators for bespoke env files
 
 5. **External SDK** (maintains fallback):
    - `src/dimos-unitree/dimos/robot/unitree/external/go2_ros2_sdk/go2_robot_sdk/presentation/go2_driver_node.py`

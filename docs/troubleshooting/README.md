@@ -2,6 +2,7 @@
 tags: [troubleshooting, index]
 status: draft
 related: []
+aliases: [Troubleshooting Index]
 summary: >
   Troubleshooting index for common ShadowHound failure modes and recovery steps.
 ---

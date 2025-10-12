@@ -2,6 +2,7 @@
 tags: [software, index]
 status: draft
 related: []
+aliases: [Software Index]
 summary: >
   Software documentation index for ROS 2 packages, simulation, and tooling.
 ---

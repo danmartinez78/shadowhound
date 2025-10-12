@@ -2,6 +2,7 @@
 tags: [hardware, index]
 status: draft
 related: []
+aliases: [Hardware Index]
 summary: >
   Hardware documentation index covering sensors, compute, and mechanical assemblies.
 ---

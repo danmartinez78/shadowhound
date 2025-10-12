@@ -307,7 +307,7 @@ Environment variables are loaded in this order (last wins):
 
 ```bash
 # Source environment
-source .shadowhound_env
+# Ensure your standard environment is loaded per the Environment Configuration Guide
 
 # Sit command (API 1009)
 ros2 topic pub --once /webrtc_req go2_interfaces/msg/WebRtcReq \
