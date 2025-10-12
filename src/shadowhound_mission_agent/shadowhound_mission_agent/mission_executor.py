@@ -311,9 +311,12 @@ class MissionExecutor:
                     agent_memory = None
                 except Exception as e:
                     # Handle DIMOS AgentMemoryConnectionError bug or other initialization errors
-                    error_msg = str(e) if hasattr(e, "__str__") else type(e).__name__
+                    # CRITICAL: Don't call str(e) - DIMOS exception __str__ has a bug (accesses self.message)
+                    # Use repr() or type name instead to avoid triggering the bug
+                    error_type = type(e).__name__
+                    error_args = repr(e.args) if e.args else "no details"
                     self.logger.warning(
-                        f"⚠ Failed to initialize LocalSemanticMemory: {error_msg}"
+                        f"⚠ Failed to initialize LocalSemanticMemory: {error_type} - {error_args}"
                     )
                     self.logger.warning(
                         "  Continuing without persistent memory (agent will work but no RAG)"
