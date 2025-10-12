@@ -536,7 +536,13 @@ build_workspace() {
     
     # Build Go2 ROS2 SDK packages first (needed by DIMOS)
     print_info "Building Go2 ROS2 SDK packages..."
-    if colcon build --packages-select go2_interfaces unitree_go go2_robot_sdk --symlink-install 2>&1 | tee -a /tmp/colcon_build.log | tail -10; then
+    # Build all Go2 SDK packages (nested submodule in DIMOS)
+    # Core packages: go2_interfaces, unitree_go, go2_robot_sdk
+    # Perception packages: lidar_processor, lidar_processor_cpp, coco_detector, speech_processor
+    if colcon build --packages-select \
+        go2_interfaces unitree_go go2_robot_sdk \
+        lidar_processor lidar_processor_cpp coco_detector speech_processor \
+        --symlink-install 2>&1 | tee -a /tmp/colcon_build.log | tail -10; then
         print_success "Go2 SDK packages built"
     else
         print_warning "Go2 SDK build had issues (may be OK if already built)"
@@ -592,6 +598,11 @@ check_dependencies() {
     python3 -c "import transformers" 2>/dev/null || missing+=("transformers (DIMOS vision)")
     python3 -c "import mmengine" 2>/dev/null || missing+=("mmengine (Metric3D depth)")
     python3 -c "import mmcv" 2>/dev/null || missing+=("mmcv (Metric3D depth)")
+    
+    # Check embeddings packages (for local semantic memory)
+    python3 -c "import chromadb" 2>/dev/null || missing+=("chromadb (local embeddings)")
+    python3 -c "import langchain_chroma" 2>/dev/null || missing+=("langchain-chroma (local embeddings)")
+    python3 -c "import sentence_transformers" 2>/dev/null || missing+=("sentence-transformers (local embeddings)")
     
     if [ ${#missing[@]} -gt 0 ]; then
         print_warning "Missing Python packages: ${missing[*]}"
@@ -670,6 +681,181 @@ check_dependencies() {
 }
 
 # ============================================================================
+# LLM Backend Validation
+# ============================================================================
+
+check_llm_backend() {
+    print_section "LLM Backend Check"
+    
+    local agent_backend=${AGENT_BACKEND:-openai}
+    
+    print_info "Configured backend: $agent_backend"
+    
+    if [ "$agent_backend" = "ollama" ]; then
+        local ollama_url=${OLLAMA_BASE_URL:-http://192.168.50.10:11434}
+        local ollama_model=${OLLAMA_MODEL:-qwen2.5-coder:32b}
+        
+        print_info "Ollama URL: $ollama_url"
+        print_info "Ollama Model: $ollama_model"
+        echo ""
+        
+        # Step 1: Check if Ollama service is responding
+        print_info "1. Checking Ollama service reachability..."
+        if ! curl -s --max-time 5 "$ollama_url/api/tags" > /dev/null 2>&1; then
+            print_error "Cannot reach Ollama service at $ollama_url"
+            echo ""
+            echo "Possible issues:"
+            echo "  • Ollama service not running"
+            echo "  • Wrong URL (check OLLAMA_BASE_URL in .env)"
+            echo "  • Network/firewall blocking connection"
+            echo "  • Thor not powered on (if using remote Ollama)"
+            echo ""
+            print_info "To fix:"
+            echo "  • Check Ollama status: docker ps | grep ollama"
+            echo "  • Test manually: curl $ollama_url/api/tags"
+            echo "  • Update .env with correct OLLAMA_BASE_URL"
+            echo ""
+            
+            read -p "Continue anyway? (Mission agent will fail) [y/N]: " continue_choice
+            if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
+                print_info "Exiting. Fix Ollama connection and try again."
+                exit 1
+            fi
+            print_warning "Continuing with unreachable backend - expect failures"
+            return 0
+        fi
+        print_success "Ollama service responding"
+        
+        # Step 2: Check if model is available
+        print_info "2. Checking if model '$ollama_model' is available..."
+        local models_json=$(curl -s --max-time 5 "$ollama_url/api/tags" 2>/dev/null)
+        
+        if [ -z "$models_json" ]; then
+            print_warning "Could not retrieve model list from Ollama"
+        elif ! echo "$models_json" | grep -q "\"name\":\"$ollama_model\""; then
+            print_error "Model '$ollama_model' not found in Ollama"
+            echo ""
+            echo "Available models:"
+            echo "$models_json" | grep -o '"name":"[^"]*"' | cut -d'"' -f4 | sed 's/^/  • /'
+            echo ""
+            print_info "To fix:"
+            echo "  • Pull the model: ollama pull $ollama_model"
+            echo "  • Or update OLLAMA_MODEL in .env to use an available model"
+            echo ""
+            
+            read -p "Continue anyway? (Mission agent will fail) [y/N]: " continue_choice
+            if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
+                print_info "Exiting. Pull the model and try again."
+                exit 1
+            fi
+            print_warning "Continuing with missing model - expect failures"
+            return 0
+        fi
+        print_success "Model '$ollama_model' is available"
+        
+        # Step 3: Test model inference (REQUIRED - with retry for cold start)
+        print_info "3. Testing model inference (required for startup)..."
+        print_info "Note: First request after model pull may take 30-60s (loading into VRAM)"
+        
+        local max_retries=2
+        local retry_count=0
+        local test_success=false
+        
+        while [ $retry_count -lt $max_retries ]; do
+            if [ $retry_count -gt 0 ]; then
+                print_info "Retry $retry_count/$((max_retries-1)): Waiting for model to warm up..."
+            fi
+            
+            local test_start=$(date +%s 2>/dev/null || echo 0)
+            # Include keep_alive to keep model loaded for subsequent requests
+            local test_response=$(curl -s --max-time 60 "$ollama_url/api/generate" \
+                -d "{\"model\": \"$ollama_model\", \"prompt\": \"Say OK\", \"stream\": false, \"keep_alive\": \"30m\"}" 2>/dev/null)
+            local test_end=$(date +%s 2>/dev/null || echo 0)
+            local test_duration=$((test_end - test_start))
+            
+            if echo "$test_response" | grep -q '"response"'; then
+                print_success "Model responded successfully (${test_duration}s)"
+                local response_text=$(echo "$test_response" | grep -o '"response":"[^"]*"' | cut -d'"' -f4 | head -c 50)
+                print_info "Response preview: $response_text"
+                test_success=true
+                break
+            fi
+            
+            retry_count=$((retry_count + 1))
+            if [ $retry_count -lt $max_retries ]; then
+                print_warning "Model test failed, retrying..."
+                sleep 5
+            fi
+        done
+        
+        if [ "$test_success" = false ]; then
+            print_error "Model inference test FAILED after $max_retries attempts"
+            echo ""
+            echo "Model is not responding to test prompts."
+            echo ""
+            echo "Possible issues:"
+            echo "  • Model failed to load into GPU memory"
+            echo "  • Insufficient VRAM on Thor (check with jtop)"
+            echo "  • Ollama container crash (check: docker logs ollama)"
+            echo "  • Model corrupted (try: ollama pull $ollama_model)"
+            echo ""
+            print_info "To diagnose:"
+            echo "  • Check GPU: ssh thor 'jtop'"
+            echo "  • Check logs: ssh thor 'docker logs ollama'"
+            echo "  • Test manually: curl -X POST $ollama_url/api/generate -d '{\"model\":\"$ollama_model\",\"prompt\":\"test\"}'"
+            echo ""
+            
+            read -p "Continue anyway? (Mission agent WILL fail) [y/N]: " continue_choice
+            if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
+                print_info "Exiting. Fix model inference and try again."
+                exit 1
+            fi
+            print_error "⚠ WARNING: Continuing with broken model - mission agent will fail ⚠"
+            return 0
+        fi
+        
+        echo ""
+        print_success "Ollama backend validation passed!"
+        
+    elif [ "$agent_backend" = "openai" ]; then
+        print_info "Backend: OpenAI"
+        echo ""
+        
+        # Check API key
+        if [ -z "$OPENAI_API_KEY" ]; then
+            print_error "OPENAI_API_KEY not set in environment"
+            echo ""
+            print_info "To fix:"
+            echo "  • Add OPENAI_API_KEY to .env file"
+            echo "  • Get API key from: https://platform.openai.com/api-keys"
+            echo ""
+            exit 1
+        fi
+        
+        # Quick format check
+        if [[ ! "$OPENAI_API_KEY" =~ ^sk- ]]; then
+            print_warning "OPENAI_API_KEY doesn't start with 'sk-' (unusual format)"
+        fi
+        
+        print_success "OPENAI_API_KEY is configured"
+        print_info "Model: ${OPENAI_MODEL:-gpt-4o}"
+        
+        # Optional: Test API key (requires network call, can be slow)
+        # Skipped for now to keep startup fast
+        # User will get immediate feedback from mission agent if key is invalid
+        
+        echo ""
+        print_success "OpenAI backend validation passed!"
+        
+    else
+        print_error "Unknown backend: $agent_backend"
+        print_info "Valid backends: openai, ollama"
+        print_info "Check AGENT_BACKEND in .env file"
+        exit 1
+    fi
+}
+
+# ============================================================================
 # Network Checks
 # ============================================================================
 
@@ -743,7 +929,13 @@ EOF
     echo "  • Web Interface: ${WEB_INTERFACE:-true}"
     echo "  • Web Port: ${WEB_PORT:-8080}"
     echo "  • ROS Domain: ${ROS_DOMAIN_ID:-0}"
-    echo "  • OpenAI Model: ${OPENAI_MODEL:-gpt-4o}"
+    echo "  • LLM Backend: ${AGENT_BACKEND:-openai}"
+    if [ "${AGENT_BACKEND:-openai}" = "ollama" ]; then
+        echo "  • Ollama URL: ${OLLAMA_BASE_URL:-http://192.168.50.10:11434}"
+        echo "  • Ollama Model: ${OLLAMA_MODEL:-qwen2.5-coder:32b}"
+    else
+        echo "  • OpenAI Model: ${OPENAI_MODEL:-gpt-4o}"
+    fi
     echo ""
     if [ "${CONN_TYPE:-webrtc}" = "webrtc" ]; then
         echo -e "${CYAN}${INFO} WebRTC mode enabled - robot must be on WiFi network${NC}"
@@ -986,11 +1178,39 @@ launch_mission_agent() {
     # Build launch command
     local launch_cmd="ros2 launch shadowhound_mission_agent mission_agent.launch.py"
     
-    # Add parameters
+    # Add agent backend parameters
+    local agent_backend=${AGENT_BACKEND:-openai}
+    launch_cmd="$launch_cmd agent_backend:=$agent_backend"
+    
+    if [ "$agent_backend" = "ollama" ]; then
+        # Ollama-specific parameters
+        if [ -n "$OLLAMA_BASE_URL" ]; then
+            launch_cmd="$launch_cmd ollama_base_url:=$OLLAMA_BASE_URL"
+        fi
+        if [ -n "$OLLAMA_MODEL" ]; then
+            launch_cmd="$launch_cmd ollama_model:=$OLLAMA_MODEL"
+        fi
+    elif [ "$agent_backend" = "openai" ]; then
+        # OpenAI-specific parameters
+        if [ -n "$OPENAI_MODEL" ]; then
+            launch_cmd="$launch_cmd openai_model:=$OPENAI_MODEL"
+        fi
+        if [ -n "$OPENAI_BASE_URL" ]; then
+            launch_cmd="$launch_cmd openai_base_url:=$OPENAI_BASE_URL"
+        fi
+    fi
+    
+    # Add robot parameters
     if [ -n "$MOCK_ROBOT" ]; then
         launch_cmd="$launch_cmd mock_robot:=$MOCK_ROBOT"
     fi
     
+    # Add planning agent parameter
+    if [ -n "$USE_PLANNING_AGENT" ]; then
+        launch_cmd="$launch_cmd use_planning_agent:=$USE_PLANNING_AGENT"
+    fi
+    
+    # Add web interface parameters
     if [ -n "$WEB_INTERFACE" ]; then
         launch_cmd="$launch_cmd enable_web_interface:=$WEB_INTERFACE"
     fi
@@ -1233,8 +1453,9 @@ main() {
     check_system
     check_git_updates  # NEW: Check for repo/submodule updates
     setup_config
+    check_dependencies  # Check/install Python deps BEFORE building
+    check_llm_backend  # IMPORTANT: Check LLM backend early, before heavy lifting
     build_workspace
-    check_dependencies
     check_network
     
     # Show summary

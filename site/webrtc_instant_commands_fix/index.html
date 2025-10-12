@@ -1,0 +1,1849 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="ShadowHound / Robot Dog knowledge base">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>WebRTC Instant Commands Fix - Session Summary - ShadowHound Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2a3383ac.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#webrtc-instant-commands-fix-session-summary" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ShadowHound Documentation" class="md-header__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ShadowHound Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              WebRTC Instant Commands Fix - Session Summary
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../project_overview/roadmap/" class="md-tabs__link">
+          
+  
+  
+  Project Overview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../hardware/" class="md-tabs__link">
+          
+  
+  
+  Hardware
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../software/" class="md-tabs__link">
+          
+  
+  
+  Software
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../networking/" class="md-tabs__link">
+          
+  
+  
+  Networking
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../simulation/" class="md-tabs__link">
+          
+  
+  
+  Simulation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../troubleshooting/" class="md-tabs__link">
+          
+  
+  
+  Troubleshooting
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../research/" class="md-tabs__link">
+          
+  
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ShadowHound Documentation" class="md-nav__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ShadowHound Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Project Overview
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Project Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Roadmap
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start Launch Checklist
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/setup_status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project Setup Status (Oct 4 2025)
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/architecture_review_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Review Summary
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/todo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project TODO Backlog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Hardware
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Software
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Software
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Script Catalog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/environment_configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Environment Configuration
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/start_script_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Start Script Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/dimos_quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DIMOS Integration Quick Start
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/ros2_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ROS 2 Workstation Setup
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/isaac_sim_remote/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Isaac Sim Remote Streaming
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Autodoc
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            Autodoc
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/autodoc/_index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Index
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Networking
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/webrtc_direct_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    WebRTC Direct Test
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Simulation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Simulation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Troubleshooting
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Research
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Research
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/devlog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Development Log
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="webrtc-instant-commands-fix-session-summary">WebRTC Instant Commands Fix - Session Summary<a class="headerlink" href="#webrtc-instant-commands-fix-session-summary" title="Permanent link">&para;</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>Preserve historical context while signaling that this page requires verification against the current workflow.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Review the legacy notes below to understand original assumptions and instructions.</li>
+<li>Cross-check commands and links with the latest tooling before execution.</li>
+</ul>
+<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Read through the legacy notes captured under <strong>Legacy Notes</strong> and flag outdated guidance.</li>
+<li>Update or replace the content with validated procedures as time permits.</li>
+<li>Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.</li>
+</ol>
+<h3 id="legacy-notes">Legacy Notes<a class="headerlink" href="#legacy-notes" title="Permanent link">&para;</a></h3>
+<p><strong>Date:</strong> October 5-6, 2025<br />
+<strong>Branch:</strong> <code>fix/webrtc-instant-commands-and-progress</code> in dimos-unitree fork<br />
+<strong>Status:</strong> 🔧 Fix implemented, awaiting validation</p>
+<hr />
+<h2 id="problem-statement">Problem Statement<a class="headerlink" href="#problem-statement" title="Permanent link">&para;</a></h2>
+<p>WebRTC API commands worked perfectly via <strong>CLI</strong> (direct publish to <code>/webrtc_req</code>) but <strong>hung indefinitely</strong> when called through the <strong>web UI</strong> (via mission agent's ROSCommandQueue).</p>
+<h3 id="symptoms">Symptoms<a class="headerlink" href="#symptoms" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ CLI commands (1001, 1004, 1005, 1009, 1016, 1017) executed instantly</li>
+<li>❌ Web UI commands never completed - queue waited forever</li>
+<li>✅ Nav2 skills (Move, SpinLeft, SpinRight) worked fine via web UI</li>
+</ul>
+<h3 id="commands-tested">Commands Tested<a class="headerlink" href="#commands-tested" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>1001</strong> - Damp (walk mode)</li>
+<li><strong>1004</strong> - StandUp</li>
+<li><strong>1005</strong> - StandDown  </li>
+<li><strong>1009</strong> - Sit ✨ (re-enabled)</li>
+<li><strong>1016</strong> - Hello (wave)</li>
+<li><strong>1017</strong> - Stretch</li>
+</ul>
+<hr />
+<h2 id="root-cause">Root Cause<a class="headerlink" href="#root-cause" title="Permanent link">&para;</a></h2>
+<p>The <code>ROSCommandQueue</code> in <code>ros_command_queue.py</code> had <strong>backwards logic</strong> for instant commands:</p>
+<pre><code class="language-python"># OLD BROKEN CODE - only waited WHILE busy
+while self._is_busy_func() and (time.time() - start_time) &lt; timeout:
+    time.sleep(0.1)
+</code></pre>
+<p><strong>The Problem:</strong><br />
+Instant commands execute so fast (0→1→0 progress in ~100ms) that by the time the queue checked <code>_is_busy_func()</code>, the robot was already back to idle. The queue thought the command never started and waited forever.</p>
+<h3 id="progress-state-transitions">Progress State Transitions<a class="headerlink" href="#progress-state-transitions" title="Permanent link">&para;</a></h3>
+<pre><code>Command sent → Robot state changes: 0 → 1 → 0 (in milliseconds)
+                                     ↑   ↑   ↑
+                                  IDLE BUSY IDLE
+</code></pre>
+<p>The queue checked after the transition completed, saw <code>progress=0</code>, and thought "not busy yet, keep waiting."</p>
+<hr />
+<h2 id="the-fix">The Fix<a class="headerlink" href="#the-fix" title="Permanent link">&para;</a></h2>
+<p>Modified <code>ros_command_queue.py</code> to <strong>wait FOR the robot to become busy first</strong>, then wait for completion:</p>
+<pre><code class="language-python"># NEW WORKING CODE - wait FOR busy state, then wait for completion
+wait_for_busy_timeout = 2.0
+became_busy = False
+
+# Phase 1: Wait up to 2s for robot to become busy
+while not self._is_busy_func() and (time.time() - start_time) &lt; wait_for_busy_timeout:
+    time.sleep(0.05)  # Check every 50ms
+    if self._is_busy_func():
+        became_busy = True
+        break
+
+if not became_busy:
+    # Instant command - already complete by the time we checked
+    self._logger.info(&quot;Command appears to be instant or already complete&quot;)
+    time.sleep(0.5)  # Brief stabilization delay
+    return True
+
+# Phase 2: Now wait for completion (progress returns to 0)
+while self._is_busy_func() and (time.time() - start_time) &lt; timeout:
+    time.sleep(0.1)
+
+return True  # Success
+</code></pre>
+<h3 id="additional-changes">Additional Changes<a class="headerlink" href="#additional-changes" title="Permanent link">&para;</a></h3>
+<p><strong><code>unitree_ros_control.py</code></strong> - Simplified state detection:</p>
+<pre><code class="language-python"># OLD: Complex mode+progress logic
+if progress == 0 and mode == 1:
+    self._mode = RobotMode.IDLE
+elif progress == 1 or mode != 1:
+    self._mode = RobotMode.MOVING
+
+# NEW: Use progress only (more reliable)
+if progress == 0:
+    self._mode = RobotMode.IDLE
+elif progress == 1:
+    self._mode = RobotMode.MOVING
+</code></pre>
+<p><strong><code>unitree_skills.py</code></strong>:
+- Re-enabled Sit command (ID 1009)
+- Minor formatting improvements</p>
+<hr />
+<h2 id="changes-made">Changes Made<a class="headerlink" href="#changes-made" title="Permanent link">&para;</a></h2>
+<h3 id="commits-in-dimos-unitree-fork-fixwebrtc-instant-commands-and-progress">Commits in <code>dimos-unitree</code> fork (fix/webrtc-instant-commands-and-progress):<a class="headerlink" href="#commits-in-dimos-unitree-fork-fixwebrtc-instant-commands-and-progress" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>7538e0f</strong> - Fix WebRTC command queue for instant commands  </li>
+<li>Modified: <code>ros_command_queue.py</code>, <code>unitree_ros_control.py</code>, <code>unitree_skills.py</code></li>
+<li>
+<p><strong>The Core Fix</strong> ✨</p>
+</li>
+<li>
+<p><strong>27d2ea2</strong> - Fix: Use go2_interfaces.msg instead of unitree_go.msg  </p>
+</li>
+<li>
+<p>Fixed import error in <code>unitree_ros_control.py</code></p>
+</li>
+<li>
+<p><strong>3c0bc01</strong> - Revert go2_ros2_sdk to 6c0551b (restore working state)  </p>
+</li>
+<li>
+<p>Reverted unnecessary submodule update that crossed a rebase</p>
+</li>
+<li>
+<p><strong>4addfbc</strong> - Skip models directory during build (requires PyTorch/CUDA)  </p>
+</li>
+<li>Added <code>COLCON_IGNORE</code> to <code>dimos/models/</code> directory</li>
+<li>Avoids build failures from Detic vision models that need ML dependencies</li>
+</ol>
+<h3 id="updated-in-shadowhound-repo">Updated in <code>shadowhound</code> repo:<a class="headerlink" href="#updated-in-shadowhound-repo" title="Permanent link">&para;</a></h3>
+<p><strong><code>shadowhound.repos</code></strong>:</p>
+<pre><code class="language-yaml">repositories:
+  dimos-unitree:
+    type: git
+    url: https://github.com/danmartinez78/dimos-unitree.git
+    version: fix/webrtc-instant-commands-and-progress
+</code></pre>
+<hr />
+<h2 id="current-state">Current State<a class="headerlink" href="#current-state" title="Permanent link">&para;</a></h2>
+<h3 id="completed">✅ Completed<a class="headerlink" href="#completed" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Queue fix logic implemented in <code>ros_command_queue.py</code></li>
+<li>State detection simplified in <code>unitree_ros_control.py</code></li>
+<li>Import errors resolved</li>
+<li>Build issues fixed (submodule reverted, models skipped)</li>
+<li>All changes pushed to <code>fix/webrtc-instant-commands-and-progress</code> branch</li>
+<li><code>shadowhound.repos</code> updated to point to fix branch</li>
+<li>Clean build verified in devcontainer</li>
+</ul>
+<h3 id="not-yet-tested">⚠️ NOT YET TESTED<a class="headerlink" href="#not-yet-tested" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>The fix has NOT been validated via web UI</strong> - this is critical!</li>
+<li>We only confirmed:</li>
+<li>✅ Code compiles and builds cleanly</li>
+<li>✅ Commands work via CLI (but CLI never had the issue)</li>
+<li>❌ <strong>Web UI command execution NOT tested yet</strong></li>
+</ul>
+<h3 id="critical-next-step">🎯 Critical Next Step<a class="headerlink" href="#critical-next-step" title="Permanent link">&para;</a></h3>
+<p><strong>Test via Web UI on laptop</strong> - This is the ONLY way to know if the fix actually works!</p>
+<h3 id="test-commands-via-web-ui">🎯 Test Commands (via Web UI)<a class="headerlink" href="#test-commands-via-web-ui" title="Permanent link">&para;</a></h3>
+<pre><code>&quot;sit&quot;
+&quot;stand up&quot;
+&quot;wave hello&quot;
+&quot;stretch&quot;
+&quot;damp&quot;
+</code></pre>
+<hr />
+<h2 id="deployment-instructions">Deployment Instructions<a class="headerlink" href="#deployment-instructions" title="Permanent link">&para;</a></h2>
+<h3 id="on-laptop-or-any-machine-with-the-robot">On Laptop (or any machine with the robot):<a class="headerlink" href="#on-laptop-or-any-machine-with-the-robot" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">cd ~/shadowhound/src/dimos-unitree
+git pull
+git submodule update --recursive
+
+cd ~/shadowhound
+rm -rf build install log
+colcon build --symlink-install
+source install/setup.bash
+
+# Launch the stack
+ros2 launch shadowhound_bringup shadowhound_bringup.launch.py
+</code></pre>
+<h3 id="expected-behavior-after-fix-if-it-works">Expected Behavior After Fix (IF IT WORKS)<a class="headerlink" href="#expected-behavior-after-fix-if-it-works" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Web UI commands should execute immediately</strong> (no more hanging)</li>
+<li><strong>Agent should receive success/failure responses</strong> within 2-3 seconds</li>
+<li><strong>Progress state transitions visible</strong> in logs:
+   <code>[INFO] Executing WebRTC command: 1009
+   [INFO] Waiting for robot to become busy...
+   [INFO] Robot became busy (progress=1)
+   [INFO] Waiting for completion...
+   [INFO] Command complete (progress=0)</code></li>
+</ol>
+<h3 id="what-could-still-go-wrong">What Could Still Go Wrong<a class="headerlink" href="#what-could-still-go-wrong" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The 2-second busy detection timeout might be too short</li>
+<li>State transitions might happen even faster than 50ms polling</li>
+<li>Progress state might not be reliable indicator</li>
+<li>There could be race conditions we didn't account for</li>
+<li>The fix might only work for some commands, not all</li>
+</ul>
+<hr />
+<h2 id="technical-details">Technical Details<a class="headerlink" href="#technical-details" title="Permanent link">&para;</a></h2>
+<h3 id="robot-state-topics">Robot State Topics<a class="headerlink" href="#robot-state-topics" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>/go2_states</code></strong> - Published by <code>go2_driver_node</code></li>
+<li><code>progress</code>: 0 (idle), 1 (executing)</li>
+<li><code>mode</code>: 1 (normal), others (unknown)</li>
+</ul>
+<h3 id="command-flow">Command Flow<a class="headerlink" href="#command-flow" title="Permanent link">&para;</a></h3>
+<pre><code>Web UI → Mission Agent → ROSCommandQueue → /webrtc_req → go2_driver_node → Robot
+         ↑                     ↓
+         └─── success/failure ─┘
+</code></pre>
+<h3 id="why-cli-works-but-web-ui-didnt">Why CLI Works But Web UI Didn't<a class="headerlink" href="#why-cli-works-but-web-ui-didnt" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>CLI</strong>: Direct publish to <code>/webrtc_req</code>, no waiting</li>
+<li><strong>Web UI</strong>: Goes through queue which needs to monitor completion</li>
+<li><strong>Queue bug</strong>: Missed the instant state transition</li>
+</ul>
+<hr />
+<h2 id="known-issues-limitations">Known Issues / Limitations<a class="headerlink" href="#known-issues-limitations" title="Permanent link">&para;</a></h2>
+<h3 id="current-limitations">Current Limitations<a class="headerlink" href="#current-limitations" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>No VLM integration yet</strong> - Commands are still hardcoded skill IDs</li>
+<li><strong>No pose feedback</strong> - Can't verify if commands achieved desired result</li>
+<li><strong>2-second busy detection timeout</strong> - Might be too long for some use cases</li>
+</ol>
+<h3 id="not-tested-yet">Not Tested Yet ⚠️<a class="headerlink" href="#not-tested-yet" title="Permanent link">&para;</a></h3>
+<ul>
+<li>❌ <strong>Actual web UI execution</strong> (CRITICAL - this is the whole point!)</li>
+<li>❌ The fix might not work at all</li>
+<li>❌ Error handling for failed commands</li>
+<li>❌ Multiple rapid commands in sequence</li>
+<li>❌ Command interruption/cancellation</li>
+</ul>
+<p><strong>Bottom line:</strong> We have a theory and an implementation, but zero proof it works.</p>
+<hr />
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<h3 id="immediate-priority-1-critical">Immediate (Priority 1) - CRITICAL ⚡<a class="headerlink" href="#immediate-priority-1-critical" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Test via Web UI on laptop</strong> 🔴 <strong>MUST DO FIRST</strong></li>
+<li>Deploy the fix to laptop</li>
+<li>Try "sit", "hello", "stretch" via web interface</li>
+<li><strong>This will tell us if the fix actually works</strong></li>
+<li>Check logs for proper state transitions</li>
+<li>If it hangs: back to the drawing board</li>
+<li>
+<p>If it works: celebrate and move to validation</p>
+</li>
+<li>
+<p><strong>IF the fix works, validate edge cases</strong></p>
+</li>
+<li>Test invalid command IDs</li>
+<li>Test commands during motion (busy state)</li>
+<li>Verify timeout behavior</li>
+<li>Try rapid command sequences</li>
+</ol>
+<h3 id="short-term-priority-2">Short Term (Priority 2)<a class="headerlink" href="#short-term-priority-2" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Add telemetry/logging</strong></li>
+<li>Log execution time per command</li>
+<li>Track success/failure rates</li>
+<li>
+<p>Monitor state transitions</p>
+</li>
+<li>
+<p><strong>Create PR to upstream dimos-unitree</strong></p>
+</li>
+<li>Clean up commit history (squash if needed)</li>
+<li>Write proper PR description</li>
+<li>Include before/after behavior</li>
+</ol>
+<h3 id="medium-term-priority-3">Medium Term (Priority 3)<a class="headerlink" href="#medium-term-priority-3" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>VLM Integration</strong></li>
+<li>Use vision to verify command completion</li>
+<li>"Did the robot actually sit?"</li>
+<li>
+<p>Retry logic based on visual feedback</p>
+</li>
+<li>
+<p><strong>Pose Estimation</strong></p>
+</li>
+<li>Parse actual robot pose from state messages</li>
+<li>Validate position after navigation commands</li>
+<li>
+<p>Detect falls or stuck states</p>
+</li>
+<li>
+<p><strong>Mission Planning</strong></p>
+</li>
+<li>Chain multiple commands</li>
+<li>Handle dependencies (must stand before walking)</li>
+<li>Recovery behaviors</li>
+</ol>
+<hr />
+<h2 id="files-modified">Files Modified<a class="headerlink" href="#files-modified" title="Permanent link">&para;</a></h2>
+<pre><code>dimos-unitree/
+├── dimos/robot/unitree/
+│   ├── external/go2_ros2_sdk/           (submodule at 6c0551b)
+│   └── ros_control/
+│       ├── ros_command_queue.py         ✏️ Core fix
+│       ├── unitree_ros_control.py       ✏️ State detection
+│       └── unitree_skills.py            ✏️ Re-enabled Sit
+└── dimos/models/COLCON_IGNORE           ➕ New file
+
+shadowhound/
+└── shadowhound.repos                     ✏️ Point to fix branch
+</code></pre>
+<hr />
+<h2 id="environment-details">Environment Details<a class="headerlink" href="#environment-details" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Robot:</strong> Unitree Go2 (Firmware 1.1.3)</li>
+<li><strong>Network:</strong> WebRTC mode via hotspot (192.168.12.1)</li>
+<li><strong>ROS2:</strong> Humble</li>
+<li><strong>Development:</strong> VS Code devcontainer</li>
+<li><strong>Repository Structure:</strong> vcstool-managed (not git submodules)</li>
+</ul>
+<hr />
+<h2 id="lessons-learned">Lessons Learned<a class="headerlink" href="#lessons-learned" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Always check timing assumptions</strong> - "Instant" means microseconds, not zero time</li>
+<li><strong>State machines need proper phase detection</strong> - Wait FOR state change, not just DURING</li>
+<li><strong>Submodule updates are risky</strong> - Only update when necessary, verify compatibility</li>
+<li><strong>COLCON_IGNORE is your friend</strong> - Skip unneeded packages to avoid dependency hell</li>
+<li><strong>CLI vs Queue behavior differs</strong> - Direct publish != queue-mediated execution</li>
+</ol>
+<hr />
+<h2 id="questions-for-next-session">Questions for Next Session<a class="headerlink" href="#questions-for-next-session" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Does the fix work via web UI?</strong> 🔴 (Critical - we don't know yet!)</li>
+<li><strong>IF it works:</strong> Should we add a "became_busy" flag to telemetry?</li>
+<li><strong>IF it works:</strong> What's the right busy detection timeout? (currently 2s)</li>
+<li><strong>IF it works:</strong> Should instant commands have a different timeout than motion commands?</li>
+<li><strong>IF it doesn't work:</strong> What did we miss in the state machine logic?</li>
+<li><strong>IF it doesn't work:</strong> Do we need to monitor a different state topic?</li>
+</ol>
+<hr />
+<p><strong>Status:</strong> Fix implemented but UNVALIDATED. We have a hypothesis (instant commands transition too fast for the queue to detect) and a proposed solution (wait FOR busy state with timeout), but we haven't tested if it actually solves the problem. Next session MUST start with web UI testing. 🧪</p>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.</li>
+<li>[ ] Links updated to use vault-friendly wikilinks or confirmed for external references.</li>
+<li>[ ] Outstanding migration work captured as tasks in the backlog.</li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../">Knowledge Base Index</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.sections", "navigation.tabs", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

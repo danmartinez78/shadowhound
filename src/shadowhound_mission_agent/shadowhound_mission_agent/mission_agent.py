@@ -34,7 +34,7 @@ class MissionAgentNode(Node):
         super().__init__("shadowhound_mission_agent")
 
         # Declare ROS parameters
-        self.declare_parameter("agent_backend", "cloud")  # 'cloud' or 'local'
+        self.declare_parameter("agent_backend", "openai")  # 'openai' or 'ollama'
         self.declare_parameter(
             "use_planning_agent", False
         )  # Use PlanningAgent instead of OpenAIAgent
@@ -42,7 +42,14 @@ class MissionAgentNode(Node):
         self.declare_parameter("web_port", 8080)  # Web interface port
         self.declare_parameter("robot_ip", "192.168.1.103")  # Robot IP address
         self.declare_parameter("webrtc_api_topic", "webrtc_req")  # WebRTC API topic
-        self.declare_parameter("agent_model", "gpt-4-turbo")  # LLM model
+
+        # OpenAI backend parameters
+        self.declare_parameter("openai_model", "gpt-4-turbo")  # OpenAI model
+        self.declare_parameter("openai_base_url", "https://api.openai.com/v1")
+
+        # Ollama backend parameters
+        self.declare_parameter("ollama_base_url", "http://localhost:11434")
+        self.declare_parameter("ollama_model", "llama3.1:70b")
 
         # Get parameters
         agent_backend = self.get_parameter("agent_backend").value
@@ -51,16 +58,28 @@ class MissionAgentNode(Node):
         web_port = self.get_parameter("web_port").value
         robot_ip = self.get_parameter("robot_ip").value
         webrtc_api_topic = self.get_parameter("webrtc_api_topic").value
-        agent_model = self.get_parameter("agent_model").value
+
+        openai_model = self.get_parameter("openai_model").value
+        openai_base_url = self.get_parameter("openai_base_url").value
+        ollama_base_url = self.get_parameter("ollama_base_url").value
+        ollama_model = self.get_parameter("ollama_model").value
+
+        # Store backend config for diagnostics
+        self.agent_backend = agent_backend
+        self.agent_model = ollama_model if agent_backend == "ollama" else openai_model
 
         self.get_logger().info("Configuration:")
         self.get_logger().info(f"  Agent backend: {agent_backend}")
         self.get_logger().info(f"  Use planning: {use_planning}")
+        if agent_backend == "openai":
+            self.get_logger().info(f"  OpenAI model: {openai_model}")
+        elif agent_backend == "ollama":
+            self.get_logger().info(f"  Ollama URL: {ollama_base_url}")
+            self.get_logger().info(f"  Ollama model: {ollama_model}")
         self.get_logger().info(f"  Web interface: {enable_web}")
         if enable_web:
             self.get_logger().info(f"  Web port: {web_port}")
         self.get_logger().info(f"  Robot IP: {robot_ip}")
-        self.get_logger().info(f"  Agent model: {agent_model}")
 
         # Log connection diagnostics
         self._log_connection_diagnostics()
@@ -73,7 +92,10 @@ class MissionAgentNode(Node):
             use_planning_agent=use_planning,
             robot_ip=robot_ip,
             webrtc_api_topic=webrtc_api_topic,
-            agent_model=agent_model,
+            openai_model=openai_model,
+            openai_base_url=openai_base_url,
+            ollama_base_url=ollama_base_url,
+            ollama_model=ollama_model,
         )
 
         # Create mission executor (uses ROS logging via this node's logger)
@@ -83,6 +105,14 @@ class MissionAgentNode(Node):
         # Initialize mission executor
         self.get_logger().info("Initializing MissionExecutor...")
         self.mission_executor.initialize()
+
+        # Validate LLM backend connection on startup
+        if not self._validate_llm_backend():
+            raise RuntimeError(
+                "LLM backend validation failed. Check logs above for details. "
+                "Ensure the backend service is running and accessible."
+            )
+
         self.get_logger().info("MissionExecutor ready!")
 
         # Initialize web interface (optional)
@@ -190,6 +220,202 @@ class MissionAgentNode(Node):
             self.get_logger().info(f"  {status} {topic} ({description})")
 
         self.get_logger().info("=" * 60)
+
+    def _validate_llm_backend(self) -> bool:
+        """Validate LLM backend connection on startup.
+
+        This sends a simple test prompt to the configured backend to ensure it's
+        reachable and responding before accepting mission commands. This catches
+        configuration errors early rather than failing on first mission.
+
+        Returns:
+            bool: True if validation passed, False otherwise
+        """
+        self.get_logger().info("=" * 60)
+        self.get_logger().info("🔍 VALIDATING LLM BACKEND CONNECTION")
+        self.get_logger().info("=" * 60)
+
+        agent_backend = self.get_parameter("agent_backend").value
+        self.get_logger().info(f"Testing {agent_backend} backend...")
+
+        try:
+            if agent_backend == "ollama":
+                return self._validate_ollama_backend()
+            elif agent_backend == "openai":
+                return self._validate_openai_backend()
+            else:
+                self.get_logger().error(f"❌ Unknown backend: {agent_backend}")
+                return False
+
+        except Exception as e:
+            self.get_logger().error(f"❌ Backend validation failed with exception: {e}")
+            return False
+
+    def _validate_ollama_backend(self) -> bool:
+        """Validate Ollama backend connection.
+
+        Returns:
+            bool: True if Ollama is accessible and responding
+        """
+        import requests
+
+        ollama_base_url = self.get_parameter("ollama_base_url").value
+        ollama_model = self.get_parameter("ollama_model").value
+
+        self.get_logger().info(f"  URL: {ollama_base_url}")
+        self.get_logger().info(f"  Model: {ollama_model}")
+
+        # Step 1: Check if Ollama service is responding
+        try:
+            self.get_logger().info("  Checking Ollama service...")
+            response = requests.get(f"{ollama_base_url}/api/tags", timeout=5)
+
+            if response.status_code != 200:
+                self.get_logger().error(
+                    f"❌ Ollama service returned status {response.status_code}"
+                )
+                self.get_logger().error(
+                    f"   Check that Ollama is running at {ollama_base_url}"
+                )
+                return False
+
+            self.get_logger().info("  ✅ Ollama service responding")
+
+        except requests.exceptions.Timeout:
+            self.get_logger().error(
+                f"❌ Timeout connecting to Ollama at {ollama_base_url}"
+            )
+            self.get_logger().error("   Check network connectivity and Ollama status")
+            return False
+
+        except requests.exceptions.ConnectionError as e:
+            self.get_logger().error(f"❌ Cannot connect to Ollama at {ollama_base_url}")
+            self.get_logger().error(f"   Error: {e}")
+            self.get_logger().error(
+                "   Check that Ollama is running and URL is correct"
+            )
+            return False
+
+        # Step 2: Check if model is available
+        try:
+            models_data = response.json()
+            available_models = [
+                m.get("name", "") for m in models_data.get("models", [])
+            ]
+
+            if ollama_model not in available_models:
+                self.get_logger().error(
+                    f"❌ Model '{ollama_model}' not found in Ollama"
+                )
+                self.get_logger().error(
+                    f"   Available models: {', '.join(available_models)}"
+                )
+                self.get_logger().error(
+                    f"   Pull the model with: ollama pull {ollama_model}"
+                )
+                return False
+
+            self.get_logger().info(f"  ✅ Model '{ollama_model}' available")
+
+        except Exception as e:
+            self.get_logger().error(f"❌ Failed to parse Ollama models list: {e}")
+            return False
+
+        # Step 3: Send a test prompt
+        try:
+            self.get_logger().info("  Sending test prompt...")
+            test_response = requests.post(
+                f"{ollama_base_url}/api/generate",
+                json={"model": ollama_model, "prompt": "Say OK", "stream": False},
+                timeout=30,
+            )
+
+            if test_response.status_code != 200:
+                self.get_logger().error(
+                    f"❌ Test prompt failed with status {test_response.status_code}"
+                )
+                return False
+
+            response_data = test_response.json()
+            response_text = response_data.get("response", "").strip()
+
+            self.get_logger().info(
+                f"  ✅ Test prompt succeeded (response: '{response_text}')"
+            )
+
+        except requests.exceptions.Timeout:
+            self.get_logger().error(
+                f"❌ Timeout waiting for test prompt response (>30s)"
+            )
+            self.get_logger().error(
+                f"   Model '{ollama_model}' may be too slow or not loaded"
+            )
+            return False
+
+        except Exception as e:
+            self.get_logger().error(f"❌ Test prompt failed: {e}")
+            return False
+
+        # All checks passed
+        self.get_logger().info("=" * 60)
+        self.get_logger().info("✅ Ollama backend validation PASSED")
+        self.get_logger().info("=" * 60)
+        return True
+
+    def _validate_openai_backend(self) -> bool:
+        """Validate OpenAI backend connection.
+
+        Returns:
+            bool: True if OpenAI API is accessible
+        """
+        import os
+        from openai import OpenAI
+
+        # Check API key
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            self.get_logger().error("❌ OPENAI_API_KEY environment variable not set")
+            self.get_logger().error("   Set it with: export OPENAI_API_KEY='sk-...'")
+            return False
+
+        self.get_logger().info("  ✅ OPENAI_API_KEY found")
+
+        openai_base_url = self.get_parameter("openai_base_url").value
+        openai_model = self.get_parameter("openai_model").value
+
+        self.get_logger().info(f"  Base URL: {openai_base_url}")
+        self.get_logger().info(f"  Model: {openai_model}")
+
+        # Send test prompt
+        try:
+            self.get_logger().info("  Sending test prompt...")
+
+            client = OpenAI(base_url=openai_base_url, api_key=api_key)
+
+            response = client.chat.completions.create(
+                model=openai_model,
+                messages=[{"role": "user", "content": "Say OK"}],
+                max_tokens=10,
+                timeout=30,
+            )
+
+            response_text = response.choices[0].message.content.strip()
+            self.get_logger().info(
+                f"  ✅ Test prompt succeeded (response: '{response_text}')"
+            )
+
+        except Exception as e:
+            self.get_logger().error(f"❌ OpenAI test prompt failed: {e}")
+            self.get_logger().error(
+                "   Check API key, model name, and network connectivity"
+            )
+            return False
+
+        # All checks passed
+        self.get_logger().info("=" * 60)
+        self.get_logger().info("✅ OpenAI backend validation PASSED")
+        self.get_logger().info("=" * 60)
+        return True
 
     def _init_web_interface(self, port: int):
         """Initialize web interface."""
@@ -393,6 +619,8 @@ class MissionAgentNode(Node):
             self.web.update_diagnostics(
                 {
                     "robot_mode": "operational",  # TODO: Get actual mode from robot state
+                    "agent_backend": self.agent_backend,
+                    "agent_model": self.agent_model,
                     "topics_available": robot_topics,
                     "action_servers": action_servers,
                 }

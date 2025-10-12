@@ -1,0 +1,206 @@
+{
+  "main": {
+    "id": "b483cca89dab5160",
+    "type": "split",
+    "children": [
+      {
+        "id": "e8e316bf25d49759",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1b11e2a82b2fc7f4",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1be22e4ceaadbbc0",
+    "type": "split",
+    "children": [
+      {
+        "id": "eeec71ee5512fd61",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "11782e383755777d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "888f61f010df1dc7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "a9356300a15a5c7a",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6507726b73b9f977",
+    "type": "split",
+    "children": [
+      {
+        "id": "e1b5e308302f1f3c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "77d67a035d276ae9",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "20f6aaadbc88bc80",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "2dfd7dad1c811593",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "ab836c657aece413",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "github-sync:Sync with Remote": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "1b11e2a82b2fc7f4",
+  "lastOpenFiles": [
+    "local_llm_integration_summary.md",
+    "issues/forcing_function_calling_with_prompts.md",
+    "issues/vllm_mistral_tokenizer_hang.md",
+    "issues/vllm_tool_calling_not_executing.md",
+    "issues/vllm_tool_calling_configuration.md",
+    "issues/start_script_issues.md",
+    "issues/mock_mode_ros_topic_dependency.md",
+    "dimos_local_llm_findings.md",
+    "local_ai_implementation_status.md",
+    "dimos_agent_architecture.md",
+    "local_llm_memory_roadmap.md",
+    "dimos_development_policy.md",
+    "dimos_branch_consolidation.md",
+    "laptop_sync_after_conversion.md",
+    "submodule_policy.md",
+    "deployment_sync.md",
+    "embeddings_auto_detection.md",
+    "llama_cpp_migration.md",
+    "vllm_env_example.txt",
+    "vllm_huggingface_auth.md",
+    "issues/thor_system_utilities.md",
+    "issues",
+    "vllm_quickstart.md",
+    "ollama_model_selection.md",
+    "Untitled.canvas",
+    "THOR_RESOURCES.md",
+    "THOR_PERFORMANCE_NOTES.md",
+    "TESTING_GUIDE_OLLAMA.md",
+    "STARTUP_VALIDATION.md",
+    "troubleshooting",
+    "software/autodoc",
+    "software",
+    "simulation",
+    "research",
+    "project_overview",
+    "networking",
+    "_templates"
+  ]
+}

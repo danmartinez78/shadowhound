@@ -1,0 +1,1952 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="ShadowHound / Robot Dog knowledge base">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>WebRTC Configuration Guide - ShadowHound Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2a3383ac.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#webrtc-configuration-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ShadowHound Documentation" class="md-header__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ShadowHound Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              WebRTC Configuration Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../project_overview/roadmap/" class="md-tabs__link">
+          
+  
+  
+  Project Overview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../hardware/" class="md-tabs__link">
+          
+  
+  
+  Hardware
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../software/" class="md-tabs__link">
+          
+  
+  
+  Software
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../networking/" class="md-tabs__link">
+          
+  
+  
+  Networking
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../simulation/" class="md-tabs__link">
+          
+  
+  
+  Simulation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../troubleshooting/" class="md-tabs__link">
+          
+  
+  
+  Troubleshooting
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../research/" class="md-tabs__link">
+          
+  
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ShadowHound Documentation" class="md-nav__button md-logo" aria-label="ShadowHound Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ShadowHound Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Project Overview
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Project Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Roadmap
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start Launch Checklist
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/quick_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/setup_status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project Setup Status (Oct 4 2025)
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/architecture_review_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture Review Summary
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project_overview/todo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project TODO Backlog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Hardware
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Software
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Software
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Script Catalog
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/environment_configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Environment Configuration
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/start_script_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Start Script Reference
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/dimos_quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DIMOS Integration Quick Start
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/ros2_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ROS 2 Workstation Setup
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/isaac_sim_remote/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Isaac Sim Remote Streaming
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Autodoc
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            Autodoc
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/autodoc/_index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Index
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Networking
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/webrtc_direct_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    WebRTC Direct Test
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Simulation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Simulation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Troubleshooting
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Research
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Research
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/devlog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Development Log
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="webrtc-configuration-guide">WebRTC Configuration Guide<a class="headerlink" href="#webrtc-configuration-guide" title="Permanent link">&para;</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>Preserve historical context while signaling that this page requires verification against the current workflow.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Review the legacy notes below to understand original assumptions and instructions.</li>
+<li>Cross-check commands and links with the latest tooling before execution.</li>
+</ul>
+<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Read through the legacy notes captured under <strong>Legacy Notes</strong> and flag outdated guidance.</li>
+<li>Update or replace the content with validated procedures as time permits.</li>
+<li>Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.</li>
+</ol>
+<h3 id="legacy-notes">Legacy Notes<a class="headerlink" href="#legacy-notes" title="Permanent link">&para;</a></h3>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>The Unitree Go2 robot supports <strong>two communication protocols</strong> for different use cases:</p>
+<ol>
+<li><strong>CycloneDDS (Ethernet)</strong> - Direct motor control, sensors, basic navigation</li>
+<li><strong>WebRTC (WiFi)</strong> - Full API access including high-level behaviors (sit, stand, dance, wave)</li>
+</ol>
+<p><strong>For DIMOS skills to work, you MUST use WebRTC mode.</strong></p>
+<hr />
+<h2 id="quick-reference">Quick Reference<a class="headerlink" href="#quick-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>CycloneDDS (Ethernet)</th>
+<th>WebRTC (WiFi)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connection</td>
+<td>Ethernet cable</td>
+<td>WiFi network</td>
+</tr>
+<tr>
+<td>Sensors/Odometry</td>
+<td>✅ Yes</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>Camera</td>
+<td>✅ Yes</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>Direct motor control (<code>/cmd_vel</code>)</td>
+<td>✅ Yes</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>Teleop (gamepad)</td>
+<td>✅ Yes</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>High-level API (sit/stand/wave)</td>
+<td>❌ No</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>DIMOS skills</td>
+<td>❌ No</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>Default</td>
+<td><code>CONN_TYPE=webrtc</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="when-to-use-each-mode">When to Use Each Mode<a class="headerlink" href="#when-to-use-each-mode" title="Permanent link">&para;</a></h2>
+<h3 id="use-cyclonedds-ethernet-for">Use CycloneDDS (Ethernet) for:<a class="headerlink" href="#use-cyclonedds-ethernet-for" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Direct motor control (velocity commands)</li>
+<li>Sensor data collection (cameras, lidar, IMU)</li>
+<li>Teleop with gamepad</li>
+<li>Basic navigation without behaviors</li>
+<li>Development/testing without robot behaviors</li>
+</ul>
+<h3 id="use-webrtc-wifi-for">Use WebRTC (WiFi) for:<a class="headerlink" href="#use-webrtc-wifi-for" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>DIMOS autonomous behaviors</strong> ← <strong>YOU NEED THIS</strong></li>
+<li>High-level API commands (sit, stand, wave, dance)</li>
+<li>Mission execution with skills</li>
+<li>Full robot capabilities</li>
+<li>Production deployment</li>
+</ul>
+<hr />
+<h2 id="configuration-steps">Configuration Steps<a class="headerlink" href="#configuration-steps" title="Permanent link">&para;</a></h2>
+<h3 id="1-set-conn_type-environment-variable">1. Set CONN_TYPE Environment Variable<a class="headerlink" href="#1-set-conn_type-environment-variable" title="Permanent link">&para;</a></h3>
+<p><strong>In <code>.env</code> file:</strong></p>
+<pre><code class="language-bash"># Connection type for Unitree Go2 communication
+CONN_TYPE=webrtc  # Required for DIMOS skills!
+</code></pre>
+<p><strong>Or in terminal:</strong></p>
+<pre><code class="language-bash">export CONN_TYPE=webrtc
+</code></pre>
+<h3 id="2-configure-robot-wifi-connection">2. Configure Robot WiFi Connection<a class="headerlink" href="#2-configure-robot-wifi-connection" title="Permanent link">&para;</a></h3>
+<p>The robot must be connected to your WiFi network for WebRTC mode to work.</p>
+<h4 id="option-a-using-unitree-app-recommended">Option A: Using Unitree App (Recommended)<a class="headerlink" href="#option-a-using-unitree-app-recommended" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Download "Unitree Go2" app on your phone</li>
+<li>Connect phone to robot's hotspot (Go2_xxxxx)</li>
+<li>Open app → Settings → WiFi Settings</li>
+<li>Connect robot to your WiFi network</li>
+<li>Note the WiFi IP address displayed (e.g., 192.168.1.103)</li>
+</ol>
+<h4 id="option-b-using-web-interface">Option B: Using Web Interface<a class="headerlink" href="#option-b-using-web-interface" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Connect to robot via Ethernet (192.168.123.161)</li>
+<li>Open browser: http://192.168.123.161:8081</li>
+<li>Navigate to Network Settings</li>
+<li>Configure WiFi credentials</li>
+<li>Note the assigned IP address</li>
+</ol>
+<h3 id="3-update-go2_ip-in-env">3. Update GO2_IP in .env<a class="headerlink" href="#3-update-go2_ip-in-env" title="Permanent link">&para;</a></h3>
+<p>Update the robot IP address to match the WiFi IP:</p>
+<pre><code class="language-bash"># Robot IP address
+# IMPORTANT: Use WiFi IP for WebRTC mode!
+GO2_IP=192.168.1.103  # Replace with your robot's WiFi IP
+</code></pre>
+<p><strong>Note:</strong> The WiFi IP is usually different from the Ethernet IP!
+- Ethernet IP: 192.168.123.161 (fixed, via USB/Ethernet)
+- WiFi IP: 192.168.1.xxx (DHCP, from your router)</p>
+<h3 id="4-verify-network-connectivity">4. Verify Network Connectivity<a class="headerlink" href="#4-verify-network-connectivity" title="Permanent link">&para;</a></h3>
+<p>Test that you can reach the robot on WiFi:</p>
+<pre><code class="language-bash"># Ping robot's WiFi IP
+ping 192.168.1.103  # Replace with your robot's WiFi IP
+
+# Should see replies like:
+# 64 bytes from 192.168.1.103: icmp_seq=1 ttl=64 time=5.2 ms
+</code></pre>
+<p>If ping fails:
+- Check robot WiFi is connected (LED indicators)
+- Verify IP address is correct (check in app)
+- Ensure laptop and robot on same network
+- Try rebooting robot</p>
+<h3 id="5-launch-with-webrtc-enabled">5. Launch with WebRTC Enabled<a class="headerlink" href="#5-launch-with-webrtc-enabled" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Option 1: Using start.sh (recommended)
+./start.sh  # Automatically uses CONN_TYPE from .env
+
+# Option 2: Manual launch
+export CONN_TYPE=webrtc
+export GO2_IP=192.168.1.103
+ros2 launch shadowhound_mission_agent bringup.launch.py
+</code></pre>
+<h3 id="6-verify-webrtc-connection">6. Verify WebRTC Connection<a class="headerlink" href="#6-verify-webrtc-connection" title="Permanent link">&para;</a></h3>
+<p>Check logs for confirmation:</p>
+<pre><code class="language-bash"># In mission agent logs, look for:
+[INFO] Connection type: webrtc
+[INFO] WebRTC mode: High-level API commands (sit, stand, wave) enabled
+
+# Check that WebRTC topics exist:
+ros2 topic list | grep webrtc
+# Should see:
+#   /webrtc_req
+#   /webrtcreq
+#   /xfk_webrtcreq
+</code></pre>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="problem-teleop-works-but-robot-doesnt-respond-to-sit-command">Problem: "Teleop works but robot doesn't respond to 'sit' command"<a class="headerlink" href="#problem-teleop-works-but-robot-doesnt-respond-to-sit-command" title="Permanent link">&para;</a></h3>
+<p><strong>Diagnosis:</strong> You're in CycloneDDS mode (Ethernet).</p>
+<p><strong>Solution:</strong>
+1. Set <code>CONN_TYPE=webrtc</code> in <code>.env</code>
+2. Connect robot to WiFi
+3. Update <code>GO2_IP</code> to WiFi IP
+4. Restart system</p>
+<p><strong>Explanation:</strong> Teleop uses <code>/cmd_vel</code> (direct motor control) which works over CycloneDDS. High-level behaviors like "sit" require WebRTC API.</p>
+<hr />
+<h3 id="problem-cannot-connect-to-robot-in-webrtc-mode">Problem: "Cannot connect to robot in WebRTC mode"<a class="headerlink" href="#problem-cannot-connect-to-robot-in-webrtc-mode" title="Permanent link">&para;</a></h3>
+<p><strong>Diagnosis:</strong> Network connectivity issue.</p>
+<p><strong>Solution:</strong>
+1. Verify robot is on WiFi:
+   <code>bash
+   # Check in Unitree app - should show WiFi connected</code></p>
+<ol>
+<li>
+<p>Verify IP address is correct:
+   <code>bash
+   ping 192.168.1.103  # Your robot's WiFi IP</code></p>
+</li>
+<li>
+<p>Check that you're using WiFi IP, not Ethernet IP:</p>
+</li>
+<li>❌ 192.168.123.161 (Ethernet IP - won't work for WebRTC)</li>
+<li>
+<p>✅ 192.168.1.103 (WiFi IP - correct for WebRTC)</p>
+</li>
+<li>
+<p>Ensure laptop and robot on same network:
+   <code>bash
+   # Check your laptop's network
+   ip addr show
+   # Should see IP in same subnet (e.g., 192.168.1.xxx)</code></p>
+</li>
+</ol>
+<hr />
+<h3 id="problem-commands-timeout-after-30-seconds">Problem: "Commands timeout after 30 seconds"<a class="headerlink" href="#problem-commands-timeout-after-30-seconds" title="Permanent link">&para;</a></h3>
+<p><strong>Diagnosis:</strong> WebRTC API not receiving commands.</p>
+<p><strong>Solution:</strong>
+1. Check that bare DDS subscriber exists:
+   <code>bash
+   ros2 topic info /webrtcreq --verbose
+   # Should show subscriber: _CREATED_BY_BARE_DDS_APP_</code></p>
+<ol>
+<li>
+<p>If no subscriber, robot's WebRTC service may not be running:
+   <code>bash
+   # Reboot robot
+   # Wait for all services to start (~30 seconds after boot)</code></p>
+</li>
+<li>
+<p>Try publishing directly to test:
+   <code>bash
+   # Sit command (API 1009)
+   ros2 topic pub --once /webrtc_req go2_interfaces/msg/WebRtcReq \
+     "{id: 0, topic: 'rt/api/sport/request', api_id: 1009, parameter: '', priority: 0}"</code></p>
+</li>
+</ol>
+<hr />
+<h3 id="problem-warn-cyclonedds-mode-high-level-api-commands-not-available">Problem: "WARN: CycloneDDS mode: High-level API commands NOT available"<a class="headerlink" href="#problem-warn-cyclonedds-mode-high-level-api-commands-not-available" title="Permanent link">&para;</a></h3>
+<p><strong>Diagnosis:</strong> CONN_TYPE not set or set to cyclonedds.</p>
+<p><strong>Solution:</strong>
+1. Check .env file:
+   <code>bash
+   grep CONN_TYPE .env
+   # Should show: CONN_TYPE=webrtc</code></p>
+<ol>
+<li>
+<p>If missing, add it:
+   <code>bash
+   echo "CONN_TYPE=webrtc" &gt;&gt; .env</code></p>
+</li>
+<li>
+<p>Restart the system:
+   <code>bash
+   ./start.sh</code></p>
+</li>
+</ol>
+<hr />
+<h2 id="advanced-configuration">Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="using-both-modes-simultaneously">Using Both Modes Simultaneously<a class="headerlink" href="#using-both-modes-simultaneously" title="Permanent link">&para;</a></h3>
+<p>You can have TWO connections at the same time:
+- <strong>Ethernet (CycloneDDS)</strong>: For sensors/odometry/camera
+- <strong>WiFi (WebRTC)</strong>: For high-level API commands</p>
+<p>This is the <strong>recommended production setup</strong> for maximum reliability.</p>
+<p><strong>Configuration:</strong></p>
+<pre><code class="language-bash"># In .env
+CONN_TYPE=webrtc  # Primary protocol for API commands
+GO2_IP=192.168.1.103  # WiFi IP
+
+# Robot should be connected via:
+# 1. Ethernet cable (for sensor data)
+# 2. WiFi network (for API commands)
+</code></pre>
+<h3 id="switching-between-modes">Switching Between Modes<a class="headerlink" href="#switching-between-modes" title="Permanent link">&para;</a></h3>
+<p>To switch from WebRTC back to CycloneDDS (if needed):</p>
+<pre><code class="language-bash"># In .env, comment out or change CONN_TYPE
+# CONN_TYPE=webrtc  # Commented out = uses cyclonedds default
+CONN_TYPE=cyclonedds  # Explicit CycloneDDS mode
+
+# Update IP to Ethernet IP
+GO2_IP=192.168.123.161  # Ethernet IP
+
+# Restart system
+./start.sh
+</code></pre>
+<h3 id="environment-variable-priority">Environment Variable Priority<a class="headerlink" href="#environment-variable-priority" title="Permanent link">&para;</a></h3>
+<p>Environment variables are loaded in this order (last wins):
+1. Default value (cyclonedds)
+2. <code>.env</code> file
+3. Shell export <code>export CONN_TYPE=webrtc</code>
+4. Launch parameter (if implemented)</p>
+<hr />
+<h2 id="testing-webrtc-connection">Testing WebRTC Connection<a class="headerlink" href="#testing-webrtc-connection" title="Permanent link">&para;</a></h2>
+<h3 id="test-1-direct-api-command">Test 1: Direct API Command<a class="headerlink" href="#test-1-direct-api-command" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Source environment
+source .shadowhound_env
+
+# Sit command (API 1009)
+ros2 topic pub --once /webrtc_req go2_interfaces/msg/WebRtcReq \
+  &quot;{id: 0, topic: 'rt/api/sport/request', api_id: 1009, parameter: '', priority: 0}&quot;
+
+# Robot should sit down within 2 seconds
+</code></pre>
+<h3 id="test-2-stand-command">Test 2: Stand Command<a class="headerlink" href="#test-2-stand-command" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Stand command (API 1001)
+ros2 topic pub --once /webrtc_req go2_interfaces/msg/WebRtcReq \
+  &quot;{id: 0, topic: 'rt/api/sport/request', api_id: 1001, parameter: '', priority: 0}&quot;
+
+# Robot should stand up
+</code></pre>
+<h3 id="test-3-wave-command">Test 3: Wave Command<a class="headerlink" href="#test-3-wave-command" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Wave command (API 1016)
+ros2 topic pub --once /webrtc_req go2_interfaces/msg/WebRtcReq \
+  &quot;{id: 0, topic: 'rt/api/sport/request', api_id: 1016, parameter: '', priority: 0}&quot;
+
+# Robot should wave with front paw
+</code></pre>
+<h3 id="test-4-web-interface">Test 4: Web Interface<a class="headerlink" href="#test-4-web-interface" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># Open web dashboard
+firefox http://localhost:8080
+
+# Try commands:
+- &quot;sit down&quot;
+- &quot;stand up&quot;  
+- &quot;wave your paw&quot;
+
+# Robot should execute behaviors
+</code></pre>
+<hr />
+<h2 id="api-command-reference">API Command Reference<a class="headerlink" href="#api-command-reference" title="Permanent link">&para;</a></h2>
+<p>Common API IDs for testing:</p>
+<table>
+<thead>
+<tr>
+<th>API ID</th>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>Stand</td>
+<td>Default standing pose</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>Walk</td>
+<td>Start walking</td>
+</tr>
+<tr>
+<td>1009</td>
+<td>Sit</td>
+<td>Sit down</td>
+</tr>
+<tr>
+<td>1011</td>
+<td>Hello</td>
+<td>Wave with front paw</td>
+</tr>
+<tr>
+<td>1016</td>
+<td>Wave</td>
+<td>Alternative wave gesture</td>
+</tr>
+<tr>
+<td>1019</td>
+<td>Dance</td>
+<td>Perform dance routine</td>
+</tr>
+<tr>
+<td>1101</td>
+<td>Stop</td>
+<td>Emergency stop</td>
+</tr>
+</tbody>
+</table>
+<p>See DIMOS documentation for full API reference.</p>
+<hr />
+<h2 id="network-architecture">Network Architecture<a class="headerlink" href="#network-architecture" title="Permanent link">&para;</a></h2>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ Laptop (192.168.1.100)                                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ROS2 Nodes:                                               │
+│  ┌──────────────────┐         ┌─────────────────────┐     │
+│  │ mission_agent    │────────▶│ go2_driver_node     │     │
+│  │ (DIMOS)          │ /webrtc_│ (go2_ros2_sdk)      │     │
+│  └──────────────────┘    req  └─────────────────────┘     │
+│         │                              │                   │
+│         │ CONN_TYPE=webrtc             │ CONN_TYPE=webrtc  │
+│         ▼                              ▼                   │
+└─────────────────────────────────────────────────────────────┘
+         │                              │
+         │ WiFi (192.168.1.x)           │
+         ▼                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Robot (192.168.1.103 WiFi, 192.168.123.161 Ethernet)       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Bare DDS App:          ROS2 Bridge:                        │
+│  ┌──────────────────┐   ┌───────────────────┐             │
+│  │ /webrtcreq       │   │ Sensors, Odometry │             │
+│  │ (WebRTC API)     │   │ Camera, Motors    │             │
+│  └──────────────────┘   └───────────────────┘             │
+│         │                        │                         │
+│         ▼                        ▼                         │
+│  ┌─────────────────────────────────────────┐              │
+│  │ Sport Mode Controller                   │              │
+│  │ (sit, stand, dance, wave, etc.)         │              │
+│  └─────────────────────────────────────────┘              │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Key Points:</strong>
+- <code>CONN_TYPE</code> controls which pathway is used
+- <code>webrtc</code> enables the Bare DDS App connection
+- <code>cyclonedds</code> only uses ROS2 Bridge (no high-level behaviors)
+- Both sensor data and API commands can coexist (dual connection)</p>
+<hr />
+<h2 id="reference-documentation">Reference Documentation<a class="headerlink" href="#reference-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Architecture Deep Dive:</strong> <code>docs/WEBRTC_DISCOVERY.md</code></li>
+<li><strong>Debugging Guide:</strong> <code>docs/DEBUGGING_ROBOT_COMMANDS.md</code></li>
+<li><strong>DIMOS Documentation:</strong> <code>src/dimos-unitree/README.md</code></li>
+<li><strong>Go2 SDK:</strong> <code>external/go2_ros2_sdk/README.md</code></li>
+</ul>
+<hr />
+<h2 id="summary-checklist">Summary Checklist<a class="headerlink" href="#summary-checklist" title="Permanent link">&para;</a></h2>
+<p>Before launching with WebRTC mode:</p>
+<ul>
+<li>[ ] <code>CONN_TYPE=webrtc</code> set in <code>.env</code></li>
+<li>[ ] Robot connected to WiFi network</li>
+<li>[ ] <code>GO2_IP</code> set to robot's <strong>WiFi IP</strong> (not Ethernet IP)</li>
+<li>[ ] Can ping robot's WiFi IP from laptop</li>
+<li>[ ] Laptop and robot on same network/subnet</li>
+<li>[ ] Robot fully booted (wait 30s after power on)</li>
+<li>[ ] <code>.env</code> file loaded (<code>source .env</code> or via <code>start.sh</code>)</li>
+</ul>
+<p><strong>If all checked, you're ready for DIMOS autonomous behaviors! 🎉</strong></p>
+<hr />
+<p><strong>For issues not covered here, see:</strong>
+- <code>docs/WEBRTC_DISCOVERY.md</code> - Complete investigation documentation
+- <code>docs/DEBUGGING_ROBOT_COMMANDS.md</code> - Step-by-step debugging guide
+- ShadowHound Issues: https://github.com/your-org/shadowhound/issues</p>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.</li>
+<li>[ ] Links updated to use vault-friendly wikilinks or confirmed for external references.</li>
+<li>[ ] Outstanding migration work captured as tasks in the backlog.</li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../">Knowledge Base Index</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.sections", "navigation.tabs", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

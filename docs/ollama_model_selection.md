@@ -1,0 +1,180 @@
+# Ollama Model Selection Guide
+
+## Tool/Function Calling Support
+
+Shadow Hound's planning agent requires **function calling** (also known as **tool use**) support from the LLM. This is critical because the agent needs to:
+
+1. Parse structured robot skill calls
+2. Generate JSON-formatted skill parameters
+3. Chain multiple skills together in a plan
+
+## Ollama Models with Function Calling
+
+### ✅ Recommended Models (Tested)
+
+| Model | Size | Tool Support | Notes |
+|-------|------|--------------|-------|
+| **qwen2.5-coder:32b** | 19GB | ✅ Excellent | Best choice for robotics, strong function calling |
+| **llama3.3:70b** | 43GB | ✅ Good | Large but capable, requires more VRAM |
+| **deepseek-r1:7b** | 4.7GB | ⚠️ Experimental | Smaller, may have limitations |
+
+### ❌ Models Without Function Calling
+
+| Model | Size | Tool Support | Notes |
+|-------|------|--------------|-------|
+| **phi4:14b** | 9GB | ❌ No | Reasoning-focused, no function calling. **⚠️ UNSTABLE on Jetson AGX Orin** - crashes frequently (see #18) |
+| **llama3.2:3b** | 2GB | ❌ No | Too small |
+| **phi3:3.8b** | 2.3GB | ❌ No | Chat only |
+
+## How to Check Tool Support
+
+### Method 1: Test with curl
+
+```bash
+curl -X POST http://localhost:11434/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "MODEL_NAME",
+    "messages": [{"role": "user", "content": "test"}],
+    "tools": [{"type": "function", "function": {"name": "test", "description": "test"}}],
+    "stream": false
+  }'
+```
+
+**Expected responses:**
+- ✅ **200 OK**: Model supports tools
+- ❌ **400 Bad Request** with `"does not support tools"`: No tool support
+
+### Method 2: Check Ollama Model Card
+
+```bash
+docker exec ollama ollama show MODEL_NAME
+```
+
+Look for mentions of:
+- "function calling"
+- "tool use"  
+- "structured output"
+
+## Configuration
+
+### For Planning Agent (Requires Tools)
+
+```bash
+# .env
+AGENT_BACKEND=ollama
+OLLAMA_MODEL=qwen2.5-coder:32b
+USE_PLANNING_AGENT=true  # Requires function calling
+```
+
+### For Simple Agent (No Tools Needed)
+
+```bash
+# .env
+AGENT_BACKEND=ollama
+OLLAMA_MODEL=phi4:14b  # Can use non-tool models
+USE_PLANNING_AGENT=false  # Text-only responses
+```
+
+### Keep Model Loaded (Prevent Cold Start 500 Errors)
+
+By default, Ollama unloads models after 5 minutes of inactivity. This causes HTTP 500 errors on the next request while the model reloads.
+
+**Option 1: Container Environment Variable (Recommended for Development)**
+
+Edit `scripts/setup_ollama_thor.sh` to add `OLLAMA_KEEP_ALIVE` environment variable:
+
+```bash
+docker run -d \
+  --name "$CONTAINER_NAME" \
+  --gpus all \
+  --tty \
+  -p ${OLLAMA_PORT}:11434 \
+  -v "${DATA_DIR}:/data" \
+  -e OLLAMA_KEEP_ALIVE=-1 \  # Add this line - keeps model loaded indefinitely
+  --restart unless-stopped \
+  "$OLLAMA_IMAGE"
+```
+
+Values:
+- `-1`: Keep loaded forever (good for active development/testing)
+- `30m`: Keep for 30 minutes (balanced)
+- `0`: Unload immediately after each request (good for benchmarking cold starts)
+
+**Option 2: Per-Request Keep-Alive (Automatic)**
+
+The `start.sh` validation automatically includes `keep_alive: 30m` in test requests to keep the model loaded for 30 minutes after validation. This happens automatically when you run `./start.sh`.
+
+**Impact on Benchmarking:**
+- The `scripts/benchmark_ollama_models.sh` script has `UNLOAD_BETWEEN_MODELS=true` by default
+- This ensures accurate measurements by unloading models between tests
+- Setting `OLLAMA_KEEP_ALIVE=-1` on the container does NOT interfere with manual `ollama pull/rm` commands
+- Benchmark script explicitly unloads models for clean measurements
+
+**Impact on Robot Restarts:**
+- ✅ **No impact** - Keep-alive only affects model memory, not robot driver
+- ✅ Robot driver runs separately from Ollama
+- ✅ Restarting robot driver (`start.sh` stop/start) does not affect Ollama
+- ⚠️ Only restarting Thor itself or the Ollama container will clear loaded models
+
+## Performance Benchmarking Targets
+
+Based on tool support, focus benchmarking on:
+
+1. **qwen2.5-coder:32b** - Primary target
+2. **llama3.3:70b** - High capability baseline
+3. **deepseek-r1:7b** - Resource-constrained option
+
+### Benchmark Metrics
+
+For each model, measure:
+
+- **Latency**: Time to first token, total completion time
+- **Accuracy**: Correct skill selection, parameter extraction
+- **Resource Usage**: GPU VRAM, CPU load
+- **Reliability**: Success rate, error handling
+
+### Test Cases
+
+1. **Simple navigation**: "Go forward 5 meters"
+2. **Multi-step**: "Go to waypoint A, turn around, take a photo"
+3. **Complex reasoning**: "Find the red object and approach it"
+4. **Error handling**: Invalid requests, out-of-bounds coordinates
+
+## Known Limitations
+
+### Phi4:14b (⚠️ Jetson AGX Orin Issue)
+- ❌ **UNSTABLE on ARM64/Jetson** - llama runner crashes with exit status 2
+- ❌ Cannot use with planning agent (no tool support)
+- ❌ Transient HTTP 500 errors during inference
+- ✅ Can use with simple agent (USE_PLANNING_AGENT=false) when it works
+- **Recommendation**: Use qwen2.5-coder:7b instead on Thor
+- **Tracking**: Issue #18
+
+### Phi4:14b (General)
+- ❌ Cannot use with planning agent
+- ✅ Can use with simple agent (USE_PLANNING_AGENT=false)
+- Strong at reasoning, weak at structured output
+
+### Qwen2.5-Coder:32b
+- ✅ Excellent function calling
+- ⚠️ Requires ~20GB VRAM
+- May be slower than smaller models
+
+### LLaMA3.3:70b
+- ✅ Very capable
+- ❌ Requires ~50GB VRAM (may need multiple GPUs or high quantization)
+- Better for high-stakes missions
+
+## Future Work
+
+See shadowhound#12 for vLLM evaluation, which may improve:
+- Batching efficiency
+- Multi-model serving
+- Quantization options
+
+## References
+
+- [OpenAI Function Calling Docs](https://platform.openai.com/docs/guides/function-calling)
+- [Ollama Model Library](https://ollama.com/library)
+- Issue dimos-unitree#1: Proper tokenizer mapping for local models

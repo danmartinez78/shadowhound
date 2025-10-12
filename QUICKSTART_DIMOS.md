@@ -10,24 +10,15 @@
 
 ## 🚀 Quick Setup
 
-### 1. Add DIMOS to Workspace (First Time)
+### 1. Clone ShadowHound with Submodules (First Time)
 
 ```bash
-# Create dependencies file
-cat > shadowhound.repos << 'EOF'
-repositories:
-  dimos-unitree:
-    type: git
-    url: https://github.com/dimensionalOS/dimos-unitree.git
-    version: main
-  go2_ros2_sdk:
-    type: git
-    url: https://github.com/dimensionalOS/go2_ros2_sdk.git
-    version: prod
-EOF
+# Clone with all submodules (DIMOS + Go2 SDK)
+git clone --recurse-submodules https://github.com/danmartinez78/shadowhound.git
+cd shadowhound
 
-# Import repositories
-vcs import src < shadowhound.repos
+# OR if already cloned, initialize submodules
+git submodule update --init --recursive
 
 # Install DIMOS Python package
 pip3 install -e src/dimos-unitree
@@ -39,6 +30,8 @@ rosdep install --from-paths src --ignore-src -y
 colcon build --symlink-install
 source install/setup.bash
 ```
+
+**Note:** As of October 2025, ShadowHound uses **git submodules** (not vcs/vcstool). DIMOS and the Go2 SDK are included as nested submodules.
 
 ### 2. Test DIMOS Integration
 

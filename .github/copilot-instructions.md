@@ -4,8 +4,51 @@
 
 ShadowHound is an autonomous mobile robot system combining ROS2 navigation with LLM/VLM-driven planning. You're working on a **Unitree Go2 quadruped** that executes natural language missions through a typed **Skills API**.
 
-**Current Phase**: Bootstrap (Phase 0) - Creating package scaffolding
-**Next Milestone**: Basic skills implementation without robot hardware
+**Current Phase**: Local LLM Integration (vLLM + local embeddings)
+**Next Milestone**: End-to-end testing with vLLM backend
+
+---
+
+## **CRITICAL: Development Environment Setup**
+
+### Network Architecture
+```
+Desktop (VS Code) ←─────→ Laptop (Host: 192.168.10.167) ←─────→ Thor (Jetson: 192.168.10.116)
+     │                         │                                        │
+     │                         ├─ ROS2 nodes (host)                   ├─ vLLM container (port 8000)
+     │                         ├─ Mission agent (host)                 ├─ Go2 SDK (if needed)
+     │                         └─ /home/daniel/shadowhound/            └─ Models cached
+     │
+     └─ VS Code Remote SSH
+        Editing: /workspaces/shadowhound/ (devcontainer)
+        BUT Code runs from: /home/daniel/shadowhound/ (laptop host)
+```
+
+### **FILE PATH CRITICAL WARNING** ⚠️
+- **You edit files in:** `/workspaces/shadowhound/` (devcontainer - for git, tools, editing)
+- **Code actually runs from:** `/home/daniel/shadowhound/` (laptop host - what Python executes)
+- **ALWAYS check both paths when debugging runtime errors!**
+- **Error tracebacks will show:** `/home/daniel/shadowhound/...` (not `/workspaces/...`)
+
+### When Making Code Changes:
+1. ✅ Edit in `/workspaces/shadowhound/` (devcontainer) - git works here
+2. ✅ Commit and push changes
+3. ⚠️ **Verify host has same changes:** Check `/home/daniel/shadowhound/` if runtime errors persist
+4. ⚠️ **Rebuild on host if needed:** User runs `./start.sh` on laptop host, not in devcontainer
+
+### Why This Matters:
+- Python cache (`.pyc`, `__pycache__`) may differ between devcontainer and host
+- Submodule commits may not be synced between paths
+- Build artifacts (`install/`, `build/`) are on the host
+- ROS2 runs on the host, not in devcontainer
+
+### Git Submodules (Not vcs!)
+**IMPORTANT:** This project uses **git submodules**, not vcstool (.repos files).
+
+- DIMOS is a git submodule: `src/dimos-unitree/`
+- To sync: `git submodule update --init --recursive`
+- Never edit submodule files directly (see `docs/submodule_policy.md`)
+- AI agents: Use standard git submodule commands
 
 ---
 
