@@ -29,6 +29,10 @@ SERVER_PORT=8080
 CTX_SIZE=8192
 GPU_LAYERS=35
 
+# Note: Qwen GGUF model requires HuggingFace authentication
+# Run: huggingface-cli login
+# Token will be saved to ~/.cache/huggingface/token and persist across sessions
+
 echo -e "${YELLOW}Configuration:${NC}"
 echo -e "  Container: ${CONTAINER_NAME}"
 echo -e "  Image: ${IMAGE}"
@@ -37,6 +41,22 @@ echo -e "  Port: ${SERVER_PORT}"
 echo -e "  Context: ${CTX_SIZE} tokens"
 echo -e "  GPU Layers: ${GPU_LAYERS}"
 echo ""
+
+# Check for HuggingFace authentication
+if [ ! -f "$HOME/.cache/huggingface/token" ] && [ -z "$HF_TOKEN" ]; then
+    echo -e "${YELLOW}⚠ HuggingFace authentication not found${NC}"
+    echo -e "Qwen GGUF model requires authentication. Run:"
+    echo -e "  ${GREEN}huggingface-cli login${NC}  (recommended, persists)"
+    echo ""
+    echo -e "Get token from: ${BLUE}https://huggingface.co/settings/tokens${NC}"
+    echo -e "Accept license: ${BLUE}https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF${NC}"
+    echo ""
+    read -p "Continue anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
 
 # Step 1: Check prerequisites
 echo -e "${YELLOW}[1/6] Checking prerequisites...${NC}"

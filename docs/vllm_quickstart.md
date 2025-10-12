@@ -2,6 +2,24 @@
 
 **Recommended:** Use NVIDIA's official vLLM container - fastest and most stable option.
 
+## Prerequisites
+
+### HuggingFace Authentication (One-time Setup)
+
+The Qwen model requires HuggingFace authentication:
+
+```bash
+# On Thor - run once
+huggingface-cli login
+```
+
+When prompted:
+- Get token from: https://huggingface.co/settings/tokens (read access)
+- Say **Yes** to "Add token as git credential" (persists forever)
+- Accept license: https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct
+
+See [docs/vllm_huggingface_auth.md](./vllm_huggingface_auth.md) for troubleshooting.
+
 ## Quick Setup (5 minutes)
 
 On Thor:
@@ -12,9 +30,10 @@ git pull origin feature/local-llm-support
 ```
 
 That's it! The script will:
-1. Pull NVIDIA's vLLM container (~10GB)
-2. Start server with Qwen2.5-Coder-7B-Instruct
-3. Expose OpenAI-compatible API on port 8000
+1. Check for HuggingFace authentication (warns if missing)
+2. Pull NVIDIA's vLLM container (~10GB)
+3. Start server with Qwen2.5-Coder-7B-Instruct
+4. Expose OpenAI-compatible API on port 8000
 
 **First run takes longer** while downloading the model (~5GB).
 

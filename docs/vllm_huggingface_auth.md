@@ -1,4 +1,4 @@
-# vLLM HuggingFace Authentication Fix
+# vLLM HuggingFace Authentication
 
 ## Problem
 
@@ -8,9 +8,7 @@ vLLM can't download Qwen/Qwen2.5-Coder-7B-Instruct without HuggingFace authentic
 Invalid credentials in Authorization header
 ```
 
-## Solution
-
-You need a HuggingFace token and must accept the model's license.
+## Recommended Solution (Persistent)
 
 ### Step 1: Get HuggingFace Token
 
@@ -24,53 +22,50 @@ You need a HuggingFace token and must accept the model's license.
 2. Click "Agree and access repository" if prompted
 3. Accept any terms/conditions
 
-### Step 3: Configure vLLM with Token
+### Step 3: Login with HuggingFace CLI
 
-**Option A: Environment Variable (Recommended)**
+**On Thor:**
+```bash
+huggingface-cli login
+```
 
-On Thor, before running vLLM:
+When prompted:
+- Paste your token (input will be hidden)
+- Say **Yes** to "Add token as git credential?"
+
+This will:
+- Save token to `~/.cache/huggingface/token`
+- Store token in git credential manager (persists across sessions)
+- Mount token into vLLM container automatically
+
+**Verify authentication:**
+```bash
+huggingface-cli whoami
+# Should show your username
+```
+
+### Step 4: Run vLLM Setup
+
+Now just run the setup script - it will detect your saved token:
+```bash
+./scripts/setup_vllm_thor.sh
+```
+
+The script will automatically:
+- Check for saved token in `~/.cache/huggingface/token`
+- Mount the HuggingFace cache directory into the container
+- Pass `HF_TOKEN` environment variable if set
+
+## Alternative: Temporary Token (Not Recommended)
+
+If you need to use a temporary token for one session:
+
 ```bash
 export HF_TOKEN="hf_your_token_here"
 ./scripts/setup_vllm_thor.sh
 ```
 
-**Option B: Update Script**
-
-Edit `scripts/setup_vllm_thor.sh`, add before the docker run command:
-```bash
-# Add your HuggingFace token here
-HF_TOKEN="hf_your_token_here"
-```
-
-Then update the docker run to include:
-```bash
-docker run --rm -it --network host \
-  --name "${CONTAINER_NAME}" \
-  --shm-size=16g \
-  --ulimit memlock=-1 --ulimit stack=67108864 \
-  --runtime=nvidia \
-  --gpus all \
-  -e HF_TOKEN="${HF_TOKEN}" \  # <-- ADD THIS LINE
-  -v "$HOME/.cache:/root/.cache" \
-  ...
-```
-
-### Step 4: Alternative - Pre-download Model
-
-If you don't want to use tokens in the container:
-
-```bash
-# On Thor, download model first
-export HF_TOKEN="hf_your_token_here"
-huggingface-cli login --token $HF_TOKEN
-
-mkdir -p ~/vllm_models
-cd ~/vllm_models
-huggingface-cli download Qwen/Qwen2.5-Coder-7B-Instruct --local-dir Qwen2.5-Coder-7B-Instruct
-
-# Then in vLLM script, change MODEL to local path:
-# MODEL="/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-7B-Instruct/snapshots/..."
-```
+**Note:** This token won't persist after closing your terminal. Use `huggingface-cli login` for permanent setup.
 
 ## Alternative Models (No Auth Required)
 
@@ -101,14 +96,57 @@ MODEL="meta-llama/Llama-3.1-8B-Instruct"
 
 ## Quick Test
 
-To verify token works:
+To verify your authentication works:
 ```bash
-export HF_TOKEN="hf_your_token_here"
+# Check who you're logged in as
 huggingface-cli whoami
-# Should show your username
 
-# Test download
-huggingface-cli download Qwen/Qwen2.5-Coder-7B-Instruct --repo-type model --max-workers 4
+# Test downloading the model
+huggingface-cli download Qwen/Qwen2.5-Coder-7B-Instruct --repo-type model
+# Should start downloading without 401 errors
+```
+
+## Troubleshooting
+
+### "Token is already saved" message
+
+If you see this when running `huggingface-cli login`:
+```
+A token is already saved on your machine. Run `hf auth whoami` to get more information
+```
+
+You're already authenticated! Just run the vLLM setup script.
+
+### Container can't access token
+
+If vLLM container shows 401 errors even after login:
+
+1. **Check token file exists:**
+   ```bash
+   ls -la ~/.cache/huggingface/token
+   ```
+
+2. **Verify token in environment:**
+   ```bash
+   echo $HF_TOKEN
+   ```
+
+3. **Try setting explicitly:**
+   ```bash
+   export HF_TOKEN=$(cat ~/.cache/huggingface/token)
+   ./scripts/setup_vllm_thor.sh
+   ```
+
+### Git credential helper not working
+
+If token doesn't persist after login:
+
+```bash
+# Configure git to store credentials
+git config --global credential.helper store
+
+# Then login again
+huggingface-cli login
 ```
 
 ## Recommended Quick Fix
@@ -120,3 +158,15 @@ huggingface-cli download Qwen/Qwen2.5-Coder-7B-Instruct --repo-type model --max-
 3. Run: `./scripts/setup_vllm_thor.sh`
 
 This will work immediately without any HuggingFace setup!
+
+## Summary
+
+**Best Practice:**
+1. Run `huggingface-cli login` (one time setup)
+2. Accept "Add token as git credential" (persists forever)
+3. Run `./scripts/setup_vllm_thor.sh` (uses saved token automatically)
+
+**Token is stored in:**
+- `~/.cache/huggingface/token` - Main token file
+- Git credential store - Backup via git credential helper
+- Container gets access via volume mount: `-v "$HOME/.cache/huggingface:/root/.cache/huggingface"`

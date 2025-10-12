@@ -24,7 +24,11 @@ MODEL="Qwen/Qwen2.5-Coder-7B-Instruct"
 SERVER_PORT=8000
 MAX_MODEL_LEN=8192
 GPU_MEMORY=0.8
-# Set HF_TOKEN environment variable before running this script if model requires auth
+
+# Note: Qwen model requires HuggingFace authentication
+# Run: huggingface-cli login
+# Token will be saved to ~/.cache/huggingface/token and persist across sessions
+# Alternative: Set HF_TOKEN environment variable
 
 echo -e "${YELLOW}Configuration:${NC}"
 echo -e "  Container: ${CONTAINER_NAME}"
@@ -33,6 +37,23 @@ echo -e "  Model: ${MODEL}"
 echo -e "  Port: ${SERVER_PORT}"
 echo -e "  Max Length: ${MAX_MODEL_LEN}"
 echo ""
+
+# Check for HuggingFace authentication
+if [ ! -f "$HOME/.cache/huggingface/token" ] && [ -z "$HF_TOKEN" ]; then
+    echo -e "${YELLOW}⚠ HuggingFace authentication not found${NC}"
+    echo -e "Qwen model requires authentication. Run one of:"
+    echo -e "  ${GREEN}huggingface-cli login${NC}  (recommended, persists)"
+    echo -e "  ${GREEN}export HF_TOKEN='hf_...'${NC}  (temporary)"
+    echo ""
+    echo -e "Get token from: ${BLUE}https://huggingface.co/settings/tokens${NC}"
+    echo -e "Accept license: ${BLUE}https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct${NC}"
+    echo ""
+    read -p "Continue anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
 
 # Step 1: Check prerequisites
 echo -e "${YELLOW}[1/5] Checking prerequisites...${NC}"
@@ -129,10 +150,10 @@ docker run --rm -it --network host \
   --runtime=nvidia \
   --gpus all \
   -e HF_TOKEN="${HF_TOKEN}" \
-  -v "$HOME/.cache:/root/.cache" \
-  -v /tmp/start_vllm.sh:/start.sh \
+  -v "$HOME/.cache/huggingface:/root/.cache/huggingface" \
+  -v "$STARTUP_SCRIPT:/startup.sh" \
   "${IMAGE}" \
-  bash /start.sh "${MODEL}" "${MAX_MODEL_LEN}" "${GPU_MEMORY}"
+  /bin/bash /startup.sh
 
 echo ""
 echo -e "${GREEN}Server stopped${NC}"

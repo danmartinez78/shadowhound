@@ -2,12 +2,32 @@
 
 Scripts for setting up local LLM inference on Thor (Jetson AGX Orin).
 
+## Prerequisites
+
+### HuggingFace Authentication (One-time Setup)
+
+Both vLLM and llama.cpp require HuggingFace authentication for Qwen models:
+
+```bash
+# On Thor - run once
+huggingface-cli login
+```
+
+When prompted:
+- Get token from: https://huggingface.co/settings/tokens (read access)
+- Say **Yes** to "Add token as git credential" (persists forever)
+- Accept license at model page (Qwen2.5-Coder)
+
+Token is saved to `~/.cache/huggingface/token` and automatically used by both setup scripts.
+
+See: `docs/vllm_huggingface_auth.md` for troubleshooting
+
 ## vLLM Setup (RECOMMENDED)
 
 **Fastest and most stable** - Uses NVIDIA's official vLLM container
 
 ```bash
-# On Thor
+# On Thor (after huggingface-cli login)
 ./setup_vllm_thor.sh
 ```
 
@@ -32,7 +52,7 @@ See: `docs/vllm_quickstart.md`
 **Use if vLLM has issues** - Uses official llama.cpp container
 
 ```bash
-# On Thor
+# On Thor (after huggingface-cli login)
 ./setup_llamacpp_docker_thor.sh
 ```
 
