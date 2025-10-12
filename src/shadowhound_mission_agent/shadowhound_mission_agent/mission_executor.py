@@ -308,7 +308,11 @@ class MissionExecutor:
                     self.logger.warning(
                         "  Continuing without persistent memory (agent will work but no RAG)"
                     )
-                    agent_memory = None
+                    # CRITICAL: Don't pass agent_memory=None with local LLM!
+                    # DIMOS will auto-create OpenAISemanticMemory which calls embeddings endpoint
+                    # that doesn't exist on vLLM/local LLMs.
+                    # Solution: Create a dummy/no-op memory or skip agent_memory parameter entirely.
+                    agent_memory = "skip"  # Signal to not pass agent_memory parameter
                 except Exception as e:
                     # Handle DIMOS AgentMemoryConnectionError bug or other initialization errors
                     # CRITICAL: Don't call str(e) - DIMOS exception __str__ has a bug (accesses self.message)
@@ -321,7 +325,7 @@ class MissionExecutor:
                     self.logger.warning(
                         "  Continuing without persistent memory (agent will work but no RAG)"
                     )
-                    agent_memory = None
+                    agent_memory = "skip"  # Signal to not pass agent_memory parameter
             else:
                 # Use OpenAI embeddings API
                 # Works with: OpenAI cloud API only
@@ -332,16 +336,22 @@ class MissionExecutor:
 
             # OpenAIAgent with skills for function calling
             # Both OpenAI and Ollama (with tool-capable models) support this
-            self.agent = OpenAIAgent(
-                dev_name="shadowhound",
-                agent_type="Mission",
-                model_name=model_name,
-                skills=self.skills,  # Enable function calling
-                openai_client=client,  # Pass custom client for backend flexibility
-                agent_memory=agent_memory,  # Use local or OpenAI embeddings
-                max_output_tokens_per_request=self.config.max_output_tokens,
-                max_input_tokens_per_request=self.config.max_input_tokens,
-            )
+            agent_kwargs = {
+                "dev_name": "shadowhound",
+                "agent_type": "Mission",
+                "model_name": model_name,
+                "skills": self.skills,  # Enable function calling
+                "openai_client": client,  # Pass custom client for backend flexibility
+                "max_output_tokens_per_request": self.config.max_output_tokens,
+                "max_input_tokens_per_request": self.config.max_input_tokens,
+            }
+            
+            # Only pass agent_memory if we have a valid one (not "skip")
+            # This prevents DIMOS from auto-creating OpenAISemanticMemory for local LLMs
+            if agent_memory != "skip":
+                agent_kwargs["agent_memory"] = agent_memory
+            
+            self.agent = OpenAIAgent(**agent_kwargs)
             self.logger.info(
                 f"DIMOS OpenAIAgent initialized with {len(self.skills.get())} skills "
                 f"(backend={self.config.agent_backend}, model={model_name})"
