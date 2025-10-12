@@ -184,25 +184,23 @@ class MissionExecutor:
         self.logger.info(f"Robot initialized (ip={self.config.robot_ip})")
 
     def _init_skills(self) -> None:
-        """Initialize DIMOS skill library."""
+        """Initialize DIMOS skill library.
+        
+        Skills are needed for function calling with both OpenAIAgent and PlanningAgent.
+        Always load skills - the agent will use them if the model supports tools.
+        """
         if not self.robot:
             raise RuntimeError("Robot must be initialized before skills")
 
-        # Only initialize skills if using planning agent (requires function calling)
-        if self.config.use_planning_agent:
-            self.logger.info("Initializing skill library...")
-            self.skills = MyUnitreeSkills(robot=self.robot)
-            skill_count = len(self.skills.get())
-            self.logger.info(f"Loaded {skill_count} skills")
-        else:
-            self.logger.info("Skipping skill initialization (planning agent disabled)")
-            self.skills = None
+        self.logger.info("Initializing skill library...")
+        self.skills = MyUnitreeSkills(robot=self.robot)
+        skill_count = len(self.skills.get())
+        self.logger.info(f"Loaded {skill_count} skills for function calling")
 
     def _init_agent(self) -> None:
         """Initialize DIMOS agent with appropriate backend."""
-        # Skills only required for planning agent
-        if self.config.use_planning_agent and not self.skills:
-            raise RuntimeError("Skills must be initialized before planning agent")
+        if not self.skills:
+            raise RuntimeError("Skills must be initialized before agent")
 
         self.logger.info(
             f"Initializing {self.config.agent_backend} agent "
@@ -249,20 +247,20 @@ class MissionExecutor:
             )
             self.logger.info("DIMOS PlanningAgent initialized")
         else:
-            # Don't pass skills to OpenAIAgent - Ollama models may not support tools/functions
-            # Skills are only needed for PlanningAgent which uses function calling
+            # OpenAIAgent with skills for function calling
+            # Both OpenAI and Ollama (with tool-capable models) support this
             self.agent = OpenAIAgent(
                 dev_name="shadowhound",
                 agent_type="Mission",
                 model_name=model_name,
+                skills=self.skills,  # Enable function calling
                 openai_client=client,  # Pass custom client for backend flexibility
                 max_output_tokens_per_request=self.config.max_output_tokens,
                 max_input_tokens_per_request=self.config.max_input_tokens,
             )
             self.logger.info(
-                f"DIMOS OpenAIAgent initialized "
-                f"(backend={self.config.agent_backend}, model={model_name}, "
-                f"max_output={self.config.max_output_tokens})"
+                f"DIMOS OpenAIAgent initialized with {len(self.skills.get())} skills "
+                f"(backend={self.config.agent_backend}, model={model_name})"
             )
 
     def execute_mission(self, command: str) -> tuple[str, dict]:
@@ -303,7 +301,9 @@ class MissionExecutor:
                         response = self.agent.latest_response.get("content", "")
                     elif self.agent.latest_response.get("type") == "plan":
                         steps = self.agent.latest_response.get("content", [])
-                        response = "Plan:\n" + "\n".join(f"{i+1}. {step}" for i, step in enumerate(steps))
+                        response = "Plan:\n" + "\n".join(
+                            f"{i+1}. {step}" for i, step in enumerate(steps)
+                        )
             else:
                 # OpenAIAgent uses run_observable_query() which returns an Observable
                 response = self.agent.run_observable_query(command).run()
