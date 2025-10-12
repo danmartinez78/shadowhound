@@ -117,22 +117,6 @@ echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null
 echo -e "${GREEN}✓ Memory cache cleared${NC}"
 echo ""
 
-# Create startup script
-STARTUP_SCRIPT="/tmp/start_vllm.sh"
-cat > "${STARTUP_SCRIPT}" << EOF
-#!/bin/bash
-VLLM_ATTENTION_BACKEND=FLASHINFER vllm serve "${MODEL}" \\
-  --port 8000 \\
-  --host 0.0.0.0 \\
-  --trust-remote-code \\
-  --max-model-len ${MAX_MODEL_LEN} \\
-  --gpu-memory-utilization ${GPU_MEMORY} \\
-  --tensor-parallel-size 1 \\
-  --enable-auto-tool-choice \\
-  --tool-call-parser hermes
-EOF
-chmod +x "${STARTUP_SCRIPT}"
-
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}Starting vLLM Server${NC}"
 echo -e "${BLUE}========================================${NC}"
@@ -153,10 +137,18 @@ docker run --rm -it --network host \
   --runtime=nvidia \
   --gpus all \
   -e HF_TOKEN="${HF_TOKEN}" \
+  -e VLLM_ATTENTION_BACKEND=FLASHINFER \
   -v "$HOME/.cache/huggingface:/root/.cache/huggingface" \
-  -v "${STARTUP_SCRIPT}:/startup.sh" \
   "${IMAGE}" \
-  /bin/bash /startup.sh
+  vllm serve "${MODEL}" \
+    --port 8000 \
+    --host 0.0.0.0 \
+    --trust-remote-code \
+    --max-model-len ${MAX_MODEL_LEN} \
+    --gpu-memory-utilization ${GPU_MEMORY} \
+    --tensor-parallel-size 1 \
+    --enable-auto-tool-choice \
+    --tool-call-parser hermes
 
 echo ""
 echo -e "${GREEN}Server stopped${NC}"
