@@ -20,7 +20,7 @@ echo ""
 # Configuration
 CONTAINER_NAME="vllm-server"
 IMAGE="nvcr.io/nvidia/vllm:25.09-py3"
-MODEL="meta-llama/Llama-3.1-8B-Instruct"
+MODEL="mistralai/Mistral-7B-Instruct-v0.3"
 SERVER_PORT=8000
 MAX_MODEL_LEN=8192
 GPU_MEMORY=0.8
@@ -38,11 +38,12 @@ echo -e "  Port: ${SERVER_PORT}"
 echo -e "  Max Length: ${MAX_MODEL_LEN}"
 echo ""
 
-# Note: Llama 3.1 has built-in tool calling and is officially validated with vLLM
-echo -e "${GREEN}ℹ️  Llama-3.1-8B-Instruct:${NC}"
-echo -e "  - Built-in tool calling (no parser needed!)"
+# Note: Mistral has built-in tool calling and is Apache 2.0 licensed (no gating!)
+echo -e "${GREEN}ℹ️  Mistral-7B-Instruct-v0.3:${NC}"
+echo -e "  - Native tool calling support"
+echo -e "  - Apache 2.0 license (no restrictions!)"
 echo -e "  - Officially validated with vLLM"
-echo -e "  - Stable and well-tested"
+echo -e "  - No HuggingFace authentication required"
 echo ""
 
 # Step 1: Check prerequisites
@@ -138,7 +139,7 @@ docker run --rm -it --network host \
     --gpu-memory-utilization ${GPU_MEMORY} \
     --tensor-parallel-size 1 \
     --enable-auto-tool-choice \
-    --tool-call-parser hermes \
+    --tool-call-parser mistral \
     --disable-frontend-multiprocessing
 
 echo ""

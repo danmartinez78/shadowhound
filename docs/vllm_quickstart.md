@@ -34,11 +34,11 @@ git pull origin feature/local-llm-support
 
 That's it! The script will:
 1. Pull NVIDIA's vLLM container (~10GB)
-2. Start server with **Llama-3.1-8B-Instruct** (officially validated for tool calling)
-3. **Enable built-in tool calling** (no parser needed)
+2. Start server with **Mistral-7B-Instruct-v0.3** (Apache 2.0, no license restrictions!)
+3. **Enable native tool calling support**
 4. Expose OpenAI-compatible API on port 8000
 
-**Note:** Llama 3.1 has native tool calling - no authentication or parser hacks required!
+**Note:** Mistral is fully open source (Apache 2.0) - no gating or authentication!
 
 **First run takes longer** while downloading the model (~5GB).
 
@@ -48,7 +48,7 @@ Update `.env`:
 ```bash
 AGENT_BACKEND=openai
 OPENAI_BASE_URL=http://192.168.10.116:8000/v1
-OPENAI_MODEL=meta-llama/Llama-3.1-8B-Instruct
+OPENAI_MODEL=mistralai/Mistral-7B-Instruct-v0.3
 USE_PLANNING_AGENT=false
 
 # API key (required by DIMOS, use dummy for vLLM)
@@ -76,7 +76,7 @@ source install/setup.bash
 curl -X POST http://192.168.10.116:8000/v1/chat/completions \
   -H 'Content-Type: application/json' \
   -d '{
-    "model": "meta-llama/Llama-3.1-8B-Instruct",
+    "model": "mistralai/Mistral-7B-Instruct-v0.3",
     "messages": [{"role": "user", "content": "Hello!"}],
     "max_tokens": 50
   }'
@@ -87,17 +87,17 @@ curl -X POST http://192.168.10.116:8000/v1/chat/completions \
 - Send: "hi"
 - Should get actual response (not 'GGGGG'!)
 
-## Why Llama 3.1 8B?
+## Why Mistral 7B?
 
-✅ **Built-in tool calling** - native support in the model itself  
+✅ **Apache 2.0 License** - fully open, no restrictions or gating!  
+✅ **Native tool calling** - built into the model  
 ✅ **Officially validated by vLLM** - tested and stable  
-✅ **No parser needed** - just works out of the box  
-✅ **Widely used** - battle-tested in production  
+✅ **No authentication required** - just download and run  
+✅ **Smaller than Llama** - faster inference, less memory  
 ✅ **Official NVIDIA support** for Thor  
-✅ **3.5x faster** than Ollama  
 ✅ **OpenAI-compatible API** - seamless integration  
 
-**From vLLM docs:** Llama 3.1 is one of the primary tested models for tool calling.  
+**From vLLM docs:** Mistral is one of the primary tested models for tool calling and uses the `mistral` parser.  
 
 ## Stopping the Server
 
@@ -133,24 +133,29 @@ sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches
 
 ## Different Models
 
-Edit the script to try other vLLM-validated tool calling models:
+Other vLLM-validated tool calling models (if you want to try):
 
 ```bash
-# In setup_vllm_thor.sh, change MODEL= line:
+# In setup_vllm_thor.sh, change MODEL= and parser:
 
-# Current default (best balance):
+# Current default (Apache 2.0, no license!):
+MODEL="mistralai/Mistral-7B-Instruct-v0.3"
+--tool-call-parser mistral
+
+# Llama 3.1 (requires Meta license acceptance):
 MODEL="meta-llama/Llama-3.1-8B-Instruct"
+--tool-call-parser hermes
 
-# Alternative officially supported models:
-MODEL="mistralai/Mistral-7B-Instruct-v0.3"  # Smaller, faster
-MODEL="ibm-granite/granite-3.0-8b-instruct"  # IBM's validated model
+# IBM Granite (Apache 2.0):
+MODEL="ibm-granite/granite-3.0-8b-instruct"
+--tool-call-parser hermes
 ```
 
-**⚠️ Models that DON'T work well:**
+**⚠️ Models that DON'T work:**
 - `Qwen/Qwen2.5-Coder-7B-Instruct` - Returns JSON as text, not tool calls
-- `NousResearch/Hermes-2-Pro-Llama-3-8B` - CUDA index errors with vLLM
+- `NousResearch/Hermes-2-Pro-Llama-3-8B` - CUDA index errors
 
-**✅ Officially validated:** See [vLLM Tool Calling Docs](https://docs.vllm.ai/en/stable/features/tool_calling.html#named-function-calling)
+**✅ Recommended:** Stick with Mistral - it's open source and just works!
 
 ## Performance
 
