@@ -138,6 +138,7 @@ docker run --rm -it --network host \
     --gpu-memory-utilization ${GPU_MEMORY} \
     --tensor-parallel-size 1 \
     --enable-auto-tool-choice \
+    --tool-call-parser hermes \
     --disable-frontend-multiprocessing
 
 echo ""
