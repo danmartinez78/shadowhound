@@ -118,19 +118,20 @@ echo -e "${GREEN}✓ Memory cache cleared${NC}"
 echo ""
 
 # Create startup script
-cat > /tmp/start_vllm.sh << 'EOF'
+STARTUP_SCRIPT="/tmp/start_vllm.sh"
+cat > "${STARTUP_SCRIPT}" << EOF
 #!/bin/bash
-VLLM_ATTENTION_BACKEND=FLASHINFER vllm serve "$1" \
-  --port 8000 \
-  --host 0.0.0.0 \
-  --trust-remote-code \
-  --max-model-len $2 \
-  --gpu-memory-utilization $3 \
-  --tensor-parallel-size 1 \
-  --enable-auto-tool-choice \
+VLLM_ATTENTION_BACKEND=FLASHINFER vllm serve "${MODEL}" \\
+  --port 8000 \\
+  --host 0.0.0.0 \\
+  --trust-remote-code \\
+  --max-model-len ${MAX_MODEL_LEN} \\
+  --gpu-memory-utilization ${GPU_MEMORY} \\
+  --tensor-parallel-size 1 \\
+  --enable-auto-tool-choice \\
   --tool-call-parser hermes
 EOF
-chmod +x /tmp/start_vllm.sh
+chmod +x "${STARTUP_SCRIPT}"
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}Starting vLLM Server${NC}"
@@ -153,7 +154,7 @@ docker run --rm -it --network host \
   --gpus all \
   -e HF_TOKEN="${HF_TOKEN}" \
   -v "$HOME/.cache/huggingface:/root/.cache/huggingface" \
-  -v "$STARTUP_SCRIPT:/startup.sh" \
+  -v "${STARTUP_SCRIPT}:/startup.sh" \
   "${IMAGE}" \
   /bin/bash /startup.sh
 
