@@ -536,7 +536,13 @@ build_workspace() {
     
     # Build Go2 ROS2 SDK packages first (needed by DIMOS)
     print_info "Building Go2 ROS2 SDK packages..."
-    if colcon build --packages-select go2_interfaces unitree_go go2_robot_sdk --symlink-install 2>&1 | tee -a /tmp/colcon_build.log | tail -10; then
+    # Build all Go2 SDK packages (nested submodule in DIMOS)
+    # Core packages: go2_interfaces, unitree_go, go2_robot_sdk
+    # Perception packages: lidar_processor, lidar_processor_cpp, coco_detector, speech_processor
+    if colcon build --packages-select \
+        go2_interfaces unitree_go go2_robot_sdk \
+        lidar_processor lidar_processor_cpp coco_detector speech_processor \
+        --symlink-install 2>&1 | tee -a /tmp/colcon_build.log | tail -10; then
         print_success "Go2 SDK packages built"
     else
         print_warning "Go2 SDK build had issues (may be OK if already built)"
