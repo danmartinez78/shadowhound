@@ -148,7 +148,7 @@ docker run --rm -it --network host \
     --gpu-memory-utilization ${GPU_MEMORY} \
     --tensor-parallel-size 1 \
     --enable-auto-tool-choice \
-    --tool-call-parser hermes
+    --tool-call-parser internlm
 
 echo ""
 echo -e "${GREEN}Server stopped${NC}"
