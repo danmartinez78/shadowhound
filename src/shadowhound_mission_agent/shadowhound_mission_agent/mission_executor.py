@@ -67,7 +67,9 @@ class MissionExecutorConfig:
     ollama_model: str = "llama3.1:70b"  # Ollama model name
 
     # Token limits (apply to both backends)
-    max_output_tokens: int = 4096  # Max tokens for model output
+    max_output_tokens: int = (
+        512  # Max tokens for model output (reduced to prevent runaway generation)
+    )
     max_input_tokens: int = 128000  # Max tokens for model input
 
 
@@ -185,7 +187,7 @@ class MissionExecutor:
 
     def _init_skills(self) -> None:
         """Initialize DIMOS skill library.
-        
+
         Skills are needed for function calling with both OpenAIAgent and PlanningAgent.
         Always load skills - the agent will use them if the model supports tools.
         """

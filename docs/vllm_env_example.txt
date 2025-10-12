@@ -1,0 +1,9 @@
+# Updated .env for vLLM with Phi-3.5-mini (no HF auth required)
+
+AGENT_BACKEND=openai
+OPENAI_BASE_URL=http://192.168.10.116:8000/v1
+OPENAI_MODEL=microsoft/Phi-3.5-mini-instruct
+USE_PLANNING_AGENT=false
+
+# Alternative if you want Qwen (requires HF token):
+# OPENAI_MODEL=Qwen/Qwen2.5-Coder-7B-Instruct

@@ -165,6 +165,12 @@
   },
   "active": "1b11e2a82b2fc7f4",
   "lastOpenFiles": [
+    "vllm_env_example.txt",
+    "vllm_huggingface_auth.md",
+    "issues/thor_system_utilities.md",
+    "issues",
+    "vllm_quickstart.md",
+    "llama_cpp_migration.md",
     "ollama_model_selection.md",
     "Untitled.canvas",
     "THOR_RESOURCES.md",
@@ -187,11 +193,6 @@
     "LLM_BACKEND_VALIDATION.md",
     "FEATURE_COMPLETE_OLLAMA.md",
     "EOD_SUMMARY_2025-10-10.md",
-    "BACKEND_VALIDATION_SUMMARY.md",
-    "BACKEND_QUICK_REFERENCE.md",
-    "software/autodoc/shadowhound_skills.md",
-    "software/autodoc/shadowhound_mission_agent.md",
-    "software/autodoc/shadowhound_bringup.md",
     "troubleshooting",
     "software/autodoc",
     "software",
@@ -200,7 +201,6 @@
     "project_overview",
     "networking",
     "_templates",
-    "_assets",
-    "web_ui/terminal_demo.html"
+    "_assets"
   ]
 }

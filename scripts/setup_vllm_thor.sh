@@ -24,6 +24,7 @@ MODEL="Qwen/Qwen2.5-Coder-7B-Instruct"
 SERVER_PORT=8000
 MAX_MODEL_LEN=8192
 GPU_MEMORY=0.8
+# Set HF_TOKEN environment variable before running this script if model requires auth
 
 echo -e "${YELLOW}Configuration:${NC}"
 echo -e "  Container: ${CONTAINER_NAME}"
@@ -124,10 +125,10 @@ echo -e "${YELLOW}Starting container...${NC}"
 docker run --rm -it --network host \
   --name "${CONTAINER_NAME}" \
   --shm-size=16g \
-  --ulimit memlock=-1 \
-  --ulimit stack=67108864 \
+  --ulimit memlock=-1 --ulimit stack=67108864 \
   --runtime=nvidia \
   --gpus all \
+  -e HF_TOKEN="${HF_TOKEN}" \
   -v "$HOME/.cache:/root/.cache" \
   -v /tmp/start_vllm.sh:/start.sh \
   "${IMAGE}" \
