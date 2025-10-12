@@ -13,7 +13,7 @@ Capture the decisions and follow-up actions from the October 3, 2025 architectur
 
 ## Prerequisites
 - Familiarity with the baseline architecture documented in [[project_overview/roadmap|Project Roadmap]].
-- Access to the detailed reference in [[project|Comprehensive Architecture Spec]].
+- Access to the detailed reference in [[project_overview/project_context|Comprehensive Architecture Spec]].
 - Awareness of current package status across the repository.
 
 ## Steps
@@ -60,6 +60,6 @@ shadowhound_bringup/      # Launch files, configs, orchestration
 - [ ] Phase checklists updated to reflect current progress after this review.
 
 ## References
-- [[project|Comprehensive Architecture Spec]]
+- [[project_context|Comprehensive Architecture Spec]]
 - [[index|Knowledge Base Index]]
 - [[project_overview/roadmap|Project Roadmap]]

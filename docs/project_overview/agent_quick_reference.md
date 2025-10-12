@@ -1,4 +1,12 @@
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+---
+tags: [project, agent, reference]
+status: draft
+related: [software/agent/dimos_agent_architecture]
+summary: >
+  Quick reference guide for ShadowHound agent types (OpenAIAgent vs PlanningAgent) and performance characteristics.
+---
+
+# ShadowHound Agent Quick Reference
 ┃                      🐕 SHADOWHOUND AGENT QUICK REFERENCE                    ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
