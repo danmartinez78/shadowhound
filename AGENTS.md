@@ -41,7 +41,7 @@ These rules apply to the entire repository.
 - Fix broken links before pushing to ensure CI passes. Run locally: `python tools/validate_wikilinks.py --docs docs`
 
 ## Git Hygiene
-- Keep the Obsidian workspace clean. The `.obsidian/` directory is ignored except for optional `themes/` and `snippets/` subfolders, which may be committed if intentionally curated.
+- The entire `.obsidian/` directory is ignored. Users cloning the repository can set up their own Obsidian workspace. Obsidian-friendly features (front-matter with `aliases`, wikilinks) are unobtrusive and remain in the documentation files themselves.
 - Use the commit message prefix `docs(<area>): ...` for documentation-related changes.
 - Do not commit build artifacts from MkDocs (`site/`) or wiki sync outputs (`wiki/`).
 
