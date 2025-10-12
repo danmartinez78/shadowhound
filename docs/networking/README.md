@@ -38,6 +38,7 @@ The network consists of:
 
 ### Featured Guides
 - [[networking/webrtc_direct_test|WebRTC Direct Test]]
+- [[networking/dds_direct_test|ROS 2 DDS Direct Test]]
 
 ## Validation
 - [ ] Each environment has a validated connection checklist.
