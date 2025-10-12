@@ -39,27 +39,20 @@ That's it! The script will:
 
 ## On Your Laptop
 
-Update `.env` (**IMPORTANT** - must include `USE_LOCAL_EMBEDDINGS`):
+Update `.env`:
 ```bash
 AGENT_BACKEND=openai
 OPENAI_BASE_URL=http://192.168.10.116:8000/v1
 OPENAI_MODEL=Qwen/Qwen2.5-Coder-7B-Instruct
 USE_PLANNING_AGENT=false
 
-# CRITICAL: vLLM doesn't support embeddings API
-USE_LOCAL_EMBEDDINGS=true
-
-# Dummy key (required by DIMOS but not used)
+# API key (required by DIMOS, use dummy for vLLM)
 OPENAI_API_KEY=sk-dummy-key-for-vllm
 ```
 
-See [docs/vllm_env_example.txt](./vllm_env_example.txt) for complete configuration.
+**Note on Embeddings:** The agent will automatically detect that you're using a local LLM (non-OpenAI URL) and use local embeddings (sentence-transformers). No need to set `USE_LOCAL_EMBEDDINGS=true` unless you want to be explicit.
 
-**Why `USE_LOCAL_EMBEDDINGS=true`?**  
-vLLM doesn't implement the `/v1/embeddings` endpoint. Without this setting, you'll get:
-```
-ValueError: No embedding data received
-```
+See [docs/vllm_env_example.txt](./vllm_env_example.txt) for complete configuration.
 
 Rebuild and test:
 ```bash
@@ -104,11 +97,10 @@ Press `Ctrl+C` in the terminal running the script.
 ## Troubleshooting
 
 ### "ValueError: No embedding data received"
-**Cause:** Missing `USE_LOCAL_EMBEDDINGS=true` in `.env`  
-**Solution:** Add to laptop's `.env` file:
+**Cause:** This shouldn't happen anymore! The agent auto-detects local LLM backends.  
+**If it does happen:** Force local embeddings in `.env`:
 ```bash
 USE_LOCAL_EMBEDDINGS=true
-OPENAI_API_KEY=sk-dummy-key-for-vllm
 ```
 Then rebuild: `colcon build --packages-select shadowhound_mission_agent`
 

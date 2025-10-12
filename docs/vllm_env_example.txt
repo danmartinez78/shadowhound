@@ -4,8 +4,9 @@
 #
 # This configuration is optimized for using vLLM running on Thor (Jetson).
 #
-# CRITICAL: vLLM does NOT support the embeddings API endpoint.
-# You MUST set USE_LOCAL_EMBEDDINGS=true to avoid "No embedding data received" errors.
+# NOTE: The agent will AUTO-DETECT that you're using a local LLM (non-OpenAI
+# base URL) and automatically use local embeddings. You don't NEED to set
+# USE_LOCAL_EMBEDDINGS=true, but you can if you want to be explicit.
 #
 # ============================================================================
 
@@ -15,11 +16,13 @@ OPENAI_BASE_URL=http://192.168.10.116:8000/v1
 OPENAI_MODEL=Qwen/Qwen2.5-Coder-7B-Instruct
 USE_PLANNING_AGENT=false
 
-# Dummy API key (required by DIMOS but not used with vLLM)
+# API key (required by DIMOS but not used with vLLM)
 OPENAI_API_KEY=sk-dummy-key-for-vllm
 
-# CRITICAL: Use local embeddings (vLLM doesn't support embeddings API)
-USE_LOCAL_EMBEDDINGS=true
+# Embeddings (OPTIONAL - auto-detected)
+# The agent automatically uses local embeddings when OPENAI_BASE_URL
+# is NOT api.openai.com. Uncomment to override:
+# USE_LOCAL_EMBEDDINGS=true
 
 # Optional RAG settings
 RAG_QUERY_N=3

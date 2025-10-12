@@ -250,22 +250,50 @@ class MissionExecutor:
             )
             self.logger.info("DIMOS PlanningAgent initialized")
         else:
-            # Determine agent memory based on USE_LOCAL_EMBEDDINGS
-            use_local_embeddings = os.getenv("USE_LOCAL_EMBEDDINGS", "false").lower() == "true"
+            # Determine embeddings strategy based on backend and configuration
+            # Strategy:
+            # 1. If USE_LOCAL_EMBEDDINGS explicitly set, honor it
+            # 2. If using local LLM (non-OpenAI base URL), default to local embeddings
+            # 3. If using OpenAI cloud (api.openai.com), default to OpenAI embeddings
+            
+            use_local_env = os.getenv("USE_LOCAL_EMBEDDINGS", "").lower()
+            
+            if use_local_env in ("true", "false"):
+                # User explicitly set preference
+                use_local_embeddings = use_local_env == "true"
+                self.logger.info(f"Embeddings: Using explicit setting USE_LOCAL_EMBEDDINGS={use_local_embeddings}")
+            else:
+                # Auto-detect based on backend
+                is_openai_cloud = (
+                    self.config.agent_backend == "openai" and 
+                    "api.openai.com" in self.config.openai_base_url
+                )
+                
+                if is_openai_cloud:
+                    # OpenAI cloud supports embeddings API
+                    use_local_embeddings = False
+                    self.logger.info("Embeddings: Auto-detected OpenAI cloud, using OpenAI embeddings API")
+                else:
+                    # Local LLM (vLLM, llama.cpp, Ollama) - use local embeddings
+                    use_local_embeddings = True
+                    self.logger.info(
+                        f"Embeddings: Auto-detected local LLM backend "
+                        f"({self.config.agent_backend}), using local embeddings"
+                    )
             
             if use_local_embeddings:
-                # Use local embeddings (sentence-transformers) - works with vLLM/llama.cpp
+                # Use local embeddings (sentence-transformers)
+                # Works with: vLLM, llama.cpp, Ollama, or any local LLM
                 agent_memory = LocalSemanticMemory(
                     collection_name="shadowhound_memory",
                     model_name="sentence-transformers/all-MiniLM-L6-v2"
                 )
-                self.logger.info("Using local embeddings (sentence-transformers)")
+                self.logger.info("✓ Agent memory: LocalSemanticMemory (sentence-transformers/all-MiniLM-L6-v2)")
             else:
-                # Use OpenAI embeddings - requires OpenAI API
-                # Note: This will fail if openai_client points to vLLM/llama.cpp
-                # (they don't support embeddings endpoint)
+                # Use OpenAI embeddings API
+                # Works with: OpenAI cloud API only
                 agent_memory = None  # Let DIMOS use default OpenAISemanticMemory
-                self.logger.info("Using OpenAI embeddings API")
+                self.logger.info("✓ Agent memory: OpenAISemanticMemory (text-embedding-3-large)")
             
             # OpenAIAgent with skills for function calling
             # Both OpenAI and Ollama (with tool-capable models) support this

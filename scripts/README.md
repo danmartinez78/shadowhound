@@ -44,12 +44,11 @@ OPENAI_BASE_URL=http://192.168.10.116:8000/v1
 OPENAI_MODEL=Qwen/Qwen2.5-Coder-7B-Instruct
 USE_PLANNING_AGENT=false
 
-# CRITICAL: vLLM doesn't support embeddings API
-USE_LOCAL_EMBEDDINGS=true
+# API key (required by DIMOS, use dummy for vLLM)
 OPENAI_API_KEY=sk-dummy-key-for-vllm
 ```
 
-**Important:** Must set `USE_LOCAL_EMBEDDINGS=true` - vLLM doesn't support `/v1/embeddings` endpoint.
+**Note:** The agent auto-detects local LLM backends and uses local embeddings automatically.
 
 See: `docs/vllm_quickstart.md` and `docs/vllm_env_example.txt`
 
@@ -75,10 +74,11 @@ OPENAI_BASE_URL=http://192.168.10.116:8080/v1
 OPENAI_MODEL=qwen2.5-coder-7b-instruct-q4_k_m.gguf
 USE_PLANNING_AGENT=false
 
-# Also requires local embeddings
-USE_LOCAL_EMBEDDINGS=true
+# API key (required by DIMOS, use dummy)
 OPENAI_API_KEY=sk-dummy-key
 ```
+
+**Note:** The agent auto-detects local LLM backends and uses local embeddings automatically.
 
 ## ~~Ollama Setup~~ (DEPRECATED)
 
