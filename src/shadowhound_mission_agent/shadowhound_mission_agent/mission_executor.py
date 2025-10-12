@@ -29,6 +29,7 @@ from dataclasses import dataclass
 try:
     from dimos.agents.agent import OpenAIAgent
     from dimos.agents.planning_agent import PlanningAgent
+    from dimos.agents.memory.chroma_impl import LocalSemanticMemory
     from dimos.robot.unitree.unitree_go2 import UnitreeGo2
     from dimos.robot.unitree.unitree_ros_control import UnitreeROSControl
     from dimos.robot.unitree.unitree_skills import MyUnitreeSkills
@@ -249,6 +250,23 @@ class MissionExecutor:
             )
             self.logger.info("DIMOS PlanningAgent initialized")
         else:
+            # Determine agent memory based on USE_LOCAL_EMBEDDINGS
+            use_local_embeddings = os.getenv("USE_LOCAL_EMBEDDINGS", "false").lower() == "true"
+            
+            if use_local_embeddings:
+                # Use local embeddings (sentence-transformers) - works with vLLM/llama.cpp
+                agent_memory = LocalSemanticMemory(
+                    collection_name="shadowhound_memory",
+                    model_name="sentence-transformers/all-MiniLM-L6-v2"
+                )
+                self.logger.info("Using local embeddings (sentence-transformers)")
+            else:
+                # Use OpenAI embeddings - requires OpenAI API
+                # Note: This will fail if openai_client points to vLLM/llama.cpp
+                # (they don't support embeddings endpoint)
+                agent_memory = None  # Let DIMOS use default OpenAISemanticMemory
+                self.logger.info("Using OpenAI embeddings API")
+            
             # OpenAIAgent with skills for function calling
             # Both OpenAI and Ollama (with tool-capable models) support this
             self.agent = OpenAIAgent(
@@ -257,6 +275,7 @@ class MissionExecutor:
                 model_name=model_name,
                 skills=self.skills,  # Enable function calling
                 openai_client=client,  # Pass custom client for backend flexibility
+                agent_memory=agent_memory,  # Use local or OpenAI embeddings
                 max_output_tokens_per_request=self.config.max_output_tokens,
                 max_input_tokens_per_request=self.config.max_input_tokens,
             )
