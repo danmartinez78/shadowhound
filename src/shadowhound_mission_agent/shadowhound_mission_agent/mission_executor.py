@@ -69,9 +69,22 @@ class MissionExecutorConfig:
 
     # Token limits (apply to both backends)
     max_output_tokens: int = (
-        512  # Max tokens for model output (reduced to prevent runaway generation)
+        150  # Max tokens for model output (terse responses for faster inference)
     )
     max_input_tokens: int = 128000  # Max tokens for model input
+    
+    # Custom system prompt for function calling enforcement
+    system_prompt: str = (
+        "You are a quadruped robot controller. "
+        "You MUST call the provided functions to control the robot. "
+        "NEVER explain how to use functions - ALWAYS call them directly. "
+        "When the user says 'move forward', call Move(). "
+        "When the user says 'step back', call Reverse(). "
+        "When the user says 'spin left', call SpinLeft(). "
+        "When the user says 'spin right', call SpinRight(). "
+        "Be extremely brief with any text responses. "
+        "Your PRIMARY job is to execute functions, not to chat."
+    )
 
 
 class MissionExecutor:
@@ -342,6 +355,7 @@ class MissionExecutor:
                 "model_name": model_name,
                 "skills": self.skills,  # Enable function calling
                 "openai_client": client,  # Pass custom client for backend flexibility
+                "system_query": self.config.system_prompt,  # Custom prompt for function calling
                 "max_output_tokens_per_request": self.config.max_output_tokens,
                 "max_input_tokens_per_request": self.config.max_input_tokens,
             }

@@ -119,6 +119,12 @@ echo -e "  3. Start OpenAI-compatible API on port ${SERVER_PORT}"
 echo ""
 echo -e "${YELLOW}Press Ctrl+C to stop the server${NC}"
 echo ""
+echo -e "${YELLOW}Downloading Mistral chat template for tool calling...${NC}"
+# Download the recommended chat template for Mistral tool calling
+# This fixes the tool call ID length issue (Mistral expects 9 digits, vLLM generates longer)
+curl -sL https://raw.githubusercontent.com/vllm-project/vllm/main/examples/tool_chat_template_mistral_parallel.jinja \
+  -o /tmp/mistral_tool_template.jinja
+
 echo -e "${YELLOW}Starting container...${NC}"
 
 docker run --rm -it --network host \
@@ -129,12 +135,14 @@ docker run --rm -it --network host \
   --gpus all \
   -e HF_TOKEN="${HF_TOKEN}" \
   -v "$HOME/.cache/huggingface:/root/.cache/huggingface" \
+  -v "/tmp/mistral_tool_template.jinja:/app/mistral_tool_template.jinja:ro" \
   "${IMAGE}" \
   vllm serve "${MODEL}" \
     --port 8000 \
     --host 0.0.0.0 \
     --trust-remote-code \
     --tokenizer "${MODEL}" \
+    --chat-template /app/mistral_tool_template.jinja \
     --max-model-len ${MAX_MODEL_LEN} \
     --gpu-memory-utilization ${GPU_MEMORY} \
     --tensor-parallel-size 1 \
