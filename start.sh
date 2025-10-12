@@ -593,6 +593,11 @@ check_dependencies() {
     python3 -c "import mmengine" 2>/dev/null || missing+=("mmengine (Metric3D depth)")
     python3 -c "import mmcv" 2>/dev/null || missing+=("mmcv (Metric3D depth)")
     
+    # Check embeddings packages (for local semantic memory)
+    python3 -c "import chromadb" 2>/dev/null || missing+=("chromadb (local embeddings)")
+    python3 -c "import langchain_chroma" 2>/dev/null || missing+=("langchain-chroma (local embeddings)")
+    python3 -c "import sentence_transformers" 2>/dev/null || missing+=("sentence-transformers (local embeddings)")
+    
     if [ ${#missing[@]} -gt 0 ]; then
         print_warning "Missing Python packages: ${missing[*]}"
         read -p "Install missing packages? [Y/n]: " install_choice
@@ -1442,9 +1447,9 @@ main() {
     check_system
     check_git_updates  # NEW: Check for repo/submodule updates
     setup_config
+    check_dependencies  # Check/install Python deps BEFORE building
     check_llm_backend  # IMPORTANT: Check LLM backend early, before heavy lifting
     build_workspace
-    check_dependencies
     check_network
     
     # Show summary
