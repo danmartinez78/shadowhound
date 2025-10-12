@@ -20,7 +20,7 @@ echo ""
 # Configuration
 CONTAINER_NAME="vllm-server"
 IMAGE="nvcr.io/nvidia/vllm:25.09-py3"
-MODEL="Qwen/Qwen2.5-Coder-7B-Instruct"
+MODEL="NousResearch/Hermes-2-Pro-Llama-3-8B"
 SERVER_PORT=8000
 MAX_MODEL_LEN=8192
 GPU_MEMORY=0.8
@@ -36,24 +36,15 @@ echo -e "  Image: ${IMAGE}"
 echo -e "  Model: ${MODEL}"
 echo -e "  Port: ${SERVER_PORT}"
 echo -e "  Max Length: ${MAX_MODEL_LEN}"
+echo -e "  Tool Parser: hermes (native support)"
 echo ""
 
-# Check for HuggingFace authentication
-if [ ! -f "$HOME/.cache/huggingface/token" ] && [ -z "$HF_TOKEN" ]; then
-    echo -e "${YELLOW}⚠ HuggingFace authentication not found${NC}"
-    echo -e "Qwen model requires authentication. Run one of:"
-    echo -e "  ${GREEN}huggingface-cli login${NC}  (recommended, persists)"
-    echo -e "  ${GREEN}export HF_TOKEN='hf_...'${NC}  (temporary)"
-    echo ""
-    echo -e "Get token from: ${BLUE}https://huggingface.co/settings/tokens${NC}"
-    echo -e "Accept license: ${BLUE}https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct${NC}"
-    echo ""
-    read -p "Continue anyway? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
-fi
+# Note: Hermes-2-Pro has native tool calling support and doesn't require HuggingFace auth
+echo -e "${GREEN}ℹ️  Hermes-2-Pro-Llama-3-8B:${NC}"
+echo -e "  - Native tool calling support (no parser hacks needed)"
+echo -e "  - No HuggingFace authentication required"
+echo -e "  - Designed specifically for function calling"
+echo ""
 
 # Step 1: Check prerequisites
 echo -e "${YELLOW}[1/5] Checking prerequisites...${NC}"
@@ -148,7 +139,7 @@ docker run --rm -it --network host \
     --gpu-memory-utilization ${GPU_MEMORY} \
     --tensor-parallel-size 1 \
     --enable-auto-tool-choice \
-    --tool-call-parser internlm
+    --tool-call-parser hermes
 
 echo ""
 echo -e "${GREEN}Server stopped${NC}"

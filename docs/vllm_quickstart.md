@@ -4,9 +4,10 @@
 
 ## Prerequisites
 
-### HuggingFace Authentication (One-time Setup)
+**None!** Hermes-2-Pro is open and doesn't require authentication.
 
-The Qwen model requires HuggingFace authentication:
+~~The Qwen model requires HuggingFace authentication~~ (No longer using Qwen)
+<del>
 
 ```bash
 # On Thor - run once
@@ -20,6 +21,8 @@ When prompted:
 
 See [docs/vllm_huggingface_auth.md](./vllm_huggingface_auth.md) for troubleshooting.
 
+</del>
+
 ## Quick Setup (5 minutes)
 
 On Thor:
@@ -30,11 +33,12 @@ git pull origin feature/local-llm-support
 ```
 
 That's it! The script will:
-1. Check for HuggingFace authentication (warns if missing)
-2. Pull NVIDIA's vLLM container (~10GB)
-3. Start server with Qwen2.5-Coder-7B-Instruct
-4. **Enable tool calling support** (required for robot control)
-5. Expose OpenAI-compatible API on port 8000
+1. Pull NVIDIA's vLLM container (~10GB)
+2. Start server with **Hermes-2-Pro-Llama-3-8B** (designed for tool calling)
+3. **Enable native tool calling support**
+4. Expose OpenAI-compatible API on port 8000
+
+**Note:** Hermes-2-Pro doesn't require HuggingFace authentication!
 
 **First run takes longer** while downloading the model (~5GB).
 
@@ -44,7 +48,7 @@ Update `.env`:
 ```bash
 AGENT_BACKEND=openai
 OPENAI_BASE_URL=http://192.168.10.116:8000/v1
-OPENAI_MODEL=Qwen/Qwen2.5-Coder-7B-Instruct
+OPENAI_MODEL=NousResearch/Hermes-2-Pro-Llama-3-8B
 USE_PLANNING_AGENT=false
 
 # API key (required by DIMOS, use dummy for vLLM)
@@ -72,7 +76,7 @@ source install/setup.bash
 curl -X POST http://192.168.10.116:8000/v1/chat/completions \
   -H 'Content-Type: application/json' \
   -d '{
-    "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "model": "NousResearch/Hermes-2-Pro-Llama-3-8B",
     "messages": [{"role": "user", "content": "Hello!"}],
     "max_tokens": 50
   }'
@@ -83,14 +87,16 @@ curl -X POST http://192.168.10.116:8000/v1/chat/completions \
 - Send: "hi"
 - Should get actual response (not 'GGGGG'!)
 
-## Why vLLM?
+## Why Hermes-2-Pro?
 
+✅ **Designed for tool calling** - native function calling support  
+✅ **Works out of the box** - no authentication or parser hacks  
+✅ **Proven with vLLM** - tested and stable  
 ✅ **Official NVIDIA support** for Thor  
-✅ **3.5x faster** than alternatives  
-✅ **Pre-built container** - no compilation needed  
+✅ **3.5x faster** than Ollama  
 ✅ **OpenAI-compatible API** - seamless integration  
-✅ **Better memory management** than Ollama  
-✅ **Tool calling support** - enables robot control via function calls  
+
+**Why not Qwen2.5-Coder?** Testing showed Qwen doesn't properly support tool calling with vLLM - it returns JSON as text instead of executing functions.  
 
 ## Stopping the Server
 
@@ -130,15 +136,19 @@ Edit the script to try other models:
 ```bash
 # In setup_vllm_thor.sh, change MODEL= line:
 
-# Faster, smaller (FP4 quantized):
-MODEL="nvidia/Llama-3.1-8B-Instruct-FP4"
+# Current default (best for tool calling):
+MODEL="NousResearch/Hermes-2-Pro-Llama-3-8B"
 
-# Larger, better quality:
-MODEL="meta-llama/Llama-3.1-8B-Instruct"
+# Larger, better quality (if you have memory):
+MODEL="NousResearch/Hermes-2-Pro-Llama-3-70B"  # Requires quantization
 
-# Coding-focused (current default):
-MODEL="Qwen/Qwen2.5-Coder-7B-Instruct"
+# Mistral with native tool support:
+MODEL="mistralai/Mistral-7B-Instruct-v0.3"
+--tool-call-parser mistral  # Change parser too
 ```
+
+**⚠️ Not Recommended:**
+- `Qwen/Qwen2.5-Coder-7B-Instruct` - Doesn't support tool calling properly with vLLM
 
 ## Performance
 
