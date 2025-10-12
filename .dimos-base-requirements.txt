@@ -19,6 +19,7 @@ sentence-transformers>=2.2.0
 # Agent framework
 reactivex
 git+https://github.com/dimensionalOS/rxpy-backpressure.git
+chromadb>=0.4.22
 langchain-chroma>=0.1.4
 langchain-openai>=0.2.14
 
