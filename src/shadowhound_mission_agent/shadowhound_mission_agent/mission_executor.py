@@ -72,18 +72,12 @@ class MissionExecutorConfig:
         150  # Max tokens for model output (terse responses for faster inference)
     )
     max_input_tokens: int = 128000  # Max tokens for model input
-    
+
     # Custom system prompt for function calling enforcement
     system_prompt: str = (
         "You are a quadruped robot controller. "
-        "You MUST call the provided functions to control the robot. "
-        "NEVER explain how to use functions - ALWAYS call them directly. "
-        "When the user says 'move forward', call Move(). "
-        "When the user says 'step back', call Reverse(). "
-        "When the user says 'spin left', call SpinLeft(). "
-        "When the user says 'spin right', call SpinRight(). "
-        "Be extremely brief with any text responses. "
-        "Your PRIMARY job is to execute functions, not to chat."
+        "Use the available functions to control the robot. "
+        "Be brief in your responses."
     )
 
 
@@ -359,12 +353,12 @@ class MissionExecutor:
                 "max_output_tokens_per_request": self.config.max_output_tokens,
                 "max_input_tokens_per_request": self.config.max_input_tokens,
             }
-            
+
             # Only pass agent_memory if we have a valid one (not "skip")
             # This prevents DIMOS from auto-creating OpenAISemanticMemory for local LLMs
             if agent_memory != "skip":
                 agent_kwargs["agent_memory"] = agent_memory
-            
+
             self.agent = OpenAIAgent(**agent_kwargs)
             self.logger.info(
                 f"DIMOS OpenAIAgent initialized with {len(self.skills.get())} skills "
