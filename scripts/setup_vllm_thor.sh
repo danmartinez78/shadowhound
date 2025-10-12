@@ -128,13 +128,13 @@ docker run --rm -it --network host \
   --runtime=nvidia \
   --gpus all \
   -e HF_TOKEN="${HF_TOKEN}" \
-  -e VLLM_ATTENTION_BACKEND=FLASHINFER \
   -v "$HOME/.cache/huggingface:/root/.cache/huggingface" \
   "${IMAGE}" \
   vllm serve "${MODEL}" \
     --port 8000 \
     --host 0.0.0.0 \
     --trust-remote-code \
+    --tokenizer "${MODEL}" \
     --max-model-len ${MAX_MODEL_LEN} \
     --gpu-memory-utilization ${GPU_MEMORY} \
     --tensor-parallel-size 1 \
