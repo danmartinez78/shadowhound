@@ -72,22 +72,17 @@
 
 ---
 
-## What to Remove Before Merge
+## Technical Debt / TODOs
 
-### Debug Code
-- [ ] **Remove or conditionalize debug logging** in `agent.py`
-  - Lines 902-903, 909: The 🔧🌡️ emoji logs
-  - Options:
-    - A) Remove them (clean but lose visibility)
-    - B) Make them conditional on `DIMOS_DEBUG=true`
-    - C) Change to standard logging level (INFO → DEBUG)
-  - Recommendation: **Change to DEBUG level** (line 902, 903, 909)
+- [ ] Remove debug logging from DIMOS agent.py (or make it conditional) ✅ DONE (changed to DEBUG level)
+- [ ] Test Wait skill more thoroughly (observed issues in multi-step commands)
+- [ ] Test Qwen2.5-Coder-7B tool calling consistency
+- [ ] Document vLLM custom chat template requirements
+- [ ] Add vLLM health check to start.sh
+- [ ] Consider model registry system (swap models easily)
+- [ ] Profile memory usage on Thor (can we run 13B models?)
 
-### Outdated Comments
-- [ ] **Update .env notes section** (lines 136-157)
-  - Remove references to Qwen2.5-Coder-7B in "This configuration" section
-  - Update to reflect cloud-first approach
-  - Add note about local LLM being experimental
+---
 
 ---
 

@@ -129,7 +129,39 @@
 
 ---
 
+---
+
+## 🔵 Post-Merge Tasks (feature/local-llm-support)
+
+### Skill Testing
+- [ ] Test Wait skill more thoroughly
+  - Context: Observed issues during multi-step command testing
+  - Test cases:
+    - Wait with various durations (1s, 5s, 10s, 30s)
+    - Wait in middle of multi-step sequence
+    - Verify robot stays idle during wait
+    - Check if duration is respected accurately
+  - Related: `src/dimos-unitree/dimos/robot/unitree/unitree_skills.py`
+  - Reported: 2025-10-12 during local LLM testing
+
+---
+
 ## ✅ Recently Completed
+
+### 2025-10-12
+- ✅ Local LLM integration (vLLM on Thor)
+  - Proof of concept with Mistral-7B and Qwen2.5-Coder-7B
+  - Local embeddings with sentence-transformers
+  - Custom chat templates for vLLM
+  - ~60% success rate (needs more tuning)
+- ✅ Agent improvements for tool calling
+  - Added tool_choice='auto' to DIMOS OpenAIAgent
+  - Added temperature=0.0 for deterministic responses
+  - Improved GPT-4o performance: 100% consistent, 2-7s response time
+- ✅ Dual configuration system (cloud + local)
+  - Easy switching between backends in .env
+  - Documentation and setup scripts
+  - Merge to dev branch ready
 
 ### 2025-10-08
 - ✅ Fixed camera feed QoS mismatch (BEST_EFFORT vs RELIABLE)
