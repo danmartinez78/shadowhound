@@ -1,13 +1,50 @@
 #!/usr/bin/env python3
-"""ShadowHound Mission Agent - ROS2 wrapper for mission execution.
+"""ShadowHound Mission Agent - ROS2 Infrastructure Wrapper.
 
-This node provides a ROS2 interface to the MissionExecutor, handling:
-- ROS node lifecycle and parameter management
-- Topic subscriptions (mission commands) and publications (status)
-- Web interface integration
-- ROS logging bridge
+This node provides a ROS2 interface to MissionExecutor, handling all ROS-specific
+concerns while delegating mission intelligence to MissionExecutor (the robot's brain).
 
-The actual mission execution logic is in MissionExecutor (pure Python).
+Architecture:
+    ROS Topics/Web UI → MissionNode (this file) → MissionExecutor → DIMOS → Robot
+
+Key Responsibilities:
+    - ROS2 node lifecycle and parameter management
+    - Subscribe to /mission_command topic
+    - Publish to /mission_status topic
+    - Subscribe to /camera/image_raw and stream to web UI
+    - Coordinate web interface (Flask server)
+    - Validate LLM backend connectivity on startup
+    - Log diagnostics (topics, connection mode, etc.)
+
+What This Is NOT:
+    - NOT the robot's intelligence (that's MissionExecutor)
+    - NOT aware of DIMOS internals
+    - NO mission execution logic (delegates to MissionExecutor)
+
+Design Pattern:
+    Humble Object / Adapter - Thin wrapper that translates between ROS2
+    and pure Python business logic (MissionExecutor).
+
+Data Flow:
+    /mission_command → mission_callback() → MissionExecutor.execute_mission()
+                                          → /mission_status
+    
+    /camera/image_raw → camera_callback() → JPEG conversion
+                                          → WebInterface.update_camera_frame()
+
+Future Refactor:
+    Will be renamed to MissionNode in Phase 1 to clarify it's just ROS2
+    infrastructure. See docs/development/naming_refactor_plan.md
+
+For detailed architecture documentation, see:
+    docs/architecture/mission_agent_vs_executor.md
+    docs/development/agent_robot_decoupling_analysis.md
+
+Configuration:
+    ROS parameters control backend selection, robot IP, model choice, etc.
+    Set via launch files or command line:
+        ros2 run shadowhound_mission_agent mission_agent \\
+          --ros-args -p agent_backend:=ollama -p robot_ip:=192.168.1.103
 """
 
 import rclpy

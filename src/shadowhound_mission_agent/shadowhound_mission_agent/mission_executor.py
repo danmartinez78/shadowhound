@@ -1,23 +1,48 @@
 #!/usr/bin/env python3
-"""Mission Executor - Pure Python mission execution logic.
+"""Mission Executor - The Robot's Cognitive Layer (Brain/Personality).
 
-This module contains the core business logic for mission execution, separated from
-ROS concerns. This separation enables:
-- Testing without ROS infrastructure
-- Reuse in scripts, notebooks, and web applications
-- Clear separation of concerns (ROS vs business logic)
+This module contains the robot's intelligence/decision-making logic, separated from
+ROS infrastructure. It initializes and coordinates DIMOS components (robot, agent,
+skills) to execute natural language missions via LLM reasoning.
 
-The MissionExecutor handles:
-- Robot initialization (DIMOS UnitreeGo2)
-- Agent initialization (DIMOS agents)
-- Skill library setup
-- Mission execution logic
+Architecture:
+    MissionNode (ROS2) → MissionExecutor (this file) → DIMOS Agent → Robot
 
-It does NOT handle:
-- ROS node initialization
-- ROS topic publishers/subscribers
-- ROS parameter handling
-- ROS logging (uses standard Python logging)
+Key Responsibilities:
+    - Initialize DIMOS robot interface (UnitreeGo2)
+    - Initialize DIMOS agent (OpenAIAgent/PlanningAgent)
+    - Configure LLM backend (OpenAI cloud vs Ollama local)
+    - Execute missions through LLM reasoning and tool calling
+    - Manage semantic memory and context (RAG)
+
+What This Is NOT:
+    - NOT a ROS2 node (pure Python, no rclpy)
+    - NOT tied to ROS topics/services
+    - CAN be used in scripts, notebooks, tests without ROS
+
+Design Pattern:
+    Humble Object - Separates business logic from infrastructure.
+    This enables testing without ROS and reuse in multiple contexts.
+
+Future Refactor:
+    Will be renamed to RobotAgent in Phase 1 to better reflect its role
+    as the robot's intelligence layer. See docs/development/naming_refactor_plan.md
+
+For detailed architecture documentation, see:
+    docs/architecture/mission_agent_vs_executor.md
+    docs/development/agent_robot_decoupling_analysis.md
+
+Example Usage:
+    # In ROS2 Node
+    config = MissionExecutorConfig(agent_backend="ollama")
+    executor = MissionExecutor(config, logger=node.get_logger())
+    executor.initialize()
+    response, timing = executor.execute_mission("patrol perimeter")
+
+    # In Jupyter Notebook
+    executor = MissionExecutor(MissionExecutorConfig())
+    executor.initialize()
+    executor.execute_mission("stand up and wave")
 """
 
 import os
