@@ -19,6 +19,10 @@ Central hub for ShadowHound development policies, workflows, and contributor gui
 
 ## Active Policies & Workflows
 
+### Collaboration & Velocity
+- **[Cloud Agent Workflow](../development/cloud_agent_workflow.md)** — ⭐ High-velocity development with GitHub Copilot cloud agents
+- **[Merge Checklist](../development/merge_checklist.md)** — Template and example for feature branch merges
+
 ### Git & Submodule Management
 - **[Git Submodule Policy](../development/submodule_policy.md)** — Standard git workflow for submodules (not vcstool)
 - **[DIMOS Development Policy](../development/dimos_development_policy.md)** — Never edit DIMOS in submodule directory; principled workflow
@@ -31,7 +35,6 @@ Central hub for ShadowHound development policies, workflows, and contributor gui
 
 ### Development Tracking
 - **[TODO List](../development/todo.md)** — Active development tasks and priorities
-- **[Merge Checklist](../development/merge_checklist.md)** — Template and example for feature branch merges
 
 ## Completed Work
 
