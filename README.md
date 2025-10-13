@@ -2,9 +2,9 @@
 
 An autonomous mobile robot system that combines ROS2 navigation with LLM/VLM-driven task planning for natural language mission execution on Unitree Go2.
 
-**Status**: 🚀 Phase 1 (Active Development) - Mission agent operational with camera feed  
-**Latest**: Fixed camera QoS, optimized web UI for laptop screens, multi-step execution working  
-**Branch**: `feature/dimos-integration` (main development, ready to merge)
+**Status**: 🏗️ Phase 0 (Infrastructure - 90% Complete)  
+**Latest**: Cloud agent workflow documented, project planning updated with reality check  
+**Branch**: `dev` (main development)
 
 ---
 
@@ -21,52 +21,32 @@ cd shadowhound
 code .
 # (Click "Reopen in Container" when prompted)
 
-# 3. Run the start script
-./start.sh --dev
+# 3. Build the workspace
+cb              # colcon build --symlink-install
+source-ws       # source install/setup.bash
+
+# 4. Verify packages
+ros2 pkg list | grep shadowhound
 ```
 
-That's it! The script handles everything:
-- ✓ Checks dependencies
-- ✓ Creates configuration (.env)
-- ✓ Builds the workspace
-- ✓ Launches the system
-- ✓ Opens web dashboard at http://localhost:8080
+**What Works Now**:
+- ✅ Devcontainer with ROS2 Humble + DIMOS
+- ✅ Package structure (bringup, mission_agent, skills)
+- ✅ Build system with helpful aliases
+- ✅ Documentation pipeline with 8x velocity gains
+- ✅ Cloud agent collaboration workflow
 
-Try a mission: "rotate to the right and take a step back" 🤖
-
-**New Features**:
-- 🎯 Multi-step sequential execution (PlanningAgent enabled by default)
-- 📊 Real-time performance metrics in web UI
-- 📹 Live camera feed with BEST_EFFORT QoS (working!)
-- ⏱️ Detailed timing instrumentation
-- 🎨 Optimized UI layout for laptop screens (camera + diagnostics + terminal fit on one screen)
-- 📝 Collapsible topics list to save vertical space
-
-### 📚 For More Control
-
-See [Script Catalog](docs/software/scripts.md) for all available scripts and options:
-- `./start.sh` - Smart interactive launcher
-- `./scripts/quick-start-dev.sh` - One-command development start
-- `./scripts/check-deps.sh` - Verify dependencies
-- `./scripts/test-web-only.sh` - Test web interface alone
+**What's Next**:
+- 🔄 Testing infrastructure (pytest, mocks, CI)
+- 🔄 Skills implementation (starting with 3 basic skills)
+- 🔄 Mission agent integration (after skills proven)
 
 ### Prerequisites
 - **Docker** with dev containers support
 - **VS Code** with [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-- **LLM Backend** - Choose one:
-  - **OpenAI API Key** (cloud, slower but reliable) - Get from [OpenAI Platform](https://platform.openai.com/api-keys)
-  - **Ollama** (self-hosted, 24x faster!) - See [Ollama Setup Guide](docs/OLLAMA_SETUP.md) ⚡
+- **Git** with submodule support
 
-### Backend Options
-
-ShadowHound supports two LLM backends:
-
-| Backend | Response Time | Setup | Best For |
-|---------|--------------|-------|----------|
-| **Ollama** ⚡ | 0.5-2s | Install locally or on gaming PC | Development, production |
-| **OpenAI Cloud** | 10-15s | Just add API key | Fallback, highest quality |
-
-**Recommended**: Use Ollama for **24x faster** iteration! See the [Ollama Setup Guide](docs/OLLAMA_SETUP.md) for installation and configuration.
+**Note**: LLM backend configuration will be needed for Phase 2 (Mission Agent), not required for current Phase 0-1 development.
 
 ### Dev Container Features
 The container provides everything you need:
@@ -149,13 +129,9 @@ These diagrams are embedded in:
 
 ShadowHound uses a **four-layer architecture** built on the DIMOS framework:
 
-![System Architecture](docs/_assets/system-architecture.png)
-
-*System architecture showing the layered design from Web UI through Mission Agent, DIMOS Skills Engine, ROS2 Bridge, to the Unitree GO2 hardware. See [full documentation](docs/index.md) for detailed architecture diagrams including data flow and network topology.*
-
 ```
 ┌─ Application ─┐  Launch files, configs, deployment
-┌─ Agent ───────┐  LLM/VLM orchestration, mission planning
+┌─ Agent ───────┐  LLM/VLM orchestration, mission planning  
 ┌─ Skills ──────┐  Execution engine, safety, telemetry
 ┌─ Robot ───────┐  ROS2 bridge to go2_ros2_sdk
 └─ Hardware ────┘  Unitree Go2 quadruped
@@ -163,14 +139,15 @@ ShadowHound uses a **four-layer architecture** built on the DIMOS framework:
 
 ### Core Packages
 
-- **`shadowhound_mission_agent/`** ✅ - ROS2 node with DIMOS integration, web UI, mission execution
-- **`shadowhound_utils/`** ✅ - Utilities including robot interface and skills framework
-- **`shadowhound_skills/`** ✅ - Vision skills package with VLM integration (Qwen, object detection)
 - **`shadowhound_bringup/`** ✅ - Launch files and configurations
+- **`shadowhound_mission_agent/`** 🏗️ - ROS2 node for mission execution (scaffolded, not implemented)
+- **`shadowhound_skills/`** 🏗️ - Skills registry and implementations (scaffolded, not implemented)
 
-**Integration**: Built on [DIMOS framework](https://github.com/Dorteel/dimos-unitree) with Unitree Go2 SDK
+**Integration**: Designed to integrate with [DIMOS framework](https://github.com/Dorteel/dimos-unitree) with Unitree Go2 SDK
 
-See [`docs/project.md`](docs/project_context.md) and [`docs/DIMOS_VISION_CAPABILITIES.md`](docs/DIMOS_VISION_CAPABILITIES.md) for detailed architecture.
+**Current Reality**: Packages exist but contain minimal implementation. See [Status Analysis](docs/project_overview/status_analysis_2025_10.md) for honest assessment.
+
+See [`docs/architecture/`](docs/architecture/) for detailed architecture documentation.
 
 ---
 
@@ -215,49 +192,6 @@ pytest src/shadowhound_skills/test/test_registry.py -v
 
 ---
 
-## Skills API Concept
-
-The **Skills API** is the primary interface for robot control. Skills are typed, safe wrappers over ROS2 operations with built-in validation, timeouts, and telemetry.
-
-### Example: Calling a Skill
-
-```python
-from shadowhound_skills import SkillRegistry
-
-# Execute a navigation skill
-result = SkillRegistry.execute(
-    "nav.goto",
-    x=1.0, y=2.0, yaw=0.0,
-    timeout=20.0
-)
-
-if result.success:
-    print(f"Navigation complete: {result.data}")
-else:
-    print(f"Navigation failed: {result.error}")
-```
-
-### Example: Implementing a Skill
-
-```python
-from shadowhound_skills import Skill, SkillResult, register_skill
-
-@register_skill("report.say")
-class SaySkill(Skill):
-    """Text-to-speech skill."""
-    
-    def validate_params(self, text: str) -> tuple[bool, str]:
-        if not text or len(text) > 500:
-            return False, "Text must be 1-500 characters"
-        return True, ""
-    
-    def execute(self, text: str) -> SkillResult:
-        # Implementation here
-        return SkillResult(success=True, data={"spoken": text})
-```
-
----
-
 ## Environment Variables
 
 ```bash
@@ -266,103 +200,119 @@ ROS_DOMAIN_ID=42                      # Isolated network
 RMW_IMPLEMENTATION=rmw_cyclonedds_cpp # DDS implementation
 RCUTILS_LOGGING_BUFFERED_STREAM=1     # Logging optimization
 
-# Robot Connection (set when needed)
-GO2_IP=192.168.1.103                  # Go2 robot IP
-GO2_MODE=webrtc                       # webrtc or ethernet
+# Robot Connection (Phase 3 - Hardware validation)
+GO2_IP=192.168.1.103                  # Go2 robot IP (when needed)
 
-# Agent Configuration (set when needed)
-AGENT_BACKEND=cloud                   # cloud or local
-OPENAI_API_KEY=<your-key>             # For cloud LLM (required)
-ALIBABA_API_KEY=<your-key>            # For Qwen VLM (optional, for vision skills)
-
-# Agent Settings
-USE_PLANNING_AGENT=true               # true=sequential multi-step, false=single-shot (default: true)
-AGENT_MODEL=gpt-4-turbo               # LLM model (gpt-4-turbo, gpt-3.5-turbo)
+# Agent Configuration (Phase 2 - Mission agent)
+AGENT_BACKEND=cloud                   # cloud or local (when needed)
+OPENAI_API_KEY=<your-key>             # For cloud LLM (Phase 2+)
 ```
 
 ---
 
 ## Current Status & Roadmap
 
-### ✅ Phase 0: Bootstrap (COMPLETE)
+### ✅ Phase 0: Infrastructure (90% Complete)
+**Target**: November 1, 2025
+
+**Completed**:
 - [x] Devcontainer with ROS2 Humble + DIMOS
 - [x] Workspace structure and build system
-- [x] Package scaffolding created
-- [x] Integration with go2_ros2_sdk
+- [x] Package scaffolding (3 packages created)
+- [x] Documentation pipeline (standard Markdown authoring)
+- [x] Cloud agent workflow (8x velocity on suitable tasks)
+- [x] Development environment with helpful aliases
+- [x] Submodule integration and protection
+- [x] Project planning documents aligned with reality
 
-### ✅ Phase 1: Mission Agent (COMPLETE)
-- [x] DIMOS integration with OpenAI/PlanningAgent
-- [x] Web UI with real-time camera feed
-- [x] Mission execution via natural language
-- [x] Performance metrics and timing instrumentation
-- [x] Multi-step sequential execution (PlanningAgent)
-- [x] Robot skills framework (via DIMOS)
+**Remaining (10%)**:
+- [ ] Testing infrastructure (pytest setup, mocks)
+- [ ] CI/CD for automated tests
+- [ ] Documentation of testing patterns
 
-### 🔄 Phase 2: Vision Skills (IN PROGRESS - `feature/vlm-integration`)
-- [x] Vision skills package with 4 skills
-  - [x] SnapshotSkill - Capture and save images
-  - [x] DescribeSceneSkill - VLM scene description
-  - [x] LocateObjectSkill - VLM object detection with bounding boxes
-  - [x] DetectObjectsSkill - VLM multi-object detection
-- [x] DIMOS Qwen VLM integration
-- [x] Comprehensive test suite (4/4 passing)
-- [ ] **NEXT**: Wire vision skills to mission_agent camera feed
-- [ ] **NEXT**: Register skills with DIMOS MyUnitreeSkills
-- [ ] End-to-end vision mission testing
+### 🔄 Phase 1: Skills Foundation (0% Complete, Next Priority)
+**Target**: November 15, 2025
 
-### 🔜 Phase 3: Performance Optimization
-- [ ] Collect baseline performance data
-- [ ] Analyze bottlenecks (cloud API vs DIMOS)
-- [ ] Optimize model selection (gpt-3.5-turbo for simple commands)
-- [ ] Add streaming responses for better UX
-- [ ] Target: <2s simple commands, <5s multi-step
+**Core Infrastructure** (Must complete first):
+- [ ] RobotInterface design and implementation
+- [ ] SkillRegistry with type safety and validation
+- [ ] Testing framework with mocks
+- [ ] First 3 skills as examples (stop, rotate, log)
 
-### 🔮 Phase 4: Advanced Features
-- [ ] Hybrid agent selection (OpenAI for simple, Planning for complex)
-- [ ] Local LLM option for offline operation
-- [ ] Advanced vision: depth estimation, 3D object tracking
-- [ ] Multi-robot coordination
-- [ ] Persistent memory and learning
+**Additional Skills** (After core proven):
+- [ ] 5-10 more navigation skills
+- [ ] 3 perception skills
+- [ ] 2-3 system skills
 
-See [Project TODO Backlog](docs/project_overview/todo.md) for detailed task tracking and [Development Log](docs/research/devlog.md) for development history.
+**Success Criteria**: "Can execute 'rotate 90 degrees, move forward 1 meter, stop' in simulation"
+
+### 🔜 Phase 2: Mission Agent (Target: December - January 2026)
+- [ ] DIMOS agent integration
+- [ ] Web UI dashboard
+- [ ] Camera feed integration
+- [ ] Natural language mission execution
+- [ ] 5+ example missions
+
+### � Phase 3: Hardware Validation (Target: February - March 2026)
+- [ ] Testing on actual Unitree Go2
+- [ ] Safety validation
+- [ ] Performance tuning
+- [ ] Documentation of lessons learned
+
+### 🌟 Phase 4: Advanced Features (Target: April - May 2026)
+- [ ] VLM integration for vision
+- [ ] Outdoor navigation
+- [ ] Multi-step autonomous missions
+- [ ] Advanced perception and planning
+
+**See**: [Detailed Roadmap](docs/project_overview/roadmap.md) for complete phase breakdown with deliverables, dependencies, and risks.
 
 ---
 
 ## Key Documentation
 
 ### Architecture & Planning
-- **[`docs/project_context.md`](docs/project_context.md)** - Complete project context and architecture
-- **[`.github/copilot-instructions.md`](.github/copilot-instructions.md)** - AI agent development guide
-- **[`docs/DIMOS_VISION_CAPABILITIES.md`](docs/DIMOS_VISION_CAPABILITIES.md)** - DIMOS vision system analysis
+- **[Architecture Hub](docs/architecture/architecture_hub.md)** - Complete system architecture
+- **[Project Overview](docs/project_overview/project_overview_hub.md)** - Vision, roadmap, status
+- **[Status Analysis (Oct 2025)](docs/project_overview/status_analysis_2025_10.md)** - Comprehensive reality check
+- **[Roadmap](docs/project_overview/roadmap.md)** - Phase-by-phase plan with deliverables
+- **[TODO List](docs/development/todo.md)** - Active task list organized by phase
 
-### Recent Improvements
-- **[`docs/MULTI_STEP_EXECUTION_ISSUE.md`](docs/MULTI_STEP_EXECUTION_ISSUE.md)** - PlanningAgent vs OpenAIAgent guide
-- **[`docs/AGENT_QUICK_REFERENCE.txt`](docs/AGENT_QUICK_REFERENCE.txt)** - Agent selection quick reference
-- **[`docs/WEB_UI_PERFORMANCE_METRICS.md`](docs/WEB_UI_PERFORMANCE_METRICS.md)** - Performance monitoring guide
-- **[`docs/PERFORMANCE_ANALYSIS_PLAN.md`](docs/PERFORMANCE_ANALYSIS_PLAN.md)** - Optimization strategy
-- **[`docs/TIMING_DISPLAY_FIX.md`](docs/TIMING_DISPLAY_FIX.md)** - Clean terminal output fix
+### Development Guides
+- **[Development Hub](docs/development/development_hub.md)** - All development processes
+- **[Cloud Agent Workflow](docs/development/cloud_agent_workflow.md)** - High-velocity collaboration (8x gains)
+- **[Cloud Agent Quick Start](docs/development/cloud_agent_quick_start.md)** - Quick reference card
+- **[Copilot Instructions](.github/copilot-instructions.md)** - AI agent development guide
+- **[Agent Guidelines](AGENTS.md)** - Repository-wide authoring rules
 
-### Package Documentation
-- **[`src/shadowhound_skills/README.md`](src/shadowhound_skills/README.md)** - Vision skills package guide
-- **[`src/shadowhound_mission_agent/`](src/shadowhound_mission_agent/)** - Mission agent implementation
+### Technical References
+- **[Software Hub](docs/software/software_hub.md)** - ROS2 packages and tools
+- **[Networking Hub](docs/networking/networking_hub.md)** - Network architecture
+- **[Simulation Hub](docs/simulation/simulation_hub.md)** - Gazebo and testing
 
 ---
 
 ## Recent Changes
 
-### October 7, 2025
-- ✅ **Multi-step execution fix**: Enabled PlanningAgent by default for proper sequential command execution
-- ✅ **Performance metrics**: Added real-time timing instrumentation to web UI
-- ✅ **Clean terminal output**: Combined timing info with responses to avoid clutter
-- ✅ **IndentationError fix**: Resolved web interface startup issue
-- ✅ **Comprehensive documentation**: Added 6 new docs (1,500+ lines) covering architecture, troubleshooting, and optimization strategies
+### October 13, 2025 - Project Management & Reality Check
+- ✅ **Comprehensive status analysis**: Documented actual Phase 0 state vs. aspirational claims
+- ✅ **Roadmap revision**: 5 specific phases with measurable deliverables and timelines
+- ✅ **TODO restructure**: Organized by phase with clear priorities and acceptance criteria
+- ✅ **README reality update**: Removed false completion claims, aligned with actual progress
 
-**Key Improvements**:
-- Commands like "rotate right and step back" now execute sequentially (not simultaneously)
-- Web UI shows agent duration, overhead, and total execution time with color-coded indicators
-- Performance averages calculated over last 50 commands for trend analysis
+**Key Insights**:
+- Project has excellent infrastructure (devcontainer, docs, workflow) but minimal implementation
+- Actually in Phase 0 (90% complete), not Phase 1 as previously claimed
+- Cloud agent workflow provides 8-10x velocity on well-defined tasks (Issue #20 proof)
+- Clear path forward: Complete Phase 0 testing, start Phase 1 skills implementation
 
-See [Development Log](docs/research/devlog.md) for complete development history.
+### October 12, 2025 - Documentation & Workflow
+- ✅ **Documentation pipeline reversal** (Issue #20): 8x velocity improvement
+- ✅ **Cloud agent workflow documentation**: 600+ lines comprehensive guide
+- ✅ **Issue templates**: Cloud agent, feature, and bug report templates
+- ✅ **Development hub updates**: Added Collaboration & Velocity section
+
+See [Status Analysis](docs/project_overview/status_analysis_2025_10.md) for complete assessment and lessons learned.
 
 ---
 
@@ -381,7 +331,7 @@ docker ps
 
 **Problem**: Setup script fails
 ```bash
-# Check setup.sh logs in terminal
+# Check logs in terminal
 # Common fix: permissions
 sudo chown -R ros:ros /workspaces/shadowhound
 ```
@@ -418,91 +368,43 @@ ros2 topic list
 ros2 daemon stop && ros2 daemon start
 ```
 
-### Mission Agent Issues
-
-**Problem**: Multi-step commands execute incorrectly
-```bash
-# Verify PlanningAgent is enabled (default since Oct 7, 2025)
-ros2 param get /shadowhound_mission_agent use_planning_agent
-# Should return: True
-
-# Check logs for "PlanningAgent initialized" (not "OpenAIAgent")
-```
-
-**Problem**: Performance seems slow
-```bash
-# This is EXPECTED with PlanningAgent (sequential execution)
-# Check web UI performance panel for timing breakdown
-# - Simple commands: ~1.5s (acceptable)
-# - Multi-step commands: ~3-5s (acceptable, ensures correctness)
-
-# See docs/PERFORMANCE_ANALYSIS_PLAN.md for optimization strategies
-```
-
-**Problem**: Web UI not showing performance metrics
-```bash
-# Rebuild mission_agent
-colcon build --packages-select shadowhound_mission_agent
-source install/setup.bash
-
-# Restart and check http://localhost:8080
-ros2 launch shadowhound_bringup shadowhound.launch.py
-```
-
-**Problem**: IndentationError on startup
-```bash
-# This was fixed in commit fa517f2
-# Pull latest changes:
-git pull origin feature/dimos-integration
-colcon build --packages-select shadowhound_mission_agent
-```
-
-### Vision Skills Issues
-
-**Problem**: Vision skills not working
-```bash
-# Check ALIBABA_API_KEY is set (required for Qwen VLM)
-echo $ALIBABA_API_KEY
-
-# Vision skills will gracefully skip if API key missing
-# See src/shadowhound_skills/README.md for setup
-```
+**See**: [Troubleshooting Hub](docs/troubleshooting/troubleshooting_hub.md) for comprehensive guides
 
 ---
 
 ## Development Tracking
 
-### 📖 DevLog & TODO System
+### 📖 Planning Documents
 
 We maintain organized tracking of development progress and tasks:
 
-- **[Development Log](docs/research/devlog.md)** - Chronological record of what was done and why
-  - Major features and fixes
-  - Technical decisions
-  - Key learnings
-  - Add entries after completing significant work
+- **[Roadmap](docs/project_overview/roadmap.md)** - Strategic milestones with specific deliverables
+  - 5 phases with timelines and success criteria
+  - Dependencies, risks, and velocity multipliers
+  - Currently in Phase 0 (90% complete)
 
-- **[Project TODO Backlog](docs/project_overview/todo.md)** - Organized task list with priorities
-  - 🔴 High / 🟡 Medium / 🟢 Low priority
+- **[TODO List](docs/development/todo.md)** - Active task list organized by phase
+  - 🔴 High / 🟡 Medium / 🟢 Low priority markers
   - Clear acceptance criteria
+  - Cloud agent candidate indicators
   - Recently completed section
 
-- **[`docs/DEVELOPMENT_TRACKING.md`](docs/DEVELOPMENT_TRACKING.md)** - Complete guide
-  - When and how to update
-  - Workflows and best practices
-  - Example entries
+- **[Status Analysis](docs/project_overview/status_analysis_2025_10.md)** - Comprehensive assessment
+  - Honest evaluation of actual vs. claimed state
+  - Lessons learned from cloud agent workflow success
+  - Revised priorities and path forward
 
 ### Quick Commands
 
 ```bash
-# Add a devlog entry (interactive)
-./scripts/add-devlog-entry.sh
+# View current priorities
+grep -A 3 "## 🔴 Phase 0" docs/development/todo.md
 
-# View priorities
-grep -A 3 "## 🔴 High Priority" docs/project_overview/todo.md
+# Check roadmap status
+head -n 50 docs/project_overview/roadmap.md
 
-# View recent entries
-head -n 50 docs/research/devlog.md
+# View recent completions
+grep -A 20 "## ✅ Recently Completed" docs/development/todo.md
 ```
 
 ---
@@ -546,10 +448,10 @@ pytest src/
 
 ## Acknowledgments
 
-- Built on [go2_ros2_sdk](https://github.com/unitreerobotics/go2_ros2_sdk)
-- Uses [ROS2 Humble](https://docs.ros.org/en/humble/)
-- Inspired by LLM-based robotics research
+- Built with [ROS2 Humble](https://docs.ros.org/en/humble/)
+- Designed to integrate with [go2_ros2_sdk](https://github.com/unitreerobotics/go2_ros2_sdk)
+- Uses [DIMOS framework](https://github.com/Dorteel/dimos-unitree) for LLM integration (Phase 2+)
 
 ---
 
-**Ready to start developing?** Check [`docs/project.md`](docs/project.md) for the complete architecture and next steps!
+**Ready to start developing?** Check [Development Hub](docs/development/development_hub.md) for complete guides and [Roadmap](docs/project_overview/roadmap.md) for next steps!
