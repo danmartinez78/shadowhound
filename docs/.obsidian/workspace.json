@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "e8e316bf25d49759",
+        "id": "aef8b99fff2f418a",
         "type": "tabs",
         "children": [
           {
-            "id": "1b11e2a82b2fc7f4",
+            "id": "bd69dbbec76250fa",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -163,8 +163,12 @@
       "github-sync:Sync with Remote": false
     }
   },
-  "active": "1b11e2a82b2fc7f4",
+  "active": "bd69dbbec76250fa",
   "lastOpenFiles": [
+    "architecture/README.md",
+    "README.md",
+    "webrtc_direct_test.md",
+    "index.md",
     "troubleshooting/startup_validation.md",
     "software/llm/thor_resources.md",
     "software/llm/thor_performance_notes.md",
@@ -187,10 +191,6 @@
     "integrations/quickstart_dimos.md",
     "project_overview/project_setup_status.md",
     "development/merge_checklist.md",
-    "history/conversion_complete.md",
-    "architecture/architecture_review_summary.md",
-    "project_overview/roadmap_detailed.md",
-    "roadmap.md",
     "hardware/Jetson-Thor-Setup-and-Demo-Guide.pdf",
     "_assets/router-topology.svg",
     "troubleshooting",

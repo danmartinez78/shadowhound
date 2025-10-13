@@ -1,7 +1,7 @@
 ---
-tags: [networking, testing]
+tags: [networking/testing, webrtc, guide]
 status: draft
-related: []
+related: [networking/dds_direct_test, software/web/webrtc_configuration, hardware/network_power_topologies]
 summary: >
   Run the WebRTC direct test workflow to validate connectivity between the workstation and the Unitree Go2.
 ---
@@ -46,6 +46,11 @@ Validate the WebRTC transport path before a full ShadowHound deployment by exerc
 ## Validation
 - [ ] `./scripts/test_webrtc_direct.sh` reports a healthy WebRTC connection without errors.
 - [ ] Mission command scripts trigger the expected sit/stand/wave behaviors (or mock confirmations in simulation).
+
+## See Also
+- [[networking/dds_direct_test|ROS 2 DDS Direct Test]] - Ethernet/DDS alternative without WebRTC
+- [[software/web/webrtc_configuration|WebRTC Configuration]] - Robot WiFi setup and connection details
+- [[hardware/network_power_topologies|Network Topologies]] - Router and IP configuration
 
 ## References
 - [[software/scripts|Script Catalog]]

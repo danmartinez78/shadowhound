@@ -1,7 +1,7 @@
 ---
-tags: [networking, dds, testing]
+tags: [networking/testing, dds, ros2, guide]
 status: draft
-related: []
+related: [networking/webrtc_direct_test, hardware/network_power_topologies, troubleshooting/startup_validation]
 summary: >
   Validate CycloneDDS (Ethernet) transport and basic ROS 2 communication without WebRTC.
 ---
@@ -63,6 +63,11 @@ ros2 topic echo /go2_states --once
 - [ ] Camera/IMU topics appear (if enabled)
 - [ ] No WebRTC-only topics required
 
+## See Also
+- [[networking/webrtc_direct_test|WebRTC Direct Test]] - WiFi alternative with camera streaming
+- [[hardware/network_power_topologies|Network Topologies]] - Router and LAN setup for DDS
+- [[troubleshooting/startup_validation|Startup Validation]] - Common launch issues
+
 ## References
 - [[networking/README|Networking Overview]]
-- [[troubleshooting/startup_validation|Startup Validation]]
+- [[software/scripts|Script Catalog]]
