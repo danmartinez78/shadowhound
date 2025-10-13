@@ -472,4 +472,4 @@ Your ShadowHound web interface makes all of this accessible through a beautiful 
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[integrations/integrations_hub|Knowledge Base Index]]

@@ -448,4 +448,4 @@ Before launching with WebRTC mode:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[software/software_hub|Knowledge Base Index]]

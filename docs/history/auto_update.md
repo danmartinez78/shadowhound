@@ -305,4 +305,4 @@ chmod +x .git/hooks/post-merge
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[history/history_hub|Knowledge Base Index]]

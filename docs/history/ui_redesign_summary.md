@@ -169,4 +169,4 @@ Just type in the command input at the bottom of the terminal and press Enter:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[history/history_hub|Knowledge Base Index]]

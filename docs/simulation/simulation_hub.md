@@ -29,7 +29,7 @@ Aggregate simulation workflows that support rapid iteration before deploying to 
 ## See Also
 - [[../software/isaac_sim_remote|Isaac Sim Remote]] — Remote streaming setup
 - [[software/software_hub|Software Documentation]] — ROS 2 packages and setup
-- [[index|Documentation Index]] — Complete documentation map
+- [[simulation/simulation_hub|Documentation Index]] — Complete documentation map
 
 ## References
 - [[software/software_hub|Software Index]]

@@ -76,6 +76,6 @@ Expected output snippet:
 - [[project_overview/roadmap|Project Roadmap]] - Milestone tracking
 
 ## References
-- [[index|Documentation Root]]
+- [[project_overview/project_overview_hub|Documentation Root]]
 - [[development/development_hub|Development Hub]]
 - [[architecture/architecture_hub|System Architecture]]

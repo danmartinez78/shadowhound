@@ -221,6 +221,6 @@ Test "rotate right and step back" again and watch it execute properly!
 - [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Agent diagnostics
 
 ## References
-- [[index|Documentation Root]]
+- [[project_overview/project_overview_hub|Documentation Root]]
 - [[software/software_hub|Software Hub]]
 - [[architecture/architecture_hub|System Architecture]]

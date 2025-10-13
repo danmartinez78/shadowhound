@@ -311,4 +311,4 @@ The scripts handle the `ROBOT_IP` translation for SDK compatibility, so you neve
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[software/software_hub|Knowledge Base Index]]

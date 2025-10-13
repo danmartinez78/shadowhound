@@ -635,4 +635,4 @@ Your RAG-enhanced agent will be much smarter about your specific robot and missi
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[integrations/integrations_hub|Knowledge Base Index]]

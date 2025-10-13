@@ -656,4 +656,4 @@ Once vision skills are stable and we have real-world usage data, we can evaluate
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[integrations/integrations_hub|Knowledge Base Index]]

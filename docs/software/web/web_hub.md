@@ -92,7 +92,7 @@ This hybrid approach provides:
 - [[../../networking/webrtc_direct_test|WebRTC Direct Test]] — Connectivity validation
 - [[networking/networking_hub|Networking Documentation]] — Network setup and DDS configuration
 - [[../../hardware/network_power_topologies|Hardware Topologies]] — Router and WiFi setup
-- [[index|Software Index]] — Complete software documentation
+- [[software/software_hub|Software Index]] — Complete software documentation
 
 ## References
 - [[../../index|Documentation Root]]

@@ -403,4 +403,4 @@ ros2 launch shadowhound_mission_agent bringup.launch.py
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[architecture/architecture_hub|Knowledge Base Index]]

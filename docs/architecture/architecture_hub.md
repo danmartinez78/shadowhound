@@ -77,7 +77,7 @@ User Input → Web UI/CLI → Mission Agent → DIMOS Agent → Skills → Robot
 - [[software/software_hub|Software Documentation]] — Software stack and packages
 - [[hardware/hardware_hub|Hardware Documentation]] — Hardware components and wiring
 - [[../integrations/dimos_integration|DIMOS Integration]] — Framework architecture
-- [[index|Documentation Index]] — Complete documentation map
+- [[architecture/architecture_hub|Documentation Index]] — Complete documentation map
 
 For questions about architecture decisions, see the main [README](../README.md) or create an issue.
 

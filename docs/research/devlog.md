@@ -193,4 +193,4 @@ Brief description of work completed.
 ## References
 - [[software/scripts|Script Catalog]]
 - [[project_overview/roadmap|Project Roadmap]]
-- [[index|Knowledge Base Index]]
+- [[research/research_hub|Knowledge Base Index]]

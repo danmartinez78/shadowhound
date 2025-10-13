@@ -116,4 +116,4 @@ The indentation error is resolved and all files compile successfully.
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[history/history_hub|Knowledge Base Index]]

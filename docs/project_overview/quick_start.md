@@ -56,7 +56,7 @@ Provide a condensed set of commands and expectations for operators who need to b
 - [[software/configuration/environment_variables|Environment Variables]] - Configuration reference
 
 ## References
-- [[index|Documentation Root]]
+- [[project_overview/project_overview_hub|Documentation Root]]
 - [[software/software_hub|Software Hub]]
 - [[development/development_hub|Development Hub]]
 ```

@@ -42,6 +42,6 @@ Summarize the strategic milestones that guide ShadowHound development and downst
 - [[software/software_hub|Software Hub]] - Package development
 
 ## References
-- [[index|Documentation Root]]
+- [[project_overview/project_overview_hub|Documentation Root]]
 - [[architecture/architecture_hub|System Architecture]]
 - [Repository README](../../README.md)

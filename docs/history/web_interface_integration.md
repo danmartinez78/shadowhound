@@ -504,4 +504,4 @@ Would you like me to implement the web interface integration?
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[history/history_hub|Knowledge Base Index]]

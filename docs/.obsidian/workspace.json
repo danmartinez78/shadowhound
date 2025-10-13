@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "history/webrtc_discovery.md",
+                "file": "index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "webrtc_discovery"
+              "title": "index"
             }
           }
         ]
@@ -169,6 +169,12 @@
   },
   "active": "bd69dbbec76250fa",
   "lastOpenFiles": [
+    "performance/sedSUrV5x",
+    "README.md",
+    "history/webrtc_discovery.md",
+    "history/sedVxSeoS",
+    "history/sedSmatPK",
+    "history/history_hub.md",
     "architecture/README.md",
     "research/README.md",
     "simulation/README.md",
@@ -199,13 +205,7 @@
     "history/push_summary.md",
     "history/roadmap_detailed.md",
     "history/project_context.md",
-    "issues/README.md",
-    "integrations/README.md",
-    "history/troubleshooting_mission_agent.md",
-    "history/timing_display_fix.md",
-    "hardware/Jetson-Thor-Setup-and-Demo-Guide.pdf",
     "_assets/router-topology.svg",
-    "troubleshooting",
     "_assets/system-architecture.png",
     "_assets/network-topology.png",
     "_assets/docs-ecosystem.png",

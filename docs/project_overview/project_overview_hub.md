@@ -87,11 +87,11 @@ See [[project_overview/roadmap|Project Roadmap]] for detailed milestone tracking
 - [ ] Status documents provide clear handoff information
 
 ## See Also
-- [[index|Documentation Root]] - Complete documentation index
+- [[project_overview/project_overview_hub|Documentation Root]] - Complete documentation index
 - [[hardware/hardware_hub|Hardware Platform]] - Unitree Go2 and sensor suite
 - [[networking/networking_hub|Networking]] - ROS2, DDS, and WebRTC configuration
 - [[simulation/simulation_hub|Simulation]] - Gazebo and hardware-in-the-loop testing
 
 ---
 
-**Navigation**: [[index|← Documentation Root]] | [[development/development_hub|Development Hub →]]
+**Navigation**: [[project_overview/project_overview_hub|← Documentation Root]] | [[development/development_hub|Development Hub →]]

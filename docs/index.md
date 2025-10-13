@@ -74,7 +74,7 @@ Central entry point for the ShadowHound documentation vault. This autonomous mob
 ### 📦 Supporting
 **[[integrations/integrations_hub|Integrations]]** - DIMOS, vision, AI integrations
 **[[issues/issues_hub|Known Issues]]** - Bug tracking and workarounds
-**[[history/]]** - Archived legacy documentation
+**[[history/history_hub|History & Archive]]** - Archived legacy documentation
 
 
 ## Validation

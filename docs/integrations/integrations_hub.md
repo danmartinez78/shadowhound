@@ -49,7 +49,7 @@ These documents preserve historical context but should be verified against curre
 - [[software/software_hub|Software Documentation]] — Software stack and agent system
 - [[architecture/architecture_hub|Architecture Documentation]] — System design
 - [[../development/dimos_development_policy|DIMOS Development Policy]] — DIMOS workflow
-- [[index|Documentation Index]] — Complete documentation map
+- [[integrations/integrations_hub|Documentation Index]] — Complete documentation map
 
 ## References
 - [[../index|Documentation Root]]

@@ -58,7 +58,7 @@ Track known issues, workarounds, and bug investigation notes for the ShadowHound
 - [[troubleshooting/troubleshooting_hub|Troubleshooting Documentation]] — Diagnostic procedures
 - [[../software/llm/llm_backend_validation|LLM Backend Validation]] — Backend health checks
 - [[development/development_hub|Development Documentation]] — Contribution guidelines
-- [[index|Documentation Index]] — Complete documentation map
+- [[issues/issues_hub|Documentation Index]] — Complete documentation map
 
 ## References
 - [[../index|Documentation Root]]

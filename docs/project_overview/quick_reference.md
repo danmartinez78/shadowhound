@@ -129,6 +129,6 @@ rm -rf build install log
 - [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Diagnostic workflows
 
 ## References
-- [[index|Documentation Root]]
+- [[project_overview/project_overview_hub|Documentation Root]]
 - [[software/software_hub|Software Hub]]
 - [[development/development_hub|Development Hub]]

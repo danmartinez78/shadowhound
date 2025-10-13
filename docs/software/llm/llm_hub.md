@@ -127,7 +127,7 @@ ros2 launch shadowhound_bringup mission_agent.launch.py
 - [[../configuration/environment_variables|Environment Variables]] — LLM backend configuration
 - [[../agent/dimos_agent_architecture|Agent Architecture]] — How agent uses LLMs
 - [[../../hardware/network_power_topologies|Hardware Topologies]] — Thor power/network setup
-- [[index|Software Index]] — Complete software documentation
+- [[software/software_hub|Software Index]] — Complete software documentation
 
 ## References
 - [[../../index|Documentation Root]]

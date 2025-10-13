@@ -75,6 +75,6 @@ Track high, medium, and low priority tasks for the ShadowHound program while cap
 - [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Known issues and diagnostics
 
 ## References
-- [[index|Documentation Root]]
+- [[project_overview/project_overview_hub|Documentation Root]]
 - [[software/software_hub|Software Hub]]
 - [[architecture/architecture_hub|System Architecture]]

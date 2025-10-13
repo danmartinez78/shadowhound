@@ -488,4 +488,4 @@ Then test your command again and watch it execute **correctly** in sequence! ðŸš
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[issues/issues_hub|Knowledge Base Index]]

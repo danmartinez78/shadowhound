@@ -121,6 +121,6 @@ Optional simplification:
 - [ ] Converted Markdown renders without Obsidian-only syntax.
 
 ## References
-- [[index|Vault Index]]
+- [[networking/networking_hub|Vault Index]]
 - [[software/software_hub|Software Index]]
 - Network monitoring dashboards (link when available)

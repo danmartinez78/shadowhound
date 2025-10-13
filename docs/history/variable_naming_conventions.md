@@ -163,4 +163,4 @@ Preserve historical context while signaling that this page requires verification
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[history/history_hub|Knowledge Base Index]]

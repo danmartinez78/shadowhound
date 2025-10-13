@@ -395,4 +395,4 @@ Before proceeding to VLM integration, achieve:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[history/history_hub|Knowledge Base Index]]

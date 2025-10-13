@@ -186,4 +186,4 @@ _This architectural shift positions ShadowHound to deliver mission-critical capa
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[architecture/architecture_hub|Knowledge Base Index]]

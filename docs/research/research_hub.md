@@ -29,7 +29,7 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 ## See Also
 - [[research/devlog|Development Log]] — Research and development notes
 - [[software/llm/llm_hub|LLM Documentation]] — Local LLM research and benchmarks
-- [[index|Documentation Index]] — Complete documentation map
+- [[research/research_hub|Documentation Index]] — Complete documentation map
 
 ## References
 - [[../index|Documentation Root]]

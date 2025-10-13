@@ -2,7 +2,7 @@
 tags: [project_overview/architecture, design, review]
 status: active
 r## References
-- [[index|Documentation Root]]
+- [[project_overview/project_overview_hub|Documentation Root]]
 - [[architecture/architecture_hub|System Architecture]]
 - [[software/agent/dimos_agent_architecture|Agent Architecture]]ed: [architecture/README, project_overview/roadmap, software/README]
 summary: >
@@ -76,6 +76,6 @@ shadowhound_bringup/      # Launch files, configs, orchestration
 - [[development/development_hub|Development Hub]] - Contributor workflows
 
 ## References
-- [[index|Documentation Root]]
+- [[project_overview/project_overview_hub|Documentation Root]]
 - [[architecture/architecture_hub|Architecture Documentation]]
 - [[software/agent/dimos_agent_architecture|Agent Architecture]]
