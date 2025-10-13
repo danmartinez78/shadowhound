@@ -12,7 +12,7 @@ summary: >
 Track auto-generated documentation for each ShadowHound ROS 2 package.
 
 ## Prerequisites
-- Completed ROS 2 workspace setup per [[../ros2_setup|ROS 2 Workstation Setup]].
+- Completed ROS 2 workspace setup per [ROS 2 Workstation Setup](../ros2_setup.md).
 - Python 3.10+ available for running the autodoc tooling.
 - `docstring_parser` library installed for API documentation extraction.
 
@@ -26,11 +26,11 @@ Track auto-generated documentation for each ShadowHound ROS 2 package.
 
 ### ShadowHound Packages
 
-- [[shadowhound_mission_agent|shadowhound_mission_agent]] - Mission agent for autonomous control
-  - [[shadowhound_mission_agent_api|API Reference]]
-- [[shadowhound_skills|shadowhound_skills]] - Mission-specific skills
-  - [[shadowhound_skills_api|API Reference]]
-- [[shadowhound_bringup|shadowhound_bringup]] - Launch files and configurations
+- [shadowhound_mission_agent](shadowhound_mission_agent.md) - Mission agent for autonomous control
+  - [API Reference](shadowhound_mission_agent_api.md)
+- [shadowhound_skills](shadowhound_skills.md) - Mission-specific skills
+  - [API Reference](shadowhound_skills_api.md)
+- [shadowhound_bringup](shadowhound_bringup.md) - Launch files and configurations
 
 ## Validation
 - [ ] Script runs without errors and updates package docs.
@@ -40,5 +40,5 @@ Track auto-generated documentation for each ShadowHound ROS 2 package.
 
 ## References
 - `tools/ros2_autodoc.py`
-- [[software/software_hub|Software Index]]
+- [Software Index](../../software/software_hub.md)
 - [Repository README](../../../README.md)

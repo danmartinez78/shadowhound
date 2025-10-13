@@ -12,10 +12,10 @@ summary: >
 Validate the WebRTC transport path before a full ShadowHound deployment by exercising the SDK driver and mission command scripts end to end.
 
 ## Prerequisites
-- [[software/ros2_setup|ROS 2 Workstation Setup]] completed inside the development container.
+- [ROS 2 Workstation Setup](../software/ros2_setup.md) completed inside the development container.
 - Robot reachable over Wi-Fi with its IP address available (or plan to rerun setup to update it).
 - Access to the `scripts/` utilities included with the repository checkout.
- - Environment configured using your standard `.env` (see [[software/environment_configuration|Environment Configuration Guide]]). No bespoke per-test `.env` files are required.
+ - Environment configured using your standard `.env` (see [Environment Configuration Guide](../software/environment_configuration.md)). No bespoke per-test `.env` files are required.
 
 ## Steps
 1. Launch the Unitree SDK driver in WebRTC mode to establish the media and control channels.
@@ -48,11 +48,11 @@ Validate the WebRTC transport path before a full ShadowHound deployment by exerc
 - [ ] Mission command scripts trigger the expected sit/stand/wave behaviors (or mock confirmations in simulation).
 
 ## See Also
-- [[networking/dds_direct_test|ROS 2 DDS Direct Test]] - Ethernet/DDS alternative without WebRTC
-- [[software/web/webrtc_configuration|WebRTC Configuration]] - Robot WiFi setup and connection details
-- [[hardware/network_power_topologies|Network Topologies]] - Router and IP configuration
+- [ROS 2 DDS Direct Test](../networking/dds_direct_test.md) - Ethernet/DDS alternative without WebRTC
+- [WebRTC Configuration](../software/web/webrtc_configuration.md) - Robot WiFi setup and connection details
+- [Network Topologies](../hardware/network_power_topologies.md) - Router and IP configuration
 
 ## References
-- [[software/scripts|Script Catalog]]
-- [[networking/networking_hub|Networking Overview]]
-- [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]]
+- [Script Catalog](../software/scripts.md)
+- [Networking Overview](../networking/networking_hub.md)
+- [Troubleshooting Hub](../troubleshooting/troubleshooting_hub.md)

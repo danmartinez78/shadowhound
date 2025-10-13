@@ -265,9 +265,9 @@ git diff --submodule  # Should not show submodule changes
 
 ## References
 
-- [[development/submodule_policy|Git Submodule Policy]]
-- [[development/dimos_development_policy|DIMOS Development Policy]]
-- [[../copilot-instructions|Copilot Instructions (Dev Env Setup)]]
+- [Git Submodule Policy](../development/submodule_policy.md)
+- [DIMOS Development Policy](../development/dimos_development_policy.md)
+- [Copilot Instructions (Dev Env Setup)](../copilot-instructions.md)
 - Git Submodules: https://git-scm.com/book/en/v2/Git-Tools-Submodules
 
 ## Change Log

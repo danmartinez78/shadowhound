@@ -34,7 +34,7 @@ Launch files and configurations for ShadowHound autonomous robot system
 
 ## Prerequisites
 
-- ROS 2 workspace configured per [[../ros2_setup|ROS 2 Workstation Setup]].
+- ROS 2 workspace configured per [ROS 2 Workstation Setup](../ros2_setup.md).
 
 ## Steps
 
@@ -51,4 +51,4 @@ Launch files and configurations for ShadowHound autonomous robot system
 ## References
 
 - Source directory: `src/shadowhound_bringup`
-- [[_index|Return to Autodoc Index]]
+- [Return to Autodoc Index](_index.md)

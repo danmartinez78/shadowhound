@@ -13,7 +13,8 @@ These rules apply to the entire repository.
     One-line summary.
   ---
   ```
-- Prefer Obsidian-style wikilinks (`[[like/this]]`) during authoring. The CI pipeline converts them to standard Markdown for GitHub Pages and the Wiki.
+- Use **standard Markdown links**: `[text](path/to/file.md)` for all internal documentation links. These work directly on GitHub.com, GitHub Pages, and in the Wiki.
+- For **Obsidian graph view**: Run `./scripts/generate_obsidian_vault.sh` to create a local vault at `docs_obs/` (gitignored). Open `docs_obs/` in Obsidian to view the documentation graph with wikilinks.
 - Structure every page with the following sections in this order: **Purpose**, **Prerequisites**, **Steps**, **Validation**, **References**.
 - Store all media, diagrams, and exported canvases under `docs/_assets/` and reference them with relative paths (for example `![](_assets/diagram.png)`).
 - Canvas files (`*.canvas`) should be committed alongside a PNG snapshot exported to `_assets/` for public readers.
@@ -27,21 +28,17 @@ These rules apply to the entire repository.
   - Generates `{package_name}_api.md` files with full API documentation
   - Requires `docstring_parser` library: `pip install docstring_parser`
 - Do **not** push directly to the GitHub Wiki; CI handles synchronization through `tools/wiki_sync.py`.
-- Use `tools/link_convert.py` for any manual exports to ensure wikilinks and embeds become GitHub-compatible links.
-- **Before committing documentation changes**, run `python tools/validate_wikilinks.py --docs docs` to check for broken internal links. The CI pipeline will automatically validate wikilinks on all pull requests that modify `docs/**`.
+- To view documentation in Obsidian with graph view, run `./scripts/generate_obsidian_vault.sh` to generate a local vault.
 
 ## Documentation Link Validation
-- All wikilinks in `/docs` are automatically validated by CI to prevent broken internal navigation.
-- The validator supports all wikilink formats:
-  - Same-directory: `[[file]]` → references file in same directory
-  - Absolute from docs root: `[[path/to/file]]` → references file relative to docs/
-  - Relative paths: `[[../file]]` or `[[../../file]]` → explicit relative navigation
-  - With labels: `[[target|Display Text]]`
-  - With anchors: `[[target#section]]` or `[[target#section|Label]]`
-- Fix broken links before pushing to ensure CI passes. Run locally: `python tools/validate_wikilinks.py --docs docs`
+- All internal links in `/docs` use standard Markdown format: `[text](path/to/file.md)`
+- Links are validated by MkDocs during the CI build process
+- Broken links will cause the build to fail when using `mkdocs build --strict`
+- Test locally: `mkdocs build --strict` to catch broken links before pushing
 
 ## Git Hygiene
-- The entire `.obsidian/` directory is ignored. Users cloning the repository can set up their own Obsidian workspace. Obsidian-friendly features (front-matter with `aliases`, wikilinks) are unobtrusive and remain in the documentation files themselves.
+- The `docs/.obsidian/` directory is committed and contains Obsidian configuration for the generated vault.
+- The generated vault `docs_obs/` is gitignored. Regenerate it locally with `./scripts/generate_obsidian_vault.sh` after pulling changes.
 - Use the commit message prefix `docs(<area>): ...` for documentation-related changes.
 - Do not commit build artifacts from MkDocs (`site/`) or wiki sync outputs (`wiki/`).
 

@@ -259,9 +259,9 @@ If prompt engineering isn't effective enough, implement client wrapper (Option 1
 
 ## Related Issues
 
-- [[vllm_tool_calling_configuration]] - vLLM setup for tool calling
-- [[vllm_mistral_tokenizer_hang]] - Mistral tokenizer fix
-- [[software/agent/dimos_agent_architecture|DIMOS Agent Architecture]] - Why OpenAIAgent is required
+- [vllm_tool_calling_configuration](vllm_tool_calling_configuration.md) - vLLM setup for tool calling
+- [vllm_mistral_tokenizer_hang](vllm_mistral_tokenizer_hang.md) - Mistral tokenizer fix
+- [DIMOS Agent Architecture](../software/agent/dimos_agent_architecture.md) - Why OpenAIAgent is required
 
 ## References
 

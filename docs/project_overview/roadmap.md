@@ -35,13 +35,13 @@ Summarize the strategic milestones that guide ShadowHound development and downst
 - [ ] Status indicators are current.
 
 ## See Also
-- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
-- [[project_overview/todo|Project TODO]] - Detailed task backlog
-- [[project_overview/architecture_review_summary|Architecture Review]] - Design decisions
-- [[development/development_hub|Development Hub]] - Implementation workflows
-- [[software/software_hub|Software Hub]] - Package development
+- [Project Overview Hub](../project_overview/project_overview_hub.md) - Planning and status tracking
+- [Project TODO](../project_overview/todo.md) - Detailed task backlog
+- [Architecture Review](../project_overview/architecture_review_summary.md) - Design decisions
+- [Development Hub](../development/development_hub.md) - Implementation workflows
+- [Software Hub](../software/software_hub.md) - Package development
 
 ## References
-- [[project_overview/project_overview_hub|Documentation Root]]
-- [[architecture/architecture_hub|System Architecture]]
+- [Documentation Root](../project_overview/project_overview_hub.md)
+- [System Architecture](../architecture/architecture_hub.md)
 - [Repository README](../../README.md)

@@ -22,5 +22,5 @@ Describe the intent of the page and who should read it.
 - [ ] Document measurable checks that confirm success.
 
 ## References
-- [[index|Return to index]]
+- [Return to index](index.md)
 - Include relative links to related docs or external resources.

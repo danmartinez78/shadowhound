@@ -29,7 +29,7 @@ Compatibility package for dimos-unitree integration
 
 ## Prerequisites
 
-- ROS 2 workspace configured per [[../ros2_setup|ROS 2 Workstation Setup]].
+- ROS 2 workspace configured per [ROS 2 Workstation Setup](../ros2_setup.md).
 
 ## Steps
 
@@ -46,4 +46,4 @@ Compatibility package for dimos-unitree integration
 ## References
 
 - Source directory: `src/dimos-unitree/dimos/robot/unitree/external/go2_ros2_sdk/unitree_go`
-- [[_index|Return to Autodoc Index]]
+- [Return to Autodoc Index](_index.md)

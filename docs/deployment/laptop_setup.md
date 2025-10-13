@@ -333,4 +333,4 @@ Issues? Check:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[deployment/deployment_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../deployment/deployment_hub.md)

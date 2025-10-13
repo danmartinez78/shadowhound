@@ -454,4 +454,4 @@ export ALIBABA_API_KEY="sk-..."  # Get from Alibaba Cloud
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[integrations/integrations_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../integrations/integrations_hub.md)

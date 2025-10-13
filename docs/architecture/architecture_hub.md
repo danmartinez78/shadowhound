@@ -38,13 +38,13 @@ ShadowHound is an autonomous mobile robot system combining ROS2 navigation with 
 ## Documents
 
 ### System Architecture
-- [[architecture/architecture_clarification|Architecture Clarification]] - Core architectural decisions
-- [[architecture/arch_update_summary|Architecture Update Summary]] - Recent architectural changes
-- [[architecture/architecture_review_summary|Architecture Review Summary]] - October 3 design decisions
-- [[architecture/deployment_topology|Deployment Topology]] - System deployment and network topology
+- [Architecture Clarification](../architecture/architecture_clarification.md) - Core architectural decisions
+- [Architecture Update Summary](../architecture/arch_update_summary.md) - Recent architectural changes
+- [Architecture Review Summary](../architecture/architecture_review_summary.md) - October 3 design decisions
+- [Deployment Topology](../architecture/deployment_topology.md) - System deployment and network topology
 
 ### Component Architecture
-- [[architecture/camera_architecture|Camera Architecture]] - Vision system design and data flow
+- [Camera Architecture](../architecture/camera_architecture.md) - Vision system design and data flow
 
 ## Key Concepts
 
@@ -63,9 +63,9 @@ User Input → Web UI/CLI → Mission Agent → DIMOS Agent → Skills → Robot
 
 ## Related Documentation
 
-- [[integrations/dimos_integration|DIMOS Integration]] - Framework integration details
-- [[software/agent/dimos_agent_architecture|Agent Architecture]] - Agent system design
-- [[software/software_hub|Software Overview]] - Software stack
+- [DIMOS Integration](../integrations/dimos_integration.md) - Framework integration details
+- [Agent Architecture](../software/agent/dimos_agent_architecture.md) - Agent system design
+- [Software Overview](../software/software_hub.md) - Software stack
 
 ## Design Principles
 
@@ -75,10 +75,10 @@ User Input → Web UI/CLI → Mission Agent → DIMOS Agent → Skills → Robot
 4. **Type-First**: Type hints, validated inputs, structured results
 
 ## See Also
-- [[software/software_hub|Software Documentation]] — Software stack and packages
-- [[hardware/hardware_hub|Hardware Documentation]] — Hardware components and wiring
-- [[../integrations/dimos_integration|DIMOS Integration]] — Framework architecture
-- [[architecture/architecture_hub|Documentation Index]] — Complete documentation map
+- [Software Documentation](../software/software_hub.md) — Software stack and packages
+- [Hardware Documentation](../hardware/hardware_hub.md) — Hardware components and wiring
+- [DIMOS Integration](../integrations/dimos_integration.md) — Framework architecture
+- [Documentation Index](../architecture/architecture_hub.md) — Complete documentation map
 
 For questions about architecture decisions, see the main [README](../index.md) or create an issue.
 

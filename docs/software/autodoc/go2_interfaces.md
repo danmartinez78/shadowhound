@@ -29,7 +29,7 @@ ROS2 message interfaces for Go2 robot communication (merged unitree_go and go2_i
 
 ## Prerequisites
 
-- ROS 2 workspace configured per [[../ros2_setup|ROS 2 Workstation Setup]].
+- ROS 2 workspace configured per [ROS 2 Workstation Setup](../ros2_setup.md).
 
 ## Steps
 
@@ -46,4 +46,4 @@ ROS2 message interfaces for Go2 robot communication (merged unitree_go and go2_i
 ## References
 
 - Source directory: `src/dimos-unitree/dimos/robot/unitree/external/go2_ros2_sdk/go2_interfaces`
-- [[_index|Return to Autodoc Index]]
+- [Return to Autodoc Index](_index.md)

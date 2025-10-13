@@ -14,8 +14,8 @@ Provide a condensed set of commands and expectations for operators who need to b
 
 ## Prerequisites
 - Repository cloned and opened inside the development container environment.
-- Environment configured according to [[software/environment_configuration|Environment Configuration Guide]].
-- Familiarity with the helper scripts documented in [[software/scripts|Script Catalog]].
+- Environment configured according to [Environment Configuration Guide](../software/environment_configuration.md).
+- Familiarity with the helper scripts documented in [Script Catalog](../software/scripts.md).
 
 ## Steps
 1. Run the dependency check to confirm the workstation is ready.
@@ -49,14 +49,14 @@ Provide a condensed set of commands and expectations for operators who need to b
 - [x] Scripts verified to exist and match documented usage patterns.
 
 ## See Also
-- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and operations
-- [[project_overview/quick_reference|Quick Reference]] - Command cheat sheet
-- [[troubleshooting/startup_validation|Startup Validation]] - Health checks
-- [[troubleshooting/quick_start_robot_test|Robot Testing]] - Hardware validation
-- [[software/configuration/environment_variables|Environment Variables]] - Configuration reference
+- [Project Overview Hub](../project_overview/project_overview_hub.md) - Planning and operations
+- [Quick Reference](../project_overview/quick_reference.md) - Command cheat sheet
+- [Startup Validation](../troubleshooting/startup_validation.md) - Health checks
+- [Robot Testing](../troubleshooting/quick_start_robot_test.md) - Hardware validation
+- [Environment Variables](../software/configuration/environment_variables.md) - Configuration reference
 
 ## References
-- [[project_overview/project_overview_hub|Documentation Root]]
-- [[software/software_hub|Software Hub]]
-- [[development/development_hub|Development Hub]]
+- [Documentation Root](../project_overview/project_overview_hub.md)
+- [Software Hub](../software/software_hub.md)
+- [Development Hub](../development/development_hub.md)
 ```

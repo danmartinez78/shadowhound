@@ -353,5 +353,5 @@ Stop web server.
 
 ## References
 
-- [[shadowhound_mission_agent|Package Overview]]
-- [[_index|Return to Autodoc Index]]
+- [Package Overview](shadowhound_mission_agent.md)
+- [Return to Autodoc Index](_index.md)

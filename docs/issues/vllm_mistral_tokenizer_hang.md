@@ -258,7 +258,7 @@ docker logs -f vllm-server 2>&1 | grep -E "(INFO|WARNING|ERROR)"
 - vLLM Tool Calling Docs: https://docs.vllm.ai/en/stable/features/tool_calling.html
 - Mistral Model Card: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3
 - vLLM Attention Backends: https://docs.vllm.ai/en/stable/design/attention.html
-- Issue: [[vllm_tool_calling_not_executing]]
+- Issue: [vllm_tool_calling_not_executing](vllm_tool_calling_not_executing.md)
 
 ## Status
 

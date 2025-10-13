@@ -158,5 +158,5 @@ List all available skills.
 
 ## References
 
-- [[shadowhound_skills|Package Overview]]
-- [[_index|Return to Autodoc Index]]
+- [Package Overview](shadowhound_skills.md)
+- [Return to Autodoc Index](_index.md)

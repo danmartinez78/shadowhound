@@ -13,8 +13,8 @@ Maintain a single source of truth for major development events, including fixes,
 
 ## Prerequisites
 - Repository cloned with commit history accessible for cross-referencing.
-- Familiarity with the contribution workflow outlined in [[project_overview/roadmap|Project Roadmap]].
-- Awareness of logging etiquette documented in [[software/scripts|Script Catalog]] via `scripts/add-devlog-entry.sh`.
+- Familiarity with the contribution workflow outlined in [Project Roadmap](../project_overview/roadmap.md).
+- Awareness of logging etiquette documented in [Script Catalog](../software/scripts.md) via `scripts/add-devlog-entry.sh`.
 
 ## Steps
 1. Use `scripts/add-devlog-entry.sh` to capture new updates with consistent formatting.
@@ -154,7 +154,7 @@ Successfully completed major refactor separating ROS concerns from business logi
 - **ROS reserved attributes**: Node.executor is used internally by rclpy
 
 ### Next Steps
-See [[project_overview/todo|Project TODO Backlog]] for upcoming work.
+See [Project TODO Backlog](../project_overview/todo.md) for upcoming work.
 
 ---
 
@@ -191,6 +191,6 @@ Brief description of work completed.
 - [ ] Historical entries reviewed periodically for archival or follow-up actions.
 
 ## References
-- [[software/scripts|Script Catalog]]
-- [[project_overview/roadmap|Project Roadmap]]
-- [[research/research_hub|Knowledge Base Index]]
+- [Script Catalog](../software/scripts.md)
+- [Project Roadmap](../project_overview/roadmap.md)
+- [Knowledge Base Index](../research/research_hub.md)

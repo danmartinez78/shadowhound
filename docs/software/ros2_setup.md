@@ -56,5 +56,5 @@ Document the baseline workstation setup for developing and testing ShadowHound R
 
 ## References
 - ROS 2 Humble Installation Guide
-- [[software/software_hub|Software Index]]
-- [[../index|Vault Index]]
+- [Software Index](../software/software_hub.md)
+- [Vault Index](../index.md)

@@ -278,13 +278,13 @@ If you MUST make a quick fix in the submodule:
 - [ ] Regular syncs with upstream DIMOS main/dev
 
 ## See Also
-- [[development/dimos_development_policy|DIMOS Development Policy]] — Principled workflow to prevent divergence
-- [[development/submodule_policy|Git Submodule Policy]] — Never edit submodules directly
-- [[development/development_hub|Development Index]] — Complete development documentation
+- [DIMOS Development Policy](../development/dimos_development_policy.md) — Principled workflow to prevent divergence
+- [Git Submodule Policy](../development/submodule_policy.md) — Never edit submodules directly
+- [Development Index](../development/development_hub.md) — Complete development documentation
 
 ## References
-- [[development/submodule_policy|Submodule Policy]] — Never edit submodules policy
-- [[development/dimos_development_policy|DIMOS Development Policy]] — Established workflow
+- [Submodule Policy](../development/submodule_policy.md) — Never edit submodules policy
+- [DIMOS Development Policy](../development/dimos_development_policy.md) — Established workflow
 - DIMOS Fork: https://github.com/danmartinez78/dimos-unitree
 - ShadowHound: https://github.com/danmartinez78/shadowhound
 - Upstream DIMOS: https://github.com/dimensionalOS/dimos-unitree

@@ -206,12 +206,12 @@ All documentation should be in `docs/` with snake_case names:
 **Remember:** Submodules are separate repos. Treat them as read-only dependencies!
 
 ## See Also
-- [[development/dimos_development_policy|DIMOS Development Policy]] — Principled workflow for DIMOS changes
-- [[development/dimos_branch_consolidation|DIMOS Branch Consolidation]] — Fixing divergent branches
-- [[development/development_hub|Development Index]] — Complete development documentation
+- [DIMOS Development Policy](../development/dimos_development_policy.md) — Principled workflow for DIMOS changes
+- [DIMOS Branch Consolidation](../development/dimos_branch_consolidation.md) — Fixing divergent branches
+- [Development Index](../development/development_hub.md) — Complete development documentation
 
 ## References
-- [[../index|Documentation Root]]
+- [Documentation Root](../index.md)
 - Git Submodules Documentation: https://git-scm.com/book/en/v2/Git-Tools-Submodules
 - DIMOS Fork: https://github.com/danmartinez78/dimos-unitree
 

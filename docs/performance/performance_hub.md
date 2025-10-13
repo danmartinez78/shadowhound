@@ -17,7 +17,7 @@ This directory tracks performance characteristics, bottleneck analysis, and opti
 
 ## Documents
 
-- [[performance/performance_analysis_plan|Performance Analysis Plan]] - Comprehensive performance testing strategy
+- [Performance Analysis Plan](../performance/performance_analysis_plan.md) - Comprehensive performance testing strategy
 
 ## Key Metrics
 
@@ -25,7 +25,7 @@ This directory tracks performance characteristics, bottleneck analysis, and opti
 - Response latency (vLLM vs Ollama vs cloud)
 - Token throughput
 - Memory usage
-- See [[software/llm/llm_hub|LLM Integration Hub]]
+- See [LLM Integration Hub](../software/llm/llm_hub.md)
 
 ### Robot Control Performance
 - Command execution latency
@@ -45,9 +45,9 @@ This directory tracks performance characteristics, bottleneck analysis, and opti
 - [ ] Optimization efforts measured and validated
 
 ## See Also
-- [[software/llm/llm_hub|LLM Integration]] - Backend performance tuning
-- [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Performance debugging
-- [[software/software_hub|Software Hub]] - Software stack optimization
+- [LLM Integration](../software/llm/llm_hub.md) - Backend performance tuning
+- [Troubleshooting](../troubleshooting/troubleshooting_hub.md) - Performance debugging
+- [Software Hub](../software/software_hub.md) - Software stack optimization
 
 ## References
-- [[index|Documentation Root]]
+- [Documentation Root](index.md)

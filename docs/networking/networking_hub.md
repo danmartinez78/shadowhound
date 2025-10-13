@@ -12,18 +12,18 @@ summary: >
 ## Purpose
 Catalog networking guides for remote teleoperation, telemetry streaming, and secure infrastructure.
 
-> Source of truth: This section aligns with [[hardware/network_power_topologies|Network & Power Topologies]] for wiring and IP planning. Treat that page as canonical for router mode, addressing, and variants.
+> Source of truth: This section aligns with [Network & Power Topologies](../hardware/network_power_topologies.md) for wiring and IP planning. Treat that page as canonical for router mode, addressing, and variants.
 
 ## Which path should I use?
 - Use WebRTC when:
   - You're on Wi‑Fi and want low‑latency camera streaming with NAT traversal.
   - You're testing full media + control paths via the Unitree SDK bridge.
-  - Follow: [[networking/webrtc_direct_test|WebRTC Direct Test]]
+  - Follow: [WebRTC Direct Test](../networking/webrtc_direct_test.md)
 
 - Use DDS (CycloneDDS) when:
   - You're on Ethernet or a LAN that allows multicast (UDP 7400‑7500).
   - You only need ROS 2 topics/services (no WebRTC media path).
-  - Follow: [[networking/dds_direct_test|ROS 2 DDS Direct Test]]
+  - Follow: [ROS 2 DDS Direct Test](../networking/dds_direct_test.md)
 
 ## Quick checklist
 - [ ] Confirm IP connectivity to the robot/bridge for your chosen path
@@ -49,7 +49,7 @@ Roles on the LAN:
 
 ## WiFi Router topology (recommended)
 
-A dedicated WiFi router between the robot and Thor provides a predictable, low‑latency LAN for both WebRTC and DDS. This mirrors the GL.iNet GL‑SFT1200 setup described in [[hardware/network_power_topologies|Network & Power Topologies]].
+A dedicated WiFi router between the robot and Thor provides a predictable, low‑latency LAN for both WebRTC and DDS. This mirrors the GL.iNet GL‑SFT1200 setup described in [Network & Power Topologies](../hardware/network_power_topologies.md).
 
 ### Topology
 - Laptop ⇄ Router (WiFi)
@@ -68,7 +68,7 @@ Benefits:
 - Thor secondary IP (same NIC): 192.168.123.10/24 to reach GO2 factory subnet
 
 Optional simplification:
-- Re‑address GO2 to 192.168.10.2/24 so everything lives on 192.168.10.0/24 (see the optional note in [[hardware/network_power_topologies|Network & Power Topologies]]).
+- Re‑address GO2 to 192.168.10.2/24 so everything lives on 192.168.10.0/24 (see the optional note in [Network & Power Topologies](../hardware/network_power_topologies.md)).
 
 ### Router configuration checklist
 - Mode: Access Point / Bridge (WAN+LAN bridged)
@@ -90,8 +90,8 @@ Optional simplification:
 ### Validation
 1. Confirm DHCP leases show the three devices with expected IPs
 2. From laptop, ping Thor and the robot IP
-3. WebRTC path: run [[networking/webrtc_direct_test|WebRTC Direct Test]]
-4. DDS path: run [[networking/dds_direct_test|ROS 2 DDS Direct Test]]
+3. WebRTC path: run [WebRTC Direct Test](../networking/webrtc_direct_test.md)
+4. DDS path: run [ROS 2 DDS Direct Test](../networking/dds_direct_test.md)
 
 ### Common pitfalls
 - Client isolation enabled on APs blocks peer‑to‑peer traffic — disable it
@@ -99,8 +99,8 @@ Optional simplification:
 - Mixed 2.4/5 GHz with power‑saving can introduce latency spikes — pin to 5 GHz if possible
 
 ### Related
-- [[software/web/webrtc_configuration|WebRTC Configuration]] — Robot WiFi onboarding flow
-- [[hardware/network_power_topologies|Network & Power Topologies]] — Comprehensive router + power distribution configurations for all hardware variants
+- [WebRTC Configuration](../software/web/webrtc_configuration.md) — Robot WiFi onboarding flow
+- [Network & Power Topologies](../hardware/network_power_topologies.md) — Comprehensive router + power distribution configurations for all hardware variants
 
 ## Prerequisites
 - Access to network configuration credentials.
@@ -112,8 +112,8 @@ Optional simplification:
 3. Verify all IP ranges and credentials are stored in secure vaults, not inline Markdown.
 
 ### Featured Guides
-- [[networking/webrtc_direct_test|WebRTC Direct Test]]
-- [[networking/dds_direct_test|ROS 2 DDS Direct Test]]
+- [WebRTC Direct Test](../networking/webrtc_direct_test.md)
+- [ROS 2 DDS Direct Test](../networking/dds_direct_test.md)
 
 ## Validation
 - [ ] Each environment has a validated connection checklist.
@@ -121,6 +121,6 @@ Optional simplification:
 - [ ] Converted Markdown renders without Obsidian-only syntax.
 
 ## References
-- [[networking/networking_hub|Vault Index]]
-- [[software/software_hub|Software Index]]
+- [Vault Index](../networking/networking_hub.md)
+- [Software Index](../software/software_hub.md)
 - Network monitoring dashboards (link when available)
