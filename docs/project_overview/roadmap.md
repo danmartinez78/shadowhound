@@ -140,6 +140,7 @@ Define strategic milestones with specific, measurable deliverables that guide Sh
   - OpenAI agent for single-shot commands
   - PlanningAgent for multi-step missions
   - Configuration switching (cloud vs local LLM)
+  - **Dependency**: [DIMOS Documentation Issue #7](https://github.com/danmartinez78/dimos-unitree/issues/7) - Integration guides
   
 - [ ] **Mission Executor Node**
   - ROS2 node wrapping mission executor

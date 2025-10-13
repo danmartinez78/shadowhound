@@ -29,6 +29,13 @@ Central index for all DIMOS framework documentation. Points to upstream sources 
 **Main Repository**: https://github.com/dimensionalOS/dimos-unitree  
 **Fork (Ours)**: https://github.com/danmartinez78/dimos-unitree
 
+#### Documentation Enhancement
+
+🚧 **[Issue #7: Comprehensive Documentation Request](https://github.com/danmartinez78/dimos-unitree/issues/7)**
+- Tracks request for detailed integration guides
+- Covers: Agent→robot pipeline, perception, memory/RAG, skills extension
+- ShadowHound contributing learnings upstream
+
 #### Essential Reads
 
 1. **[DIMOS README](../../src/dimos-unitree/README.md)** - Start here!
