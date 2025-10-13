@@ -14,7 +14,7 @@ Serve as the primary entry point for understanding ShadowHound's current status,
 ## Prerequisites
 - Familiarity with the ShadowHound mission: autonomous mobile robot combining ROS2 navigation with LLM/VLM-driven task planning
 - Access to the repository workspace and development environment
-- Understanding of the [[architecture/README|System Architecture]] and [[hardware/README|Hardware Platform]]
+- Understanding of the [[architecture/architecture_hub|System Architecture]] and [[hardware/hardware_hub|Hardware Platform]]
 
 ## Quick Navigation
 
@@ -65,17 +65,17 @@ See [[project_overview/roadmap|Project Roadmap]] for detailed milestone tracking
 ## Related Documentation
 
 ### Development
-- **[[development/README|Development Hub]]** - Contributor guides, policies, and workflows
+- **[[development/development_hub|Development Hub]]** - Contributor guides, policies, and workflows
 - **[[development/submodule_policy|Submodule Policy]]** - Git submodule management guidelines
 - **[[development/dimos_development_policy|DIMOS Development]]** - Framework development practices
 
 ### Implementation
-- **[[software/README|Software Hub]]** - ROS2 packages, LLM integration, web interface
-- **[[software/llm/README|LLM Integration]]** - vLLM/Ollama setup and model selection
-- **[[architecture/README|Architecture]]** - System design and component interactions
+- **[[software/software_hub|Software Hub]]** - ROS2 packages, LLM integration, web interface
+- **[[software/llm/llm_hub|LLM Integration]]** - vLLM/Ollama setup and model selection
+- **[[architecture/architecture_hub|Architecture]]** - System design and component interactions
 
 ### Operations
-- **[[troubleshooting/README|Troubleshooting]]** - Diagnostic workflows and issue resolution
+- **[[troubleshooting/troubleshooting_hub|Troubleshooting]]** - Diagnostic workflows and issue resolution
 - **[[troubleshooting/startup_validation|Startup Validation]]** - Backend and node health checks
 - **[[troubleshooting/quick_start_robot_test|Robot Testing]]** - Hardware-in-the-loop validation
 
@@ -88,10 +88,10 @@ See [[project_overview/roadmap|Project Roadmap]] for detailed milestone tracking
 
 ## See Also
 - [[index|Documentation Root]] - Complete documentation index
-- [[hardware/README|Hardware Platform]] - Unitree Go2 and sensor suite
-- [[networking/README|Networking]] - ROS2, DDS, and WebRTC configuration
-- [[simulation/README|Simulation]] - Gazebo and hardware-in-the-loop testing
+- [[hardware/hardware_hub|Hardware Platform]] - Unitree Go2 and sensor suite
+- [[networking/networking_hub|Networking]] - ROS2, DDS, and WebRTC configuration
+- [[simulation/simulation_hub|Simulation]] - Gazebo and hardware-in-the-loop testing
 
 ---
 
-**Navigation**: [[index|← Documentation Root]] | [[development/README|Development Hub →]]
+**Navigation**: [[index|← Documentation Root]] | [[development/development_hub|Development Hub →]]

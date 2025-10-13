@@ -15,7 +15,7 @@ Documentation for the ShadowHound web interface and WebRTC-based robot communica
 ## Prerequisites
 - Understanding of WebRTC protocols
 - Familiarity with GO2 robot communication modes
-- Network configuration knowledge (see [[../../networking/README|Networking Docs]])
+- Network configuration knowledge (see [[networking/networking_hub|Networking Docs]])
 
 ## Key Documents
 
@@ -90,9 +90,9 @@ This hybrid approach provides:
 
 ## See Also
 - [[../../networking/webrtc_direct_test|WebRTC Direct Test]] — Connectivity validation
-- [[../../networking/README|Networking Documentation]] — Network setup and DDS configuration
+- [[networking/networking_hub|Networking Documentation]] — Network setup and DDS configuration
 - [[../../hardware/network_power_topologies|Hardware Topologies]] — Router and WiFi setup
-- [[../README|Software Index]] — Complete software documentation
+- [[index|Software Index]] — Complete software documentation
 
 ## References
 - [[../../index|Documentation Root]]

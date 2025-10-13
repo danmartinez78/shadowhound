@@ -54,10 +54,10 @@ User Input → Web UI/CLI → Mission Agent → DIMOS Agent → Skills → Robot
 4. **Type-First**: Type hints, validated inputs, structured results
 
 ## See Also
-- [[../software/README|Software Documentation]] — Software stack and packages
-- [[../hardware/README|Hardware Documentation]] — Hardware components and wiring
+- [[software/software_hub|Software Documentation]] — Software stack and packages
+- [[hardware/hardware_hub|Hardware Documentation]] — Hardware components and wiring
 - [[../integrations/dimos_integration|DIMOS Integration]] — Framework architecture
-- [[../README|Documentation Index]] — Complete documentation map
+- [[index|Documentation Index]] — Complete documentation map
 
 For questions about architecture decisions, see the main [README](../README.md) or create an issue.
 

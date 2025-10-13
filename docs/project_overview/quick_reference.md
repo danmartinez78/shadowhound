@@ -122,13 +122,13 @@ rm -rf build install log
 - [x] Updated to reflect DIMOS integration and current package structure.
 
 ## See Also
-- [[project_overview/README|Project Overview Hub]] - Planning and operations
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and operations
 - [[project_overview/agent_quick_reference|Agent Quick Reference]] - Agent-specific commands
 - [[project_overview/quick_start|Quick Start]] - Rapid launch checklist
 - [[software/configuration/environment_variables|Environment Variables]] - Complete reference
-- [[troubleshooting/README|Troubleshooting]] - Diagnostic workflows
+- [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Diagnostic workflows
 
 ## References
 - [[index|Documentation Root]]
-- [[software/README|Software Hub]]
-- [[development/README|Development Hub]]
+- [[software/software_hub|Software Hub]]
+- [[development/development_hub|Development Hub]]

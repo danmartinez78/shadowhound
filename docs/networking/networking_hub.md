@@ -122,5 +122,5 @@ Optional simplification:
 
 ## References
 - [[index|Vault Index]]
-- [[software/README|Software Index]]
+- [[software/software_hub|Software Index]]
 - Network monitoring dashboards (link when available)

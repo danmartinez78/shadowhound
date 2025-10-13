@@ -516,7 +516,7 @@ git rebase origin/dev
 - [[development/submodule_policy|Git Submodule Policy]] — Why we use standard git submodules
 - [[development/dimos_branch_consolidation|DIMOS Branch Consolidation]] — Fixing current divergence
 - [[integrations/quickstart_dimos|DIMOS Quick Start]] — Getting started with DIMOS
-- [[development/README|Development Index]] — Complete development documentation
+- [[development/development_hub|Development Index]] — Complete development documentation
 
 ## References
 - **Submodule Policy:** [[development/submodule_policy|Git Submodule Policy]] - Why we don't edit submodules

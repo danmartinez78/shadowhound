@@ -57,10 +57,10 @@ Organize the ShadowHound software stack documentation, including ROS 2 packages,
 - [ ] All subdirectories have README index pages
 
 ## See Also
-- [[../development/README|Development Documentation]] — Git workflows and policies
-- [[../hardware/README|Hardware Documentation]] — Robot and sensor setup
-- [[../networking/README|Networking Documentation]] — DDS and WebRTC connectivity
-- [[../troubleshooting/README|Troubleshooting Index]] — Diagnostic procedures
+- [[development/development_hub|Development Documentation]] — Git workflows and policies
+- [[hardware/hardware_hub|Hardware Documentation]] — Robot and sensor setup
+- [[networking/networking_hub|Networking Documentation]] — DDS and WebRTC connectivity
+- [[troubleshooting/troubleshooting_hub|Troubleshooting Index]] — Diagnostic procedures
 
 ## References
 - [[../index|Documentation Root]]

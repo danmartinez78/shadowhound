@@ -26,7 +26,7 @@ Document integration points between ShadowHound and external frameworks, service
 - Vision integration docs (legacy, see [[../hardware/omni_vision_exploration|Omni Vision]] for current work)
 
 ### AI & LLM
-- See [[../software/llm/README|LLM Documentation]] for current local LLM integration
+- See [[software/llm/llm_hub|LLM Documentation]] for current local LLM integration
 
 ## Legacy Documents
 
@@ -46,10 +46,10 @@ These documents preserve historical context but should be verified against curre
 - [ ] Integration points align with current architecture
 
 ## See Also
-- [[../software/README|Software Documentation]] — Software stack and agent system
-- [[../architecture/README|Architecture Documentation]] — System design
+- [[software/software_hub|Software Documentation]] — Software stack and agent system
+- [[architecture/architecture_hub|Architecture Documentation]] — System design
 - [[../development/dimos_development_policy|DIMOS Development Policy]] — DIMOS workflow
-- [[../README|Documentation Index]] — Complete documentation map
+- [[index|Documentation Index]] — Complete documentation map
 
 ## References
 - [[../index|Documentation Root]]

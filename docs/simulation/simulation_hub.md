@@ -28,11 +28,11 @@ Aggregate simulation workflows that support rapid iteration before deploying to 
 
 ## See Also
 - [[../software/isaac_sim_remote|Isaac Sim Remote]] — Remote streaming setup
-- [[../software/README|Software Documentation]] — ROS 2 packages and setup
-- [[../README|Documentation Index]] — Complete documentation map
+- [[software/software_hub|Software Documentation]] — ROS 2 packages and setup
+- [[index|Documentation Index]] — Complete documentation map
 
 ## References
-- [[../software/README|Software Index]]
+- [[software/software_hub|Software Index]]
 - NVIDIA Isaac Sim: https://docs.omniverse.nvidia.com/isaacsim/
 - Gazebo Documentation: https://gazebosim.org/
 - [[../index|Vault Index]]

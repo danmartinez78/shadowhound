@@ -68,13 +68,13 @@ Track high, medium, and low priority tasks for the ShadowHound program while cap
 - [ ] Links to supporting docs verified and updated when files move.
 
 ## See Also
-- [[project_overview/README|Project Overview Hub]] - Planning and status tracking
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
 - [[project_overview/roadmap|Project Roadmap]] - High-level milestones
-- [[development/README|Development Hub]] - Contributor workflows
-- [[software/llm/README|LLM Integration]] - Backend development tasks
-- [[troubleshooting/README|Troubleshooting]] - Known issues and diagnostics
+- [[development/development_hub|Development Hub]] - Contributor workflows
+- [[software/llm/llm_hub|LLM Integration]] - Backend development tasks
+- [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Known issues and diagnostics
 
 ## References
 - [[index|Documentation Root]]
-- [[software/README|Software Hub]]
-- [[architecture/README|System Architecture]]
+- [[software/software_hub|Software Hub]]
+- [[architecture/architecture_hub|System Architecture]]

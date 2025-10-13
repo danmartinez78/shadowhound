@@ -280,7 +280,7 @@ If you MUST make a quick fix in the submodule:
 ## See Also
 - [[development/dimos_development_policy|DIMOS Development Policy]] — Principled workflow to prevent divergence
 - [[development/submodule_policy|Git Submodule Policy]] — Never edit submodules directly
-- [[development/README|Development Index]] — Complete development documentation
+- [[development/development_hub|Development Index]] — Complete development documentation
 
 ## References
 - [[development/submodule_policy|Submodule Policy]] — Never edit submodules policy

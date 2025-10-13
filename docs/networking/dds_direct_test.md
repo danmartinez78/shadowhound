@@ -69,5 +69,5 @@ ros2 topic echo /go2_states --once
 - [[troubleshooting/startup_validation|Startup Validation]] - Common launch issues
 
 ## References
-- [[networking/README|Networking Overview]]
+- [[networking/networking_hub|Networking Overview]]
 - [[software/scripts|Script Catalog]]

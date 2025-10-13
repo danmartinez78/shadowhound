@@ -15,7 +15,7 @@ Central hub for ShadowHound development policies, workflows, and contributor gui
 ## Prerequisites
 - Familiarity with git and ROS 2 development workflows
 - Access to the ShadowHound repository
-- Understanding of the project architecture (see [[../architecture/README|Architecture Index]])
+- Understanding of the project architecture (see [[architecture/architecture_hub|Architecture Index]])
 
 ## Active Policies & Workflows
 
@@ -96,9 +96,9 @@ Central hub for ShadowHound development policies, workflows, and contributor gui
 - [ ] Legacy content archived appropriately
 
 ## See Also
-- [[architecture/README|Architecture Documentation]] — System design and components
-- [[software/README|Software Documentation]] — ROS 2 packages and configuration
-- [[project_overview/README|Project Overview]] — Planning, status, and quick-start guides
+- [[architecture/architecture_hub|Architecture Documentation]] — System design and components
+- [[software/software_hub|Software Documentation]] — ROS 2 packages and configuration
+- [[project_overview/project_overview_hub|Project Overview]] — Planning, status, and quick-start guides
 - [[index|Documentation Root]] — Complete documentation map
 
 ## References

@@ -28,11 +28,11 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 
 ## See Also
 - [[research/devlog|Development Log]] — Research and development notes
-- [[../software/llm/README|LLM Documentation]] — Local LLM research and benchmarks
-- [[../README|Documentation Index]] — Complete documentation map
+- [[software/llm/llm_hub|LLM Documentation]] — Local LLM research and benchmarks
+- [[index|Documentation Index]] — Complete documentation map
 
 ## References
 - [[../index|Documentation Root]]
 - Research assets and datasets (link when available)
-- [[../software/README|Software Index]]
-- [[../simulation/README|Simulation Index]]
+- [[software/software_hub|Software Index]]
+- [[simulation/simulation_hub|Simulation Index]]

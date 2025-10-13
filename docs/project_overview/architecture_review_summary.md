@@ -3,7 +3,7 @@ tags: [project_overview/architecture, design, review]
 status: active
 r## References
 - [[index|Documentation Root]]
-- [[architecture/README|System Architecture]]
+- [[architecture/architecture_hub|System Architecture]]
 - [[software/agent/dimos_agent_architecture|Agent Architecture]]ed: [architecture/README, project_overview/roadmap, software/README]
 summary: >
   Key outcomes from the October 3, 2025 architecture review that redefined ShadowHound's layered design and delivery plan.
@@ -22,7 +22,7 @@ Capture the decisions and follow-up actions from the October 3, 2025 architectur
 
 ## Prerequisites
 - Familiarity with the baseline architecture documented in [[project_overview/roadmap|Project Roadmap]].
-- Access to the detailed reference in [[architecture/README|Architecture Documentation]].
+- Access to the detailed reference in [[architecture/architecture_hub|Architecture Documentation]].
 - Awareness of current package status across the repository.
 
 ## Steps
@@ -69,13 +69,13 @@ shadowhound_bringup/      # Launch files, configs, orchestration
 - [ ] Phase checklists updated to reflect current progress after this review.
 
 ## See Also
-- [[project_overview/README|Project Overview Hub]] - Planning and status tracking
-- [[architecture/README|Architecture Hub]] - Detailed system design
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
+- [[architecture/architecture_hub|Architecture Hub]] - Detailed system design
 - [[project_overview/roadmap|Project Roadmap]] - Implementation phases
-- [[software/README|Software Hub]] - Package development
-- [[development/README|Development Hub]] - Contributor workflows
+- [[software/software_hub|Software Hub]] - Package development
+- [[development/development_hub|Development Hub]] - Contributor workflows
 
 ## References
 - [[index|Documentation Root]]
-- [[architecture/README|Architecture Documentation]]
+- [[architecture/architecture_hub|Architecture Documentation]]
 - [[software/agent/dimos_agent_architecture|Agent Architecture]]

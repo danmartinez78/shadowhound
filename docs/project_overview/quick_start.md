@@ -49,7 +49,7 @@ Provide a condensed set of commands and expectations for operators who need to b
 - [x] Scripts verified to exist and match documented usage patterns.
 
 ## See Also
-- [[project_overview/README|Project Overview Hub]] - Planning and operations
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and operations
 - [[project_overview/quick_reference|Quick Reference]] - Command cheat sheet
 - [[troubleshooting/startup_validation|Startup Validation]] - Health checks
 - [[troubleshooting/quick_start_robot_test|Robot Testing]] - Hardware validation
@@ -57,6 +57,6 @@ Provide a condensed set of commands and expectations for operators who need to b
 
 ## References
 - [[index|Documentation Root]]
-- [[software/README|Software Hub]]
-- [[development/README|Development Hub]]
+- [[software/software_hub|Software Hub]]
+- [[development/development_hub|Development Hub]]
 ```

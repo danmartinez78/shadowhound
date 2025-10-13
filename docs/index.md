@@ -38,29 +38,63 @@ ShadowHound is an autonomous mobile robot system combining ROS2 navigation with 
 - Install the Obsidian Markdown Links core plugin (enabled by default).
 
 ## Steps
-1. Review the top-level categories below and follow links for detailed guides.
+1. Review the directory hubs below to explore specific topic areas.
 2. Use the reusable template at [`_templates/page`](./_templates/page.md) when authoring new content.
 3. Store shared media inside [`_assets/`](./_assets/) and reference them with relative paths.
 
-### Category Quick Links
-- [[project_overview/roadmap|Project Overview & Roadmap]]
-- [[project_overview/quick_start|Quick Start Launch Checklist]]
-- [[project_overview/quick_reference|Quick Reference]]
-- [[project_overview/todo|Project TODO Backlog]]
-- [[project_overview/setup_status|Project Setup Status (Oct 4 2025)]]
-- [[project_overview/architecture_review_summary|Architecture Review Summary]]
-- [[hardware/README|Hardware Stack]]
-- [[software/README|Software Stack]]
-- [[software/scripts|Script Catalog]]
-- [[software/environment_configuration|Environment Configuration Guide]]
-- [[software/start_script_reference|Start Script Reference]]
-- [[software/dimos_quick_start|DIMOS Integration Quick Start]]
-- [[networking/README|Networking]]
-- [[networking/webrtc_direct_test|WebRTC Direct Test]]
-- [[simulation/README|Simulation]]
-- [[troubleshooting/README|Troubleshooting]]
-- [[research/README|Research Log]]
-- [[research/devlog|Development Log]]
+## Documentation Directories
+
+### 📋 Planning & Status
+**[[project_overview/project_overview_hub|Project Overview]]**
+- Strategic planning, roadmaps, and status tracking
+- Quick start guides and operational references
+- 8 active documents: roadmap, todo, setup status, architecture review
+
+### 🏗️ System Design
+**[[architecture/architecture_hub|Architecture]]**
+- System architecture and design decisions
+- Component interactions and data flows
+- Layered design: Application → Agent → Skills → Robot
+
+### 🔧 Development
+**[[development/development_hub|Development]]**
+- Contributor guides and development policies
+- Git workflows and submodule management
+- 11 documents including cleanup tracking and checklists
+
+### 💻 Software
+**[[software/software_hub|Software]]**
+- ROS2 packages and implementations
+- LLM integration (vLLM, Ollama) - 26+ docs
+- Web interface and WebRTC communication
+- Configuration and environment setup
+
+### 🤖 Hardware
+**[[hardware/hardware_hub|Hardware]]**
+- Unitree Go2 platform and sensor suite
+- Network and power topologies
+- Hardware specifications and integration guides
+
+### 🌐 Networking
+**[[networking/networking_hub|Networking]]**
+- ROS2 DDS and WebRTC configuration
+- Direct connectivity testing
+- Multi-machine deployment topologies
+
+### 🐛 Troubleshooting
+**[[troubleshooting/troubleshooting_hub|Troubleshooting]]**
+- Diagnostic workflows and health checks
+- Known issues and resolutions
+- Startup validation and robot testing
+
+### 🔬 Research & Testing
+**[[simulation/simulation_hub|Simulation]]** - Gazebo and hardware-in-the-loop
+**[[research/research_hub|Research]]** - Experiments and development logs
+
+### 📦 Supporting
+**[[integrations/integrations_hub|Integrations]]** - DIMOS, vision, AI integrations
+**[[issues/issues_hub|Known Issues]]** - Bug tracking and workarounds
+**[[history/]]** - Archived legacy documentation
 
 
 ## Validation

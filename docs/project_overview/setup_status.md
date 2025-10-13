@@ -69,13 +69,13 @@ Expected output snippet:
 - [ ] Follow-up tasks captured in the roadmap or package-specific backlogs.
 
 ## See Also
-- [[project_overview/README|Project Overview Hub]] - Planning and status tracking
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
 - [[project_overview/architecture_review_summary|Architecture Review]] - Design decisions
 - [[development/submodule_policy|Submodule Policy]] - Git submodule guidelines
-- [[software/README|Software Hub]] - Package development
+- [[software/software_hub|Software Hub]] - Package development
 - [[project_overview/roadmap|Project Roadmap]] - Milestone tracking
 
 ## References
 - [[index|Documentation Root]]
-- [[development/README|Development Hub]]
-- [[architecture/README|System Architecture]]
+- [[development/development_hub|Development Hub]]
+- [[architecture/architecture_hub|System Architecture]]

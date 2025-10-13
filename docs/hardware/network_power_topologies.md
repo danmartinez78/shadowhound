@@ -355,13 +355,13 @@ ros2 topic list | grep /pal/
 - [ ] Documentation reviewed for accuracy against current hardware
 
 ## See Also
-- [[networking/README|Networking Documentation]] — DDS configuration and connectivity testing
+- [[networking/networking_hub|Networking Documentation]] — DDS configuration and connectivity testing
 - [[hardware/omni_vision_exploration|360° Vision Options]] — Comprehensive sensor comparison
 - [[hardware/omni_vision_sensor_setup|Omni Vision Setup]] — Additional sensor integration notes
 - [[networking/dds_direct_test|DDS Direct Test]] — ROS 2 DDS connectivity validation
 
 ## References
-- [[hardware/README|Hardware Stack Overview]]
+- [[hardware/hardware_hub|Hardware Stack Overview]]
 - [[../index|Documentation Index]]
 - RealSense D555 Datasheet v1.1 (Power over Ethernet 802.3at, Gigabit, DDS support)
 - DreamVu PAL SDK: https://dreamvu.com/support/

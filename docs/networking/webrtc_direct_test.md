@@ -54,5 +54,5 @@ Validate the WebRTC transport path before a full ShadowHound deployment by exerc
 
 ## References
 - [[software/scripts|Script Catalog]]
-- [[networking/README|Networking Overview]]
-- [[troubleshooting/README|Troubleshooting Hub]]
+- [[networking/networking_hub|Networking Overview]]
+- [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]]

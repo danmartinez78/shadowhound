@@ -70,9 +70,9 @@ ros2 daemon start
 ## Diagnostic Workflow
 
 ### 1. Identify Subsystem
-- **Hardware**: Power, sensors, networking → See [[../hardware/README|Hardware Docs]]
-- **Software**: ROS 2, agent, skills → See [[../software/README|Software Docs]]
-- **Networking**: DDS, WebRTC, WiFi → See [[../networking/README|Networking Docs]]
+- **Hardware**: Power, sensors, networking → See [[hardware/hardware_hub|Hardware Docs]]
+- **Software**: ROS 2, agent, skills → See [[software/software_hub|Software Docs]]
+- **Networking**: DDS, WebRTC, WiFi → See [[networking/networking_hub|Networking Docs]]
 
 ### 2. Gather Information
 ```bash
@@ -122,7 +122,7 @@ jtop
 
 ## References
 - [[../index|Documentation Root]]
-- [[../hardware/README|Hardware Index]]
-- [[../software/README|Software Index]]
-- [[../networking/README|Networking Index]]
+- [[hardware/hardware_hub|Hardware Index]]
+- [[software/software_hub|Software Index]]
+- [[networking/networking_hub|Networking Index]]
 - ROS 2 Troubleshooting: https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools.html

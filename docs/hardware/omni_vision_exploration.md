@@ -173,10 +173,10 @@ Accurate calibration ensures:
 ## See Also
 - [[hardware/omni_vision_sensor_setup|Omni Vision Setup]] — Configuration guide for deployment
 - [[hardware/network_power_topologies|Network & Power Topologies]] — DreamVu PAL USB wiring (Configuration #3)
-- [[hardware/README|Hardware Index]] — Complete hardware documentation
+- [[hardware/hardware_hub|Hardware Index]] — Complete hardware documentation
 
 ## References
-- [[hardware/README|Hardware Stack Overview]]
+- [[hardware/hardware_hub|Hardware Stack Overview]]
 - [[../index|Documentation Index]]
 - DreamVu PAL SDK: https://dreamvu.com/support/
 - DreamVu ROS 2 Driver: https://github.com/DreamVu-ROS/pal_camera_ros2

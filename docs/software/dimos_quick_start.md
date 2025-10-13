@@ -95,4 +95,4 @@ class PatrolArea(AbstractRobotSkill):
 ## References
 - [[scripts|Script Catalog]]
 - [[environment_configuration|Environment Configuration Guide]]
-- [[hardware/README|Hardware Stack Overview]]
+- [[hardware/hardware_hub|Hardware Stack Overview]]

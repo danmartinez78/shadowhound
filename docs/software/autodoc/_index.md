@@ -40,5 +40,5 @@ Track auto-generated documentation for each ShadowHound ROS 2 package.
 
 ## References
 - `tools/ros2_autodoc.py`
-- [[../README|Software Index]]
+- [[index|Software Index]]
 - [Repository README](../../../README.md)

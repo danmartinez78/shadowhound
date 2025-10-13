@@ -35,8 +35,8 @@ Provide a curated map of hardware documentation for the ShadowHound platform.
 ## See Also
 - [[hardware/network_power_topologies|Network & Power Topologies]] — Comprehensive wiring configurations
 - [[hardware/omni_vision_exploration|360° Vision Options]] — Sensor research and comparison
-- [[networking/README|Networking Documentation]] — DDS and WebRTC connectivity
-- [[troubleshooting/README|Troubleshooting Index]] — Hardware diagnostic procedures
+- [[networking/networking_hub|Networking Documentation]] — DDS and WebRTC connectivity
+- [[troubleshooting/troubleshooting_hub|Troubleshooting Index]] — Hardware diagnostic procedures
 
 ## References
 - [[../index|Vault Index]]

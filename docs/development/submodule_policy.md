@@ -208,7 +208,7 @@ All documentation should be in `docs/` with snake_case names:
 ## See Also
 - [[development/dimos_development_policy|DIMOS Development Policy]] — Principled workflow for DIMOS changes
 - [[development/dimos_branch_consolidation|DIMOS Branch Consolidation]] — Fixing divergent branches
-- [[development/README|Development Index]] — Complete development documentation
+- [[development/development_hub|Development Index]] — Complete development documentation
 
 ## References
 - [[../index|Documentation Root]]

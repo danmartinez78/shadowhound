@@ -214,13 +214,13 @@ Test "rotate right and step back" again and watch it execute properly!
 ═══════════════════════════════════════════════════════════════════════════
 
 ## See Also
-- [[project_overview/README|Project Overview Hub]] - Planning and operations
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and operations
 - [[project_overview/quick_reference|Quick Reference]] - General command cheat sheet
 - [[software/agent/dimos_agent_architecture|Agent Architecture]] - Detailed design docs
-- [[software/llm/README|LLM Integration]] - Backend configuration
-- [[troubleshooting/README|Troubleshooting]] - Agent diagnostics
+- [[software/llm/llm_hub|LLM Integration]] - Backend configuration
+- [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Agent diagnostics
 
 ## References
 - [[index|Documentation Root]]
-- [[software/README|Software Hub]]
-- [[architecture/README|System Architecture]]
+- [[software/software_hub|Software Hub]]
+- [[architecture/architecture_hub|System Architecture]]

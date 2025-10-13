@@ -121,10 +121,10 @@ Below is a curated list of **parabolic and 360° cameras** suitable for indoor r
 ## See Also
 - [[hardware/omni_vision_exploration|360° Vision Options]] — Comprehensive sensor comparison and research
 - [[hardware/network_power_topologies|Network & Power Topologies]] — Wiring configurations for sensors
-- [[hardware/README|Hardware Index]] — Complete hardware documentation
+- [[hardware/hardware_hub|Hardware Index]] — Complete hardware documentation
 
 ## References
-- [[hardware/README|Hardware Stack Overview]]
+- [[hardware/hardware_hub|Hardware Stack Overview]]
 - [[../index|Documentation Index]]
 - DreamVu PAL family documentation
 - RealSense D555 specifications

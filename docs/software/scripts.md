@@ -19,7 +19,7 @@ Centralize knowledge about the helper scripts that automate ShadowHound setup, l
 ## Steps
 1. Select a launch profile (`./start.sh`, quick-start wrappers, or targeted helpers) that matches your scenario.
 2. Run the prerequisite health checks (dependency, network, or configuration) before commanding the robot.
-3. Capture observations in [[troubleshooting/README|Troubleshooting Hub]] and update this catalog when scripts change.
+3. Capture observations in [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]] and update this catalog when scripts change.
 
 ### Launch & Orchestration
 - **`./start.sh [options]`** — Primary orchestrator that validates prerequisites, configures `.env`, builds the workspace, and starts the ROS and web stack. Key flags:
@@ -65,4 +65,4 @@ Centralize knowledge about the helper scripts that automate ShadowHound setup, l
 ## References
 - [[environment_configuration|Environment Configuration Guide]]
 - [[networking/webrtc_direct_test|WebRTC Direct Test]]
-- [[troubleshooting/README|Troubleshooting Hub]]
+- [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]]
