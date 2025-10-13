@@ -165,6 +165,8 @@
   },
   "active": "bd69dbbec76250fa",
   "lastOpenFiles": [
+    "issues/README.md",
+    "integrations/README.md",
     "history/troubleshooting_mission_agent.md",
     "history/timing_display_fix.md",
     "history/topic_diagnostics.md",
@@ -189,8 +191,6 @@
     "history/ui_cleanup.md",
     "development/README.md",
     "history/variable_naming_conventions.md",
-    "history/qol_improvements.md",
-    "history/indentation_fix.md",
     "hardware/Jetson-Thor-Setup-and-Demo-Guide.pdf",
     "_assets/router-topology.svg",
     "troubleshooting",

@@ -1,7 +1,7 @@
 ---
 tags: [research, index]
-status: draft
-related: []
+status: active
+related: [research/devlog, software/llm/README]
 aliases: [Research Index]
 summary: >
   Research index tracking experiments, benchmarks, and external findings relevant to ShadowHound.
@@ -22,11 +22,17 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 3. Link promising findings back to roadmap items or implementation tickets.
 
 ## Validation
-- [ ] Each research note includes reproducibility metadata.
-- [ ] External papers are cited with accessible links.
-- [ ] Conversion pipeline preserves equations and figures.
+- [ ] Each research note includes reproducibility metadata
+- [ ] External papers are cited with accessible links
+- [ ] Conversion pipeline preserves equations and figures
+
+## See Also
+- [[research/devlog|Development Log]] — Research and development notes
+- [[../software/llm/README|LLM Documentation]] — Local LLM research and benchmarks
+- [[../README|Documentation Index]] — Complete documentation map
 
 ## References
-- [[../index|Vault Index]]
+- [[../index|Documentation Root]]
+- Research assets and datasets (link when available)
 - [[../software/README|Software Index]]
 - [[../simulation/README|Simulation Index]]

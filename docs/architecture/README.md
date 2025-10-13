@@ -1,7 +1,7 @@
 ---
 tags: [architecture, index]
-status: draft
-related: []
+status: active
+related: [software/README, hardware/README, integrations/dimos_integration]
 aliases: [Architecture Index]
 summary: >
   Architecture documentation index covering system design, component relationships, and deployment topology.
@@ -52,6 +52,12 @@ User Input → Web UI/CLI → Mission Agent → DIMOS Agent → Skills → Robot
 2. **Safety-First**: Timeout, validation, error handling in every skill
 3. **Container-First**: Development in devcontainer
 4. **Type-First**: Type hints, validated inputs, structured results
+
+## See Also
+- [[../software/README|Software Documentation]] — Software stack and packages
+- [[../hardware/README|Hardware Documentation]] — Hardware components and wiring
+- [[../integrations/dimos_integration|DIMOS Integration]] — Framework architecture
+- [[../README|Documentation Index]] — Complete documentation map
 
 For questions about architecture decisions, see the main [README](../README.md) or create an issue.
 
