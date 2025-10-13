@@ -2,6 +2,79 @@
 
 These rules apply to the entire repository.
 
+## **CRITICAL: Development Logging** 📝
+
+### YOU MUST UPDATE THE DEVLOG
+
+**Before starting any work**:
+1. Read `docs/development/recent_work.md` (last 5 days summary - START HERE)
+2. Check `docs/development/devlog.md` (detailed recent activity log)
+3. Verify you understand the current system state
+
+**After completing ANY significant work** (MANDATORY):
+1. **Preferred**: Run `./scripts/add-devlog-entry.sh` (interactive helper)
+2. **Alternative**: Manually add entry to `docs/development/devlog.md` using template
+3. Include: Type, Status, Impact, Activities, Commits, Files, Decisions
+4. Commit with: `docs(devlog): [your activity title]`
+
+**What requires a devlog entry**:
+- ✅ Feature complete (any new functionality, no matter how small)
+- ✅ PR merged (document what was merged and impact)
+- ✅ Major bug fix (anything requiring investigation)
+- ✅ Architectural decision (design choices affecting future work)
+- ✅ Integration work (connecting systems or components)
+- ✅ End of work session (daily summary if multiple activities)
+- ✅ Failed attempts with learnings (document what didn't work and why)
+
+**Devlog entry template**:
+```markdown
+## YYYY-MM-DD (Day Name)
+
+### [Time Range]: [Activity Title]
+**Type**: Feature | Fix | Integration | Documentation | Testing | Infrastructure  
+**PR/Issue**: #123 (if applicable)  
+**Status**: ✅ Complete | 🔄 In Progress | ⚠️ Blocked  
+**Impact**: One-line description of what changed and why it matters
+
+**Activities**:
+- Bullet list of what was done
+- Key implementation details
+
+**Commits**: 
+- `abc123` - Commit message
+
+**Files Created/Updated**:
+- `path/to/file.py` (brief description)
+
+**Decisions**:
+- Key technical or architectural decisions with rationale
+
+**Discoveries**:
+- Unexpected findings, constraints, or learnings
+
+**Notes**: Additional context, gotchas, future work
+```
+
+### Quick Reference Files for Context
+
+**docs/development/recent_work.md** (READ THIS FIRST):
+- Last 5 days at a glance
+- Current system state
+- Active blockers
+- Quick stats
+
+**docs/development/devlog.md** (DETAILED LOG):
+- All development activity since project start
+- Chronological, most recent first
+- Full details with commits, files, decisions
+
+**docs/history/project_history_oct_2025.md** (HISTORICAL):
+- Comprehensive 10-day history (Oct 3-13)
+- 389 commits analyzed
+- Major milestones and achievements
+
+---
+
 ## Authoring Markdown
 - All new documentation **must** live under `/docs` and include the YAML front-matter block:
   ```

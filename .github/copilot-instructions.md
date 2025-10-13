@@ -2,10 +2,68 @@
 
 ## Project Context
 
-ShadowHound is an autonomous mobile robot system combining ROS2 navigation with LLM/VLM-driven planning. You're working on a **Unitree Go2 quadruped** that executes natural language missions through a typed **Skills API**.
+ShadowHound is an autonomous mobile robot system combining ROS2 navigation with LLM/VLM-driven planning. You're working on a **Unitree Go2 quadruped** that executes natural language missions through DIMOS framework integration.
 
-**Current Phase**: Local LLM Integration (vLLM + local embeddings)
-**Next Milestone**: End-to-end testing with vLLM backend
+**Current State**: WORKING END-TO-END SYSTEM
+- ✅ Physical robot validated (Unitree Go2)
+- ✅ Two LLM backends proven (OpenAI cloud + vLLM Thor)
+- ✅ Mission agent implemented (~2,100 LOC)
+- ⚠️ WebRTC API issues limit available skills
+
+**Active Blockers**: 
+- WebRTC API skills (majority of DIMOS skills non-functional)
+- MockRobot not implemented (needed for dev velocity)
+
+---
+
+## **CRITICAL: Devlog Requirements** 📝
+
+### YOU MUST UPDATE THE DEVLOG
+
+**Before starting work**:
+1. Read `docs/development/recent_work.md` (last 5 days context)
+2. Check `docs/development/devlog.md` (recent entries)
+3. Verify you understand current system state
+
+**After completing significant work** (REQUIRED):
+1. Run: `./scripts/add-devlog-entry.sh` (interactive)
+2. Or manually add entry to `docs/development/devlog.md`
+3. Follow the template (Type, Status, Impact, Activities, Commits, Decisions)
+4. Commit with message: `docs(devlog): [your activity title]`
+
+**What counts as "significant work"**:
+- ✅ Feature complete (any new functionality)
+- ✅ PR merged (document what was merged)
+- ✅ Major fix (bugs that required investigation)
+- ✅ Architectural decision (design choice affecting future work)
+- ✅ Integration work (connecting systems/components)
+- ✅ End of work session (daily summary)
+
+**Failure to update devlog = incomplete work**
+
+Example entry format:
+```markdown
+## 2025-10-13 (Sunday)
+
+### 14:00-18:00: DIMOS Integration Merge
+**Type**: Integration  
+**PR/Issue**: #21  
+**Status**: ✅ Complete  
+**Impact**: DIMOS validated on physical robot, major milestone
+
+**Activities**:
+- Merged feature/dimos-integration branch
+- Validated on Unitree Go2 hardware
+- Documented network architecture
+
+**Commits**: 
+- `f16bda8` - Feature branch merge
+
+**Decisions**:
+- Validate on hardware before merging (de-risks architecture changes)
+
+**Notes**: Working end-to-end with physical robot
+```
 
 ---
 
@@ -47,7 +105,7 @@ Desktop (VS Code) ←─────→ Laptop (Host: 192.168.10.167) ←──�
 
 - DIMOS is a git submodule: `src/dimos-unitree/`
 - To sync: `git submodule update --init --recursive`
-- Never edit submodule files directly (see `docs/submodule_policy.md`)
+- Never edit submodule files directly (see `docs/policies/submodule_policy.md`)
 - AI agents: Use standard git submodule commands
 
 ---
@@ -57,23 +115,23 @@ Desktop (VS Code) ←─────→ Laptop (Host: 192.168.10.167) ←──�
 ### Four-Layer Stack
 ```
 Application  → Launch files, configs, deployment
-Agent        → LLM/VLM orchestration, mission planning
-Skills       → Execution engine, safety, telemetry
+Agent        → LLM/VLM orchestration, mission planning (DIMOS)
+Skills       → Execution engine (DIMOS MyUnitreeSkills ~30 behaviors)
 Robot        → ROS2 bridge to go2_ros2_sdk hardware
 ```
 
 ### Package Map
 - `shadowhound_interfaces/` - Custom ROS2 messages/services/actions
-- `shadowhound_robot/` - Hardware interface layer (go2_ros2_sdk bridge)
-- `shadowhound_skills/` - Skills registry + implementations
-- `shadowhound_agent/` - Mission planner + LLM integration
+- `shadowhound_mission_agent/` - Mission agent + web UI (~2,100 LOC implemented)
 - `shadowhound_bringup/` - Launch files and configurations
+- `src/dimos-unitree/` - DIMOS framework (git submodule)
 
 ### Key Principles
-1. **Skills-First**: All robot control through Skills API, never direct topic publishing
+1. **DIMOS-First**: Skills exist in DIMOS MyUnitreeSkills, leverage them
 2. **Safety-First**: Every skill has timeout, validation, and error handling
 3. **Container-First**: All development in devcontainer
 4. **Type-First**: Use type hints, validate inputs, return structured results
+5. **Devlog-First**: Document all significant work in devlog
 
 ---
 
