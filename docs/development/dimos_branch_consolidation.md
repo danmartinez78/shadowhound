@@ -1,7 +1,7 @@
 ---
-tags: [dimos, git, policy]
+tags: [development/policy, dimos, git]
 status: active
-related: [submodule_policy]
+related: [development/submodule_policy, development/dimos_development_policy]
 summary: >
   Plan to consolidate divergent DIMOS branches and establish principled workflow.
 ---
@@ -277,14 +277,14 @@ If you MUST make a quick fix in the submodule:
 - [ ] Weekly check for divergence between branches
 - [ ] Regular syncs with upstream DIMOS main/dev
 
-## Related Documentation
-
-- `docs/submodule_policy.md` - Never edit submodules policy
-- `docs/dimos_development_policy.md` - TO BE CREATED
-- `docs/deployment_sync.md` - Three-machine architecture
+## See Also
+- [[development/dimos_development_policy|DIMOS Development Policy]] — Principled workflow to prevent divergence
+- [[development/submodule_policy|Git Submodule Policy]] — Never edit submodules directly
+- [[development/README|Development Index]] — Complete development documentation
 
 ## References
-
+- [[development/submodule_policy|Submodule Policy]] — Never edit submodules policy
+- [[development/dimos_development_policy|DIMOS Development Policy]] — Established workflow
 - DIMOS Fork: https://github.com/danmartinez78/dimos-unitree
 - ShadowHound: https://github.com/danmartinez78/shadowhound
 - Upstream DIMOS: https://github.com/dimensionalOS/dimos-unitree

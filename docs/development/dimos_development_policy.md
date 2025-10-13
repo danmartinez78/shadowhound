@@ -1,7 +1,7 @@
 ---
-tags: [dimos, git, policy, workflow]
+tags: [development/policy, dimos, git, workflow]
 status: active
-related: [submodule_policy, dimos_branch_consolidation]
+related: [development/submodule_policy, development/dimos_branch_consolidation, integrations/quickstart_dimos]
 summary: >
   Principled workflow for DIMOS development to prevent branch divergence.
 ---
@@ -512,9 +512,15 @@ git rebase origin/dev
 
 ## Related Documentation
 
-- **Submodule Policy:** `docs/submodule_policy.md` - Why we don't edit submodules
-- **Consolidation Plan:** `docs/dimos_branch_consolidation.md` - How we're fixing current divergence
-- **Deployment Sync:** `docs/deployment_sync.md` - Three-machine architecture
+## See Also
+- [[development/submodule_policy|Git Submodule Policy]] — Why we use standard git submodules
+- [[development/dimos_branch_consolidation|DIMOS Branch Consolidation]] — Fixing current divergence
+- [[integrations/quickstart_dimos|DIMOS Quick Start]] — Getting started with DIMOS
+- [[development/README|Development Index]] — Complete development documentation
+
+## References
+- **Submodule Policy:** [[development/submodule_policy|Git Submodule Policy]] - Why we don't edit submodules
+- **Consolidation Plan:** [[development/dimos_branch_consolidation|DIMOS Branch Consolidation]] - How we're fixing current divergence
 
 ---
 

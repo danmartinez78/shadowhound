@@ -1,9 +1,9 @@
 ---
-tags: [development, docs]
-status: draft
-related: []
+tags: [development/process, docs, cleanup]
+status: active
+related: [development/pr_checklist_docs_cleanup, development/doc_root_cleanup, development/project_root_docs_cleanup]
 summary: >
-  Standardize and clean documentation folder-by-folder with clear owners, checklists, and acceptance criteria.
+  Standardize and clean documentation folder-by-folder with clear checklists and Obsidian graph optimization guidelines.
 ---
 
 # Per-directory Documentation Review Plan

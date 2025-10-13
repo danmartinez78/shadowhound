@@ -1,3 +1,11 @@
+---
+tags: [development/process, git, merge]
+status: complete
+related: [development/dimos_branch_consolidation]
+summary: >
+  COMPLETE: Merge checklist for feature/local-llm-support → dev branch (October 2025).
+---
+
 # Merge Checklist: feature/local-llm-support → dev
 
 **Date**: October 12, 2025  

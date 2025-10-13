@@ -1,3 +1,11 @@
+---
+tags: [development/policy, git, submodules]
+status: active
+related: [development/dimos_development_policy, development/dimos_branch_consolidation]
+summary: >
+  Git submodule management policy for ShadowHound - standard git workflow, never edit DIMOS in submodule directory.
+---
+
 # Git Submodule Policy
 
 ## Repository Management: Git Submodules (Not vcs!)
@@ -196,3 +204,14 @@ All documentation should be in `docs/` with snake_case names:
 | Docs | `docs/` directory | Git commit → laptop pull |
 
 **Remember:** Submodules are separate repos. Treat them as read-only dependencies!
+
+## See Also
+- [[development/dimos_development_policy|DIMOS Development Policy]] — Principled workflow for DIMOS changes
+- [[development/dimos_branch_consolidation|DIMOS Branch Consolidation]] — Fixing divergent branches
+- [[development/README|Development Index]] — Complete development documentation
+
+## References
+- [[../index|Documentation Root]]
+- Git Submodules Documentation: https://git-scm.com/book/en/v2/Git-Tools-Submodules
+- DIMOS Fork: https://github.com/danmartinez78/dimos-unitree
+

@@ -1,9 +1,9 @@
 ---
-tags: [development, docs]
-status: draft
-related: []
+tags: [development/cleanup, docs]
+status: complete
+related: [development/doc_root_cleanup, development/per_directory_review_plan]
 summary: >
-  Identify documentation files in the repository root and propose destinations under docs/ or archival.
+  COMPLETE: Inventory of documentation files in repository root with proposed destinations (work executed October 2025).
 ---
 
 # Project Root Docs Cleanup Draft

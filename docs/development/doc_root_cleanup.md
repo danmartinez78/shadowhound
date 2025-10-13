@@ -1,9 +1,9 @@
 ---
-tags: [development, docs]
-status: draft
-related: []
+tags: [development/cleanup, docs]
+status: complete
+related: [development/project_root_docs_cleanup, development/per_directory_review_plan]
 summary: >
-  Inventory unstructured files at docs/ root and propose canonical destinations or archival.
+  COMPLETE: Inventory of unstructured files at docs/ root with proposed destinations (work executed October 2025).
 ---
 
 # Docs Root Cleanup Draft

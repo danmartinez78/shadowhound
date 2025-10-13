@@ -1,3 +1,11 @@
+---
+tags: [development/tracking, tasks, project]
+status: active
+related: [project_overview/roadmap_detailed, project_overview/project_setup_status]
+summary: >
+  Active TODO list for ShadowHound development - high priority tasks, features in progress, and backlog items.
+---
+
 # ShadowHound TODO List
 
 **Last Updated**: 2025-10-08
