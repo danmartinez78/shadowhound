@@ -1,9 +1,10 @@
 ---
-tags: [project, agent, reference]
-status: draft
-related: [software/agent/dimos_agent_architecture]
+tags: [project_overview/reference, agent, llm, performance]
+status: active
+related: [software/agent/dimos_agent_architecture, software/llm/README, project_overview/quick_reference]
 summary: >
   Quick reference guide for ShadowHound agent types (OpenAIAgent vs PlanningAgent) and performance characteristics.
+aliases: [agent-reference, agent-types]
 ---
 
 # ShadowHound Agent Quick Reference
@@ -211,3 +212,15 @@ Hybrid Agent Selection (Coming Soon):
 Test "rotate right and step back" again and watch it execute properly!
 
 ═══════════════════════════════════════════════════════════════════════════
+
+## See Also
+- [[project_overview/README|Project Overview Hub]] - Planning and operations
+- [[project_overview/quick_reference|Quick Reference]] - General command cheat sheet
+- [[software/agent/dimos_agent_architecture|Agent Architecture]] - Detailed design docs
+- [[software/llm/README|LLM Integration]] - Backend configuration
+- [[troubleshooting/README|Troubleshooting]] - Agent diagnostics
+
+## References
+- [[index|Documentation Root]]
+- [[software/README|Software Hub]]
+- [[architecture/README|System Architecture]]

@@ -96,13 +96,13 @@ Central hub for ShadowHound development policies, workflows, and contributor gui
 - [ ] Legacy content archived appropriately
 
 ## See Also
-- [[../architecture/README|Architecture Documentation]] — System design and components
-- [[../software/README|Software Documentation]] — ROS 2 packages and configuration
-- [[../project_overview/project_context|Project Context]] — Project status and overview
-- [[../README|Documentation Index]] — Complete documentation map
+- [[architecture/README|Architecture Documentation]] — System design and components
+- [[software/README|Software Documentation]] — ROS 2 packages and configuration
+- [[project_overview/README|Project Overview]] — Planning, status, and quick-start guides
+- [[index|Documentation Root]] — Complete documentation map
 
 ## References
-- [[../index|Documentation Root]]
+- [[index|Documentation Root]]
 - Git Submodules Documentation: https://git-scm.com/book/en/v2/Git-Tools-Submodules
 - Obsidian Documentation: https://help.obsidian.md/
 - GitHub Wiki Best Practices

@@ -1,9 +1,10 @@
 ---
-tags: [project, onboarding]
-status: draft
-related: []
+tags: [project_overview/operations, onboarding, launch]
+status: active
+related: [project_overview/quick_reference, software/configuration/environment_variables, troubleshooting/startup_validation]
 summary: >
   Rapid launch checklist for bringing up ShadowHound via the automated `start.sh` workflow.
+aliases: [launch, getting-started]
 ---
 
 # Quick Start Launch Checklist
@@ -47,7 +48,15 @@ Provide a condensed set of commands and expectations for operators who need to b
 - [x] Mission commands accepted (mock confirmations or hardware motion observed).
 - [x] Scripts verified to exist and match documented usage patterns.
 
+## See Also
+- [[project_overview/README|Project Overview Hub]] - Planning and operations
+- [[project_overview/quick_reference|Quick Reference]] - Command cheat sheet
+- [[troubleshooting/startup_validation|Startup Validation]] - Health checks
+- [[troubleshooting/quick_start_robot_test|Robot Testing]] - Hardware validation
+- [[software/configuration/environment_variables|Environment Variables]] - Configuration reference
+
 ## References
-- [[software/start_script_reference|Start Script Reference]]
-- [[software/environment_configuration|Environment Configuration Guide]]
-- [[software/scripts|Script Catalog]]
+- [[index|Documentation Root]]
+- [[software/README|Software Hub]]
+- [[development/README|Development Hub]]
+```

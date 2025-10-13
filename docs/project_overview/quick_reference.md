@@ -1,9 +1,10 @@
 ---
-tags: [project, reference]
-status: draft
-related: []
+tags: [project_overview/reference, commands, operations]
+status: active
+related: [project_overview/agent_quick_reference, project_overview/quick_start, software/configuration/environment_variables]
 summary: >
   Command cheat sheet and operational shortcuts for ShadowHound maintainers.
+aliases: [commands, cheat-sheet]
 ---
 
 # Quick Reference
@@ -120,7 +121,14 @@ rm -rf build install log
 - [x] Updated to use devcontainer aliases (cb, cbr, source-ws, rosdep-install).
 - [x] Updated to reflect DIMOS integration and current package structure.
 
+## See Also
+- [[project_overview/README|Project Overview Hub]] - Planning and operations
+- [[project_overview/agent_quick_reference|Agent Quick Reference]] - Agent-specific commands
+- [[project_overview/quick_start|Quick Start]] - Rapid launch checklist
+- [[software/configuration/environment_variables|Environment Variables]] - Complete reference
+- [[troubleshooting/README|Troubleshooting]] - Diagnostic workflows
+
 ## References
-- [[software/scripts|Script Catalog]]
-- [[software/start_script_reference|Start Script Reference]]
-- [[software/environment_configuration|Environment Configuration Guide]]
+- [[index|Documentation Root]]
+- [[software/README|Software Hub]]
+- [[development/README|Development Hub]]
