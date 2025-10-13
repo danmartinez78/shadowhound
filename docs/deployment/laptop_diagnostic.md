@@ -139,4 +139,4 @@ But if the whole layout is different, you need to pull and rebuild!
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[deployment/deployment_hub|Knowledge Base Index]]

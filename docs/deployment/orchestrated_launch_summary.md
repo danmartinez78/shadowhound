@@ -327,4 +327,4 @@ You now have a **production-ready orchestrator** that:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[index|Knowledge Base Index]]
+- [[deployment/deployment_hub|Knowledge Base Index]]

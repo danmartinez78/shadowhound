@@ -42,7 +42,13 @@ Central entry point for the ShadowHound documentation vault. This autonomous mob
 - Git workflows and submodule management
 - 11 documents including cleanup tracking and checklists
 
-### 💻 Software
+### � Deployment
+**[[deployment/deployment_hub|Deployment]]**
+- Environment strategies and configuration
+- Launch orchestration and machine setup
+- Multi-machine synchronization procedures
+
+### �💻 Software
 **[[software/software_hub|Software]]**
 - ROS2 packages and implementations
 - LLM integration (vLLM, Ollama) - 26+ docs
@@ -70,6 +76,7 @@ Central entry point for the ShadowHound documentation vault. This autonomous mob
 ### 🔬 Research & Testing
 **[[simulation/simulation_hub|Simulation]]** - Gazebo and hardware-in-the-loop
 **[[research/research_hub|Research]]** - Experiments and development logs
+**[[performance/performance_hub|Performance]]** - Benchmarking and optimization
 
 ### 📦 Supporting
 **[[integrations/integrations_hub|Integrations]]** - DIMOS, vision, AI integrations
