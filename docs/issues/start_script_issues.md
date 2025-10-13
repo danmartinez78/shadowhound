@@ -269,13 +269,13 @@ Only ask if there are warnings (not errors):
 if [ "$topics_ok" = false ]; then
     print_error "Critical topics are missing - cannot launch mission agent"
     read -p "Launch anyway (may fail)? [y/N]: " continue_choice
-    if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
+    if [ "$continue_choice" != "y" ] && [ "$continue_choice" != "Y" ]; then
         return 1
     fi
 elif [ "$topics_warnings" = true ]; then
     print_warning "Some optional topics are missing"
     read -p "Continue to launch mission agent? [Y/n]: " continue_choice
-    if [[ "$continue_choice" = "n" || "$continue_choice" = "N" ]]; then
+    if [ "$continue_choice" = "n" ] || [ "$continue_choice" = "N" ]; then
         return 1
     fi
 else
@@ -379,7 +379,21 @@ validate_environment() {
     local all_ok=true
     
     if [ "$agent_backend" = "openai" ]; then
-        if [ -z "$OPENAI_BASE_URL" ] || [[ "$OPENAI_BASE_URL" == *"api.openai.com"* ]]; then
+        if [ -z "$OPENAI_BASE_URL" ]; then
+            # Using OpenAI cloud
+            :
+        else
+            case "$OPENAI_BASE_URL" in
+                *api.openai.com*)
+                    # Using OpenAI cloud
+                    :
+                    ;;
+                *)
+                    # Using local LLM (vLLM, LocalAI, etc.)
+                    :
+                    ;;
+            esac
+        fi
             # Using OpenAI cloud
             if [ -z "$OPENAI_API_KEY" ]; then
                 print_error "OPENAI_API_KEY not set (required for OpenAI cloud)"
@@ -457,9 +471,11 @@ check_llm_backend() {
         
         print_info "Checking LLM endpoint: $base_url"
         
-        if [[ "$base_url" == *"api.openai.com"* ]]; then
-            print_info "OpenAI cloud endpoint - skipping health check"
-        else
+                case "$base_url" in
+                    *api.openai.com*)
+                        print_info "OpenAI cloud endpoint - skipping health check"
+                        ;;
+                    *)
             # Local LLM - check if accessible
             local models_url="${base_url}/models"
             if curl -s -f -m 5 "$models_url" >/dev/null 2>&1; then
@@ -475,11 +491,12 @@ check_llm_backend() {
                 print_warning "LLM endpoint not accessible (may be down)"
                 print_info "Check if vLLM/Ollama is running"
                 read -p "Continue anyway? [y/N]: " continue_choice
-                if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
+                if [ "$continue_choice" != "y" ] && [ "$continue_choice" != "Y" ]; then
                     return 1
                 fi
             fi
-        fi
+            ;;
+        esac
     fi
     
     echo ""

@@ -41,9 +41,9 @@ Provide a repeatable process for connecting NVIDIA Isaac Sim running on a remote
 ## Validation
 - [ ] Streaming client renders Isaac Sim viewport with <100 ms latency.
 - [ ] ROS 2 bridge publishes `/shadowhound/sim/status` without errors.
-- [ ] Networking checklist in [[../networking/README|Networking Index]] is satisfied.
+- [ ] Networking checklist in [[networking/networking_hub|Networking Index]] is satisfied.
 
 ## References
 - NVIDIA Isaac Sim Streaming Docs
 - [[./autodoc/_index|Autodoc Index]]
-- [[./README|Software Index]]
+- [[software/software_hub|Software Index]]

@@ -23,8 +23,6 @@ chroma.sqlite3
 *.swo
 *~
 .obsidian/
-!.obsidian/themes/
-!.obsidian/snippets/
 
 # Python
 __pycache__/

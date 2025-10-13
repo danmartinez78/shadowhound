@@ -1,9 +1,10 @@
 ---
-tags: [project, roadmap]
-status: draft
+tags: [project_overview/planning, roadmap, milestones]
+status: active
 related: []
 summary: >
   High-level phases and milestones for the ShadowHound robot dog initiative.
+aliases: [roadmap]
 ---
 
 # Project Roadmap
@@ -33,7 +34,14 @@ Summarize the strategic milestones that guide ShadowHound development and downst
 - [ ] Linked execution docs exist for each milestone.
 - [ ] Status indicators are current.
 
+## See Also
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
+- [[project_overview/todo|Project TODO]] - Detailed task backlog
+- [[project_overview/architecture_review_summary|Architecture Review]] - Design decisions
+- [[development/development_hub|Development Hub]] - Implementation workflows
+- [[software/software_hub|Software Hub]] - Package development
+
 ## References
-- [[../index|Vault Index]]
+- [[project_overview/project_overview_hub|Documentation Root]]
+- [[architecture/architecture_hub|System Architecture]]
 - [Repository README](../../README.md)
-- Project tracker (link when available)

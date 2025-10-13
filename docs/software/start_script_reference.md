@@ -47,7 +47,7 @@ Explain how the `start.sh` orchestration script and its helpers prepare, validat
 ### Troubleshooting Checklist
 - Re-run with `--mock` if hardware connectivity blocks the workflow.
 - Change ports using `--web-port` when the default 8080 is occupied.
-- Inspect generated `.shadowhound_env` to confirm environment exports.
+- If environment variables seem missing or inconsistent, review your standard `.env` against the [[environment_configuration|Environment Configuration Guide]].
 
 ## Validation
 - [x] `start.sh` completes without errors for both development and production presets.

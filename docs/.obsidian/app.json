@@ -1,1 +1,6 @@
-{}
+{
+  "promptDelete": false,
+  "userIgnoreFilters": [
+    "history/docs_readme_legacy.md"
+  ]
+}

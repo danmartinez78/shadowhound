@@ -34,6 +34,7 @@ nav:
   - Networking:
       - Overview: networking/README.md
       - WebRTC Direct Test: networking/webrtc_direct_test.md
+      - ROS 2 DDS Direct Test: networking/dds_direct_test.md
   - Simulation:
       - Overview: simulation/README.md
   - Troubleshooting:

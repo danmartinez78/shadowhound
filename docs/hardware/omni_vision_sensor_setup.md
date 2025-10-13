@@ -1,9 +1,9 @@
 ---
-tags: [hardware, legacy]
+tags: [hardware/sensors, configuration, vision]
 status: draft
 related: []
 summary: >
-  Legacy documentation preserved from earlier phases for review and migration.
+  Configuration guide for omnidirectional vision layer including parabolic and 360° cameras.
 ---
 
 # Omni Vision + Context Layer (360° / Parabolic Camera)
@@ -112,12 +112,19 @@ Below is a curated list of **parabolic and 360° cameras** suitable for indoor r
 
 *Document prepared for the ShadowHound Project — Omni Vision Integration Layer (v0.1)*
 
-
 ## Validation
-- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
-- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
-- [ ] Outstanding migration work captured as tasks in the backlog.
+- [ ] Functional requirements defined and validated
+- [ ] Integration strategy documented
+- [ ] Power and network requirements specified
+- [ ] ROI gating strategy planned for VLM integration
+
+## See Also
+- [[hardware/omni_vision_exploration|360° Vision Options]] — Comprehensive sensor comparison and research
+- [[hardware/network_power_topologies|Network & Power Topologies]] — Wiring configurations for sensors
+- [[hardware/hardware_hub|Hardware Index]] — Complete hardware documentation
 
 ## References
-- [[hardware/README|Hardware Stack Overview]]
-- [[index|Knowledge Base Index]]
+- [[hardware/hardware_hub|Hardware Stack Overview]]
+- [[../index|Documentation Index]]
+- DreamVu PAL family documentation
+- RealSense D555 specifications

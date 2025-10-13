@@ -1,5 +1,14 @@
 ---
-tags: [project, architecture]
+tags: [project_overview/architecture, design, review]
+status: active
+r## References
+- [[project_overview/project_overview_hub|Documentation Root]]
+- [[architecture/architecture_hub|System Architecture]]
+- [[software/agent/dimos_agent_architecture|Agent Architecture]]ed: [architecture/README, project_overview/roadmap, software/README]
+summary: >
+  Key outcomes from the October 3, 2025 architecture review that redefined ShadowHound's layered design and delivery plan.
+aliases: [arch-review, design-decisions]
+---s: [project, architecture]
 status: draft
 related: []
 summary: >
@@ -13,7 +22,7 @@ Capture the decisions and follow-up actions from the October 3, 2025 architectur
 
 ## Prerequisites
 - Familiarity with the baseline architecture documented in [[project_overview/roadmap|Project Roadmap]].
-- Access to the detailed reference in [[project|Comprehensive Architecture Spec]].
+- Access to the detailed reference in [[architecture/architecture_hub|Architecture Documentation]].
 - Awareness of current package status across the repository.
 
 ## Steps
@@ -59,7 +68,14 @@ shadowhound_bringup/      # Launch files, configs, orchestration
 - [ ] Skills registry enforces validation and telemetry per the review.
 - [ ] Phase checklists updated to reflect current progress after this review.
 
+## See Also
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
+- [[architecture/architecture_hub|Architecture Hub]] - Detailed system design
+- [[project_overview/roadmap|Project Roadmap]] - Implementation phases
+- [[software/software_hub|Software Hub]] - Package development
+- [[development/development_hub|Development Hub]] - Contributor workflows
+
 ## References
-- [[project|Comprehensive Architecture Spec]]
-- [[index|Knowledge Base Index]]
-- [[project_overview/roadmap|Project Roadmap]]
+- [[project_overview/project_overview_hub|Documentation Root]]
+- [[architecture/architecture_hub|Architecture Documentation]]
+- [[software/agent/dimos_agent_architecture|Agent Architecture]]

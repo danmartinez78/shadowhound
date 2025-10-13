@@ -1,9 +1,10 @@
 ---
-tags: [project, setup]
-status: draft
+tags: [project_overview/status, dimos, integration]
+status: active
 related: []
 summary: >
   Snapshot of the DIMOS integration status as of October 4, 2025, including repository layout and next steps.
+aliases: [dimos-integration, setup-milestone]
 ---
 
 # Project Setup Status (October 4, 2025)
@@ -67,7 +68,14 @@ Expected output snippet:
 - [ ] Submodule status matches the target revisions.
 - [ ] Follow-up tasks captured in the roadmap or package-specific backlogs.
 
+## See Also
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
+- [[project_overview/architecture_review_summary|Architecture Review]] - Design decisions
+- [[development/submodule_policy|Submodule Policy]] - Git submodule guidelines
+- [[software/software_hub|Software Hub]] - Package development
+- [[project_overview/roadmap|Project Roadmap]] - Milestone tracking
+
 ## References
-- [[software/dimos_quick_start|DIMOS Integration Quick Start]]
-- [[software/scripts|Script Catalog]]
-- [[project_overview/roadmap|Project Roadmap]]
+- [[project_overview/project_overview_hub|Documentation Root]]
+- [[development/development_hub|Development Hub]]
+- [[architecture/architecture_hub|System Architecture]]

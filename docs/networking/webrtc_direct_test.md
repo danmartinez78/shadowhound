@@ -1,5 +1,5 @@
 ---
-tags: [networking, testing]
+tags: [networking/testing, webrtc, guide]
 status: draft
 related: []
 summary: >
@@ -15,22 +15,17 @@ Validate the WebRTC transport path before a full ShadowHound deployment by exerc
 - [[software/ros2_setup|ROS 2 Workstation Setup]] completed inside the development container.
 - Robot reachable over Wi-Fi with its IP address available (or plan to rerun setup to update it).
 - Access to the `scripts/` utilities included with the repository checkout.
+ - Environment configured using your standard `.env` (see [[software/environment_configuration|Environment Configuration Guide]]). No bespoke per-test `.env` files are required.
 
 ## Steps
-1. Generate or refresh the `.env.webrtc_test` configuration using the interactive helper.
-2. Launch the Unitree SDK driver in WebRTC mode to establish the media and control channels.
-3. Send validation commands from a separate terminal to confirm bidirectional communication.
-4. Capture any anomalies in the **Troubleshooting** section and update this page after remediation.
+1. Launch the Unitree SDK driver in WebRTC mode to establish the media and control channels.
+2. Send validation commands from a separate terminal to confirm bidirectional communication.
+3. Capture any anomalies in the **Troubleshooting** section and update this page after remediation.
 
-### Configuration Helper
-```bash
-./scripts/setup_webrtc_test.sh
-```
-The script prompts for the robot IP, validates connectivity, and writes `.env.webrtc_test` with:
-- `GO2_IP` — Wi-Fi address of the robot.
-- `CONN_TYPE=webrtc` — Enables WebRTC transport.
-- `ROS_DOMAIN_ID=0` — Isolates the ROS graph for testing.
-- `RMW_IMPLEMENTATION` — Sets CycloneDDS for compatibility.
+### Environment Notes
+- Ensure `GO2_IP` is set appropriately in your standard environment.
+- Set `CONN_TYPE=webrtc` when using WebRTC transport.
+- `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` is recommended.
 
 ### Launch Sequence
 1. **Terminal 1 – Start the driver**
@@ -39,23 +34,25 @@ The script prompts for the robot IP, validates connectivity, and writes `.env.we
    ```
 2. **Terminal 2 – Exercise commands**
    ```bash
-   source .shadowhound_env
    ./scripts/test_commands.sh sit
    ./scripts/test_commands.sh stand
    ./scripts/test_commands.sh wave
    ```
 
 ### Troubleshooting
-- **Robot not reachable** — Re-run the setup helper to confirm IP and network reachability.
-- **Missing `.env.webrtc_test`** — The helper recreates the file automatically.
-- **Incorrect configuration** — Run the helper again; it overwrites the environment safely.
+- **Robot not reachable** — Confirm IP and network reachability.
+- **Incorrect configuration** — Review your standard environment variables.
 
 ## Validation
-- [ ] `.env.webrtc_test` regenerated for the current robot IP and committed to your local notes if values changed.
 - [ ] `./scripts/test_webrtc_direct.sh` reports a healthy WebRTC connection without errors.
 - [ ] Mission command scripts trigger the expected sit/stand/wave behaviors (or mock confirmations in simulation).
 
+## See Also
+- [[networking/dds_direct_test|ROS 2 DDS Direct Test]] - Ethernet/DDS alternative without WebRTC
+- [[software/web/webrtc_configuration|WebRTC Configuration]] - Robot WiFi setup and connection details
+- [[hardware/network_power_topologies|Network Topologies]] - Router and IP configuration
+
 ## References
 - [[software/scripts|Script Catalog]]
-- [[networking/README|Networking Overview]]
-- [[troubleshooting/README|Troubleshooting Hub]]
+- [[networking/networking_hub|Networking Overview]]
+- [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]]

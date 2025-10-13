@@ -81,4 +81,4 @@ ENABLE_WEB_INTERFACE=false
 ## References
 - [[scripts|Script Catalog]]
 - [[networking/webrtc_direct_test|WebRTC Direct Test]]
-- [[troubleshooting/README|Troubleshooting Hub]]
+- [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]]

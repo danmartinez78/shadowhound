@@ -1,9 +1,10 @@
 ---
-tags: [project, planning]
-status: draft
+tags: [project_overview/planning, backlog, tasks]
+status: active
 related: []
 summary: >
   Prioritized backlog tracking outstanding ShadowHound work items, milestones, and recently completed tasks.
+aliases: [backlog, tasks]
 ---
 
 # Project TODO Backlog
@@ -66,7 +67,14 @@ Track high, medium, and low priority tasks for the ShadowHound program while cap
 - [ ] Completed items moved to the history section with accurate dates.
 - [ ] Links to supporting docs verified and updated when files move.
 
+## See Also
+- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
+- [[project_overview/roadmap|Project Roadmap]] - High-level milestones
+- [[development/development_hub|Development Hub]] - Contributor workflows
+- [[software/llm/llm_hub|LLM Integration]] - Backend development tasks
+- [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Known issues and diagnostics
+
 ## References
-- [[project_overview/roadmap|Project Roadmap]]
-- [[software/scripts|Script Catalog]]
-- [[software/environment_configuration|Environment Configuration Guide]]
+- [[project_overview/project_overview_hub|Documentation Root]]
+- [[software/software_hub|Software Hub]]
+- [[architecture/architecture_hub|System Architecture]]

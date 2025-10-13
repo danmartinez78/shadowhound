@@ -1,7 +1,7 @@
 ---
 tags: [issue, vllm, mistral, inference]
 status: active
-related: [vllm_tool_calling_configuration, vllm_quickstart]
+related: []
 summary: >
   vLLM server hangs with Mistral model due to tokenizer mismatch and FLASHINFER backend issues
 ---
