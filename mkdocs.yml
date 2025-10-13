@@ -1,6 +1,6 @@
 site_name: ShadowHound Documentation
 site_description: "ShadowHound / Robot Dog knowledge base"
-docs_dir: docs_web
+docs_dir: docs
 site_url: ""
 theme:
   name: material
@@ -20,9 +20,9 @@ nav:
       - Architecture Review Summary: project_overview/architecture_review_summary.md
       - Project TODO Backlog: project_overview/todo.md
   - Hardware:
-      - Overview: hardware/README.md
+      - Overview: hardware/hardware_hub.md
   - Software:
-      - Overview: software/README.md
+      - Overview: software/software_hub.md
       - Script Catalog: software/scripts.md
       - Environment Configuration: software/environment_configuration.md
       - Start Script Reference: software/start_script_reference.md
@@ -32,15 +32,15 @@ nav:
       - Autodoc:
           - Index: software/autodoc/_index.md
   - Networking:
-      - Overview: networking/README.md
+      - Overview: networking/networking_hub.md
       - WebRTC Direct Test: networking/webrtc_direct_test.md
       - ROS 2 DDS Direct Test: networking/dds_direct_test.md
   - Simulation:
-      - Overview: simulation/README.md
+      - Overview: simulation/simulation_hub.md
   - Troubleshooting:
-      - Overview: troubleshooting/README.md
+      - Overview: troubleshooting/troubleshooting_hub.md
   - Research:
-      - Overview: research/README.md
+      - Overview: research/research_hub.md
       - Development Log: research/devlog.md
 markdown_extensions:
   - admonition

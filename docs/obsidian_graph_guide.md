@@ -3,13 +3,39 @@ tags: [documentation, obsidian, meta]
 status: active
 related: []
 summary: >
-  Guide to navigating the ShadowHound Obsidian vault and optimizing the graph view.
+  Guide to generating and navigating the ShadowHound Obsidian vault with graph view.
 ---
 
 # Obsidian Graph View Guide
 
 ## Purpose
-Explain the graph view configuration and how to navigate the ShadowHound documentation vault effectively.
+Explain how to generate the Obsidian vault and navigate the ShadowHound documentation with graph view.
+
+## Generating the Vault
+
+**Important**: The documentation source is in standard Markdown (`docs/`). To view it in Obsidian with graph visualization:
+
+```bash
+# Generate Obsidian vault from docs/
+./scripts/generate_obsidian_vault.sh
+```
+
+This creates `docs_obs/` (gitignored) with:
+- All documentation converted to Obsidian wikilinks
+- Pre-configured graph view settings
+- Color-coded directory groups
+
+**When to regenerate**:
+- After `git pull` to get latest documentation
+- After editing documentation locally
+- If the vault seems out of sync with `docs/`
+
+## Opening in Obsidian
+
+1. Open Obsidian
+2. Click "Open folder as vault"
+3. Select `docs_obs/` in the shadowhound directory
+4. Press Ctrl/Cmd+G to open graph view
 
 ## Graph View Settings
 
