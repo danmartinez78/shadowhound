@@ -65,4 +65,4 @@ ros2 topic echo /go2_states --once
 
 ## References
 - [[networking/README|Networking Overview]]
-- [[troubleshooting/STARTUP_VALIDATION|Startup Validation]]
+- [[troubleshooting/startup_validation|Startup Validation]]
