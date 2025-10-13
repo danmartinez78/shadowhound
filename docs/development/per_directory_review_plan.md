@@ -101,3 +101,42 @@ Define the order and checks to validate documentation consistency after the reor
 - [ ] Development contains handoff/status guides
 - [ ] LLM docs unchanged functionally after move
 - [ ] Project overview reflects current branch and status
+
+## Obsidian Graph View Optimization
+
+To create a highly navigable graph view in Obsidian, apply these patterns during each directory review:
+
+### Hierarchical Tags
+- Use `/` in tags to create clusters: `software/llm`, `hardware/sensors`, `troubleshooting/network`
+- Example: `tags: [software/llm, setup, guide]` instead of `tags: [software, llm, setup]`
+
+### Bidirectional Linking
+- If page A links to B, ensure B links back to A when semantically related
+- Create hub-and-spoke: every page links to its directory README/index
+- Add horizontal links between peer pages (not just vertical to index)
+
+### "Related" Front-Matter
+- Populate `related: []` with 2-5 semantically connected docs
+- Example: `related: [software/llm/vllm_quickstart, software/llm/ollama_setup]`
+- These show as connections in the graph even without explicit wikilinks
+
+### Cross-References in Content
+- Add "See also" sections near the bottom of each page
+- Link to related guides in the content body, not just References
+- Example:
+  ```markdown
+  ## See Also
+  - [[software/llm/backend_quick_reference|Backend Comparison]]
+  - [[software/llm/vllm_quickstart|vLLM Alternative]]
+  ```
+
+### Avoid Orphans
+- Every page must have at least one incoming link (ideally from its directory index)
+- Every page must have at least one outgoing link (back to index or to related content)
+- Use grep to find orphans: `grep -L '\[\[' docs/**/*.md`
+
+### Hub Pages
+- Directory README/index pages should link to all major pages in that directory
+- Use descriptive link text, not just filenames
+- Group related links into sections
+
