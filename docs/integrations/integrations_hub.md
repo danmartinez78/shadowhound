@@ -1,7 +1,7 @@
 ---
 tags: [integrations, index]
 status: active
-related: [integrations/quickstart_dimos, integrations/dimos_integration, software/agent/dimos_agent_architecture]
+related: []
 aliases: [Integrations Index]
 summary: >
   Integration documentation for DIMOS framework, vision systems, RAG, and external services.

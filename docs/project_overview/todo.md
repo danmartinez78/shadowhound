@@ -1,7 +1,7 @@
 ---
 tags: [project_overview/planning, backlog, tasks]
 status: active
-related: [project_overview/roadmap, project_overview/architecture_review_summary, software/llm/README]
+related: []
 summary: >
   Prioritized backlog tracking outstanding ShadowHound work items, milestones, and recently completed tasks.
 aliases: [backlog, tasks]

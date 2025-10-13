@@ -1,7 +1,7 @@
 ---
 tags: [project_overview, index]
 status: active
-related: [development/README, software/README, architecture/README]
+related: []
 summary: >
   Central hub for ShadowHound project planning, status tracking, roadmaps, and quick reference guides.
 ---

@@ -1,7 +1,7 @@
 ---
 tags: [development, docs]
 status: draft
-related: [development/per_directory_review_plan]
+related: []
 summary: >
   Pull request checklist for documentation-only changes to ensure consistency, navigation, and link integrity.
 ---

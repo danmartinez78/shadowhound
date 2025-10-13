@@ -1,7 +1,7 @@
 ---
 tags: [hardware, index]
 status: draft
-related: [hardware/network_power_topologies, hardware/omni_vision_exploration, hardware/omni_vision_sensor_setup]
+related: []
 aliases: [Hardware Index]
 summary: >
   Hardware documentation index covering sensors, compute, power distribution, and mechanical assemblies.

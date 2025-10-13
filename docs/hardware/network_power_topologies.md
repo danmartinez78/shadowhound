@@ -1,7 +1,7 @@
 ---
 tags: [hardware/power, hardware/networking, sensors, configuration]
 status: draft
-related: [networking/README, hardware/omni_vision_exploration, hardware/omni_vision_sensor_setup]
+related: []
 aliases: [Network & Power Topologies]
 summary: >
   Comprehensive wiring and network configurations for ShadowHound hardware combinations: Thor + GO2 baseline, RealSense D555 variant, and DreamVu PAL variant.

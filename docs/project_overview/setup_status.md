@@ -1,7 +1,7 @@
 ---
 tags: [project_overview/status, dimos, integration]
 status: active
-related: [development/submodule_policy, software/README, project_overview/architecture_review_summary]
+related: []
 summary: >
   Snapshot of the DIMOS integration status as of October 4, 2025, including repository layout and next steps.
 aliases: [dimos-integration, setup-milestone]

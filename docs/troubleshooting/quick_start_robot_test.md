@@ -1,7 +1,7 @@
 ---
 tags: [troubleshooting/testing, robot, quickstart]
 status: active
-related: [software/llm/ollama_setup, hardware/network_power_topologies, networking/webrtc_direct_test]
+related: []
 summary: >
   Quick start guide for testing robot with local LLM (Ollama phi4:14b) - complete setup and validation procedures.
 ---

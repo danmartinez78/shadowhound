@@ -1,7 +1,7 @@
 ---
 tags: [simulation, index]
 status: active
-related: [software/isaac_sim_remote, software/README]
+related: []
 aliases: [Simulation Index]
 summary: >
   Simulation documentation index covering Isaac Sim, Gazebo, and digital twins.

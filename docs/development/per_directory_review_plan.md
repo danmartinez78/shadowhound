@@ -1,7 +1,7 @@
 ---
 tags: [development/process, docs, cleanup]
 status: active
-related: [development/pr_checklist_docs_cleanup, development/doc_root_cleanup, development/project_root_docs_cleanup]
+related: []
 summary: >
   Standardize and clean documentation folder-by-folder with clear checklists and Obsidian graph optimization guidelines.
 ---
@@ -68,7 +68,7 @@ Copy this template into a tracking note or PR description for each directory you
 - Autodoc tool (for packages): `tools/ros2_autodoc.py`---
 tags: [development, docs]
 status: draft
-related: [project_overview/status_2025-10-12]
+related: []
 summary: >
   Checklist and order of operations to review each docs directory for consistency and navigation.
 ---

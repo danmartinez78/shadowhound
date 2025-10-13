@@ -1,7 +1,7 @@
 ---
 tags: [development/policy, dimos, git, workflow]
 status: active
-related: [development/submodule_policy, development/dimos_branch_consolidation, integrations/quickstart_dimos]
+related: []
 summary: >
   Principled workflow for DIMOS development to prevent branch divergence.
 ---

@@ -1,9 +1,20 @@
+#!/bin/bash
+# Update Obsidian graph.json WHILE OBSIDIAN IS RUNNING
+# Run this script, then immediately switch to Obsidian and open graph view
+
+cd "$(dirname "$0")/../docs/.obsidian"
+
+echo "Updating graph.json with optimized settings..."
+echo "⚠️  IMPORTANT: Keep Obsidian OPEN while running this!"
+echo ""
+
+cat > graph.json << 'EOF'
 {
   "collapse-filter": false,
   "search": "",
   "showTags": false,
   "showAttachments": false,
-  "hideUnresolved": false,
+  "hideUnresolved": true,
   "showOrphans": false,
   "collapse-color-groups": false,
   "colorGroups": [
@@ -130,6 +141,20 @@
   "repelStrength": 12,
   "linkStrength": 0.6,
   "linkDistance": 300,
-  "scale": 0.19753086419753077,
+  "scale": 1.0,
   "close": false
 }
+EOF
+
+echo "✅ graph.json updated!"
+echo ""
+echo "Next steps:"
+echo "1. Switch to Obsidian (keep it open!)"
+echo "2. Open Graph View (Ctrl+G)"
+echo "3. Click anywhere in the graph to refresh"
+echo "4. You should see colors and better spacing!"
+echo ""
+echo "If colors don't show:"
+echo "- Click the filters icon (right side)"
+echo "- Expand 'Groups' section"
+echo "- Ensure groups are not collapsed"

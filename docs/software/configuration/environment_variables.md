@@ -1,7 +1,7 @@
 ---
 tags: [software/configuration, reference]
 status: active
-related: [software/configuration/vllm_env_example, software/llm/vllm_quickstart, software/environment_configuration]
+related: []
 summary: >
   Complete environment variables reference for ShadowHound - robot networking, LLM backends, ROS2 configuration, and deployment settings.
 ---

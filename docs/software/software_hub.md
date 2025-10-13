@@ -1,7 +1,7 @@
 ---
 tags: [software, index]
 status: active
-related: [software/ros2_setup, software/llm/vllm_quickstart, software/web/webrtc_configuration]
+related: []
 aliases: [Software Index]
 summary: >
   Software documentation index for ROS 2 packages, LLM integration, web interface, and tooling.

@@ -1,7 +1,7 @@
 ---
 tags: [project_overview/reference, commands, operations]
 status: active
-related: [project_overview/agent_quick_reference, project_overview/quick_start, software/configuration/environment_variables]
+related: []
 summary: >
   Command cheat sheet and operational shortcuts for ShadowHound maintainers.
 aliases: [commands, cheat-sheet]

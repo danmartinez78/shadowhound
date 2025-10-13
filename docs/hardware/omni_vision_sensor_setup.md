@@ -1,7 +1,7 @@
 ---
 tags: [hardware/sensors, configuration, vision]
 status: draft
-related: [hardware/omni_vision_exploration, hardware/network_power_topologies, software/sensors]
+related: []
 summary: >
   Configuration guide for omnidirectional vision layer including parabolic and 360° cameras.
 ---

@@ -1,7 +1,7 @@
 ---
 tags: [development/cleanup, docs]
 status: complete
-related: [development/project_root_docs_cleanup, development/per_directory_review_plan]
+related: []
 summary: >
   COMPLETE: Inventory of unstructured files at docs/ root with proposed destinations (work executed October 2025).
 ---

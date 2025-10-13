@@ -1,7 +1,7 @@
 ---
 tags: [development/cleanup, docs]
 status: complete
-related: [development/doc_root_cleanup, development/per_directory_review_plan]
+related: []
 summary: >
   COMPLETE: Inventory of documentation files in repository root with proposed destinations (work executed October 2025).
 ---

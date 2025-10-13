@@ -1,7 +1,7 @@
 ---
 tags: [issues, index]
 status: active
-related: [troubleshooting/README, software/llm/llm_backend_validation]
+related: []
 aliases: [Issues Index]
 summary: >
   Known issues, workarounds, and tracked bugs for ShadowHound system.

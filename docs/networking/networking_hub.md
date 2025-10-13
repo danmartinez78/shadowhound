@@ -1,7 +1,7 @@
 ---
 tags: [networking, index]
 status: draft
-related: [hardware/network_power_topologies, software/web/webrtc_configuration]
+related: []
 aliases: [Networking Index]
 summary: >
   Networking documentation index for connectivity, telemetry, and remote operations.

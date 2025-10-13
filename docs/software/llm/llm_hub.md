@@ -1,7 +1,7 @@
 ---
 tags: [software/llm, index]
 status: active
-related: [software/README, software/configuration/environment_variables, hardware/network_power_topologies]
+related: []
 aliases: [LLM Documentation Index]
 summary: >
   Local LLM integration documentation - vLLM, Ollama setup, benchmarking, and backend validation.

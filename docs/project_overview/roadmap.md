@@ -1,7 +1,7 @@
 ---
 tags: [project_overview/planning, roadmap, milestones]
 status: active
-related: [project_overview/todo, project_overview/architecture_review_summary, development/README]
+related: []
 summary: >
   High-level phases and milestones for the ShadowHound robot dog initiative.
 aliases: [roadmap]

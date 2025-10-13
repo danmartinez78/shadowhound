@@ -1,7 +1,7 @@
 ---
 tags: [deployment, git, submodules]
 status: active
-related: [submodule_policy, deployment_sync]
+related: []
 summary: >
   Step-by-step guide for syncing laptop host after vcs→git submodule conversion.
 ---

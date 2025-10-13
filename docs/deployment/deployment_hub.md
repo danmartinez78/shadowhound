@@ -1,7 +1,7 @@
 ---
 tags: [deployment, operations, index]
 status: active
-related: [networking/networking_hub, hardware/hardware_hub, software/software_hub]
+related: []
 summary: >
   Deployment guides, environment strategies, and launch orchestration for ShadowHound system.
 aliases: [Deployment Hub, Operations]

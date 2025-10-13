@@ -1,7 +1,7 @@
 ---
 tags: [development, index]
 status: active
-related: [development/dimos_development_policy, development/submodule_policy, development/per_directory_review_plan]
+related: []
 aliases: [Development Index]
 summary: >
   Development documentation index covering policies, workflows, contribution guidelines, and process documentation.

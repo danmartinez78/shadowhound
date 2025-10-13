@@ -1,7 +1,7 @@
 ---
 tags: [development/process, docs, planning]
 status: active
-related: [development/per_directory_review_plan, development/doc_root_cleanup, development/pr_checklist_docs_cleanup]
+related: []
 summary: >
   Master plan for documentation cleanup and GitHub Wiki creation - organize structure, improve discoverability.
 ---

@@ -1,7 +1,7 @@
 ---
 tags: [networking/testing, webrtc, guide]
 status: draft
-related: [networking/dds_direct_test, software/web/webrtc_configuration, hardware/network_power_topologies]
+related: []
 summary: >
   Run the WebRTC direct test workflow to validate connectivity between the workstation and the Unitree Go2.
 ---

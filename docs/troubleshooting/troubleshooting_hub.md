@@ -1,7 +1,7 @@
 ---
 tags: [troubleshooting, index]
 status: active
-related: [troubleshooting/startup_validation, troubleshooting/quick_start_robot_test, software/llm/llm_backend_validation]
+related: []
 aliases: [Troubleshooting Index]
 summary: >
   Troubleshooting index for common ShadowHound failure modes, diagnostic procedures, and recovery steps.

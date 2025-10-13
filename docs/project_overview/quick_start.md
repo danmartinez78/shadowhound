@@ -1,7 +1,7 @@
 ---
 tags: [project_overview/operations, onboarding, launch]
 status: active
-related: [project_overview/quick_reference, software/configuration/environment_variables, troubleshooting/startup_validation]
+related: []
 summary: >
   Rapid launch checklist for bringing up ShadowHound via the automated `start.sh` workflow.
 aliases: [launch, getting-started]

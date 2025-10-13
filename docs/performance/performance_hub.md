@@ -1,7 +1,7 @@
 ---
 tags: [performance, testing, index]
 status: active
-related: [troubleshooting/troubleshooting_hub, software/software_hub]
+related: []
 summary: >
   Performance analysis, benchmarking, and optimization documentation.
 aliases: [Performance Hub]

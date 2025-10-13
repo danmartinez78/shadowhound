@@ -1,7 +1,7 @@
 ---
 tags: [project_overview/reference, agent, llm, performance]
 status: active
-related: [software/agent/dimos_agent_architecture, software/llm/README, project_overview/quick_reference]
+related: []
 summary: >
   Quick reference guide for ShadowHound agent types (OpenAIAgent vs PlanningAgent) and performance characteristics.
 aliases: [agent-reference, agent-types]

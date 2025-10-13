@@ -1,7 +1,7 @@
 ---
 tags: [architecture, index]
 status: active
-related: [software/README, hardware/README, integrations/dimos_integration]
+related: []
 aliases: [Architecture Index]
 summary: >
   Architecture documentation index covering system design, component relationships, and deployment topology.

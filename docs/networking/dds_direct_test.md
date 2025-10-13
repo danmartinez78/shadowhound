@@ -1,7 +1,7 @@
 ---
 tags: [networking/testing, dds, ros2, guide]
 status: draft
-related: [networking/webrtc_direct_test, hardware/network_power_topologies, troubleshooting/startup_validation]
+related: []
 summary: >
   Validate CycloneDDS (Ethernet) transport and basic ROS 2 communication without WebRTC.
 ---

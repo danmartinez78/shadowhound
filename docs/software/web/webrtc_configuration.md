@@ -1,7 +1,7 @@
 ---
 tags: [software/web, networking, webrtc, configuration]
 status: active
-related: [networking/webrtc_direct_test, hardware/network_power_topologies, software/web/README]
+related: []
 summary: >
   Complete WebRTC configuration guide for GO2 robot WiFi communication, high-level API access, and dual-protocol architecture.
 ---

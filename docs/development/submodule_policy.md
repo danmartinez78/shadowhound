@@ -1,7 +1,7 @@
 ---
 tags: [development/policy, git, submodules]
 status: active
-related: [development/dimos_development_policy, development/dimos_branch_consolidation]
+related: []
 summary: >
   Git submodule management policy for ShadowHound - standard git workflow, never edit DIMOS in submodule directory.
 ---

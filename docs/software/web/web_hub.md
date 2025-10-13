@@ -1,7 +1,7 @@
 ---
 tags: [software/web, index]
 status: active
-related: [software/README, networking/webrtc_direct_test, hardware/network_power_topologies]
+related: []
 aliases: [Web Interface Documentation]
 summary: >
   Web interface and WebRTC communication documentation for ShadowHound robot control.

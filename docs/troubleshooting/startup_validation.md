@@ -1,7 +1,7 @@
 ---
 tags: [troubleshooting/validation, llm, diagnostics]
 status: active
-related: [software/llm/llm_backend_validation, software/llm/vllm_quickstart, software/start_script_reference]
+related: []
 summary: >
   Two-layer LLM backend validation system - pre-flight checks in start.sh and runtime validation in mission agent.
 ---

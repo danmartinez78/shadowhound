@@ -1,7 +1,7 @@
 ---
 tags: [issue, workaround, llm, function-calling]
 status: testing
-related: [vllm_tool_calling_configuration, dimos_agent_architecture]
+related: []
 summary: >
   System prompt engineering to force LLM function calling without modifying DIMOS
 ---

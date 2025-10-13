@@ -1,7 +1,7 @@
 ---
 tags: [hardware/sensors, research, vision]
 status: draft
-related: [hardware/omni_vision_sensor_setup, hardware/network_power_topologies, software/sensors]
+related: []
 summary: >
   Comprehensive research on 360° omnidirectional vision options for ShadowHound, with focus on DreamVu PAL cameras.
 ---

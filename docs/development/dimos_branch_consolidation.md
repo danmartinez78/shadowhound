@@ -1,7 +1,7 @@
 ---
 tags: [development/policy, dimos, git]
 status: active
-related: [development/submodule_policy, development/dimos_development_policy]
+related: []
 summary: >
   Plan to consolidate divergent DIMOS branches and establish principled workflow.
 ---
