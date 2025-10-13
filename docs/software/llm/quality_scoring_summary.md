@@ -94,8 +94,8 @@ llama3.1:70b
 
 ## Learn More
 
-- **Full Guide**: [OLLAMA_QUALITY_SCORING.md](OLLAMA_QUALITY_SCORING.md) - Complete methodology
-- **Benchmarking**: [OLLAMA_BENCHMARKING.md](OLLAMA_BENCHMARKING.md) - How to run tests
+- **Full Guide**: [ollama_quality_scoring.md](ollama_quality_scoring.md) - Complete methodology
+- **Benchmarking**: [ollama_benchmarking.md](ollama_benchmarking.md) - How to run tests
 - **Academic Background**: 
   - [IFEval Paper](https://arxiv.org/abs/2311.07911) - Instruction-following evaluation
   - [OpenAI Evals](https://github.com/openai/evals) - Evaluation framework

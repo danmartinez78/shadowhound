@@ -199,8 +199,8 @@ ros2 launch shadowhound_mission_agent mission_agent.launch.py \
 
 ## More Information
 
-- **Full Setup Guide**: [docs/OLLAMA_SETUP.md](OLLAMA_SETUP.md)
-- **Architecture Details**: [docs/OLLAMA_BACKEND_INTEGRATION.md](OLLAMA_BACKEND_INTEGRATION.md)
+- **Full Setup Guide**: [docs/ollama_setup.md](ollama_setup.md)
+- **Architecture Details**: [docs/ollama_backend_integration.md](ollama_backend_integration.md)
 - **Ollama Documentation**: https://github.com/ollama/ollama
 
 ---

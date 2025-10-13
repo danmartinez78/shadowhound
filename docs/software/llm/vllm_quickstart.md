@@ -165,5 +165,5 @@ Expected latency: **5-10 seconds** per command (much faster than Ollama's 12-15s
 
 - [Issue #12: LLM Alternatives](https://github.com/danmartinez78/shadowhound/issues/12)
 - [NVIDIA vLLM Announcement](https://forums.developer.nvidia.com/t/announcing-new-vllm-container-3-5x-increase-in-gen-ai-performance-in-just-5-weeks-of-jetson-agx-thor-launch/346634)
-- [scripts/README.md](../scripts/README.md) - Comparison of all setup options
-- [docs/vllm_huggingface_auth.md](../docs/vllm_huggingface_auth.md) - Authentication troubleshooting
+- [scripts/README.md](../../scripts/README.md) - Comparison of all setup options
+- [docs/vllm_huggingface_auth.md](vllm_huggingface_auth.md) - Authentication troubleshooting

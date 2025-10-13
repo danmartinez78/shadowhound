@@ -332,8 +332,8 @@ After testing, note:
 ---
 
 **Questions?** Check:
-- `docs/OLLAMA_SETUP.md` - Detailed setup guide
+- `docs/ollama_setup.md` - Detailed setup guide
 - `docs/BACKEND_QUICK_REFERENCE.md` - Quick commands
-- `docs/OLLAMA_BACKEND_INTEGRATION.md` - Architecture details
+- `docs/ollama_backend_integration.md` - Architecture details
 
 Good luck with testing! 🚀

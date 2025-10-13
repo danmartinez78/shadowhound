@@ -116,7 +116,7 @@ openai_model: "gpt-4-turbo"
 
 ## Documentation Added
 
-### 1. OLLAMA_SETUP.md (Comprehensive Guide)
+### 1. ollama_setup.md (Comprehensive Guide)
 - Installation instructions (Linux/Windows/Thor)
 - Network configuration for remote access
 - Model selection guide (70B/13B/8B comparison)
@@ -234,7 +234,7 @@ feat: Add Ollama backend support for local LLM inference
 - Update mission_agent.py to pass new Ollama parameters
 - Add launch arguments for all backend configuration options
 - Create config file examples (laptop/thor/cloud)
-- Add comprehensive OLLAMA_SETUP.md documentation
+- Add comprehensive ollama_setup.md documentation
 - Update README.md with backend comparison table
 - Expected performance: 0.5-2s vs 10-15s (24x faster!)
 ```

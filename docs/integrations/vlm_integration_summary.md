@@ -296,10 +296,10 @@ Test vision missions:
 
 ## Resources & References
 
-- [Package README](../src/shadowhound_skills/README.md)
-- [DIMOS Vision Discovery](../docs/dimos_vision_capabilities.md)
-- [Vision Integration Design](../docs/vision_integration_design.md)
-- [Camera Architecture](../docs/camera_architecture.md)
+- [Package README](../../src/shadowhound_skills/README.md)
+- [DIMOS Vision Discovery](dimos_vision_capabilities.md)
+- [Vision Integration Design](vision_integration_design.md)
+- [Camera Architecture](../architecture/camera_architecture.md)
 
 ## Summary
 

@@ -80,5 +80,5 @@ User Input → Web UI/CLI → Mission Agent → DIMOS Agent → Skills → Robot
 - [[../integrations/dimos_integration|DIMOS Integration]] — Framework architecture
 - [[architecture/architecture_hub|Documentation Index]] — Complete documentation map
 
-For questions about architecture decisions, see the main [README](../README.md) or create an issue.
+For questions about architecture decisions, see the main [README](../index.md) or create an issue.
 

@@ -13,7 +13,7 @@ The `benchmark_ollama_models.sh` script helps you **objectively compare** differ
 
 1. **Speed**: Tokens per second generation rate
 2. **Latency**: Time to first token (responsiveness)
-3. **Quality**: Response accuracy, completeness, instruction-following (see [Quality Scoring Guide](OLLAMA_QUALITY_SCORING.md))
+3. **Quality**: Response accuracy, completeness, instruction-following (see [Quality Scoring Guide](ollama_quality_scoring.md))
 4. **Resource Usage**: Model size and memory footprint
 
 ### Test Scenarios
@@ -133,7 +133,7 @@ RECOMMENDATIONS
    🌟 Use llama3.1:70b - 13pts better quality, only 2.0x slower!
 ```
 
-**Note**: Quality scores (Q: X/100) measure response accuracy and instruction-following. See [Quality Scoring Guide](OLLAMA_QUALITY_SCORING.md) for details.
+**Note**: Quality scores (Q: X/100) measure response accuracy and instruction-following. See [Quality Scoring Guide](ollama_quality_scoring.md) for details.
 
 ---
 
@@ -171,7 +171,7 @@ RECOMMENDATIONS
 - **60-74**: Fair (consider for non-critical)
 - **<60**: Poor (significant issues)
 
-See [OLLAMA_QUALITY_SCORING.md](OLLAMA_QUALITY_SCORING.md) for complete scoring methodology.
+See [ollama_quality_scoring.md](ollama_quality_scoring.md) for complete scoring methodology.
 - Depends on both speed and response length
 
 ---
@@ -403,8 +403,8 @@ export OLLAMA_MODEL="llama3.1:70b" # Quality for missions
 
 ## Related Documentation
 
-- [OLLAMA_MODELS.md](OLLAMA_MODELS.md) - Model recommendations
-- [OLLAMA_SETUP.md](OLLAMA_SETUP.md) - Installation guide
+- [ollama_models.md](ollama_models.md) - Model recommendations
+- [ollama_setup.md](ollama_setup.md) - Installation guide
 - Setup script: `scripts/setup_ollama_thor.sh`
 - Test script: `scripts/test_ollama_laptop.sh`
 

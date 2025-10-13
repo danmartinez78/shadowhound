@@ -13,11 +13,11 @@ Successfully implemented Ollama backend support for ShadowHound with comprehensi
    - Core implementation in mission_executor.py, mission_agent.py
    - Launch file updates with new parameters
    - Configuration file examples (laptop_dev, thor_onboard, cloud)
-   - Comprehensive OLLAMA_SETUP.md documentation
+   - Comprehensive ollama_setup.md documentation
    - README updates with backend comparison
 
 2. **6730abd** - docs: Add comprehensive Ollama backend integration summary
-   - Architecture documentation (OLLAMA_BACKEND_INTEGRATION.md)
+   - Architecture documentation (ollama_backend_integration.md)
    - Design decisions and deployment scenarios
    - Testing plan and performance expectations
 
@@ -43,8 +43,8 @@ Successfully implemented Ollama backend support for ShadowHound with comprehensi
 - ✅ `configs/cloud_openai.yaml` (new)
 
 ### Documentation (4 files, 800+ lines)
-- ✅ `docs/OLLAMA_SETUP.md` (comprehensive setup guide)
-- ✅ `docs/OLLAMA_BACKEND_INTEGRATION.md` (architecture documentation)
+- ✅ `docs/ollama_setup.md` (comprehensive setup guide)
+- ✅ `docs/ollama_backend_integration.md` (architecture documentation)
 - ✅ `docs/BACKEND_QUICK_REFERENCE.md` (quick reference)
 - ✅ `README.md` (updated with backend comparison)
 
@@ -202,9 +202,9 @@ agent_backend:=openai openai_model:=gpt-4-turbo
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| `OLLAMA_SETUP.md` | Complete setup guide | First-time users |
+| `ollama_setup.md` | Complete setup guide | First-time users |
 | `BACKEND_QUICK_REFERENCE.md` | Quick commands | Daily users |
-| `OLLAMA_BACKEND_INTEGRATION.md` | Architecture details | Developers |
+| `ollama_backend_integration.md` | Architecture details | Developers |
 | `README.md` | Overview and quick start | Everyone |
 
 ## Migration Guide
@@ -301,15 +301,15 @@ ollama_model:=llama3.1:70b
 ## Contact & Support
 
 **Documentation:**
-- Setup: `docs/OLLAMA_SETUP.md`
+- Setup: `docs/ollama_setup.md`
 - Quick Ref: `docs/BACKEND_QUICK_REFERENCE.md`
-- Architecture: `docs/OLLAMA_BACKEND_INTEGRATION.md`
+- Architecture: `docs/ollama_backend_integration.md`
 
 **Troubleshooting:**
 - Check logs for "Using X backend" message
 - Verify connectivity: `curl http://ollama-ip:11434/api/tags`
 - Test OpenAI fallback if Ollama fails
-- See troubleshooting section in OLLAMA_SETUP.md
+- See troubleshooting section in ollama_setup.md
 
 ---
 
