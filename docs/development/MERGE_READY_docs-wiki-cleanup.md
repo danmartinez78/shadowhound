@@ -78,7 +78,7 @@ Complete documentation cleanup and Obsidian graph optimization. All 173 markdown
 ## Known Issues / Trade-offs
 
 ### Wikilinks on GitHub.com
-**Issue:** Raw wikilinks like `[[path/to/file]]` don't render on GitHub.com repo browsing.
+**Issue:** Raw wikilinks like `[` `[path/to/file]]` (double brackets) don't render on GitHub.com repo browsing.
 
 **Mitigation:**
 - ✅ CI converts to standard markdown for GitHub Pages
