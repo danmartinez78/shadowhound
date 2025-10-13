@@ -32,9 +32,10 @@ Central index for all DIMOS framework documentation. Points to upstream sources 
 #### Documentation Enhancement
 
 🚧 **[Issue #7: Comprehensive Documentation Request](https://github.com/danmartinez78/dimos-unitree/issues/7)**
-- Tracks request for detailed integration guides
-- Covers: Agent→robot pipeline, perception, memory/RAG, skills extension
-- ShadowHound contributing learnings upstream
+- **Status**: Assigned to cloud agent for baseline documentation (main branch)
+- **Scope**: Agent→robot pipeline, perception, memory/RAG, skills extension, observables
+- **Timeline**: Phase 1 (Core Integration) in progress
+- **Next**: Review PR when ready, then document our branch-specific changes
 
 #### Essential Reads
 
