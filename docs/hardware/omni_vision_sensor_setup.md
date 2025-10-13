@@ -119,12 +119,12 @@ Below is a curated list of **parabolic and 360° cameras** suitable for indoor r
 - [ ] ROI gating strategy planned for VLM integration
 
 ## See Also
-- [[hardware/omni_vision_exploration|360° Vision Options]] — Comprehensive sensor comparison and research
-- [[hardware/network_power_topologies|Network & Power Topologies]] — Wiring configurations for sensors
-- [[hardware/hardware_hub|Hardware Index]] — Complete hardware documentation
+- [360° Vision Options](../hardware/omni_vision_exploration.md) — Comprehensive sensor comparison and research
+- [Network & Power Topologies](../hardware/network_power_topologies.md) — Wiring configurations for sensors
+- [Hardware Index](../hardware/hardware_hub.md) — Complete hardware documentation
 
 ## References
-- [[hardware/hardware_hub|Hardware Stack Overview]]
-- [[../index|Documentation Index]]
+- [Hardware Stack Overview](../hardware/hardware_hub.md)
+- [Documentation Index](../index.md)
 - DreamVu PAL family documentation
 - RealSense D555 specifications

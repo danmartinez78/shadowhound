@@ -622,4 +622,4 @@ Before calling UI "done":
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[history/history_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../history/history_hub.md)

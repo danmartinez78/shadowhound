@@ -255,9 +255,9 @@ ws.onmessage = (event) => {
 ### 3. Documentation & Process ⭐⭐⭐⭐⭐
 
 **New Files:**
-- [[research/devlog|Development Log]] - Development journal
-- [[project_overview/todo|Project TODO Backlog]] - Task tracking
-- [[software/scripts|Script Catalog]] - Script documentation
+- [Development Log](../research/devlog.md) - Development journal
+- [Project TODO Backlog](../project_overview/todo.md) - Task tracking
+- [Script Catalog](../software/scripts.md) - Script documentation
 - `docs/agent_refactor_analysis.md` - Architecture analysis
 - `docs/development_tracking.md` - Progress tracking
 - `docs/vision_integration_design.md` - Vision design (630 lines!)
@@ -864,9 +864,9 @@ If you want to dive deeper:
    - `docs/web_ui_mock_image_testing.md` - Mock image testing
 
 4. **Process:**
-   - [[research/devlog|Development Log]] - Development journal
-   - [[project_overview/todo|Project TODO Backlog]] - Task tracking
-   - [[software/scripts|Script Catalog]] - Helper scripts
+   - [Development Log](../research/devlog.md) - Development journal
+   - [Project TODO Backlog](../project_overview/todo.md) - Task tracking
+   - [Script Catalog](../software/scripts.md) - Helper scripts
 
 ---
 
@@ -879,4 +879,4 @@ If you want to dive deeper:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[history/history_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../history/history_hub.md)

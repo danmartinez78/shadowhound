@@ -62,4 +62,4 @@ By focusing Codex runs on the pure-Python layers, we can continue delivering val
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[deployment/deployment_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../deployment/deployment_hub.md)

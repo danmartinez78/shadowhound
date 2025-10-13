@@ -19,15 +19,15 @@ Track known issues, workarounds, and bug investigation notes for the ShadowHound
 ## Active Issues
 
 ### vLLM & LLM Backends
-- **[[issues/vllm_mistral_tokenizer_hang|vLLM Mistral Tokenizer Hang]]** — Inference hang issue with Mistral models
-- **[[issues/forcing_function_calling_with_prompts|Forcing Function Calling]]** — Workaround for function calling reliability
-- **[[issues/vllm_tool_calling_configuration|vLLM Tool Calling Configuration]]** — Configuration requirements
-- **[[issues/vllm_tool_calling_not_executing|vLLM Tool Calling Not Executing]]** — Debugging tool execution
+- **[vLLM Mistral Tokenizer Hang](../issues/vllm_mistral_tokenizer_hang.md)** — Inference hang issue with Mistral models
+- **[Forcing Function Calling](../issues/forcing_function_calling_with_prompts.md)** — Workaround for function calling reliability
+- **[vLLM Tool Calling Configuration](../issues/vllm_tool_calling_configuration.md)** — Configuration requirements
+- **[vLLM Tool Calling Not Executing](../issues/vllm_tool_calling_not_executing.md)** — Debugging tool execution
 
 ### System Issues
-- **[[issues/start_script_issues|Start Script Issues]]** — Start script troubleshooting
-- **[[issues/thor_system_utilities|Thor System Utilities]]** — Thor-specific system utilities
-- **[[issues/mock_mode_ros_topic_dependency|Mock Mode ROS Topic Dependency]]** — ROS topic dependencies in mock mode
+- **[Start Script Issues](../issues/start_script_issues.md)** — Start script troubleshooting
+- **[Thor System Utilities](../issues/thor_system_utilities.md)** — Thor-specific system utilities
+- **[Mock Mode ROS Topic Dependency](../issues/mock_mode_ros_topic_dependency.md)** — ROS topic dependencies in mock mode
 
 ### Legacy Issues
 - known_issues.md (legacy, needs review)
@@ -47,7 +47,7 @@ Track known issues, workarounds, and bug investigation notes for the ShadowHound
 1. Document investigation steps
 2. Update issue document with root cause
 3. Link to fix/workaround in relevant docs
-4. Consider moving to [[../history/|history/]] if resolved
+4. Consider moving to [history/](../history/.md) if resolved
 
 ## Validation
 - [ ] Active issues have reproduction steps
@@ -55,11 +55,11 @@ Track known issues, workarounds, and bug investigation notes for the ShadowHound
 - [ ] Resolved issues moved to history or marked complete
 
 ## See Also
-- [[troubleshooting/troubleshooting_hub|Troubleshooting Documentation]] — Diagnostic procedures
-- [[../software/llm/llm_backend_validation|LLM Backend Validation]] — Backend health checks
-- [[development/development_hub|Development Documentation]] — Contribution guidelines
-- [[issues/issues_hub|Documentation Index]] — Complete documentation map
+- [Troubleshooting Documentation](../troubleshooting/troubleshooting_hub.md) — Diagnostic procedures
+- [LLM Backend Validation](../software/llm/llm_backend_validation.md) — Backend health checks
+- [Development Documentation](../development/development_hub.md) — Contribution guidelines
+- [Documentation Index](../issues/issues_hub.md) — Complete documentation map
 
 ## References
-- [[../index|Documentation Root]]
+- [Documentation Root](../index.md)
 - GitHub Issues: https://github.com/danmartinez78/shadowhound/issues

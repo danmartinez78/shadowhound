@@ -39,9 +39,9 @@ Detailed roadmaps and project context from earlier phases.
 - [x] Links updated to reflect current documentation structure
 
 ## See Also
-- [[history/history_hub|Documentation Root]] - Current active documentation
-- [[project_overview/project_overview_hub|Project Overview]] - Current status and planning
-- [[development/development_hub|Development Hub]] - Active development guides
+- [Documentation Root](../history/history_hub.md) - Current active documentation
+- [Project Overview](../project_overview/project_overview_hub.md) - Current status and planning
+- [Development Hub](../development/development_hub.md) - Active development guides
 
 ## References
-This directory serves as read-only archive. For current documentation, start at [[history/history_hub|Documentation Root]].
+This directory serves as read-only archive. For current documentation, start at [Documentation Root](../history/history_hub.md).

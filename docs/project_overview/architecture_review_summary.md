@@ -2,9 +2,9 @@
 tags: [project_overview/architecture, design, review]
 status: active
 r## References
-- [[project_overview/project_overview_hub|Documentation Root]]
-- [[architecture/architecture_hub|System Architecture]]
-- [[software/agent/dimos_agent_architecture|Agent Architecture]]ed: [architecture/README, project_overview/roadmap, software/README]
+- [Documentation Root](../project_overview/project_overview_hub.md)
+- [System Architecture](../architecture/architecture_hub.md)
+- [Agent Architecture](../software/agent/dimos_agent_architecture.md)ed: [architecture/README, project_overview/roadmap, software/README]
 summary: >
   Key outcomes from the October 3, 2025 architecture review that redefined ShadowHound's layered design and delivery plan.
 aliases: [arch-review, design-decisions]
@@ -21,8 +21,8 @@ summary: >
 Capture the decisions and follow-up actions from the October 3, 2025 architecture review so contributors can align implementation work with the agreed design.
 
 ## Prerequisites
-- Familiarity with the baseline architecture documented in [[project_overview/roadmap|Project Roadmap]].
-- Access to the detailed reference in [[architecture/architecture_hub|Architecture Documentation]].
+- Familiarity with the baseline architecture documented in [Project Roadmap](../project_overview/roadmap.md).
+- Access to the detailed reference in [Architecture Documentation](../architecture/architecture_hub.md).
 - Awareness of current package status across the repository.
 
 ## Steps
@@ -69,13 +69,13 @@ shadowhound_bringup/      # Launch files, configs, orchestration
 - [ ] Phase checklists updated to reflect current progress after this review.
 
 ## See Also
-- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
-- [[architecture/architecture_hub|Architecture Hub]] - Detailed system design
-- [[project_overview/roadmap|Project Roadmap]] - Implementation phases
-- [[software/software_hub|Software Hub]] - Package development
-- [[development/development_hub|Development Hub]] - Contributor workflows
+- [Project Overview Hub](../project_overview/project_overview_hub.md) - Planning and status tracking
+- [Architecture Hub](../architecture/architecture_hub.md) - Detailed system design
+- [Project Roadmap](../project_overview/roadmap.md) - Implementation phases
+- [Software Hub](../software/software_hub.md) - Package development
+- [Development Hub](../development/development_hub.md) - Contributor workflows
 
 ## References
-- [[project_overview/project_overview_hub|Documentation Root]]
-- [[architecture/architecture_hub|Architecture Documentation]]
-- [[software/agent/dimos_agent_architecture|Agent Architecture]]
+- [Documentation Root](../project_overview/project_overview_hub.md)
+- [Architecture Documentation](../architecture/architecture_hub.md)
+- [Agent Architecture](../software/agent/dimos_agent_architecture.md)

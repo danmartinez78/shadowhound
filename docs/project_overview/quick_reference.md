@@ -14,8 +14,8 @@ Aggregate frequently used commands, environment tweaks, and emergency actions so
 
 ## Prerequisites
 - Repository workspace initialized with the DIMOS and ShadowHound packages.
-- Awareness of the launch tooling outlined in [[software/scripts|Script Catalog]].
-- Environment variables configured according to [[software/environment_configuration|Environment Configuration Guide]].
+- Awareness of the launch tooling outlined in [Script Catalog](../software/scripts.md).
+- Environment variables configured according to [Environment Configuration Guide](../software/environment_configuration.md).
 
 ## Steps
 1. Use the command tables below to execute common maintenance, launch, and diagnostic workflows.
@@ -122,13 +122,13 @@ rm -rf build install log
 - [x] Updated to reflect DIMOS integration and current package structure.
 
 ## See Also
-- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and operations
-- [[project_overview/agent_quick_reference|Agent Quick Reference]] - Agent-specific commands
-- [[project_overview/quick_start|Quick Start]] - Rapid launch checklist
-- [[software/configuration/environment_variables|Environment Variables]] - Complete reference
-- [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Diagnostic workflows
+- [Project Overview Hub](../project_overview/project_overview_hub.md) - Planning and operations
+- [Agent Quick Reference](../project_overview/agent_quick_reference.md) - Agent-specific commands
+- [Quick Start](../project_overview/quick_start.md) - Rapid launch checklist
+- [Environment Variables](../software/configuration/environment_variables.md) - Complete reference
+- [Troubleshooting](../troubleshooting/troubleshooting_hub.md) - Diagnostic workflows
 
 ## References
-- [[project_overview/project_overview_hub|Documentation Root]]
-- [[software/software_hub|Software Hub]]
-- [[development/development_hub|Development Hub]]
+- [Documentation Root](../project_overview/project_overview_hub.md)
+- [Software Hub](../software/software_hub.md)
+- [Development Hub](../development/development_hub.md)

@@ -18,20 +18,20 @@ This directory contains guides for deploying and operating ShadowHound across mu
 ## Documents
 
 ### Environment Strategy
-- [[deployment/codex_environment_strategy|Codex Environment Strategy]] - Environment configuration approach
-- [[deployment/codex_24_04_plan|Codex 24.04 Plan]] - Ubuntu 24.04 deployment planning
+- [Codex Environment Strategy](../deployment/codex_environment_strategy.md) - Environment configuration approach
+- [Codex 24.04 Plan](../deployment/codex_24_04_plan.md) - Ubuntu 24.04 deployment planning
 
 ### Launch & Orchestration
-- [[deployment/orchestrated_launch|Orchestrated Launch]] - Comprehensive launch system design
-- [[deployment/orchestrated_launch_summary|Orchestrated Launch Summary]] - Quick reference for launch system
+- [Orchestrated Launch](../deployment/orchestrated_launch.md) - Comprehensive launch system design
+- [Orchestrated Launch Summary](../deployment/orchestrated_launch_summary.md) - Quick reference for launch system
 
 ### Machine Setup
-- [[deployment/laptop_setup|Laptop Setup]] - Development laptop configuration
-- [[deployment/laptop_diagnostic|Laptop Diagnostic]] - Laptop troubleshooting and validation
+- [Laptop Setup](../deployment/laptop_setup.md) - Development laptop configuration
+- [Laptop Diagnostic](../deployment/laptop_diagnostic.md) - Laptop troubleshooting and validation
 
 ### Synchronization
-- [[deployment/deployment_sync|Deployment Sync]] - Syncing code across machines
-- [[deployment/laptop_sync_after_conversion|Laptop Sync After Conversion]] - Post-migration sync procedures
+- [Deployment Sync](../deployment/deployment_sync.md) - Syncing code across machines
+- [Laptop Sync After Conversion](../deployment/laptop_sync_after_conversion.md) - Post-migration sync procedures
 
 ## Deployment Topologies
 
@@ -52,7 +52,7 @@ Critical configuration managed through `.env` files:
 - `AGENT_BACKEND` - cloud vs local LLM
 - `GO2_IP` - Robot IP address
 - `ROS_DOMAIN_ID` - ROS2 network isolation
-- See [[software/configuration/environment_variables|Environment Variables Guide]]
+- See [Environment Variables Guide](../software/configuration/environment_variables.md)
 
 ### Launch Orchestration
 The `start.sh` script provides unified deployment:
@@ -67,11 +67,11 @@ The `start.sh` script provides unified deployment:
 - [ ] Sync procedures validated for code updates
 
 ## See Also
-- [[networking/networking_hub|Networking Hub]] - Network topology and configuration
-- [[hardware/hardware_hub|Hardware Hub]] - Physical device setup
-- [[software/software_hub|Software Hub]] - Software stack and packages
-- [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]] - Deployment diagnostics
+- [Networking Hub](../networking/networking_hub.md) - Network topology and configuration
+- [Hardware Hub](../hardware/hardware_hub.md) - Physical device setup
+- [Software Hub](../software/software_hub.md) - Software stack and packages
+- [Troubleshooting Hub](../troubleshooting/troubleshooting_hub.md) - Deployment diagnostics
 
 ## References
-- [[deployment/deployment_hub|Documentation Root]]
-- [[project_overview/project_overview_hub|Project Overview]] - Current status and planning
+- [Documentation Root](../deployment/deployment_hub.md)
+- [Project Overview](../project_overview/project_overview_hub.md) - Current status and planning

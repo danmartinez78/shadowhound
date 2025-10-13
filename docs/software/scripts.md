@@ -13,13 +13,13 @@ Centralize knowledge about the helper scripts that automate ShadowHound setup, l
 
 ## Prerequisites
 - Repository cloned with execute permissions retained on the `scripts/` directory.
-- [[software/ros2_setup|ROS 2 Workstation Setup]] completed so ROS 2, colcon, and Python dependencies are available.
-- Familiarity with environment configuration from [[environment_configuration|Environment Configuration Guide]].
+- [ROS 2 Workstation Setup](../software/ros2_setup.md) completed so ROS 2, colcon, and Python dependencies are available.
+- Familiarity with environment configuration from [Environment Configuration Guide](environment_configuration.md).
 
 ## Steps
 1. Select a launch profile (`./start.sh`, quick-start wrappers, or targeted helpers) that matches your scenario.
 2. Run the prerequisite health checks (dependency, network, or configuration) before commanding the robot.
-3. Capture observations in [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]] and update this catalog when scripts change.
+3. Capture observations in [Troubleshooting Hub](../troubleshooting/troubleshooting_hub.md) and update this catalog when scripts change.
 
 ### Launch & Orchestration
 - **`./start.sh [options]`** — Primary orchestrator that validates prerequisites, configures `.env`, builds the workspace, and starts the ROS and web stack. Key flags:
@@ -35,9 +35,9 @@ Centralize knowledge about the helper scripts that automate ShadowHound setup, l
 - **`test_topic_visibility.sh`** — Confirms ROS 2 topics are visible in the current domain.
 
 ### Development Workflow Helpers
-- **`scripts/add-devlog-entry.sh`** — Interactive assistant that inserts formatted entries into [[research/devlog|Development Log]].
+- **`scripts/add-devlog-entry.sh`** — Interactive assistant that inserts formatted entries into [Development Log](../research/devlog.md).
 - **`scripts/update_repos.sh`** — Updates the repository and submodules with optional `--auto` or `--fetch-only` flags.
-- Deprecated: `scripts/setup_webrtc_test.sh` (bespoke `.env` generation). Use your standard `.env` and see [[software/environment_configuration|Environment Configuration Guide]].
+- Deprecated: `scripts/setup_webrtc_test.sh` (bespoke `.env` generation). Use your standard `.env` and see [Environment Configuration Guide](../software/environment_configuration.md).
 
 ### Example Workflow
 ```bash
@@ -54,7 +54,7 @@ Centralize knowledge about the helper scripts that automate ShadowHound setup, l
 ### Troubleshooting Patterns
 - Re-run `scripts/check-deps.sh` after updating containers or OS packages.
 - Use `./start.sh --mock` when hardware is unavailable but you need ROS and the web UI.
-- If environment variables appear missing, verify your standard `.env` aligns with the [[software/environment_configuration|Environment Configuration Guide]].
+- If environment variables appear missing, verify your standard `.env` aligns with the [Environment Configuration Guide](../software/environment_configuration.md).
 
 ## Validation
 - [x] Launch scripts tested in both development and production modes after edits.
@@ -63,6 +63,6 @@ Centralize knowledge about the helper scripts that automate ShadowHound setup, l
 - [x] Verified all referenced scripts exist in the repository.
 
 ## References
-- [[environment_configuration|Environment Configuration Guide]]
-- [[networking/webrtc_direct_test|WebRTC Direct Test]]
-- [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]]
+- [Environment Configuration Guide](environment_configuration.md)
+- [WebRTC Direct Test](../networking/webrtc_direct_test.md)
+- [Troubleshooting Hub](../troubleshooting/troubleshooting_hub.md)

@@ -612,4 +612,4 @@ ros2 launch shadowhound_mission_agent mission_agent.launch.py mock_robot:=false
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[history/history_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../history/history_hub.md)

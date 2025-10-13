@@ -29,7 +29,7 @@ Vision and perception skills for ShadowHound autonomous robot
 
 ## Prerequisites
 
-- ROS 2 workspace configured per [[../ros2_setup|ROS 2 Workstation Setup]].
+- ROS 2 workspace configured per [ROS 2 Workstation Setup](../ros2_setup.md).
 
 ## Steps
 
@@ -46,4 +46,4 @@ Vision and perception skills for ShadowHound autonomous robot
 ## References
 
 - Source directory: `src/shadowhound_skills`
-- [[_index|Return to Autodoc Index]]
+- [Return to Autodoc Index](_index.md)

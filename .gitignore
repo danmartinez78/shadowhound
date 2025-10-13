@@ -59,5 +59,6 @@ Thumbs.db
 *.backup
 patches/
 /docs_web/
+/docs_obs/
 /wiki/
 /site/

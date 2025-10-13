@@ -126,8 +126,8 @@ To create a highly navigable graph view in Obsidian, apply these patterns during
 - Example:
   ```markdown
   ## See Also
-  - [[software/llm/backend_quick_reference|Backend Comparison]]
-  - [[software/llm/vllm_quickstart|vLLM Alternative]]
+  - [Backend Comparison](../software/llm/backend_quick_reference.md)
+  - [vLLM Alternative](../software/llm/vllm_quickstart.md)
   ```
 
 ### Avoid Orphans

@@ -15,15 +15,15 @@ Documentation for the ShadowHound web interface and WebRTC-based robot communica
 ## Prerequisites
 - Understanding of WebRTC protocols
 - Familiarity with GO2 robot communication modes
-- Network configuration knowledge (see [[networking/networking_hub|Networking Docs]])
+- Network configuration knowledge (see [Networking Docs](../../networking/networking_hub.md))
 
 ## Key Documents
 
 ### WebRTC Configuration
-- **[[software/web/webrtc_configuration|WebRTC Configuration Guide]]** — Complete setup guide for robot WiFi communication, high-level API access, and dual-protocol architecture (WebRTC + CycloneDDS)
+- **[WebRTC Configuration Guide](../../software/web/webrtc_configuration.md)** — Complete setup guide for robot WiFi communication, high-level API access, and dual-protocol architecture (WebRTC + CycloneDDS)
 
 ### Web UI Design
-- **[[software/web/web_ui_mockup|Web UI Mockup]]** — Design reference and interface mockup for robot control interface
+- **[Web UI Mockup](../../software/web/web_ui_mockup.md)** — Design reference and interface mockup for robot control interface
 
 ## WebRTC Overview
 
@@ -49,7 +49,7 @@ The Unitree Go2 robot supports **two communication protocols**:
 ## Common Tasks
 
 ### Configure WebRTC Connection
-See [[software/web/webrtc_configuration|WebRTC Configuration Guide]] for complete setup instructions including:
+See [WebRTC Configuration Guide](../../software/web/webrtc_configuration.md) for complete setup instructions including:
 - Robot WiFi onboarding
 - WebRTC connection setup
 - Dual-protocol architecture
@@ -63,7 +63,7 @@ See [[software/web/webrtc_configuration|WebRTC Configuration Guide]] for complet
 ```
 
 ### Test WebRTC Connectivity
-See [[../../networking/webrtc_direct_test|WebRTC Direct Test]] for validation procedures.
+See [WebRTC Direct Test](../../networking/webrtc_direct_test.md) for validation procedures.
 
 ## Architecture Notes
 
@@ -80,7 +80,7 @@ This hybrid approach provides:
 ### Network Requirements
 - GO2 robot on WiFi: `192.168.10.103`
 - Thor/Laptop on same network: `192.168.10.x`
-- See [[../../hardware/network_power_topologies|Network Topologies]] for complete wiring
+- See [Network Topologies](../../hardware/network_power_topologies.md) for complete wiring
 
 ## Validation
 - [ ] WebRTC configuration guide tested and validated
@@ -89,13 +89,13 @@ This hybrid approach provides:
 - [ ] Dual-protocol architecture explained
 
 ## See Also
-- [[../../networking/webrtc_direct_test|WebRTC Direct Test]] — Connectivity validation
-- [[networking/networking_hub|Networking Documentation]] — Network setup and DDS configuration
-- [[../../hardware/network_power_topologies|Hardware Topologies]] — Router and WiFi setup
-- [[software/software_hub|Software Index]] — Complete software documentation
+- [WebRTC Direct Test](../../networking/webrtc_direct_test.md) — Connectivity validation
+- [Networking Documentation](../../networking/networking_hub.md) — Network setup and DDS configuration
+- [Hardware Topologies](../../hardware/network_power_topologies.md) — Router and WiFi setup
+- [Software Index](../../software/software_hub.md) — Complete software documentation
 
 ## References
-- [[../../index|Documentation Root]]
+- [Documentation Root](../../index.md)
 - Unitree GO2 SDK Documentation
 - WebRTC Protocol Specification
 - go2-webrtc-connect: https://github.com/abizovnuralem/go2_webrtc_connect

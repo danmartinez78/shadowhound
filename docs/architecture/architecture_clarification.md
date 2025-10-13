@@ -385,4 +385,4 @@ Does this clarify the architecture? The key is: **The agent is a tool the ROS no
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[architecture/architecture_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../architecture/architecture_hub.md)

@@ -234,4 +234,4 @@ Found a new issue? Update this file with:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[issues/issues_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../issues/issues_hub.md)

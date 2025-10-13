@@ -343,4 +343,4 @@ ros2 topic pub /mission_command std_msgs/String "data: 'take one step forward'"
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[performance/performance_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../performance/performance_hub.md)

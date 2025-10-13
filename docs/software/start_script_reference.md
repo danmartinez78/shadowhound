@@ -12,8 +12,8 @@ summary: >
 Explain how the `start.sh` orchestration script and its helpers prepare, validate, and launch the ShadowHound stack for development and production.
 
 ## Prerequisites
-- Environment configured per [[environment_configuration|Environment Configuration Guide]].
-- Familiarity with the broader script ecosystem in [[scripts|Script Catalog]].
+- Environment configured per [Environment Configuration Guide](environment_configuration.md).
+- Familiarity with the broader script ecosystem in [Script Catalog](scripts.md).
 - Ability to run commands within the development container or a compatible ROS 2 workstation.
 
 ## Steps
@@ -47,7 +47,7 @@ Explain how the `start.sh` orchestration script and its helpers prepare, validat
 ### Troubleshooting Checklist
 - Re-run with `--mock` if hardware connectivity blocks the workflow.
 - Change ports using `--web-port` when the default 8080 is occupied.
-- If environment variables seem missing or inconsistent, review your standard `.env` against the [[environment_configuration|Environment Configuration Guide]].
+- If environment variables seem missing or inconsistent, review your standard `.env` against the [Environment Configuration Guide](environment_configuration.md).
 
 ## Validation
 - [x] `start.sh` completes without errors for both development and production presets.
@@ -56,6 +56,6 @@ Explain how the `start.sh` orchestration script and its helpers prepare, validat
 - [x] Verified all referenced scripts exist in the repository.
 
 ## References
-- [[scripts|Script Catalog]]
-- [[environment_configuration|Environment Configuration Guide]]
-- [[networking/webrtc_direct_test|WebRTC Direct Test]]
+- [Script Catalog](scripts.md)
+- [Environment Configuration Guide](environment_configuration.md)
+- [WebRTC Direct Test](../networking/webrtc_direct_test.md)

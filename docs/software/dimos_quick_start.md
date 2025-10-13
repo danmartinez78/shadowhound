@@ -93,6 +93,6 @@ class PatrolArea(AbstractRobotSkill):
 - [ ] Custom skill registration verified via DIMOS agent or direct execution.
 
 ## References
-- [[scripts|Script Catalog]]
-- [[environment_configuration|Environment Configuration Guide]]
-- [[hardware/hardware_hub|Hardware Stack Overview]]
+- [Script Catalog](scripts.md)
+- [Environment Configuration Guide](environment_configuration.md)
+- [Hardware Stack Overview](../hardware/hardware_hub.md)

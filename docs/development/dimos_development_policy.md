@@ -513,14 +513,14 @@ git rebase origin/dev
 ## Related Documentation
 
 ## See Also
-- [[development/submodule_policy|Git Submodule Policy]] — Why we use standard git submodules
-- [[development/dimos_branch_consolidation|DIMOS Branch Consolidation]] — Fixing current divergence
-- [[integrations/quickstart_dimos|DIMOS Quick Start]] — Getting started with DIMOS
-- [[development/development_hub|Development Index]] — Complete development documentation
+- [Git Submodule Policy](../development/submodule_policy.md) — Why we use standard git submodules
+- [DIMOS Branch Consolidation](../development/dimos_branch_consolidation.md) — Fixing current divergence
+- [DIMOS Quick Start](../integrations/quickstart_dimos.md) — Getting started with DIMOS
+- [Development Index](../development/development_hub.md) — Complete development documentation
 
 ## References
-- **Submodule Policy:** [[development/submodule_policy|Git Submodule Policy]] - Why we don't edit submodules
-- **Consolidation Plan:** [[development/dimos_branch_consolidation|DIMOS Branch Consolidation]] - How we're fixing current divergence
+- **Submodule Policy:** [Git Submodule Policy](../development/submodule_policy.md) - Why we don't edit submodules
+- **Consolidation Plan:** [DIMOS Branch Consolidation](../development/dimos_branch_consolidation.md) - How we're fixing current divergence
 
 ---
 

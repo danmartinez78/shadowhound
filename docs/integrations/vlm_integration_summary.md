@@ -316,4 +316,4 @@ The foundation is solid. Vision capabilities are ready for integration with the 
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[integrations/integrations_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../integrations/integrations_hub.md)

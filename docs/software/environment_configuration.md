@@ -13,7 +13,7 @@ Document the environment variables and templates that govern ShadowHound behavio
 
 ## Prerequisites
 - Repository cloned with access to the `.env.*` templates in the project root.
-- Understanding of the launch automation from [[scripts|Script Catalog]].
+- Understanding of the launch automation from [Script Catalog](scripts.md).
 - Sensitive credentials (OpenAI keys, robot IP addresses) stored securely before editing `.env` files.
 
 ## Steps
@@ -79,6 +79,6 @@ ENABLE_WEB_INTERFACE=false
 - [x] Verified .env templates exist in repository root.
 
 ## References
-- [[scripts|Script Catalog]]
-- [[networking/webrtc_direct_test|WebRTC Direct Test]]
-- [[troubleshooting/troubleshooting_hub|Troubleshooting Hub]]
+- [Script Catalog](scripts.md)
+- [WebRTC Direct Test](../networking/webrtc_direct_test.md)
+- [Troubleshooting Hub](../troubleshooting/troubleshooting_hub.md)

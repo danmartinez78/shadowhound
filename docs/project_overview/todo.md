@@ -13,7 +13,7 @@ aliases: [backlog, tasks]
 Track high, medium, and low priority tasks for the ShadowHound program while capturing recently completed work for historical context.
 
 ## Prerequisites
-- Awareness of the current mission goals outlined in [[project_overview/roadmap|Project Roadmap]].
+- Awareness of the current mission goals outlined in [Project Roadmap](../project_overview/roadmap.md).
 - Agreement with stakeholders on priority definitions (🔴 high, 🟡 medium, 🟢 low).
 - Access to supporting documentation referenced in each task bullet.
 
@@ -68,13 +68,13 @@ Track high, medium, and low priority tasks for the ShadowHound program while cap
 - [ ] Links to supporting docs verified and updated when files move.
 
 ## See Also
-- [[project_overview/project_overview_hub|Project Overview Hub]] - Planning and status tracking
-- [[project_overview/roadmap|Project Roadmap]] - High-level milestones
-- [[development/development_hub|Development Hub]] - Contributor workflows
-- [[software/llm/llm_hub|LLM Integration]] - Backend development tasks
-- [[troubleshooting/troubleshooting_hub|Troubleshooting]] - Known issues and diagnostics
+- [Project Overview Hub](../project_overview/project_overview_hub.md) - Planning and status tracking
+- [Project Roadmap](../project_overview/roadmap.md) - High-level milestones
+- [Development Hub](../development/development_hub.md) - Contributor workflows
+- [LLM Integration](../software/llm/llm_hub.md) - Backend development tasks
+- [Troubleshooting](../troubleshooting/troubleshooting_hub.md) - Known issues and diagnostics
 
 ## References
-- [[project_overview/project_overview_hub|Documentation Root]]
-- [[software/software_hub|Software Hub]]
-- [[architecture/architecture_hub|System Architecture]]
+- [Documentation Root](../project_overview/project_overview_hub.md)
+- [Software Hub](../software/software_hub.md)
+- [System Architecture](../architecture/architecture_hub.md)

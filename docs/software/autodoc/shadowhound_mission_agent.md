@@ -29,7 +29,7 @@ ShadowHound mission agent for autonomous robot control using DIMOS framework
 
 ## Prerequisites
 
-- ROS 2 workspace configured per [[../ros2_setup|ROS 2 Workstation Setup]].
+- ROS 2 workspace configured per [ROS 2 Workstation Setup](../ros2_setup.md).
 
 ## Steps
 
@@ -46,4 +46,4 @@ ShadowHound mission agent for autonomous robot control using DIMOS framework
 ## References
 
 - Source directory: `src/shadowhound_mission_agent`
-- [[_index|Return to Autodoc Index]]
+- [Return to Autodoc Index](_index.md)

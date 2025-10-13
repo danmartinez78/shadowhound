@@ -20,13 +20,13 @@ Centralize troubleshooting guides to reduce mean time to recovery across hardwar
 ## Active Troubleshooting Guides
 
 ### Startup & Validation
-- **[[troubleshooting/startup_validation|Startup Validation Flow]]** — Two-layer LLM backend validation (pre-flight checks + runtime)
+- **[Startup Validation Flow](../troubleshooting/startup_validation.md)** — Two-layer LLM backend validation (pre-flight checks + runtime)
   - Start script pre-flight checks (fail fast)
   - Mission agent runtime validation
   - Ollama and OpenAI backend validation
 
 ### Robot Testing
-- **[[troubleshooting/quick_start_robot_test|Quick Start: Robot Testing]]** — Complete testing procedure with local LLM
+- **[Quick Start: Robot Testing](../troubleshooting/quick_start_robot_test.md)** — Complete testing procedure with local LLM
   - GPU setup and monitoring (jtop)
   - Ollama configuration (phi4:14b)
   - End-to-end robot command testing
@@ -36,17 +36,17 @@ Centralize troubleshooting guides to reduce mean time to recovery across hardwar
 
 ### LLM Backend Issues
 **Symptom**: Mission agent fails to start or hangs  
-**Solution**: See [[troubleshooting/startup_validation|Startup Validation]] for pre-flight checks
+**Solution**: See [Startup Validation](../troubleshooting/startup_validation.md) for pre-flight checks
 
 **Symptom**: Slow or no responses from LLM  
-**Solution**: Check backend configuration in [[software/llm/llm_backend_validation|Backend Validation]]
+**Solution**: Check backend configuration in [Backend Validation](../software/llm/llm_backend_validation.md)
 
 ### Robot Connectivity Issues
 **Symptom**: Robot not responding to commands  
 **Solution**: 
-1. Verify DDS connectivity: [[networking/dds_direct_test|DDS Direct Test]]
-2. Check WebRTC connection: [[networking/webrtc_direct_test|WebRTC Direct Test]]
-3. Validate network topology: [[hardware/network_power_topologies|Network Topologies]]
+1. Verify DDS connectivity: [DDS Direct Test](../networking/dds_direct_test.md)
+2. Check WebRTC connection: [WebRTC Direct Test](../networking/webrtc_direct_test.md)
+3. Validate network topology: [Network Topologies](../hardware/network_power_topologies.md)
 
 ### ROS 2 Topic Issues
 **Symptom**: Topics not visible or no data  
@@ -70,9 +70,9 @@ ros2 daemon start
 ## Diagnostic Workflow
 
 ### 1. Identify Subsystem
-- **Hardware**: Power, sensors, networking → See [[hardware/hardware_hub|Hardware Docs]]
-- **Software**: ROS 2, agent, skills → See [[software/software_hub|Software Docs]]
-- **Networking**: DDS, WebRTC, WiFi → See [[networking/networking_hub|Networking Docs]]
+- **Hardware**: Power, sensors, networking → See [Hardware Docs](../hardware/hardware_hub.md)
+- **Software**: ROS 2, agent, skills → See [Software Docs](../software/software_hub.md)
+- **Networking**: DDS, WebRTC, WiFi → See [Networking Docs](../networking/networking_hub.md)
 
 ### 2. Gather Information
 ```bash
@@ -114,15 +114,15 @@ jtop
 - [ ] Cross-links to related docs verified
 
 ## See Also
-- [[../software/llm/llm_backend_validation|LLM Backend Validation]] — Runtime backend health checks
-- [[../networking/dds_direct_test|DDS Direct Test]] — ROS 2 connectivity validation
-- [[../networking/webrtc_direct_test|WebRTC Direct Test]] — Robot WiFi validation
-- [[../hardware/network_power_topologies|Network Topologies]] — Wiring and connectivity reference
-- [[../software/start_script_reference|Start Script]] — Startup sequence and validation
+- [LLM Backend Validation](../software/llm/llm_backend_validation.md) — Runtime backend health checks
+- [DDS Direct Test](../networking/dds_direct_test.md) — ROS 2 connectivity validation
+- [WebRTC Direct Test](../networking/webrtc_direct_test.md) — Robot WiFi validation
+- [Network Topologies](../hardware/network_power_topologies.md) — Wiring and connectivity reference
+- [Start Script](../software/start_script_reference.md) — Startup sequence and validation
 
 ## References
-- [[../index|Documentation Root]]
-- [[hardware/hardware_hub|Hardware Index]]
-- [[software/software_hub|Software Index]]
-- [[networking/networking_hub|Networking Index]]
+- [Documentation Root](../index.md)
+- [Hardware Index](../hardware/hardware_hub.md)
+- [Software Index](../software/software_hub.md)
+- [Networking Index](../networking/networking_hub.md)
 - ROS 2 Troubleshooting: https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools.html

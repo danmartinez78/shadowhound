@@ -355,14 +355,14 @@ ros2 topic list | grep /pal/
 - [ ] Documentation reviewed for accuracy against current hardware
 
 ## See Also
-- [[networking/networking_hub|Networking Documentation]] — DDS configuration and connectivity testing
-- [[hardware/omni_vision_exploration|360° Vision Options]] — Comprehensive sensor comparison
-- [[hardware/omni_vision_sensor_setup|Omni Vision Setup]] — Additional sensor integration notes
-- [[networking/dds_direct_test|DDS Direct Test]] — ROS 2 DDS connectivity validation
+- [Networking Documentation](../networking/networking_hub.md) — DDS configuration and connectivity testing
+- [360° Vision Options](../hardware/omni_vision_exploration.md) — Comprehensive sensor comparison
+- [Omni Vision Setup](../hardware/omni_vision_sensor_setup.md) — Additional sensor integration notes
+- [DDS Direct Test](../networking/dds_direct_test.md) — ROS 2 DDS connectivity validation
 
 ## References
-- [[hardware/hardware_hub|Hardware Stack Overview]]
-- [[../index|Documentation Index]]
+- [Hardware Stack Overview](../hardware/hardware_hub.md)
+- [Documentation Index](../index.md)
 - RealSense D555 Datasheet v1.1 (Power over Ethernet 802.3at, Gigabit, DDS support)
 - DreamVu PAL SDK: https://dreamvu.com/support/
 - Unitree GO2 Documentation: Factory IP 192.168.123.161, Xavier Backpack 192.168.123.18

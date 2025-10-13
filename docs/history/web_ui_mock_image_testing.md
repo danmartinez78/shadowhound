@@ -392,4 +392,4 @@ We've successfully built a **professional sci-fi themed web UI** with **mock ima
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[history/history_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../history/history_hub.md)

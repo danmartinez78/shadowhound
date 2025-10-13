@@ -19,14 +19,14 @@ Document integration points between ShadowHound and external frameworks, service
 ## Active Integrations
 
 ### DIMOS Framework
-- **[[integrations/quickstart_dimos|DIMOS Quick Start]]** — Getting started with DIMOS integration
-- **[[integrations/dimos_integration|DIMOS Integration]]** — Framework integration details (legacy, needs review)
+- **[DIMOS Quick Start](../integrations/quickstart_dimos.md)** — Getting started with DIMOS integration
+- **[DIMOS Integration](../integrations/dimos_integration.md)** — Framework integration details (legacy, needs review)
 
 ### Vision & Perception
-- Vision integration docs (legacy, see [[../hardware/omni_vision_exploration|Omni Vision]] for current work)
+- Vision integration docs (legacy, see [Omni Vision](../hardware/omni_vision_exploration.md) for current work)
 
 ### AI & LLM
-- See [[software/llm/llm_hub|LLM Documentation]] for current local LLM integration
+- See [LLM Documentation](../software/llm/llm_hub.md) for current local LLM integration
 
 ## Legacy Documents
 
@@ -46,11 +46,11 @@ These documents preserve historical context but should be verified against curre
 - [ ] Integration points align with current architecture
 
 ## See Also
-- [[software/software_hub|Software Documentation]] — Software stack and agent system
-- [[architecture/architecture_hub|Architecture Documentation]] — System design
-- [[../development/dimos_development_policy|DIMOS Development Policy]] — DIMOS workflow
-- [[integrations/integrations_hub|Documentation Index]] — Complete documentation map
+- [Software Documentation](../software/software_hub.md) — Software stack and agent system
+- [Architecture Documentation](../architecture/architecture_hub.md) — System design
+- [DIMOS Development Policy](../development/dimos_development_policy.md) — DIMOS workflow
+- [Documentation Index](../integrations/integrations_hub.md) — Complete documentation map
 
 ## References
-- [[../index|Documentation Root]]
+- [Documentation Root](../index.md)
 - DIMOS Repository: https://github.com/danmartinez78/dimos-unitree

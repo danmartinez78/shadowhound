@@ -154,4 +154,4 @@ When user reports an issue:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[architecture/architecture_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../architecture/architecture_hub.md)

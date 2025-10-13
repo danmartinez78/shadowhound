@@ -27,12 +27,12 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 - [ ] Conversion pipeline preserves equations and figures
 
 ## See Also
-- [[research/devlog|Development Log]] — Research and development notes
-- [[software/llm/llm_hub|LLM Documentation]] — Local LLM research and benchmarks
-- [[research/research_hub|Documentation Index]] — Complete documentation map
+- [Development Log](../research/devlog.md) — Research and development notes
+- [LLM Documentation](../software/llm/llm_hub.md) — Local LLM research and benchmarks
+- [Documentation Index](../research/research_hub.md) — Complete documentation map
 
 ## References
-- [[../index|Documentation Root]]
+- [Documentation Root](../index.md)
 - Research assets and datasets (link when available)
-- [[software/software_hub|Software Index]]
-- [[simulation/simulation_hub|Simulation Index]]
+- [Software Index](../software/software_hub.md)
+- [Simulation Index](../simulation/simulation_hub.md)

@@ -424,4 +424,4 @@ What do you think? Which options work best for your workflow?
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[history/history_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../history/history_hub.md)

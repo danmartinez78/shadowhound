@@ -14,7 +14,7 @@ Configure WebRTC-based communication with the Unitree GO2 robot for high-level A
 ## Prerequisites
 - GO2 robot on WiFi network
 - Understanding of dual-protocol architecture (DDS + WebRTC)
-- Network configuration (see [[networking/networking_hub|Networking Documentation]])
+- Network configuration (see [Networking Documentation](../../networking/networking_hub.md))
 
 ## Overview
 
@@ -448,4 +448,4 @@ Before launching with WebRTC mode:
 - [ ] Outstanding migration work captured as tasks in the backlog.
 
 ## References
-- [[software/software_hub|Knowledge Base Index]]
+- [Knowledge Base Index](../../software/software_hub.md)
