@@ -18,7 +18,7 @@ Output:    docs_web/ (standard markdown)  ← GitHub Pages
            wiki/ (standard markdown)       ← GitHub Wiki
 ```
 
-**Authoring format:** Obsidian wikilinks `[[path/to/file]]`
+**Authoring format:** Obsidian wikilinks `[` `[path/to/file]]` (double brackets)
 
 **Pros:**
 - ✅ Obsidian works natively (no local conversion)
@@ -70,8 +70,8 @@ Output:    docs/ published directly       ← Already standard markdown
 
 ### Phase 1: Build Reverse Converter (1-2 hours)
 Create `tools/obsidian_convert.py`:
-- Convert `[text](path.md)` → `[[path|text]]`
-- Convert `![alt](image.png)` → `![[image.png]]`
+- Convert `[text](path.md)` → `[` `[path|text]]` (double brackets)
+- Convert `![alt](image.png)` → `![` `[image.png]]` (exclaim + double brackets)
 - Preserve anchors: `#heading` → `#heading`
 - Handle relative paths correctly
 
