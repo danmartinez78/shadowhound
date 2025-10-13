@@ -1,26 +1,21 @@
 ---
-tags: [project, legacy]
-status: draft
-related: []
+tags: [software/configuration, reference]
+status: active
+related: [software/configuration/vllm_env_example, software/llm/vllm_quickstart, software/environment_configuration]
 summary: >
-  Legacy documentation preserved from earlier phases for review and migration.
+  Complete environment variables reference for ShadowHound - robot networking, LLM backends, ROS2 configuration, and deployment settings.
 ---
 
 # ShadowHound Environment Variables Reference
 
 ## Purpose
-Preserve historical context while signaling that this page requires verification against the current workflow.
+Comprehensive reference for all environment variables used throughout the ShadowHound stack, their relationships, and configuration guidelines.
 
 ## Prerequisites
-- Review the legacy notes below to understand original assumptions and instructions.
-- Cross-check commands and links with the latest tooling before execution.
+- Understanding of shell environment variable syntax
+- Familiarity with .env file format
+- Knowledge of ShadowHound deployment architecture
 
-## Steps
-1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
-2. Update or replace the content with validated procedures as time permits.
-3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
-
-### Legacy Notes
 ## Overview
 
 This document clarifies the environment variables used throughout the ShadowHound stack and their relationships.

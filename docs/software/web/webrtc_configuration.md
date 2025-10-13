@@ -1,26 +1,21 @@
 ---
-tags: [project, legacy]
-status: draft
-related: []
+tags: [software/web, networking, webrtc, configuration]
+status: active
+related: [networking/webrtc_direct_test, hardware/network_power_topologies, software/web/README]
 summary: >
-  Legacy documentation preserved from earlier phases for review and migration.
+  Complete WebRTC configuration guide for GO2 robot WiFi communication, high-level API access, and dual-protocol architecture.
 ---
 
 # WebRTC Configuration Guide
 
 ## Purpose
-Preserve historical context while signaling that this page requires verification against the current workflow.
+Configure WebRTC-based communication with the Unitree GO2 robot for high-level API access (sit, stand, dance, wave) alongside CycloneDDS for low-level control.
 
 ## Prerequisites
-- Review the legacy notes below to understand original assumptions and instructions.
-- Cross-check commands and links with the latest tooling before execution.
+- GO2 robot on WiFi network
+- Understanding of dual-protocol architecture (DDS + WebRTC)
+- Network configuration (see [[../../networking/README|Networking Documentation]])
 
-## Steps
-1. Read through the legacy notes captured under **Legacy Notes** and flag outdated guidance.
-2. Update or replace the content with validated procedures as time permits.
-3. Record verification outcomes in the validation checklist and mark follow-up tasks in the backlog.
-
-### Legacy Notes
 ## Overview
 
 The Unitree Go2 robot supports **two communication protocols** for different use cases:
