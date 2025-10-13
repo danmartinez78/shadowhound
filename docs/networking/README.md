@@ -100,7 +100,7 @@ Optional simplification:
 
 ### Related
 - [[software/web/webrtc_configuration|WebRTC Configuration]] — Robot WiFi onboarding flow
-- [[hardware/power_network_setup|Power & Router Setup]] — Example router + power distribution
+- [[hardware/network_power_topologies|Network & Power Topologies]] — Comprehensive router + power distribution configurations for all hardware variants
 
 ## Prerequisites
 - Access to network configuration credentials.

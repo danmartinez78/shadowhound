@@ -1,10 +1,10 @@
 ---
 tags: [hardware, index]
 status: draft
-related: []
+related: [hardware/network_power_topologies, hardware/omni_vision_exploration, hardware/omni_vision_sensor_setup]
 aliases: [Hardware Index]
 summary: >
-  Hardware documentation index covering sensors, compute, and mechanical assemblies.
+  Hardware documentation index covering sensors, compute, power distribution, and mechanical assemblies.
 ---
 
 # Hardware Index
@@ -31,6 +31,12 @@ Provide a curated map of hardware documentation for the ShadowHound platform.
 - [ ] All critical hardware subsystems have at least one linked document.
 - [ ] Media assets are stored under `_assets/` and referenced relatively.
 - [ ] Links render correctly after conversion to public outputs.
+
+## See Also
+- [[hardware/network_power_topologies|Network & Power Topologies]] — Comprehensive wiring configurations
+- [[hardware/omni_vision_exploration|360° Vision Options]] — Sensor research and comparison
+- [[networking/README|Networking Documentation]] — DDS and WebRTC connectivity
+- [[troubleshooting/README|Troubleshooting Index]] — Hardware diagnostic procedures
 
 ## References
 - [[../index|Vault Index]]

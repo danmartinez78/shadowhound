@@ -1,9 +1,9 @@
 ---
-tags: [hardware, legacy]
+tags: [hardware/sensors, research, vision]
 status: draft
-related: []
+related: [hardware/omni_vision_sensor_setup, hardware/network_power_topologies, software/sensors]
 summary: >
-  Legacy documentation preserved from earlier phases for review and migration.
+  Comprehensive research on 360° omnidirectional vision options for ShadowHound, with focus on DreamVu PAL cameras.
 ---
 
 # 360° Vision – Comprehensive Options & Plan (v0.9)
@@ -164,12 +164,19 @@ Accurate calibration ensures:
 
 *Document prepared for ShadowHound Project — 360° Vision Integration Plan (v0.9)*
 
-
 ## Validation
-- [ ] Legacy guidance reviewed for accuracy and converted to the new workflow where applicable.
-- [ ] Links updated to use vault-friendly wikilinks or confirmed for external references.
-- [ ] Outstanding migration work captured as tasks in the backlog.
+- [ ] Sensor options reviewed and prioritized (DreamVu PAL family preferred)
+- [ ] Integration requirements documented for each option
+- [ ] Power and bandwidth budgets calculated
+- [ ] SDK/ROS2 compatibility verified
+
+## See Also
+- [[hardware/omni_vision_sensor_setup|Omni Vision Setup]] — Configuration guide for deployment
+- [[hardware/network_power_topologies|Network & Power Topologies]] — DreamVu PAL USB wiring (Configuration #3)
+- [[hardware/README|Hardware Index]] — Complete hardware documentation
 
 ## References
 - [[hardware/README|Hardware Stack Overview]]
-- [[index|Knowledge Base Index]]
+- [[../index|Documentation Index]]
+- DreamVu PAL SDK: https://dreamvu.com/support/
+- DreamVu ROS 2 Driver: https://github.com/DreamVu-ROS/pal_camera_ros2

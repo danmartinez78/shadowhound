@@ -33,8 +33,7 @@ New to ShadowHound? Start here:
 
 ### Hardware
 - [Hardware Setup](hardware/README.md) - Robot and sensor configuration
-- [Network Topology](hardware/network_power_topologies.md) - Network architecture
-- [Power Setup](hardware/power_network_setup.md) - Power distribution
+- [Network & Power Topologies](hardware/network_power_topologies.md) - Comprehensive wiring and power configurations for all hardware variants
 
 ### Software
 - [Software Overview](software/README.md) - Software stack guide
