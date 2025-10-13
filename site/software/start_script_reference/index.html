@@ -212,7 +212,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../hardware/" class="md-tabs__link">
+        <a href="../../hardware/README.md" class="md-tabs__link">
           
   
   
@@ -234,7 +234,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+        <a href="../README.md" class="md-tabs__link">
           
   
   
@@ -254,7 +254,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../networking/" class="md-tabs__link">
+        <a href="../../networking/README.md" class="md-tabs__link">
           
   
   
@@ -274,7 +274,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../simulation/" class="md-tabs__link">
+        <a href="../../simulation/README.md" class="md-tabs__link">
           
   
   
@@ -294,7 +294,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../troubleshooting/" class="md-tabs__link">
+        <a href="../../troubleshooting/README.md" class="md-tabs__link">
           
   
   
@@ -314,7 +314,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../research/" class="md-tabs__link">
+        <a href="../../research/README.md" class="md-tabs__link">
           
   
   
@@ -454,7 +454,7 @@
     
   
   
-    <span class="md-status md-status--draft"></span>
+    <span class="md-status md-status--active"></span>
   
 
   
@@ -484,7 +484,7 @@
     
   
   
-    <span class="md-status md-status--draft"></span>
+    <span class="md-status md-status--active"></span>
   
 
   
@@ -514,7 +514,7 @@
     
   
   
-    <span class="md-status md-status--draft"></span>
+    <span class="md-status md-status--active"></span>
   
 
   
@@ -544,7 +544,7 @@
     
   
   
-    <span class="md-status md-status--draft"></span>
+    <span class="md-status md-status--active"></span>
   
 
   
@@ -570,13 +570,6 @@
     Architecture Review Summary
     
   </span>
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
   
 
       </a>
@@ -604,7 +597,7 @@
     
   
   
-    <span class="md-status md-status--draft"></span>
+    <span class="md-status md-status--active"></span>
   
 
   
@@ -674,7 +667,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../hardware/" class="md-nav__link">
+      <a href="../../hardware/README.md" class="md-nav__link">
         
   
   
@@ -682,13 +675,6 @@
     Overview
     
   </span>
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
   
 
       </a>
@@ -759,7 +745,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../README.md" class="md-nav__link">
         
   
   
@@ -767,13 +753,6 @@
     Overview
     
   </span>
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
   
 
       </a>
@@ -1243,12 +1222,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../../networking/" class="md-nav__link">
+      <a href="../../networking/README.md" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/webrtc_direct_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    WebRTC Direct Test
     
   </span>
   
@@ -1273,12 +1275,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../networking/webrtc_direct_test/" class="md-nav__link">
+      <a href="../../networking/dds_direct_test/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    WebRTC Direct Test
+    ROS 2 DDS Direct Test
     
   </span>
   
@@ -1355,7 +1357,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../simulation/" class="md-nav__link">
+      <a href="../../simulation/README.md" class="md-nav__link">
         
   
   
@@ -1363,13 +1365,6 @@
     Overview
     
   </span>
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
   
 
       </a>
@@ -1437,7 +1432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../troubleshooting/" class="md-nav__link">
+      <a href="../../troubleshooting/README.md" class="md-nav__link">
         
   
   
@@ -1445,13 +1440,6 @@
     Overview
     
   </span>
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
   
 
       </a>
@@ -1519,7 +1507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../research/" class="md-nav__link">
+      <a href="../../research/README.md" class="md-nav__link">
         
   
   
@@ -1527,13 +1515,6 @@
     Overview
     
   </span>
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
   
 
       </a>
@@ -1637,19 +1618,20 @@
 <ul>
 <li>Re-run with <code>--mock</code> if hardware connectivity blocks the workflow.</li>
 <li>Change ports using <code>--web-port</code> when the default 8080 is occupied.</li>
-<li>Inspect generated <code>.shadowhound_env</code> to confirm environment exports.</li>
+<li>If environment variables seem missing or inconsistent, review your standard <code>.env</code> against the <a href="../environment_configuration/">Environment Configuration Guide</a>.</li>
 </ul>
 <h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
 <ul>
-<li>[ ] <code>start.sh</code> completes without errors for both development and production presets.</li>
-<li>[ ] Quick-start helpers (<code>quick-start-dev.sh</code>, <code>quick-start-prod.sh</code>) reflect the latest supported flags.</li>
-<li>[ ] Troubleshooting tips validated against recent incidents and updated as needed.</li>
+<li>[x] <code>start.sh</code> completes without errors for both development and production presets.</li>
+<li>[x] Quick-start helpers (<code>quick-start-dev.sh</code>, <code>quick-start-prod.sh</code>) reflect the latest supported flags.</li>
+<li>[x] Troubleshooting tips validated against recent incidents and updated as needed.</li>
+<li>[x] Verified all referenced scripts exist in the repository.</li>
 </ul>
 <h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../scripts/">Script Catalog</a></li>
 <li><a href="../environment_configuration/">Environment Configuration Guide</a></li>
-<li><a href="networking/webrtc_direct_test.md">WebRTC Direct Test</a></li>
+<li><a href="../../networking/webrtc_direct_test/">WebRTC Direct Test</a></li>
 </ul>
 
 

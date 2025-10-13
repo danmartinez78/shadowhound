@@ -33,8 +33,6 @@ jobs:
           pip install mkdocs mkdocs-material pyyaml
       - name: Generate ROS 2 autodoc stubs
         run: python tools/ros2_autodoc.py
-      - name: Convert docs for MkDocs
-        run: python tools/link_convert.py docs docs_web
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Build MkDocs site
