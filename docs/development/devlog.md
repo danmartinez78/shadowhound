@@ -61,7 +61,12 @@ summary: >
 - Wiki now auto-syncs on every docs/ change to dev branch
 - Verified at: https://github.com/danmartinez78/shadowhound/wiki
 
-**Commits**: `b0217cb` (squash merge), `338de1c` (devlog), `703c043` (wiki test)
+**Issues Discovered**:
+- ❌ YAML front-matter visible in wiki pages (should be stripped)
+- ❌ Links point to raw markdown files (should be wiki page names)
+- Created Issue #29 for cloud agent to fix link_convert.py
+
+**Commits**: `b0217cb` (squash merge), `338de1c` (devlog), `703c043` (wiki test), `8afe2e1` (wiki validation)
 
 ---
 
