@@ -18,10 +18,10 @@ summary: >
 
 ## 2025-10-14 (Monday)
 
-### Late Evening: Documentation Cleanup & Organization (21:00-22:30)
-**Type**: Documentation + Organization  
+### Late Evening: Documentation Cleanup & Planning (21:00-23:30)
+**Type**: Documentation + Organization + Planning  
 **Status**: ✅ Complete  
-**Impact**: Clear three-tier documentation structure: active tracking, historical narratives, raw artifacts
+**Impact**: Clear three-tier documentation structure established, cloud agent tasks delegated, next session planned
 
 **Activities**:
 - Migrated legacy devlog entries (Oct 6 & 8) to project_history_oct_2025.md
@@ -35,11 +35,18 @@ summary: >
 - Enhanced WebRTC blocker in MVP roadmap Known Gaps section
 - Deleted duplicate legacy devlog (`docs/research/devlog.md`)
 - Discarded superseded status docs (README changes, where_we_are_oct13.md)
+- **Created cloud agent issues for mechanical cleanup tasks**:
+  - Issue #22: Obsidian docs → `docs/tools/obsidian/`
+  - Issue #23: src/ docs → `docs/software/packages/`
+- **Created next session plan**: `docs/development/next_session.md`
 
 **Commits**:
 - `e87bd5b` - docs(legacy): reorganize history → legacy, migrate devlog
 - `f17d31d` - docs(devlog): document legacy archive reorganization
 - `56c443e` - docs(history): separate history narratives from legacy artifacts
+- `4e86f03` - docs(devlog): update with final three-tier structure
+
+**Pushed to origin/dev**: 12 commits total (including MVP work from earlier session)
 
 **Final Structure**:
 ```
@@ -73,14 +80,16 @@ docs/
 - Need explicit pattern documentation (history_hub.md explains it)
 
 **Next Steps**:
-- Handle dimos-unitree submodule update (separate concern)
-- Continue daily devlog entries (this file remains active)
-- Periodically synthesize devlog → new history docs (e.g., project_history_nov_2025.md)
+- **Tomorrow (Oct 15)**: Interactive tasks (project_overview cleanup, development dir organization)
+- **Cloud agents**: Handle mechanical tasks (#22 Obsidian, #23 src/ docs)
+- **Later**: Legacy mining (review 41 docs for missed info - iterative, do last)
+- Handle dimos-unitree submodule update (verify if intentional)
 
 **Notes**:
 - This structure scales: future histories join history/, devlog keeps growing
 - Clear semantics: history = past (closed), development = present (active), legacy = artifacts (reference)
 - Pattern supports long-term project evolution
+- **Documentation consolidation pattern**: root README acts as quick reference linking to detailed docs under `docs/`
 
 ---
 
