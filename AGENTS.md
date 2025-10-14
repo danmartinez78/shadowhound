@@ -2,6 +2,37 @@
 
 These rules apply to the entire repository.
 
+## **CRITICAL: MVP Roadmap is Source of Truth** 🎯
+
+### YOU MUST READ AND PROTECT THE MVP ROADMAP
+
+**Before starting ANY significant work**:
+1. **READ**: `docs/project_overview/mvp_embodied_ai_platform.md` (MVP roadmap - SOURCE OF TRUTH)
+2. **READ**: `docs/project_overview/MVP_PROTECTION_POLICY.md` (how to protect scope)
+3. Extract: MVP scope, current milestone, success criteria, constraints
+
+**Purpose**: This roadmap defines project scope after comprehensive requirements gathering. Without it, scope becomes confused and shifts unintentionally (historical problem).
+
+**When proposing changes to the roadmap**:
+1. ❌ **DO NOT** edit automatically
+2. ✅ **DO** explain proposed change clearly
+3. ✅ **DO** explain WHY it's needed  
+4. ✅ **DO** show impact on scope/milestones
+5. ✅ **WAIT** for explicit user approval
+
+**When detecting scope creep**:
+```
+⚠️  SCOPE ALERT: This request would add [X] to MVP scope.
+Current MVP: [list 5 core capabilities]
+Proposed addition: [describe]
+Impact: [timeline/complexity/risk]
+Recommendation: Add to Future Work instead?
+```
+
+**Exception**: Typo fixes and factual corrections (e.g., sensor specs) can be made but should be noted in commit.
+
+---
+
 ## **CRITICAL: Development Logging** 📝
 
 ### YOU MUST UPDATE THE DEVLOG
