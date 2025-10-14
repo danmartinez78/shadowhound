@@ -153,7 +153,7 @@ Large feature branches, testing multiple approaches, extensive investigation:
   - Supports Google-style and NumPy-style docstrings
   - Generates `{package_name}_api.md` files with full API documentation
   - Requires `docstring_parser` library: `pip install docstring_parser`
-- Do **not** push directly to the GitHub Wiki; CI handles synchronization through `tools/wiki_sync.py`.
+- Do **not** push directly to the GitHub Wiki; CI handles synchronization through `tools/wiki_sync.py` on pushes to `dev` and `main` branches when `docs/**` changes.
 - To view documentation in Obsidian with graph view, run `./scripts/generate_obsidian_vault.sh` to generate a local vault.
 
 ## Documentation Link Validation

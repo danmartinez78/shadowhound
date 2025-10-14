@@ -110,6 +110,10 @@ ShadowHound maintains a single Obsidian vault under `docs/`, then converts it fo
 
 Because every outward-facing site consumes the converted Markdown, links and media render identically on GitHub, Pages, and the Wiki.
 
+**📚 View the documentation:**
+- **[GitHub Wiki](https://github.com/danmartinez78/shadowhound/wiki)** - Browse the complete documentation in wiki format
+- **[GitHub Pages](https://danmartinez78.github.io/shadowhound/)** - Material theme documentation site
+
 ### Architecture Diagrams
 
 Visual architecture diagrams are available in `docs/_assets/`:
