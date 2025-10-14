@@ -281,7 +281,7 @@ Test vision missions:
 
 ### New Files
 - `src/shadowhound_skills/` - Complete ROS2 package (12 files)
-- `src/shadowhound_skills/README.md` - 363 lines of documentation
+- `docs/software/packages/shadowhound_skills/README.md` - 363 lines of documentation
 - `src/shadowhound_skills/shadowhound_skills/vision.py` - 427 lines of code
 - `src/shadowhound_skills/test/test_vision.py` - Comprehensive test suite
 - `docs/dimos_vision_capabilities.md` - 427 lines of discovery documentation
@@ -296,7 +296,7 @@ Test vision missions:
 
 ## Resources & References
 
-- [Package README](../../src/shadowhound_skills/README.md)
+- [Package README](../software/packages/shadowhound_skills/README.md)
 - [DIMOS Vision Discovery](dimos_vision_capabilities.md)
 - [Vision Integration Design](vision_integration_design.md)
 - [Camera Architecture](../architecture/camera_architecture.md)
