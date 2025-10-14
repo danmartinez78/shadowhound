@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Iterable
 
 WIKILINK_PATTERN = re.compile(r"(!?)\[\[([^\]]+)\]\]")
-YAML_FRONTMATTER_PATTERN = re.compile(r"^---\s*\n.*?\n---\s*\n", re.DOTALL | re.MULTILINE)
+YAML_FRONTMATTER_PATTERN = re.compile(r"\A---\s*\n.*?\n---\s*\n", re.DOTALL)
 MARKDOWN_LINK_PATTERN = re.compile(r"(!?)\[([^\]]+)\]\(([^\)]+)\)")
 
 
@@ -129,8 +129,13 @@ def convert_markdown_link(match: re.Match[str]) -> str:
         wiki_page_name = wiki_slugify(href[:-3])  # Remove .md
         return f"[{label}]({wiki_page_name})"
     
-    # For other internal links (no extension), still convert to wiki-style
-    if not "." in Path(href).name:  # No extension
+    # Skip links that look like they're already wiki-style (no path, no extension)
+    # These are typically results of wikilink conversion
+    if "/" not in href and "." not in href:
+        return match.group(0)
+    
+    # For other internal links with paths but no .md extension, convert to wiki-style
+    if "/" in href and not "." in Path(href).name:  # Has path but no extension
         wiki_page_name = wiki_slugify(href)
         return f"[{label}]({wiki_page_name})"
     
