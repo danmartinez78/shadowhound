@@ -21,6 +21,44 @@ summary: >
 
 ## 2025-10-14 (Tuesday)
 
+### Evening: Project Overview Directory Cleanup (04:00-06:00)
+**Type**: Documentation Reorganization
+**Status**: ✅ Complete
+**Cleanup Doc**: [history/project_overview_cleanup_oct14_2025.md](../history/project_overview_cleanup_oct14_2025.md)
+
+Cleaned and reorganized project_overview directory for clarity and focus.
+
+**Key Results**:
+- Reduced from 14 to 6 files (57% reduction)
+- Moved operational/technical docs to appropriate directories
+- Archived point-in-time status and pre-MVP planning docs
+- Preserved skills-first roadmap as historical artifact
+- Enhanced MVP doc with testing requirements and success metrics
+
+**Files Kept** (6):
+- mvp_embodied_ai_platform.md (SOURCE OF TRUTH)
+- MVP_PROTECTION_POLICY.md
+- ideas_backlog.md, ideas_integration_summary.md
+- status_analysis_2025_10.md
+- project_overview_hub.md
+
+**Files Moved** (6):
+- agent_quick_reference.md → software/agent/
+- quick_reference.md → development/
+- quick_start.md → deployment/
+- setup_status.md, status_2025-10-12.md, todo.md → history/
+
+**MVP Enhancements** (additions-only):
+- Testing infrastructure requirements added to Milestone 1
+- Skills definition tasks added to Milestone 1
+- Enhanced success metrics in Milestone 5
+- Action Items & TODOs section added
+- Video walkthrough added to documentation TODOs
+
+**Commits**: `4765e4a`
+
+---
+
 ### Afternoon: Experiment Documentation System Created (02:30-03:30)
 **Type**: Documentation + Process
 **Status**: ✅ Complete
