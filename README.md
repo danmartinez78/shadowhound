@@ -4,6 +4,8 @@ An autonomous mobile robot system that combines ROS2 navigation with LLM/VLM-dri
 
 **Status**: 🎯 Phase 0 (Bootstrap) - Package scaffolding in progress
 
+📚 **[Documentation Wiki](https://github.com/danmartinez78/shadowhound/wiki)** | 📖 **[Project Context](docs/project.md)** | 🤖 **[DIMOS Integration](docs/DIMOS_INTEGRATION.md)**
+
 ---
 
 ## Quick Start
