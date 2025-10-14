@@ -40,8 +40,8 @@ This ensures the wiki is always up-to-date with the latest documentation without
        │
        ├─ (Conversion via link_convert.py)
        │  • Strip YAML front-matter
-       │  • Convert [[wikilinks]] to wiki-style
-       │  • Convert [text](path.md) to wiki-style
+       │  • Convert wikilinks (`[\[page]]`) to wiki-style
+       │  • Convert `[text](path.md)` to wiki-style
        ↓
 ┌─────────────┐
 │  wiki/      │  Temporary local wiki repo
@@ -76,10 +76,10 @@ summary: >
 
 **Wikilink Conversion**:
 ```markdown
-[[simple_page]]           → [simple_page](Simple-Page)
-[[docs/path/to/page]]     → [page](Page)
-[[page|Custom Label]]     → [Custom Label](Page)
-[[page#section]]          → [page § section](Page#section)
+[\[simple_page]]           → [simple_page](Simple-Page)
+[\[docs/path/to/page]]     → [page](Page)
+[\[page|Custom Label]]     → [Custom Label](Page)
+[\[page#section]]          → [page § section](Page#section)
 ```
 
 **Markdown Link Conversion**:
@@ -182,7 +182,7 @@ To view workflow execution:
 **Solution**:
 1. Test locally with `link_convert.py` to verify conversion
 2. Check that source links follow supported formats:
-   - Wikilinks: `[[page_name]]` or `[[path/to/page]]`
+   - Wikilinks: `[\[page_name]]` or `[\[path/to/page]]`
    - Markdown: `[text](path/to/page.md)`
 3. Ensure all linked files exist in `docs/`
 4. Review the conversion examples in the Architecture section above
@@ -257,7 +257,7 @@ python tools/wiki_sync.py --docs <source> --wiki <local_path> --remote <url>
 Link conversion utility that:
 - **Strips YAML front-matter** from markdown files (lines between `---` markers at file start)
 - **Converts links to wiki-style format**:
-  - Wikilinks `[[page]]` → `[page](Page)`
+  - Wikilinks `[\[page]]` → `[page](Page)`
   - Markdown links `[text](path/to/page.md)` → `[text](Page)`
   - Uses GitHub Wiki naming convention: Title-Case-With-Hyphens
 - Preserves external links (http://, https://)
@@ -279,10 +279,12 @@ status: draft
 ---
 
 Link to [Setup](docs/setup.md)
-Link to [[config_file]]
+Link to [\[config_file]]
 
 # Output:
 Link to [Setup](Setup)
+Link to [config_file](Config-File)
+```
 Link to [config_file](Config-File)
 ```
 
