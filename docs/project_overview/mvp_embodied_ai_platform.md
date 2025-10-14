@@ -1,22 +1,29 @@
 ---
-tags: [project, mvp, roadmap, planning]
+tags: [project, mvp, roadmap, planning, transformers, embodied-ai]
 status: active
 related: [roadmap.md, project_history_oct_2025.md]
 summary: >
-  MVP definition and roadmap for ShadowHound household assistant robot
+  MVP definition and roadmap for ShadowHound embodied AI robot platform
 ---
 
-# ShadowHound MVP: Household Assistant Robot
+# ShadowHound MVP: Embodied AI Robot Platform
 
 **Created**: 2025-10-14  
 **Status**: Planning  
-**Target**: Functional household assistant with voice interaction and vision-based missions
+**Target**: Embodied AI platform exploring transformer architectures in robotics (LLM, VLM, VLA)
 
 ---
 
 ## Executive Summary
 
-Transform ShadowHound into an autonomous household assistant robot capable of executing natural language missions like "find the red ball in the living room" or "check if the oven is on in the kitchen." The robot will navigate dynamically, interact via voice with personality, and process everything onboard the Thor AGX compute platform.
+Transform ShadowHound into an embodied AI platform for hands-on exploration of transformer architectures in robotics. The MVP focuses on natural language mission execution with vision-based perception, demonstrating LLM reasoning, VLM scene understanding, and autonomous navigation. Household missions ("find the red ball", "check if oven is on") serve as concrete test scenarios to validate the platform's capabilities, but the architecture is designed for broader applications beyond domestic environments.
+---
+
+## Executive Summary
+
+Build ShadowHound as a general-purpose autonomous mobile manipulation platform demonstrating transformer architectures in robotics (LLM, VLM, VLA). The robot accepts natural language missions, reasons about vision and actions, and executes complex behaviors. Initial validation uses household scenarios ("find the red ball in the living room" or "check if the oven is on in the kitchen"), but the architecture supports diverse applications beyond domestic environments.
+
+**Project Goal**: Hands-on experience with transformer architectures in robotics, not limited to household assistance.
 
 ### Success Criteria
 
@@ -24,10 +31,24 @@ The MVP is complete when the robot can:
 
 1. ✅ Accept voice commands OR console/web commands
 2. ✅ Execute vision-based missions (find objects, check appliance states)
-3. ✅ Navigate safely in household environments (with/without prior map)
+3. ✅ Navigate safely in dynamic environments (with/without prior map)
 4. ✅ Respond with voice output expressing personality
 5. ✅ Process all computation onboard Thor AGX (no cloud dependency for deployment)
 6. ✅ Learn and remember spatial information over time
+
+### Project Goals
+
+**Primary Goal**: Hands-on experience with transformer architectures in robotics
+- LLM (Large Language Models): Mission planning, reasoning, natural language understanding
+- VLM (Vision-Language Models): Scene understanding, visual question answering
+- VLA (Vision-Language-Action): Direct visuomotor control (future/stretch)
+
+**Secondary Goal**: Demonstrate embodied AI capabilities through concrete test scenarios
+- Household missions provide measurable success criteria
+- Platform architecture supports diverse applications beyond domestic use
+- Foundation for research and experimentation in robotics AI
+
+**Note**: Household scenarios are initial test cases, not the sole application domain.
 
 ---
 
@@ -39,28 +60,34 @@ The MVP is complete when the robot can:
 - Input: "Find the red ball in the living room"
 - System: Parse intent → Plan actions → Execute → Report findings
 - Output: Voice response with personality + visual confirmation
+- **Broader Use**: Any natural language task specification
 
-**2. Vision-Based Perception**
+**2. Vision-Based Perception (VLM)**
 - Object detection and recognition (YOLO + VLM)
 - Scene understanding ("Is the oven on?")
 - Spatial awareness and obstacle avoidance
+- **Broader Use**: Visual reasoning for any environment
 
 **3. Navigation & SLAM**
 - Start with no prior map ("birth" state)
 - Build map while exploring
 - Remember locations over time
 - Navigate to semantic locations ("kitchen", "living room")
+- **Broader Use**: Generalizable spatial learning for any space
 
 **4. Voice Interaction**
 - Bidirectional conversation capability
 - Accept voice commands
 - Speak responses with personality
 - Ask clarifying questions when needed
+- **Broader Use**: Natural human-robot interaction
 
 **5. Personality System**
 - Configurable personas (Tachikoma, TARS, etc.)
-- Runtime-adjustable personality parameters (TARS-style: humor, honesty, etc.)
+- TARS persona: Runtime-adjustable personality parameters (like the movie)
+- Other personas: Fixed personality traits
 - Persona influences interaction style and clarification behavior
+- **Broader Use**: Configurable interaction styles for different contexts
 
 ---
 
@@ -116,8 +143,8 @@ The MVP is complete when the robot can:
                           ↓
 ┌─────────────────────────────────────────────────────────┐
 │ AGENT LAYER (Mission Intelligence)                       │
-│ • LLM/VLM reasoning (OpenAI or vLLM)                    │
-│ • Mission planning and adaptation                        │
+│ • LLM reasoning (mission planning, language)            │
+│ • VLM reasoning (visual understanding)                  │
 │ • Personality system                                     │
 │ • Voice interaction (TTS/STT)                           │
 └─────────────────────────────────────────────────────────┘
@@ -220,7 +247,7 @@ The MVP is complete when the robot can:
 - [ ] Test with laptop speaker/mic
 - [ ] Validate onboard hardware (speaker + 4-mic array)
 
-### 3. Navigation & SLAM 🗺️
+### 4. Navigation & SLAM 🗺️
 
 **Current State**:
 - SLAM + Nav2: Tested and working on Go2 ✅
@@ -261,7 +288,7 @@ The MVP is complete when the robot can:
 - [ ] Choose persistence strategy based on results
 - [ ] Implement "go to [room]" navigation skill
 
-### 4. Compute Budget & Performance ⚡
+### 5. Compute Budget & Performance ⚡
 
 **Current State**:
 - Thor AGX: Available, performance unknown for full stack ⚠️
@@ -270,18 +297,20 @@ The MVP is complete when the robot can:
 
 **MVP Requirements**:
 - Run concurrently on Thor:
-  - vLLM inference (mission planning)
-  - VLM inference (visual reasoning) OR YOLO (object detection)
+  - LLM inference (mission planning, language understanding)
+  - VLM inference (visual reasoning, scene understanding)
+  - VLA inference (complex terrain locomotion) - when triggered
   - ROS2 nodes (Nav2, SLAM, perception)
   - TTS/STT processing
 - Target: < 5s end-to-end mission response time
 - Acceptable: Graceful degradation if compute insufficient
 
 **Unknown (High Priority Investigation)**:
-- Can Thor run full stack simultaneously?
+- Can Thor run full stack simultaneously (LLM + VLM + VLA + ROS2)?
 - What's the bottleneck? (GPU, CPU, memory, I/O)
-- Which models are viable? (Llama 3.1 70B? Qwen VLM? Smaller models?)
+- Which models are viable? (Llama 3.1 70B? Qwen VLM? Which VLA?)
 - Framework choice: vLLM vs llama.cpp vs other
+- Can we time-multiplex models? (VLA only when needed)
 
 **Fallback Options** (If Thor Insufficient):
 1. **Cloud Compute**: LLM/VLM inference in cloud, everything else onboard
@@ -297,50 +326,74 @@ The MVP is complete when the robot can:
 - [ ] Document compute budget and constraints
 - [ ] Choose deployment architecture based on results
 
-### 5. Personality System 🎭
+### 6. Personality System 🎭
 
 **Current State**:
 - Personality: Not implemented ❌
 - Mission responses: Functional but robotic ⚠️
 
 **MVP Requirements**:
-- Configurable personas (Tachikoma, TARS, custom)
-- Runtime-adjustable personality parameters (TARS-style)
-- Persona influences voice response style
-- Persona affects clarification behavior
+- Multiple configurable personas (Tachikoma, TARS, custom)
+- **TARS Persona Only**: Runtime-adjustable personality parameters (like in the movie)
+- **Other Personas**: Fixed personality characteristics (no user adjustment)
+- Persona influences voice response style and clarification behavior
 
 **Persona Examples**:
 
 **Tachikoma (Ghost in the Shell)**:
-- Curious, enthusiastic, childlike
+- Curious, enthusiastic, childlike AI
 - Frequent questions and commentary
 - High verbosity, explores proactively
-- Parameters: `curiosity=0.9, enthusiasm=0.8, verbosity=0.7`
+- **Fixed Personality**: User cannot adjust, always behaves consistently
 
 **TARS (Interstellar)**:
-- Direct, efficient, configurable
-- Adjustable humor and honesty settings
-- Minimal unnecessary speech
-- Parameters: `humor=0.6, honesty=0.9, verbosity=0.3`
+- Direct, efficient, mission-focused
+- **User-Adjustable Parameters**: Humor, honesty, verbosity (0-100%)
+- Minimal unnecessary speech (unless humor turned up)
+- User commands: "Set humor to 60%", "Set honesty to 90%"
 
 **Implementation Strategy**:
-1. **MVP Scope**: Fixed personality per persona (select at startup)
-2. **Stretch Goal**: Evolving personality based on experiences (backlog)
-3. **Initial Focus**: Personality affects voice responses only
-4. **Future Expansion**: Personality influences decision-making (cautious vs exploratory)
 
-**Personality Parameters** (TARS-Inspired):
-- `humor` (0.0-1.0): Frequency of jokes/wit in responses
-- `honesty` (0.0-1.0): Directness vs diplomatic responses
-- `curiosity` (0.0-1.0): Proactive exploration vs wait for commands
-- `verbosity` (0.0-1.0): Talkative vs concise
-- `caution` (0.0-1.0): Risk-averse vs bold decisions
+1. **MVP Scope**: 
+   - Fixed personality per persona (Tachikoma, custom personas)
+   - TARS with adjustable parameters (special case)
+   - Select persona at startup or via voice command
+
+2. **Stretch Goal**: 
+   - Evolving personality based on experiences (backlog)
+   
+3. **Initial Focus**: 
+   - Personality affects voice responses only
+   
+4. **Future Expansion**: 
+   - Personality influences decision-making (cautious vs exploratory)
+
+**TARS Personality Parameters**:
+
+User-facing (0-100% scale):
+- `humor` (0-100%): Frequency of jokes/wit in responses
+- `honesty` (0-100%): Directness vs diplomatic responses  
+- `verbosity` (0-100%): Talkative vs concise
+
+**Implementation Note**: 
+User interface uses 0-100% scale ("Set humor to 60%"), but the actual LLM prompt engineering strategy to achieve these behaviors remains to be determined. May involve:
+- System prompt modifications
+- Temperature/sampling adjustments
+- Few-shot examples in context
+- Fine-tuning (if needed)
+
+**Other Personas**:
+- Defined by static system prompts
+- No runtime adjustment by user
+- Consistent behavior across sessions
 
 **Deliverables**:
 - [ ] Design persona configuration schema (YAML/JSON)
 - [ ] Implement persona selection system
-- [ ] Create Tachikoma persona profile
-- [ ] Create TARS persona profile
+- [ ] Create Tachikoma persona profile (fixed personality)
+- [ ] Create TARS persona profile (adjustable parameters)
+- [ ] Implement TARS parameter adjustment ("Set humor to 60%")
+- [ ] Research LLM prompt engineering strategies for personality control
 - [ ] Integrate personality into LLM system prompts
 - [ ] Test personality parameters with voice output
 - [ ] (Stretch) Implement personality-influenced decision making
@@ -383,7 +436,7 @@ The MVP is complete when the robot can:
 ### Milestone 4: Compute Optimization (2-3 weeks)
 **Goal**: Full stack runs efficiently on Thor or fallback identified
 
-- [ ] Profile Thor with all systems running
+- [ ] Profile Thor with all systems running (LLM + VLM + Nav2 + SLAM + TTS/STT)
 - [ ] Measure end-to-end latency for typical missions
 - [ ] Identify bottlenecks and optimize
 - [ ] Test model alternatives (70B vs 8B vs 3B)
@@ -401,6 +454,7 @@ The MVP is complete when the robot can:
   - "Go to the bedroom and tell me what you see"
 - [ ] Validate map persistence (shutdown + relocalize)
 - [ ] Test onboard hardware (speaker + 4-mic array)
+- [ ] Test TARS personality parameter adjustment
 - [ ] Document known limitations and future work
 - [ ] **Success Metric**: 3 complex missions succeed end-to-end
 
@@ -488,7 +542,55 @@ The MVP is complete when the robot can:
 
 ## Future Work (Post-MVP)
 
-### Immediate Enhancements
+### Vision-Language-Action (VLA) for Complex Terrain 🦾
+
+**Priority**: LOW - Tackle last after MVP complete and stable
+
+**Why VLA is Post-MVP**:
+- **High Complexity**: Requires simulation environment, fine-tuning, extensive testing
+- **Safety Risk**: Direct motor control on physical robot requires careful validation
+- **Research Scope**: Cutting-edge area, significant learning curve
+- **Infrastructure Needed**: Sim2real pipeline, data collection, model training
+- **Design Work**: Integration strategy with existing DIMOS skills
+
+**Vision** (When Ready):
+Enable direct visuomotor control for complex terrain navigation where standard motion skills fail.
+
+**Use Cases**:
+- **Stairs**: Climbing/descending stairs safely
+- **Cluttered Environments**: Navigate through tight spaces with obstacles
+- **Uneven Terrain**: Adapt gait to terrain features in real-time
+- **Complex Manipulation**: Fine-grained control for object interaction
+
+**Technical Requirements** (To Investigate):
+- [ ] ROS2 Go2 SDK joint control interface (DDS mode support?)
+- [ ] Simulation environment for VLA training (Gazebo, Isaac Sim, MuJoCo?)
+- [ ] VLA model selection (RT-1, RT-2, OpenVLA, Octo, custom?)
+- [ ] Data collection strategy (teleoperation, demonstration, sim?)
+- [ ] Safety mechanisms (joint limits, collision detection, emergency stop)
+- [ ] Integration with mission agent (when to invoke VLA vs normal skills?)
+
+**Experimental Approach** (When Ready):
+1. **Phase 1**: Investigate Go2 SDK joint control capabilities (DDS vs direct)
+2. **Phase 2**: Set up simulation environment with Go2 model
+3. **Phase 3**: Collect training data (sim + real demonstrations)
+4. **Phase 4**: Train/fine-tune VLA model
+5. **Phase 5**: Sim validation with safety checks
+6. **Phase 6**: Careful real-robot validation (gradual rollout)
+
+**Deliverables** (Future Work):
+- [ ] Survey Go2 SDK for low-level joint control
+- [ ] Research VLA architectures suitable for quadruped
+- [ ] Design VLA integration architecture
+- [ ] Set up simulation environment
+- [ ] Implement data collection pipeline
+- [ ] Train initial VLA model
+- [ ] Validate in simulation
+- [ ] Real-robot validation with extensive safety testing
+
+---
+
+### Immediate Enhancements (After MVP)
 - **Evolving Personality**: Learn from interactions, adapt over time
 - **Personality Decision Influence**: Cautious vs exploratory behavior
 - **Multi-Room Semantic Mapping**: Full house spatial understanding
