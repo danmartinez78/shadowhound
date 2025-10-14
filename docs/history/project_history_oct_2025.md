@@ -1,7 +1,7 @@
 ---
-tags: [legacy, history, timeline]
-status: archived
-related: [legacy_hub.md, mvp_embodied_ai_platform.md]
+tags: [history, timeline, retrospective]
+status: closed
+related: [history_hub.md, ../legacy/legacy_hub.md, ../development/devlog.md]
 summary: >
   Complete history of ShadowHound project from inception (Oct 3, 2025) through Oct 13, 2025 - 389 commits, 10 days of intensive development. CLOSED HISTORICAL PERIOD.
 ---
@@ -848,9 +848,10 @@ In **10 days** (Oct 3-13), we:
 
 ## Related Documents
 
-- [Legacy Hub](legacy_hub.md) - Index of all legacy documentation
-- [MVP Roadmap](../project_overview/mvp_embodied_ai_platform.md) - Current project goals (Oct 14+)
+- [History Hub](history_hub.md) - Index of all historical narratives
+- [Legacy Hub](../legacy/legacy_hub.md) - Granular artifacts from this period (41 files)
 - [Development Log](../development/devlog.md) - Daily development tracking (Oct 14+)
+- [MVP Roadmap](../project_overview/mvp_embodied_ai_platform.md) - Current project goals
 - [Recent Work](../development/recent_work.md) - Last 5 days summary
 - [Mission Agent vs Executor](../architecture/mission_agent_vs_executor.md) - Architecture reference
 - [Cloud Agent Workflow](../development/cloud_agent_workflow.md) - High-velocity collaboration
@@ -859,5 +860,6 @@ In **10 days** (Oct 3-13), we:
 
 **History Author**: Project Team  
 **Period Covered**: October 3-13, 2025 (10 days, 389 commits)  
-**Purpose**: Comprehensive record of project bootstrap period  
-**Status**: CLOSED - This is a historical archive. See MVP roadmap and devlog for current state.
+**Purpose**: Comprehensive retrospective of project bootstrap period  
+**Status**: CLOSED - This is a historical narrative. See devlog for current state.
+
