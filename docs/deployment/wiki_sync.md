@@ -198,7 +198,7 @@ python tools/wiki_sync.py --docs <source> --wiki <local_path> --remote <url>
 ### `tools/link_convert.py`
 
 Link conversion utility that:
-- Converts Obsidian wikilinks (`[[target]]`) to Markdown links (`[target](target.md)`)
+- Converts Obsidian wikilinks (double-bracket syntax) to Markdown links (standard link format)
 - Handles embeds and images
 - Preserves assets and non-Markdown files
 - Adjusts relative paths based on file depth
