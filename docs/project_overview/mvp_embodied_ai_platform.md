@@ -19,10 +19,6 @@ summary: >
 Transform ShadowHound into an embodied AI platform for hands-on exploration of transformer architectures in robotics. The MVP focuses on natural language mission execution with vision-based perception, demonstrating LLM reasoning, VLM scene understanding, and autonomous navigation. Household missions ("find the red ball", "check if oven is on") serve as concrete test scenarios to validate the platform's capabilities, but the architecture is designed for broader applications beyond domestic environments.
 ---
 
-## Executive Summary
-
-Build ShadowHound as a general-purpose autonomous mobile manipulation platform demonstrating transformer architectures in robotics (LLM, VLM, VLA). The robot accepts natural language missions, reasons about vision and actions, and executes complex behaviors. Initial validation uses household scenarios ("find the red ball in the living room" or "check if the oven is on in the kitchen"), but the architecture supports diverse applications beyond domestic environments.
-
 **Project Goal**: Hands-on experience with transformer architectures in robotics, not limited to household assistance.
 
 ### Success Criteria
@@ -98,9 +94,26 @@ The MVP is complete when the robot can:
 - **ROS2 Humble** + DIMOS + Mission Agent (~2,100 LOC)
 - **SLAM + Nav2** tested on Unitree Go2
 - **Camera feed** streaming to mission agent
+- **LiDAR** operational (depth/occupancy data for Nav2 costmaps)
 - **Web UI** operational (dashboard, controls, camera view)
 - **LLM backends**: OpenAI cloud (working) + vLLM Thor (partial)
 - **Network architecture**: Laptop dev environment established
+
+### 🔧 Hardware Configuration
+
+**Current Sensors (MVP)**:
+- **Camera**: Front-facing (Go2 built-in) - RGB for VLM/object detection
+- **LiDAR**: 2D planar LiDAR (Go2 built-in) - Depth/occupancy for Nav2 costmaps
+- **IMU**: Inertial measurement unit (Go2 built-in) - Orientation, motion
+- **Odometry**: Wheel encoders (Go2 built-in) - Position estimation
+
+**Potential Sensor Upgrades (Future/Optional)**:
+- **RealSense Depth Camera**: RGB-D for better 3D understanding (not essential for MVP)
+- **360° Camera** (Insta360 X4 or DreamVU): Omnidirectional vision (not essential for MVP)
+- **4-Mic Array**: Voice interaction (deployment hardware, not dev)
+- **Speaker**: TTS output (deployment hardware, not dev)
+
+**Note**: LiDAR is essential for MVP navigation (costmap generation). RGB-D and 360° cameras are potential enhancements for future work but not required for initial missions.
 
 ### ⚠️ What's Available But Untested
 
@@ -188,6 +201,7 @@ The MVP is complete when the robot can:
 
 **Current State**:
 - Camera feed: `/camera/image_raw` (BEST_EFFORT QoS) ✅
+- LiDAR: 2D planar LiDAR operational (depth/occupancy only, no semantic data) ✅
 - DIMOS perception: Available but untested ⚠️
 - VLM branch: Qwen integration ready but not merged ⚠️
 
@@ -197,10 +211,19 @@ The MVP is complete when the robot can:
 - Track objects in 3D space for navigation
 - Scene understanding for semantic mapping
 
+**Sensor Capabilities**:
+- **Camera (RGB)**: Primary sensor for VLM/object detection, semantic understanding
+- **LiDAR**: Depth/occupancy data for Nav2 costmaps and obstacle avoidance (essential for MVP)
+- **Note**: LiDAR provides geometric data but no color/semantic information - vision handles object recognition
+
 **Experimental Approaches** (Will Test):
 - **Option A**: DIMOS perception stack (YOLO + tracking)
 - **Option B**: VLM branch (Qwen for scene understanding)
 - **Option C**: Hybrid (YOLO for detection, VLM for reasoning)
+
+**Future Sensor Upgrades** (Optional):
+- RealSense depth camera: RGB-D for better 3D understanding
+- 360° camera (Insta360 X4/DreamVU): Omnidirectional vision
 
 **Deliverables**:
 - [ ] Test DIMOS perception modules on real missions
@@ -591,7 +614,37 @@ Enable direct visuomotor control for complex terrain navigation where standard m
 ---
 
 ### Immediate Enhancements (After MVP)
-- **Evolving Personality**: Learn from interactions, adapt over time
+
+**Evolving Personality System** 🌱
+- **Vision**: Personality adapts based on mission history, user interactions, and experiences
+- **Example Behaviors**:
+  - Tachikoma becomes more confident in familiar spaces
+  - TARS adjusts humor based on successful joke reception
+  - Robot remembers user preferences ("You usually ask me to be quiet in the morning")
+  - Personality "grows" from naive (birth) to experienced over robot's lifetime
+- **Implementation Approaches**:
+  - Experience database: Track missions, outcomes, user feedback
+  - Persona evolution rules: How traits shift based on experiences
+  - Long-term memory integration: Recall past interactions
+  - Fine-tuning: Periodically update LLM based on interaction logs (if compute allows)
+- **Design Questions**:
+  - Should evolution be per-persona or cross-persona learning?
+  - How fast should personality evolve? (gradual vs rapid adaptation)
+  - Can user reset personality to "factory defaults"?
+  - Should evolution be observable/transparent to user?
+
+**Sensor Upgrades for Enhanced Perception** 📷
+- **RealSense Depth Camera**: RGB-D for improved 3D scene understanding
+  - Better object detection in cluttered spaces
+  - Precise distance estimation for manipulation tasks
+  - Improved VLM input with depth information
+- **360° Camera** (Insta360 X4 or DreamVU): Omnidirectional vision
+  - Spatial awareness without rotation
+  - Better semantic mapping (see entire room at once)
+  - Safety: Detect approaching people/obstacles from any direction
+  - Use case: "Look around and tell me what's in this room"
+
+**Other Enhancements**:
 - **Personality Decision Influence**: Cautious vs exploratory behavior
 - **Multi-Room Semantic Mapping**: Full house spatial understanding
 - **Object Manipulation**: Pick up and move objects (requires gripper)
