@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert Obsidian wikilinks and embeds to standard Markdown links."""
+"""Convert Obsidian wikilinks and embeds to wiki-style links and strip YAML front-matter."""
 
 from __future__ import annotations
 
@@ -10,13 +10,36 @@ from pathlib import Path
 from typing import Iterable
 
 WIKILINK_PATTERN = re.compile(r"(!?)\[\[([^\]]+)\]\]")
+YAML_FRONTMATTER_PATTERN = re.compile(r"^---\s*\n.*?\n---\s*\n", re.DOTALL | re.MULTILINE)
+MARKDOWN_LINK_PATTERN = re.compile(r"(!?)\[([^\]]+)\]\(([^\)]+)\)")
 
 
 def slugify(value: str) -> str:
+    """Convert text to URL-friendly slug (lowercase, hyphens)."""
     slug = re.sub(r"[^0-9A-Za-z\s-]", "", value)
     slug = slug.strip().lower()
     slug = re.sub(r"[\s]+", "-", slug)
     return slug
+
+
+def wiki_slugify(path: str) -> str:
+    """Convert file path to GitHub Wiki page name.
+    
+    GitHub Wiki expects page names like "Page-Name" (title case with hyphens).
+    Example: "docs/path/to/my_page.md" -> "My-Page"
+    """
+    # Get the filename without extension
+    filename = Path(path).stem
+    
+    # Replace underscores with spaces
+    filename = filename.replace("_", " ")
+    
+    # Title case each word
+    words = filename.split()
+    titled_words = [word.capitalize() for word in words]
+    
+    # Join with hyphens
+    return "-".join(titled_words)
 
 
 def needs_extension(target: str) -> bool:
@@ -30,6 +53,11 @@ def normalize_target(target: str) -> str:
 
 
 def convert_match(match: re.Match[str], current_file_depth: int = 0) -> str:
+    """Convert wikilink to wiki-style link (for GitHub Wiki).
+    
+    Wiki links should be just the page name without path or extension.
+    Example: [[path/to/page]] -> [Page](Page)
+    """
     is_embed = match.group(1) == "!"
     raw = match.group(2)
     if "|" in raw:
@@ -49,38 +77,93 @@ def convert_match(match: re.Match[str], current_file_depth: int = 0) -> str:
     if not target_part:
         return match.group(0)
 
-    if needs_extension(target_part):
-        href = f"{target_part}.md"
-    else:
-        href = target_part
-
-    # Adjust relative path based on current file depth
-    # If the target starts with ../ or ./, keep it as-is (already relative)
-    # If the target contains /, it's an absolute path from docs root - adjust for depth
-    # If the target has no /, it's a same-directory reference - no adjustment needed
-    if not (target_part.startswith("../") or target_part.startswith("./")):
-        if "/" in target_part and current_file_depth > 0:
-            # Absolute path from docs root - prepend ../ for each level of depth
-            href = "../" * current_file_depth + href
-        # else: same-directory reference, no adjustment needed
-
+    # For wiki-style links, convert the path to a wiki page name
+    wiki_page_name = wiki_slugify(target_part)
+    
     if anchor_slug:
-        href = f"{href}#{anchor_slug}"
-
-    href = href.replace(" ", "%20")
+        href = f"{wiki_page_name}#{anchor_slug}"
+    else:
+        href = wiki_page_name
 
     if is_embed:
+        # For embeds (images), keep them as relative paths with extension
+        # Images in wiki should reference _assets/ directory
         alt_text = label_part or Path(target_part).name
-        return f"![{alt_text}]({href})"
+        if needs_extension(target_part):
+            image_href = f"{target_part}.md"
+        else:
+            image_href = target_part
+        return f"![{alt_text}]({image_href})"
 
-    label = label_part or Path(target_part).name or target_part
+    label = label_part or Path(target_part).stem or target_part
     if anchor and not label_part:
         label = f"{label} § {anchor}"
     return f"[{label}]({href})"
 
 
+def convert_markdown_link(match: re.Match[str]) -> str:
+    """Convert standard markdown link to wiki-style link (for GitHub Wiki).
+    
+    Converts [Label](path/to/file.md) to [Label](File)
+    For images, keeps the path as-is since they need to reference _assets/
+    """
+    is_embed = match.group(1) == "!"
+    label = match.group(2)
+    href = match.group(3)
+    
+    # Skip external links (http://, https://, mailto:, etc.)
+    if "://" in href or href.startswith("mailto:"):
+        return match.group(0)
+    
+    # Skip anchor-only links
+    if href.startswith("#"):
+        return match.group(0)
+    
+    # For images/embeds, keep path as-is (especially for _assets/)
+    if is_embed:
+        return match.group(0)
+    
+    # For internal links to .md files, convert to wiki-style
+    if href.endswith(".md"):
+        # Remove the .md extension and any path
+        wiki_page_name = wiki_slugify(href[:-3])  # Remove .md
+        return f"[{label}]({wiki_page_name})"
+    
+    # For other internal links (no extension), still convert to wiki-style
+    if not "." in Path(href).name:  # No extension
+        wiki_page_name = wiki_slugify(href)
+        return f"[{label}]({wiki_page_name})"
+    
+    # Keep other links as-is (images, external files, etc.)
+    return match.group(0)
+
+
+def strip_yaml_frontmatter(content: str) -> str:
+    """Remove YAML front-matter from the beginning of a markdown file.
+    
+    YAML front-matter is delimited by --- at the start and end.
+    Example:
+        ---
+        tags: [test]
+        status: draft
+        ---
+        
+        # Content
+        
+    Returns just the content without the front-matter.
+    """
+    return YAML_FRONTMATTER_PATTERN.sub("", content, count=1)
+
+
 def convert_text(content: str, current_file_depth: int = 0) -> str:
-    return WIKILINK_PATTERN.sub(lambda m: convert_match(m, current_file_depth), content)
+    """Convert wikilinks to wiki-style links and strip YAML front-matter."""
+    # First strip YAML front-matter
+    content = strip_yaml_frontmatter(content)
+    # Then convert wikilinks
+    content = WIKILINK_PATTERN.sub(lambda m: convert_match(m, current_file_depth), content)
+    # Also convert standard markdown links to wiki-style
+    content = MARKDOWN_LINK_PATTERN.sub(convert_markdown_link, content)
+    return content
 
 
 def convert_file(input_path: Path, output_path: Path, input_root: Path) -> None:
