@@ -39,8 +39,8 @@ summary: >
 
 **Conversions Validated**:
 - `[text](docs/path/page.md)` → `[text](Page)` ✓
-- `[[config_file]]` → `[config_file](Config-File)` ✓
-- `[[path/to/page|Label]]` → `[Label](Page)` ✓
+- `[\[config_file]]` → `[config_file](Config-File)` ✓
+- `[\[path/to/page|Label]]` → `[Label](Page)` ✓
 - External links, anchors, images preserved ✓
 
 **Files Changed**:
