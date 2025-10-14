@@ -18,6 +18,52 @@ summary: >
 
 ## 2025-10-14 (Monday)
 
+### Late Evening: Documentation Cleanup & Legacy Archive (21:00-22:00)
+**Type**: Documentation + Organization  
+**Status**: ✅ Complete  
+**Impact**: Clear separation of historical (Oct 3-13) vs active documentation
+
+**Activities**:
+- Migrated legacy devlog entries (Oct 6 & 8) to project_history_oct_2025.md
+- Removed forward-looking "Next Phase Priorities" from history doc (purely historical now)
+- Renamed `docs/history/` → `docs/legacy/` (43 files)
+- Created `legacy_hub.md` explaining closed archive (Oct 3-13 period)
+- Updated project_history front-matter (status: archived)
+- Enhanced WebRTC blocker in MVP roadmap Known Gaps section
+- Deleted duplicate legacy devlog (`docs/research/devlog.md`)
+- Discarded superseded status docs (README changes, where_we_are_oct13.md)
+
+**Commits**:
+- `e87bd5b` - docs(legacy): reorganize history → legacy, migrate devlog, update history doc
+
+**Files Reorganized**:
+- 43 files moved to `docs/legacy/` (closed historical archive)
+- `docs/legacy/project_history_oct_2025.md` - comprehensive Oct 3-13 history (CLOSED)
+- `docs/legacy/legacy_hub.md` - archive index and usage guidelines
+- `docs/development/devlog.md` - active log (Oct 14+) **THIS FILE**
+
+**Key Decisions**:
+- **Clear separation**: `legacy/` = past (Oct 3-13), `development/` = present (Oct 14+), `project_overview/` = future (MVP)
+- History doc is CLOSED - no more additions, purely backwards-looking
+- Devlog is ACTIVE - daily entries going forward
+- Legacy granular docs (41 files) preserved for detailed technical reference
+
+**Discoveries**:
+- Found duplicate devlog in `docs/research/` (deleted after content migration)
+- Import reordering in mission agent files already committed
+- WebRTC blocker needed more detail in MVP roadmap (added)
+
+**Next Steps**:
+- Handle dimos-unitree submodule update (separate concern)
+- Begin Phase 1 documentation alignment with MVP roadmap
+
+**Notes**:
+- Archive provides complete documentary record of bootstrap phase (Oct 3-13)
+- For current work: check devlog, recent_work.md, and MVP roadmap
+- Legacy docs remain accessible but clearly marked as historical
+
+---
+
 ### Evening: MVP Definition & Requirements Gathering (18:00-21:00)
 **Type**: Planning + Documentation  
 **Status**: ✅ Complete  
