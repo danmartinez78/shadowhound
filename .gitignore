@@ -17,6 +17,9 @@ chroma.sqlite3
 *.sqlite3
 *.db
 
+# Model files (download separately)
+models/
+
 # IDE and editor files
 .vscode/
 *.swp
