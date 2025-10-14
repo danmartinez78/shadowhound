@@ -16,6 +16,105 @@ summary: >
 
 ---
 
+## 2025-10-15 (Tuesday)
+
+### Early Morning: Obsidian Config Relocation & PR #24 Review (00:00-01:00)
+**Type**: Documentation Organization + Fix  
+**PR**: #24  
+**Status**: ✅ Complete  
+**Impact**: Fixed .obsidian tracking issue, ready to merge PR #24
+
+**Activities**:
+- Reviewed PR #24 from cloud agent (Issue #22 - Obsidian docs consolidation)
+- Identified issue: `.obsidian/` tracked at `docs/.obsidian/` (bloated git tracking)
+- **Fix applied**: Moved `docs/.obsidian/` → `docs/tools/obsidian/.obsidian/`
+- Updated `scripts/generate_obsidian_vault.sh` to use new location
+- Updated agent instructions (AGENTS.md, copilot-instructions.md)
+- Updated obsidian tool documentation (README.md, guide.md)
+- Tested vault generation: ✅ 211 files converted successfully
+- Added PR comment explaining fix
+
+**Commits**:
+- `04743df` - fix(obsidian): move .obsidian config to tools/obsidian/
+
+**Key Decisions**:
+- **Stop tracking entire .obsidian**: Moved to tools dir as "configuration template"
+- **Clearer semantics**: Config lives with tool documentation, not at docs root
+- **Reduced git bloat**: .obsidian/ no longer polluting docs/ root
+
+**Rationale**:
+- Original approach tracked full `.obsidian/` at docs root (confusing, bloated)
+- New approach: template lives with tool docs, gets copied during vault generation
+- Users can customize locally in `docs_obs/.obsidian/` (gitignored)
+- Template ensures consistent starting point for all developers
+
+**Validation**:
+- ✅ Script generates vault successfully
+- ✅ Config copied to correct location (`docs_obs/.obsidian/`)
+- ✅ All references updated
+- ✅ No functionality changes
+
+**Notes**:
+- PR #24 ready to merge after this fix
+- Cloud agent did excellent mechanical work
+- This fix addresses architectural concern raised during review
+
+---
+
+## 2025-10-14 (Monday)
+
+### Late Night: Obsidian Documentation Consolidation (02:36-02:45 UTC)
+**Type**: Documentation Organization  
+**Issue**: #[pending]  
+**Status**: ✅ Complete  
+**Impact**: Consolidated Obsidian-related documentation under tools structure
+
+**Activities**:
+- Created `docs/tools/` directory structure for development tools
+- Created `docs/tools/obsidian/` directory
+- Moved three Obsidian documentation files:
+  - `docs/obsidian_graph_guide.md` → `docs/tools/obsidian/guide.md`
+  - `docs/obsidian_graph_setup.md` → `docs/tools/obsidian/setup.md`
+  - `docs/obsidian_graph_persistence.md` → `docs/tools/obsidian/persistence.md`
+- Created `docs/tools/obsidian/README.md` explaining:
+  - Purpose of Obsidian integration (graph view for docs)
+  - How to use `scripts/generate_obsidian_vault.sh`
+  - Where the `.obsidian/` config lives (docs/.obsidian/) and why it's committed
+  - Links to the three detailed guides
+- Created `docs/tools/README.md` with Obsidian section and future tools placeholder
+- Updated cross-references in:
+  - `.github/copilot-instructions.md` (added link to docs/tools/obsidian/)
+  - `docs/development/MERGE_READY_docs-wiki-cleanup.md` (updated file paths)
+  - `docs/tools/obsidian/persistence.md` (fixed internal reference)
+  - `docs/tools/obsidian/guide.md` (fixed path to .obsidian/graph.json)
+- Verified `scripts/generate_obsidian_vault.sh` still works (converted 211 files successfully)
+- Confirmed `.obsidian/` directory remains in `docs/.obsidian/` (not moved)
+
+**Commits**:
+- `bce6754` - docs(obsidian): consolidate to docs/tools/obsidian/
+
+**Key Decisions**:
+- **Tools directory pattern**: Established `docs/tools/` as location for development tool documentation
+- **Keep .obsidian in place**: Left `docs/.obsidian/` at root of docs/ (as required)
+- **Clear README structure**: Each tool gets subdirectory with README.md + supporting docs
+- **No functionality changes**: Pure reorganization, script still works identically
+
+**Validation**:
+- ✅ All files moved successfully via `git mv`
+- ✅ Script generates vault without errors (211 files converted)
+- ✅ New files appear in generated vault at correct paths
+- ✅ Old file locations are removed
+- ✅ `.obsidian/` directory remains in `docs/.obsidian/`
+- ✅ All cross-references updated
+- ✅ No broken links
+
+**Notes**:
+- Part of documentation cleanup establishing clear structure
+- Tools documentation now has dedicated section under `docs/tools/`
+- Sets pattern for future tool documentation (ROS2 autodoc, linting, etc.)
+
+---
+
 ## 2025-10-14 (Monday)
 
 ### Late Evening: Documentation Cleanup & Planning (21:00-23:30)

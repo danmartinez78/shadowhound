@@ -58,4 +58,4 @@ Obsidian writes graph.json on close. If you manually edit graph settings in the 
 **Recommendation**: Either use the script OR manually configure through UI, not both.
 
 ## Manual Configuration Alternative
-See `obsidian_graph_setup.md` for step-by-step UI configuration if you prefer not to use the script.
+See `setup.md` for step-by-step UI configuration if you prefer not to use the script.
