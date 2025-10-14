@@ -38,7 +38,7 @@ summary: >
 - **Created cloud agent issues for mechanical cleanup tasks**:
   - Issue #22: Obsidian docs → `docs/tools/obsidian/`
   - Issue #23: src/ docs → `docs/software/packages/`
-- **Created next session plan**: `docs/development/next_session.md`
+- **Created next session plan**: `docs/development/work_plan_oct15.md`
 
 **Commits**:
 - `e87bd5b` - docs(legacy): reorganize history → legacy, migrate devlog
