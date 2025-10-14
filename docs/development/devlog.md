@@ -34,6 +34,7 @@ Cleaned and reorganized project_overview directory for clarity and focus.
 - Archived point-in-time status and pre-MVP planning docs
 - Preserved skills-first roadmap as historical artifact
 - Enhanced MVP doc with testing requirements and success metrics
+- Updated project_overview_hub.md with new structure
 
 **Files Kept** (6):
 - mvp_embodied_ai_platform.md (SOURCE OF TRUTH)
@@ -55,7 +56,7 @@ Cleaned and reorganized project_overview directory for clarity and focus.
 - Action Items & TODOs section added
 - Video walkthrough added to documentation TODOs
 
-**Commits**: `4765e4a`
+**Commits**: `4765e4a`, `bafe630`, `615ba21`
 
 ---
 
