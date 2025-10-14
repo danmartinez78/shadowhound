@@ -29,11 +29,11 @@ Created experiment documentation system for parallel development without merge c
 
 **Key Results**:
 - Created `docs/development/experiments/` directory structure
-- Created comprehensive guide: `experiments/README.md`
+- Created comprehensive guide: `experiments/README.md` (520 lines)
 - Created template: `experiments/template_experiment.md`
 - Created 2 example docs from historical work:
-  - `local_llm_exploration_oct10_2025.md` (LLM model selection)
-  - `dimos_integration_oct05_2025.md` (Feature branch work)
+  - `local_llm_exploration_oct10_2025.md` (248 lines - 4 models tested)
+  - `dimos_integration_oct05_2025.md` (274 lines - 7 experiments)
 - Updated agent instructions (AGENTS.md, copilot-instructions.md)
 - Updated devlog to lightweight timeline format
 
@@ -43,7 +43,7 @@ Created experiment documentation system for parallel development without merge c
 - No merge conflicts (each experiment = unique file)
 - Preserves experimental learning (what worked, what didn't, why)
 
-**Commits**: [pending]
+**Commits**: `71f1cc4`
 
 ---
 
