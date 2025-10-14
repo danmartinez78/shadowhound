@@ -2,10 +2,163 @@
 
 ## Project Context
 
-ShadowHound is an autonomous mobile robot system combining ROS2 navigation with LLM/VLM-driven planning. You're working on a **Unitree Go2 quadruped** that executes natural language missions through a typed **Skills API**.
+ShadowHound is an autonomous mobile robot system combining ROS2 navigation with LLM/VLM-driven planning. You're working on a **Unitree Go2 quadruped** that executes natural language missions through DIMOS framework integration.
 
-**Current Phase**: Bootstrap (Phase 0) - Creating package scaffolding
-**Next Milestone**: Basic skills implementation without robot hardware
+**Current State**: WORKING END-TO-END SYSTEM
+- ✅ Physical robot validated (Unitree Go2)
+- ✅ Two LLM backends proven (OpenAI cloud + vLLM Thor)
+- ✅ Mission agent implemented (~2,100 LOC)
+- ⚠️ WebRTC API issues limit available skills
+
+**Active Blockers**: 
+- WebRTC API skills (majority of DIMOS skills non-functional)
+- MockRobot not implemented (needed for dev velocity)
+
+---
+
+## **CRITICAL: MVP Roadmap is Source of Truth** 🎯
+
+### YOU MUST READ AND PROTECT THE MVP ROADMAP
+
+**Before starting ANY significant work**:
+1. **READ**: `docs/project_overview/mvp_embodied_ai_platform.md` (MVP roadmap - SOURCE OF TRUTH)
+2. **READ**: `docs/project_overview/MVP_PROTECTION_POLICY.md` (how to protect scope)
+3. Extract: MVP scope, current milestone, success criteria, constraints
+
+**Purpose**: This roadmap defines project scope after comprehensive requirements gathering. Without it, scope becomes confused and shifts unintentionally (historical problem).
+
+**When proposing changes to the roadmap**:
+1. ❌ **DO NOT** edit automatically
+2. ✅ **DO** explain proposed change clearly
+3. ✅ **DO** explain WHY it's needed  
+4. ✅ **DO** show impact on scope/milestones
+5. ✅ **WAIT** for explicit user approval
+
+**When detecting scope creep**:
+```
+⚠️  SCOPE ALERT: This request would add [X] to MVP scope.
+Current MVP: [list 5 core capabilities]
+Proposed addition: [describe]
+Impact: [timeline/complexity/risk]
+Recommendation: Add to Future Work instead?
+```
+
+**Exception**: Typo fixes and factual corrections (e.g., sensor specs) can be made but should be noted in commit.
+
+---
+
+## **CRITICAL: Development Documentation** 📝
+
+### YOU MUST UPDATE DOCUMENTATION AFTER WORK
+
+**Before starting work**:
+1. Read `docs/development/recent_work.md` (last 5 days context - START HERE)
+2. Check `docs/development/devlog.md` (recent timeline)
+3. Check `docs/development/experiments/` (active experimental work)
+4. Verify you understand current system state
+
+**After completing work** (REQUIRED):
+
+### For Simple/Straightforward Work (use devlog)
+Simple features, bug fixes, documentation updates, refactoring:
+
+1. Add **lightweight entry** to `docs/development/devlog.md`
+2. Include: date, time, type, status, key results, commits
+3. Link to experiment doc if building on experimental work
+4. Commit: `docs(devlog): [activity title]`
+
+**Devlog Entry Format** (SIMPLIFIED):
+```markdown
+### Evening: Local LLM Integration Complete
+**Type**: Feature
+**Status**: ✅ Complete
+**Experiment Doc**: [experiments/local_llm_exploration_oct10_2025.md](experiments/local_llm_exploration_oct10_2025.md)
+
+Tested 4 LLM models, selected Mistral 7B for 24x speed improvement.
+
+**Key Results**:
+- vLLM on Thor: 37 tok/s baseline
+- Tool calling validated
+- Local embeddings working
+
+**Commits**: `3ac1e01`, `45618b2`
+```
+
+### For Experimental/Research Work (use experiment docs)
+Large feature branches, testing multiple approaches, extensive investigation:
+
+1. Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
+2. Use template: `docs/development/experiments/template_experiment.md`
+3. Document: Context, Hypothesis, all Experiments tried, Final Results
+4. Add lightweight devlog entry with link to experiment doc
+5. Commit experiment doc: `docs(experiments): [experiment title]`
+
+**When to create experiment doc**:
+- ✅ Testing multiple approaches (e.g., 4 LLM models)
+- ✅ Feature branch spans multiple days with iteration
+- ✅ Extensive debugging or investigation
+- ✅ Need to document "what we tried" not just "what worked"
+- ✅ Research-driven development with exploration
+
+**See**: `docs/development/experiments/README.md` for complete guide
+
+**Example experiment docs**:
+- `local_llm_exploration_oct10_2025.md` - LLM model selection
+- `dimos_integration_oct05_2025.md` - Feature branch work
+
+### Why This Pattern?
+
+**Benefits**:
+- ✅ No merge conflicts (experiment docs are unique per branch)
+- ✅ Preserves experimental learning (what worked, what didn't, why)
+- ✅ Lightweight devlog timeline (easy to scan)
+- ✅ Detailed experiment docs (full narrative when needed)
+- ✅ Works with parallel development and large feature branches
+
+**Failure to document = incomplete work**
+
+---
+
+## **CRITICAL: Development Environment Setup**
+
+### Network Architecture
+```
+Desktop (VS Code) ←─────→ Laptop (Host: 192.168.10.167) ←─────→ Thor (Jetson: 192.168.10.116)
+     │                         │                                        │
+     │                         ├─ ROS2 nodes (host)                   ├─ vLLM container (port 8000)
+     │                         ├─ Mission agent (host)                 ├─ Go2 SDK (if needed)
+     │                         └─ /home/daniel/shadowhound/            └─ Models cached
+     │
+     └─ VS Code Remote SSH
+        Editing: /workspaces/shadowhound/ (devcontainer)
+        BUT Code runs from: /home/daniel/shadowhound/ (laptop host)
+```
+
+### **FILE PATH CRITICAL WARNING** ⚠️
+- **You edit files in:** `/workspaces/shadowhound/` (devcontainer - for git, tools, editing)
+- **Code actually runs from:** `/home/daniel/shadowhound/` (laptop host - what Python executes)
+- **ALWAYS check both paths when debugging runtime errors!**
+- **Error tracebacks will show:** `/home/daniel/shadowhound/...` (not `/workspaces/...`)
+
+### When Making Code Changes:
+1. ✅ Edit in `/workspaces/shadowhound/` (devcontainer) - git works here
+2. ✅ Commit and push changes
+3. ⚠️ **Verify host has same changes:** Check `/home/daniel/shadowhound/` if runtime errors persist
+4. ⚠️ **Rebuild on host if needed:** User runs `./start.sh` on laptop host, not in devcontainer
+
+### Why This Matters:
+- Python cache (`.pyc`, `__pycache__`) may differ between devcontainer and host
+- Submodule commits may not be synced between paths
+- Build artifacts (`install/`, `build/`) are on the host
+- ROS2 runs on the host, not in devcontainer
+
+### Git Submodules (Not vcs!)
+**IMPORTANT:** This project uses **git submodules**, not vcstool (.repos files).
+
+- DIMOS is a git submodule: `src/dimos-unitree/`
+- To sync: `git submodule update --init --recursive`
+- Never edit submodule files directly (see `docs/policies/submodule_policy.md`)
+- AI agents: Use standard git submodule commands
 
 ---
 
@@ -14,23 +167,23 @@ ShadowHound is an autonomous mobile robot system combining ROS2 navigation with 
 ### Four-Layer Stack
 ```
 Application  → Launch files, configs, deployment
-Agent        → LLM/VLM orchestration, mission planning
-Skills       → Execution engine, safety, telemetry
+Agent        → LLM/VLM orchestration, mission planning (DIMOS)
+Skills       → Execution engine (DIMOS MyUnitreeSkills ~30 behaviors)
 Robot        → ROS2 bridge to go2_ros2_sdk hardware
 ```
 
 ### Package Map
 - `shadowhound_interfaces/` - Custom ROS2 messages/services/actions
-- `shadowhound_robot/` - Hardware interface layer (go2_ros2_sdk bridge)
-- `shadowhound_skills/` - Skills registry + implementations
-- `shadowhound_agent/` - Mission planner + LLM integration
+- `shadowhound_mission_agent/` - Mission agent + web UI (~2,100 LOC implemented)
 - `shadowhound_bringup/` - Launch files and configurations
+- `src/dimos-unitree/` - DIMOS framework (git submodule)
 
 ### Key Principles
-1. **Skills-First**: All robot control through Skills API, never direct topic publishing
+1. **DIMOS-First**: Skills exist in DIMOS MyUnitreeSkills, leverage them
 2. **Safety-First**: Every skill has timeout, validation, and error handling
 3. **Container-First**: All development in devcontainer
 4. **Type-First**: Use type hints, validate inputs, return structured results
+5. **Devlog-First**: Document all significant work in devlog
 
 ---
 
@@ -437,3 +590,69 @@ mypy src/shadowhound_*/shadowhound_*/
 ---
 
 **Remember**: Always check `docs/project.md` for the latest architecture and phase status before starting new work.
+
+---
+
+## Documentation Guidelines
+
+### Standard Markdown Authoring
+- Author docs inside `/docs` using the required YAML front-matter:
+  ```
+  ---
+  tags: [topic, component]
+  status: draft
+  related: []
+  summary: >
+    One-line summary.
+  ---
+  ```
+- Use **standard Markdown links** (e.g., `[ROS2 Setup](../software/ros2_setup.md)`) for internal references. These work directly on GitHub.com, GitHub Pages, and the Wiki.
+- Store images and other media in `docs/_assets/` and embed them with standard Markdown syntax (`![](_assets/image.png)`).
+
+### Obsidian Graph View (Optional)
+- To view documentation in Obsidian with graph visualization, run `./scripts/generate_obsidian_vault.sh`
+- This generates `docs_obs/` (gitignored) with wikilinks for Obsidian viewing
+- The generated vault includes the Obsidian configuration template from `docs/tools/obsidian/.obsidian/` for graph view colors and layout
+- Regenerate the vault after pulling documentation changes
+- See `docs/tools/obsidian/` for complete documentation
+
+### Rendering on GitHub Surfaces
+- Documentation is authored in standard Markdown and used directly by MkDocs and the Wiki
+- Do **not** commit the generated `docs_obs/`, `wiki/`, or `site/` folders—these are build artifacts
+- Prefer descriptive alt text for images to improve accessibility across GitHub renderers
+
+### Navigation Placement
+- Add new topic pages to the appropriate category index:
+  - Project planning → `docs/project_overview/`
+  - Hardware content → `docs/hardware/`
+  - Software guides and ROS 2 packages → `docs/software/`
+  - Networking, Simulation, Troubleshooting, and Research each have their own `README.md` index.
+- Update `mkdocs.yml` whenever you add a top-level page so MkDocs navigation matches the vault structure.
+
+### Automation Hooks
+- After creating or modifying ROS 2 packages under `src/`, run `python tools/ros2_autodoc.py` to refresh autogenerated references in `docs/software/autodoc/`.
+- Standard Markdown links are used directly by GitHub Pages and Wiki (no conversion needed).
+
+### Commit Messaging
+- Use the `docs(<scope>): <message>` format for documentation commits, e.g., `docs(simulation): add gazebo tuning guide`.
+
+### Examples
+- Link example: `[Autodoc Index](../software/autodoc/_index.md)` (standard markdown, works everywhere).
+- Page skeleton:
+  ```markdown
+  ---
+  tags: [software, setup]
+  status: draft
+  related: []
+  summary: >
+    Configure the ShadowHound development environment.
+  ---
+
+  # Title
+
+  ## Purpose
+  ## Prerequisites
+  ## Steps
+  ## Validation
+  ## References
+  ```

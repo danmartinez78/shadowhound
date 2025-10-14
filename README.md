@@ -1,95 +1,213 @@
-# ShadowHound - Autonomous Mobile Robot with LLM Planning
+<div align="center">
 
-An autonomous mobile robot system that combines ROS2 navigation with LLM/VLM-driven task planning for natural language mission execution on Unitree Go2.
+# 🐺 ShadowHound
 
-**Status**: 🎯 Phase 0 (Bootstrap) - Package scaffolding in progress
+### Embodied AI Robot Platform
+
+*Exploring transformer architectures in robotics through natural language mission execution*
+
+[![ROS2 Humble](https://img.shields.io/badge/ROS2-Humble-blue?logo=ros)](https://docs.ros.org/en/humble/)
+[![Platform](https://img.shields.io/badge/Platform-Unitree%20Go2-orange)](https://www.unitree.com/go2/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Dev Status](https://img.shields.io/badge/Status-Active%20Development-yellow)](docs/project_overview/mvp_embodied_ai_platform.md)
+
+[📚 **Documentation**](https://danmartinez78.github.io/shadowhound/) • 
+[🎯 **MVP Roadmap**](docs/project_overview/mvp_embodied_ai_platform.md) • 
+[📖 **Wiki**](https://github.com/danmartinez78/shadowhound/wiki) • 
+[🔬 **Experiments**](docs/development/experiments/)
+
+</div>
 
 ---
 
-## Quick Start
+## 🎯 Project Vision
+
+**ShadowHound** is an embodied AI platform for hands-on exploration of transformer architectures in robotics. Built on the Unitree Go2 quadruped, it combines ROS2 navigation with LLM/VLM-driven task planning to execute natural language missions.
+
+### Why This Project?
+
+- 🧠 **LLM Integration**: Mission planning, reasoning, natural language understanding
+- 👁️ **Vision Models (VLM)**: Scene understanding, visual question answering  
+- 🤖 **Visuomotor Actions (VLA)**: Direct perception-to-action control *(stretch goal)*
+
+**Note**: While initial test missions focus on household scenarios ("Find the red ball"), the architecture is designed for broader embodied AI research beyond domestic applications.
+
+---
+
+## ⚡ Quick Start
 
 ### Prerequisites
-- **Docker** with dev containers support
-- **VS Code** with [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-- **Git** for cloning the repository
 
-### 1. Open in Dev Container
+- Docker Desktop
+- VS Code with [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- Git with submodule support
+
+### Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/danmartinez78/shadowhound.git
+# 1. Clone repository with submodules
+git clone --recurse-submodules https://github.com/danmartinez78/shadowhound.git
 cd shadowhound
 
-# Open in VS Code
+# 2. Open in VS Code and reopen in container
 code .
-```
 
-When VS Code opens, you'll be prompted to "Reopen in Container" - click it!
-The container provides:
-- ✅ ROS2 Humble Desktop Full
-- ✅ Navigation2 stack
-- ✅ CycloneDDS middleware
-- ✅ Python tools (black, isort, pylint, mypy, pytest)
-- ✅ C++ development tools
-- ✅ Helpful aliases (`cb`, `source-ws`, `rosdep-install`)
+# 3. Build workspace
+cb && source-ws
 
-### 2. Build the Workspace
-
-```bash
-# Inside the container terminal:
-cb              # Build with colcon (alias for colcon build --symlink-install)
-source-ws       # Source the workspace (alias for source install/setup.bash)
-```
-
-### 3. Verify Setup
-
-```bash
-# Check ROS environment
-printenv | grep ROS
-
-# List shadowhound packages (when created)
+# 4. Verify installation
 ros2 pkg list | grep shadowhound
 ```
 
----
-
-## Architecture Overview
-
-ShadowHound uses a **four-layer architecture**:
-
-```
-┌─ Application ─┐  Launch files, configs, deployment
-┌─ Agent ───────┐  LLM/VLM orchestration, mission planning
-┌─ Skills ──────┐  Execution engine, safety, telemetry
-┌─ Robot ───────┐  ROS2 bridge to go2_ros2_sdk
-└─ Hardware ────┘  Unitree Go2 quadruped
-```
-
-### Core Packages (to be created)
-
-- **`shadowhound_interfaces/`** - Custom ROS2 messages/services/actions
-- **`shadowhound_robot/`** - Hardware interface layer
-- **`shadowhound_skills/`** - Skills registry and implementations
-- **`shadowhound_agent/`** - Mission planner and LLM integration
-- **`shadowhound_bringup/`** - Launch files and configurations
-
-See [`docs/project.md`](docs/project.md) for detailed architecture.
+✅ **Ready!** The dev container includes ROS2 Humble, DIMOS framework, and all dependencies.
 
 ---
 
-## Development Workflow
+## 🏗️ What's Built
 
-### Useful Aliases (Pre-configured)
+<table>
+<tr>
+<td width="50%">
+
+### ✅ Working System
+
+**Mission Agent** (~2,100 LOC):
+- `mission_agent.py` (713 LOC) - ROS2 node
+- `mission_executor.py` (517 LOC) - Cognitive layer
+- `web_interface.py` (479 LOC) - FastAPI dashboard
+- `rag_memory_example.py` (392 LOC) - Memory patterns
+- Unit tests (223 LOC)
+
+**LLM Backends** *(hardware validated)*:
+- ✅ OpenAI cloud (GPT-4o)
+- ⚠️ vLLM local (Mistral 7B on Thor AGX)
+
+**Infrastructure**:
+- Complete ROS2 dev environment
+- DIMOS framework integration
+- Camera feed streaming (QoS matched)
+- Custom web UI dashboard
+- Configuration system
+
+</td>
+<td width="50%">
+
+### 📊 Development Stats
+
+- **389 commits** in 10 days *(Oct 3-13)*
+- **3,500 LOC** across packages
+- **6,271 lines** contributed to DIMOS docs
+- **187 markdown files** organized
+- **8x velocity** with cloud agents
+
+### 🤖 Hardware Validated
+
+- ✅ Physical Unitree Go2 testing
+- ✅ SLAM + Nav2 navigation
+- ✅ Camera, LiDAR, IMU, odometry
+- ✅ Network architecture validated
+- ✅ Motion commands executed
+
+### ⚠️ Known Constraints
+
+- WebRTC API skills non-functional
+- MockRobot not implemented
+- Thor GPU degraded (37→5 tok/s)
+- Custom skills needed
+
+</td>
+</tr>
+</table>
+
+> 📖 **Deep Dive**: [Project History Oct 2025](docs/history/project_history_oct_2025.md) • [Development Log](docs/development/devlog.md)
+
+---
+
+## 🏛️ Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Application Layer                                  │
+│  • Launch files  • Configurations  • Deployment    │
+└─────────────────────────────────────────────────────┘
+                         ↓
+┌─────────────────────────────────────────────────────┐
+│  Agent Layer (shadowhound_mission_agent)            │
+│  • LLM/VLM orchestration  • Mission planning       │
+│  • Natural language processing  • Memory systems   │
+└─────────────────────────────────────────────────────┘
+                         ↓
+┌─────────────────────────────────────────────────────┐
+│  Skills Layer (DIMOS MyUnitreeSkills)               │
+│  • ~30 behaviors  • Safety validation              │
+│  • Telemetry collection  • Error handling          │
+└─────────────────────────────────────────────────────┘
+                         ↓
+┌─────────────────────────────────────────────────────┐
+│  Robot Layer (go2_ros2_sdk)                         │
+│  • ROS2 bridge  • Hardware abstraction             │
+│  • Sensor fusion  • Motor control                  │
+└─────────────────────────────────────────────────────┘
+```
+
+### 📦 Core Packages
+
+| Package | Purpose | Status |
+|---------|---------|--------|
+| `shadowhound_bringup` | Launch files, configurations | ✅ Operational |
+| `shadowhound_mission_agent` | Mission execution, web UI | ✅ 2,100 LOC |
+| `shadowhound_skills` | Skills registry | 🏗️ Scaffolded |
+| `dimos-unitree` | DIMOS framework | ✅ Integrated |
+
+> 🏛️ **Learn More**: [Architecture Hub](docs/architecture/architecture_hub.md) • [Software Hub](docs/software/software_hub.md)
+
+---
+
+## 🎯 MVP Roadmap
+
+**Goal**: Household assistant with vision, voice, and semantic navigation
+
+### Success Criteria
+
+- ✅ Accept voice OR console/web commands
+- ✅ Execute vision-based missions  
+- ✅ Navigate safely with SLAM
+- ⏳ Respond with voice + personality
+- ⏳ Process onboard Thor AGX *(no cloud dependency)*
+- ⏳ Learn and remember spatial information
+
+### Current Milestone: Vision Foundation
+
+**Focus**: Establish object detection baseline
+- Test DIMOS perception stack vs VLM branch (Qwen)
+- Compare accuracy, latency, compute budget
+- Choose vision approach for MVP
+
+### Test Missions
+
+```python
+"Find the red ball in the living room"
+"Check if the oven is on"
+"Navigate to the kitchen and describe what you see"
+```
+
+> 🗺️ **Full Plan**: [MVP Roadmap](docs/project_overview/mvp_embodied_ai_platform.md) • [Project Overview Hub](docs/project_overview/project_overview_hub.md)
+
+---
+
+## 🛠️ Development
+
+### Pre-configured Aliases
 
 ```bash
 cb              # colcon build --symlink-install
-cbt             # colcon test
-cbr             # colcon build && source install/setup.bash
-source-ws       # source install/setup.bash (if workspace is built)
-rosdep-install  # rosdep install --from-paths src --ignore-src -r -y
+source-ws       # source install/setup.bash  
+cbr             # build and source combined
+rosdep-install  # install ROS dependencies
 ```
 
-### Creating a New Package
+### Creating a Package
 
 ```bash
 cd src/
@@ -97,221 +215,157 @@ ros2 pkg create --build-type ament_python \
     --dependencies rclpy std_msgs \
     shadowhound_<name>
 
-# Build and test
-cb --packages-select shadowhound_<name>
-source-ws
-ros2 run shadowhound_<name> <node_name>
+cb --packages-select shadowhound_<name> && source-ws
 ```
 
-### Testing
+### Development Workflow
 
 ```bash
-# Run ROS2 tests
-cbt --packages-select shadowhound_<name>
+# 1. Create feature branch
+git checkout -b feature/my-feature
 
-# Run Python unit tests
-pytest src/shadowhound_<name>/test/
+# 2. Make changes and test
+cb && source-ws
+pytest src/shadowhound_<package>/test/
 
-# Run specific test
-pytest src/shadowhound_skills/test/test_registry.py -v
+# 3. Format and lint
+black src/ --line-length 99
+isort src/
+flake8 src/ --max-line-length 99
+
+# 4. Commit with conventional commits
+git commit -m "feat(skills): add navigation behavior"
+
+# 5. Push and create PR
+git push origin feature/my-feature
 ```
+
+> 🔧 **Guides**: [Development Hub](docs/development/development_hub.md) • [Cloud Agent Workflow](docs/development/cloud_agent_workflow.md) • [Copilot Instructions](.github/copilot-instructions.md)
 
 ---
 
-## Skills API Concept
+## 📚 Documentation
 
-The **Skills API** is the primary interface for robot control. Skills are typed, safe wrappers over ROS2 operations with built-in validation, timeouts, and telemetry.
+<div align="center">
 
-### Example: Calling a Skill
+| Resource | Description |
+|----------|-------------|
+| [📖 **GitHub Wiki**](https://github.com/danmartinez78/shadowhound/wiki) | Complete documentation *(auto-syncs from dev/main)* |
+| [🌐 **GitHub Pages**](https://danmartinez78.github.io/shadowhound/) | Material theme site *(from main branch)* |
+| [🎯 **MVP Roadmap**](docs/project_overview/mvp_embodied_ai_platform.md) | 5 milestones, success criteria |
+| [🏛️ **Architecture Hub**](docs/architecture/architecture_hub.md) | System design, layer details |
+| [📋 **Development Log**](docs/development/devlog.md) | Daily timeline *(Oct 14+)* |
+| [📜 **Project History**](docs/history/project_history_oct_2025.md) | 389 commits analyzed *(Oct 3-13)* |
+| [🔬 **Experiments**](docs/development/experiments/) | Detailed experimental work |
 
-```python
-from shadowhound_skills import SkillRegistry
-
-# Execute a navigation skill
-result = SkillRegistry.execute(
-    "nav.goto",
-    x=1.0, y=2.0, yaw=0.0,
-    timeout=20.0
-)
-
-if result.success:
-    print(f"Navigation complete: {result.data}")
-else:
-    print(f"Navigation failed: {result.error}")
-```
-
-### Example: Implementing a Skill
-
-```python
-from shadowhound_skills import Skill, SkillResult, register_skill
-
-@register_skill("report.say")
-class SaySkill(Skill):
-    """Text-to-speech skill."""
-    
-    def validate_params(self, text: str) -> tuple[bool, str]:
-        if not text or len(text) > 500:
-            return False, "Text must be 1-500 characters"
-        return True, ""
-    
-    def execute(self, text: str) -> SkillResult:
-        # Implementation here
-        return SkillResult(success=True, data={"spoken": text})
-```
+</div>
 
 ---
 
-## Environment Variables
+## 🤝 Contributing
 
-```bash
-# ROS2 Configuration (pre-set in devcontainer)
-ROS_DOMAIN_ID=42                      # Isolated network
-RMW_IMPLEMENTATION=rmw_cyclonedds_cpp # DDS implementation
-RCUTILS_LOGGING_BUFFERED_STREAM=1     # Logging optimization
-
-# Robot Connection (set when needed)
-GO2_IP=192.168.1.103                  # Go2 robot IP
-GO2_MODE=webrtc                       # webrtc or ethernet
-
-# Agent Configuration (set when needed)
-AGENT_BACKEND=cloud                   # cloud or local
-OPENAI_API_KEY=<your-key>             # For cloud LLM
-```
-
----
-
-## Current Status & Roadmap
-
-### ✅ Phase 0: Bootstrap (CURRENT)
-- [x] Devcontainer with ROS2 Humble
-- [x] Workspace structure
-- [ ] Create package scaffolding
-- [ ] First build and test
-
-### 🔄 Phase 1: Basic Skills (NEXT)
-- [ ] Skills registry implementation
-- [ ] Basic skills (say, stop, rotate, snapshot)
-- [ ] Unit tests
-
-### 🔜 Phase 2: Robot Integration
-- [ ] Import go2_ros2_sdk
-- [ ] Robot interface implementation
-- [ ] Hardware testing
-
-### 🔮 Phase 3: Agent Integration
-- [ ] LLM client
-- [ ] Mission planner
-- [ ] Natural language missions
-
-See [`docs/project.md`](docs/project.md) for complete roadmap and implementation phases.
-
----
-
-## Key Documentation
-
-- **[`docs/project.md`](docs/project.md)** - Complete architecture and implementation plan
-- **[`.github/copilot-instructions.md`](.github/copilot-instructions.md)** - AI agent development guide
-- **Package READMEs** - Each package will have detailed documentation
-
----
-
-## Troubleshooting
-
-### Container Issues
-
-**Problem**: Container fails to build
-```bash
-# Check Docker is running
-docker ps
-
-# Rebuild container from scratch
-# Ctrl+Shift+P → "Dev Containers: Rebuild Container Without Cache"
-```
-
-**Problem**: Setup script fails
-```bash
-# Check setup.sh logs in terminal
-# Common fix: permissions
-sudo chown -R ros:ros /workspaces/shadowhound
-```
-
-### ROS Issues
-
-**Problem**: Packages not found after build
-```bash
-# Always source after building
-source-ws
-
-# Or use the combined alias
-cbr
-```
-
-**Problem**: Dependencies missing
-```bash
-# Install ROS dependencies
-rosdep-install
-
-# Check what's missing
-rosdep check --from-paths src --ignore-src
-```
-
-**Problem**: Can't find ROS topics
-```bash
-# Check ROS environment
-printenv | grep ROS
-
-# List topics
-ros2 topic list
-
-# Check network (if using real robot)
-ros2 daemon stop && ros2 daemon start
-```
-
----
-
-## Contributing
+We welcome contributions! Please follow these principles:
 
 ### Development Principles
-1. **Container-First**: Always develop inside the devcontainer
-2. **Skills-First**: Implement robot control as skills, not ad-hoc ROS code
-3. **Safety-First**: Validate inputs, add timeouts, clamp velocities
-4. **Test-Driven**: Write tests alongside implementation
-5. **Document**: Keep `docs/project.md` updated
 
-### Code Style
-- **Python**: black (line length 99), isort, flake8, mypy
-- **ROS2**: Follow [ROS2 conventions](https://docs.ros.org/en/humble/The-ROS2-Project/Contributing/Code-Style-Language-Versions.html)
-- **Commits**: Use conventional commits (feat:, fix:, docs:, etc.)
+1. **🐳 Container-First**: Always develop in devcontainer
+2. **🎯 Skills-First**: Robot control through skills API, not ad-hoc code
+3. **🛡️ Safety-First**: Validate inputs, implement timeouts, clamp velocities
+4. **✅ Test-Driven**: Write tests alongside implementation
+5. **📝 Document**: Update docs as you work
 
-### Before Submitting
+### Code Standards
+
 ```bash
-# Format code
-black src/shadowhound_*/shadowhound_*/ --line-length 99
-isort src/shadowhound_*/shadowhound_*/
+# Format with Black & isort
+black src/ --line-length 99
+isort src/
 
-# Lint
-flake8 src/shadowhound_*/shadowhound_*/ --max-line-length 99
+# Lint with flake8 & mypy
+flake8 src/ --max-line-length 99
+mypy src/
+```
 
-# Type check
-mypy src/shadowhound_*/shadowhound_*/
+### Commit Convention
 
-# Test
-cbt
-pytest src/
+```bash
+feat(scope): add new feature
+fix(scope): fix bug
+docs(scope): update documentation
+test(scope): add tests
+refactor(scope): refactor code
+```
+
+> 📘 **Contributing Guide**: [AGENTS.md](AGENTS.md) • [Development Hub](docs/development/development_hub.md)
+
+---
+
+## 🌟 Recent Highlights
+
+### Today (Oct 14, 2025)
+
+- ✅ MVP roadmap defined with 5 milestones
+- ✅ Project overview consolidated (14 → 6 files)
+- ✅ Experiment documentation system created
+- ✅ Wiki auto-sync operational (dev + main)
+- ✅ Main branch protected (requires PR + status checks)
+- ✅ Root directory cleaned and organized
+
+### This Week (Oct 3-13, 2025)
+
+- ✅ Built mission agent from scratch (~2,100 LOC)
+- ✅ Integrated DIMOS framework (feature branch → tested → merged)
+- ✅ Validated on physical Unitree Go2 (dual LLM backends)
+- ✅ Created custom FastAPI web UI (479 LOC)
+- ✅ Integrated local LLM (vLLM + Mistral on Thor AGX)
+- ✅ Organized 187 documentation files
+- ✅ Established cloud agent workflow (8x velocity)
+
+> 📅 **Timeline**: [Development Log](docs/development/devlog.md) • [Project History](docs/history/project_history_oct_2025.md)
+
+---
+
+## 📊 Project Stats
+
+```
+📦 Packages:        9 ROS2 packages
+📝 Documentation:   187 markdown files
+🧪 Tests:           223 LOC (mission agent)
+�� Code:            ~3,500 LOC (ShadowHound packages)
+📚 DIMOS Contrib:   6,271 lines (upstream docs)
+⏱️ Development:     10 days (Oct 3-13, 2025)
+✨ Commits:         389 commits analyzed
 ```
 
 ---
 
-## License
+## �� Acknowledgments
 
-[Add your license here]
+Built with open-source excellence:
 
-## Acknowledgments
-
-- Built on [go2_ros2_sdk](https://github.com/unitreerobotics/go2_ros2_sdk)
-- Uses [ROS2 Humble](https://docs.ros.org/en/humble/)
-- Inspired by LLM-based robotics research
+- **[ROS2 Humble](https://docs.ros.org/en/humble/)** - Robot Operating System
+- **[go2_ros2_sdk](https://github.com/unitreerobotics/go2_ros2_sdk)** - Unitree Go2 integration
+- **[DIMOS](https://github.com/Dorteel/dimos-unitree)** - LLM orchestration framework
+- **[Unitree Go2](https://www.unitree.com/go2/)** - Quadruped robot platform
 
 ---
 
-**Ready to start developing?** Check [`docs/project.md`](docs/project.md) for the complete architecture and next steps!
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+**Ready to explore embodied AI?**
+
+[🚀 Get Started](docs/development/development_hub.md) • 
+[📖 Read the Docs](https://danmartinez78.github.io/shadowhound/) • 
+[🎯 View MVP](docs/project_overview/mvp_embodied_ai_platform.md)
+
+---
+
+*Built with ❤️ for robotics research and transformer architecture exploration*
+
+</div>

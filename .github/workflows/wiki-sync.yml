@@ -1,0 +1,35 @@
+name: Sync Wiki
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'docs/**'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Configure git user for wiki sync
+        run: |
+          git config --global user.email "shadowhound-bot@users.noreply.github.com"
+          git config --global user.name "ShadowHound Bot"
+      
+      - name: Sync to GitHub Wiki
+        env:
+          WIKI_REMOTE: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git
+        run: python tools/wiki_sync.py --docs docs --wiki wiki --remote "$WIKI_REMOTE"

@@ -1,0 +1,54 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "docs"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install documentation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mkdocs mkdocs-material pyyaml
+      - name: Generate ROS 2 autodoc stubs
+        run: python tools/ros2_autodoc.py
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Build MkDocs site
+        run: mkdocs build
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Configure git user for wiki sync
+        run: |
+          git config --global user.email "shadowhound-bot@users.noreply.github.com"
+          git config --global user.name "ShadowHound Bot"
+      - name: Sync GitHub Wiki
+        env:
+          WIKI_REMOTE: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git
+        run: python tools/wiki_sync.py --docs docs --wiki wiki --remote "$WIKI_REMOTE"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

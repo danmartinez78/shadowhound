@@ -1,0 +1,34 @@
+# ShadowHound Configuration: Laptop Development with Thor Ollama
+# 
+# Use this configuration when developing on laptop (native Ubuntu) and using
+# Ollama running on Thor (on desk) for LLM inference.
+#
+# Deployment: Laptop (daniel@9510) -> Thor Ollama container (via network)
+# Performance: ~1-3s response time (10x faster than cloud, includes network latency)
+#
+# Prerequisites:
+# 1. Ollama container running on Thor (port 11434)
+# 2. Thor's docker port 11434 exposed to network
+# 3. Model downloaded: docker exec -it ollama ollama pull llama3.1:13b
+#
+# Usage:
+#   ros2 launch shadowhound_bringup shadowhound.launch.py \
+#       config:=configs/laptop_dev_ollama.yaml
+
+# Agent backend configuration
+agent_backend: "ollama"
+use_planning_agent: false
+
+# Ollama settings - REPLACE WITH YOUR THOR'S IP
+ollama_base_url: "http://192.168.1.50:11434"  # <-- Change to Thor's actual IP!
+ollama_model: "llama3.1:13b"  # 13B recommended for Thor (32GB AGX Orin)
+
+# Robot settings
+robot_ip: "192.168.1.103"  # Go2 robot IP
+webrtc_api_topic: "webrtc_req"
+
+# Web interface
+enable_web_interface: true
+web_port: 8080
+
+# Note: No OPENAI_API_KEY needed for Ollama backend!

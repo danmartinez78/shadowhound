@@ -1,0 +1,38 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    // Prevent auto-formatting in submodule directories
+    "files.watcherExclude": {
+        "**/src/dimos-unitree/**": true
+    },
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    // Disable formatting for submodule paths
+    "python.formatting.blackArgs": [
+        "--line-length=99",
+        "--exclude=src/dimos-unitree/"
+    ],
+    "python.linting.pylintArgs": [
+        "--ignore=src/dimos-unitree"
+    ],
+    // Prevent search/indexing of submodule to reduce noise
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "**/build": true,
+        "**/install": true,
+        "**/log": true,
+        "**/src/dimos-unitree/dimos/robot/unitree/external/**": true
+    }
+}

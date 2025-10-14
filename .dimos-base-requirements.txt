@@ -1,0 +1,73 @@
+# Base DIMOS requirements (excluding heavy CUDA/perception packages)
+# This file contains all dependencies needed for basic DIMOS operation
+
+# Core web framework
+fastapi>=0.115.6
+sse-starlette>=2.2.1
+uvicorn>=0.34.0
+websockets
+pydantic
+
+# LLM APIs
+openai
+anthropic>=0.19.0
+tiktoken>=0.8.0
+transformers>=4.30.0
+torch>=2.0.0
+sentence-transformers>=2.2.0
+
+# Agent framework
+reactivex
+git+https://github.com/dimensionalOS/rxpy-backpressure.git
+chromadb>=0.4.22
+langchain-chroma>=0.1.4
+langchain-openai>=0.2.14
+
+# Utilities
+python-dotenv
+colorlog==6.9.0
+typeguard
+empy==3.3.4
+catkin_pkg
+lark
+
+# Web/Network
+Flask>=2.2
+python-multipart==0.0.20
+requests
+wasmtime
+
+# Testing
+pytest
+pytest-asyncio==0.26.0
+asyncio==3.4.3
+
+# Data Processing
+numpy<2
+opencv-python==4.10.0.84
+opencv-contrib-python==4.10.0.84
+pandas
+Pillow
+
+# Messaging
+pyzmq
+
+# Perception Dependencies (required for YOLO object detection)
+ultralytics>=8.3.70
+filterpy>=1.4.5
+scipy>=1.15.1
+scikit-learn
+mmengine>=0.10.3  # Required for Metric3D depth estimation
+# mmcv - Install separately with: pip install mmcv -f https://download.openmmlab.com/mmcv/dist/cpu/torch2.0/index.html
+# (Requires CUDA-specific build, so we skip in requirements to avoid build failures)
+timm>=1.0.15
+lap>=0.5.12
+# xformers==0.0.20 - Skipped (CUDA-specific, causes issues on CPU-only systems)
+
+# Git-based packages (must come last)
+git+https://github.com/dimensionalOS/rxpy-backpressure.git
+
+# Audio
+sounddevice
+pyaudio
+soundfile
