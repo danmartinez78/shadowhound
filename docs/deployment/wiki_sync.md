@@ -24,9 +24,10 @@ This document explains how the ShadowHound documentation is automatically synchr
 
 ShadowHound maintains documentation as standard Markdown files in the `/docs` directory. When changes are pushed to the `dev` or `main` branches, a GitHub Actions workflow automatically:
 
-1. **Converts** Obsidian wikilinks to standard Markdown links
-2. **Copies** the converted documentation to the wiki repository
-3. **Commits and pushes** changes to the GitHub Wiki
+1. **Strips YAML front-matter** - Removes metadata blocks from the start of files
+2. **Converts links to wiki-style** - Transforms both wikilinks and markdown links to GitHub Wiki format
+3. **Copies** the converted documentation to the wiki repository
+4. **Commits and pushes** changes to the GitHub Wiki
 
 This ensures the wiki is always up-to-date with the latest documentation without manual intervention.
 
@@ -38,6 +39,9 @@ This ensures the wiki is always up-to-date with the latest documentation without
 └──────┬──────┘
        │
        ├─ (Conversion via link_convert.py)
+       │  • Strip YAML front-matter
+       │  • Convert [[wikilinks]] to wiki-style
+       │  • Convert [text](path.md) to wiki-style
        ↓
 ┌─────────────┐
 │  wiki/      │  Temporary local wiki repo
@@ -48,6 +52,48 @@ This ensures the wiki is always up-to-date with the latest documentation without
 ┌─────────────┐
 │ GitHub Wiki │  Published wiki (user-facing)
 └─────────────┘
+```
+
+### Link Conversion Details
+
+The `link_convert.py` tool performs the following transformations:
+
+**YAML Front-matter Stripping**:
+```markdown
+# Input:
+---
+tags: [project, overview]
+status: draft
+summary: >
+  Multi-line summary
+---
+
+# Content
+
+# Output:
+# Content
+```
+
+**Wikilink Conversion**:
+```markdown
+[[simple_page]]           → [simple_page](Simple-Page)
+[[docs/path/to/page]]     → [page](Page)
+[[page|Custom Label]]     → [Custom Label](Page)
+[[page#section]]          → [page § section](Page#section)
+```
+
+**Markdown Link Conversion**:
+```markdown
+[Setup](docs/setup.md)              → [Setup](Setup)
+[Config](path/to/config.md)         → [Config](Config)
+[Guide](architecture/guide.md)      → [Guide](Guide)
+```
+
+**Preserved Links**:
+```markdown
+[External](https://example.com)     → [External](https://example.com)
+[Anchor](#section)                  → [Anchor](#section)
+![Image](_assets/diagram.png)       → ![Image](_assets/diagram.png)
 ```
 
 ### Trigger Conditions
@@ -131,12 +177,23 @@ To view workflow execution:
 
 ### Issue: Links broken in wiki after sync
 
-**Cause**: Wikilink conversion may have issues with complex paths.
+**Cause**: Links in source docs may use incorrect format or reference non-existent pages.
 
 **Solution**:
 1. Test locally with `link_convert.py` to verify conversion
-2. Check if source links use proper relative paths
+2. Check that source links follow supported formats:
+   - Wikilinks: `[[page_name]]` or `[[path/to/page]]`
+   - Markdown: `[text](path/to/page.md)`
 3. Ensure all linked files exist in `docs/`
+4. Review the conversion examples in the Architecture section above
+
+### Issue: YAML front-matter visible in wiki
+
+**Cause**: This issue has been fixed. If you still see YAML, the wiki may need to be re-synced.
+
+**Solution**:
+1. Push a change to trigger wiki sync workflow
+2. Or manually run: `python tools/wiki_sync.py --docs docs --wiki /tmp/wiki_local --remote "$WIKI_REMOTE"`
 
 ### Issue: Images not showing in wiki
 
@@ -198,14 +255,35 @@ python tools/wiki_sync.py --docs <source> --wiki <local_path> --remote <url>
 ### `tools/link_convert.py`
 
 Link conversion utility that:
-- Converts Obsidian wikilinks (double-bracket syntax) to Markdown links (standard link format)
-- Handles embeds and images
-- Preserves assets and non-Markdown files
-- Adjusts relative paths based on file depth
+- **Strips YAML front-matter** from markdown files (lines between `---` markers at file start)
+- **Converts links to wiki-style format**:
+  - Wikilinks `[[page]]` → `[page](Page)`
+  - Markdown links `[text](path/to/page.md)` → `[text](Page)`
+  - Uses GitHub Wiki naming convention: Title-Case-With-Hyphens
+- Preserves external links (http://, https://)
+- Preserves anchor links (#section)
+- Preserves image paths (especially `_assets/` directory)
+- Preserves non-Markdown files
 
 **Usage**:
 ```bash
 python tools/link_convert.py <input_dir> <output_dir>
+```
+
+**Examples**:
+```markdown
+# Input:
+---
+tags: [test]
+status: draft
+---
+
+Link to [Setup](docs/setup.md)
+Link to [[config_file]]
+
+# Output:
+Link to [Setup](Setup)
+Link to [config_file](Config-File)
 ```
 
 ## Validation
@@ -213,9 +291,10 @@ python tools/link_convert.py <input_dir> <output_dir>
 After a wiki sync, verify:
 
 - [ ] Wiki is accessible at https://github.com/danmartinez78/shadowhound/wiki
-- [ ] Home page displays `docs/index.md` content
-- [ ] Internal links work correctly
-- [ ] Images and diagrams display
+- [ ] Home page displays `docs/index.md` content (without YAML front-matter)
+- [ ] Internal links work correctly and point to wiki pages (not .md files)
+- [ ] Images and diagrams display (from `_assets/` directory)
+- [ ] No YAML metadata visible at the top of pages
 - [ ] Recent changes are reflected
 - [ ] Workflow logs show successful execution
 
