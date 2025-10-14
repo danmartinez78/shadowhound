@@ -18,49 +18,69 @@ summary: >
 
 ## 2025-10-14 (Monday)
 
-### Late Evening: Documentation Cleanup & Legacy Archive (21:00-22:00)
+### Late Evening: Documentation Cleanup & Organization (21:00-22:30)
 **Type**: Documentation + Organization  
 **Status**: ✅ Complete  
-**Impact**: Clear separation of historical (Oct 3-13) vs active documentation
+**Impact**: Clear three-tier documentation structure: active tracking, historical narratives, raw artifacts
 
 **Activities**:
 - Migrated legacy devlog entries (Oct 6 & 8) to project_history_oct_2025.md
 - Removed forward-looking "Next Phase Priorities" from history doc (purely historical now)
-- Renamed `docs/history/` → `docs/legacy/` (43 files)
-- Created `legacy_hub.md` explaining closed archive (Oct 3-13 period)
-- Updated project_history front-matter (status: archived)
+- Renamed `docs/history/` → `docs/legacy/` (43 files initially)
+- **Refined structure**: Separated history narratives from legacy artifacts
+- Created `docs/history/` for synthesized historical narratives
+- Moved project_history_oct_2025.md from legacy/ to history/
+- Created history_hub.md explaining active→synthesis→history pattern
+- Updated legacy_hub.md to be artifact-only index (points to history hub)
 - Enhanced WebRTC blocker in MVP roadmap Known Gaps section
 - Deleted duplicate legacy devlog (`docs/research/devlog.md`)
 - Discarded superseded status docs (README changes, where_we_are_oct13.md)
 
 **Commits**:
-- `e87bd5b` - docs(legacy): reorganize history → legacy, migrate devlog, update history doc
+- `e87bd5b` - docs(legacy): reorganize history → legacy, migrate devlog
+- `f17d31d` - docs(devlog): document legacy archive reorganization
+- `56c443e` - docs(history): separate history narratives from legacy artifacts
 
-**Files Reorganized**:
-- 43 files moved to `docs/legacy/` (closed historical archive)
-- `docs/legacy/project_history_oct_2025.md` - comprehensive Oct 3-13 history (CLOSED)
-- `docs/legacy/legacy_hub.md` - archive index and usage guidelines
-- `docs/development/devlog.md` - active log (Oct 14+) **THIS FILE**
+**Final Structure**:
+```
+docs/
+├── history/                    # Synthesized historical narratives
+│   ├── history_hub.md         # Index and pattern explanation
+│   └── project_history_oct_2025.md  # Oct 3-13 comprehensive narrative (CLOSED)
+│
+├── development/                # Active tracking
+│   ├── devlog.md              # Daily log (Oct 14+) **THIS FILE**
+│   └── recent_work.md         # Last 5 days summary
+│
+├── legacy/                     # Raw historical artifacts
+│   ├── legacy_hub.md          # Artifact index (points to history/)
+│   └── [41 granular docs]     # Day-by-day working docs from Oct 3-13
+│
+└── project_overview/           # Goals & planning
+    └── mvp_embodied_ai_platform.md  # Current roadmap
+```
 
 **Key Decisions**:
-- **Clear separation**: `legacy/` = past (Oct 3-13), `development/` = present (Oct 14+), `project_overview/` = future (MVP)
-- History doc is CLOSED - no more additions, purely backwards-looking
-- Devlog is ACTIVE - daily entries going forward
-- Legacy granular docs (41 files) preserved for detailed technical reference
+- **Three-tier structure**: history/ (narratives) ↔ development/ (active) ↔ legacy/ (artifacts)
+- **Pattern established**: devlog (active) → periodic synthesis → history doc (closed)
+- History docs are closed retrospectives, devlog is ongoing chronicle
+- Legacy artifacts are raw materials that informed history synthesis
+- Clear separation prevents confusion about where to add/find content
 
 **Discoveries**:
-- Found duplicate devlog in `docs/research/` (deleted after content migration)
-- Import reordering in mission agent files already committed
-- WebRTC blocker needed more detail in MVP roadmap (added)
+- Initial attempt lumped narratives with artifacts (confusing)
+- History doc doesn't belong in legacy/ (it's a synthesis, not an artifact)
+- Need explicit pattern documentation (history_hub.md explains it)
 
 **Next Steps**:
 - Handle dimos-unitree submodule update (separate concern)
-- Begin Phase 1 documentation alignment with MVP roadmap
+- Continue daily devlog entries (this file remains active)
+- Periodically synthesize devlog → new history docs (e.g., project_history_nov_2025.md)
 
 **Notes**:
-- Archive provides complete documentary record of bootstrap phase (Oct 3-13)
-- For current work: check devlog, recent_work.md, and MVP roadmap
-- Legacy docs remain accessible but clearly marked as historical
+- This structure scales: future histories join history/, devlog keeps growing
+- Clear semantics: history = past (closed), development = present (active), legacy = artifacts (reference)
+- Pattern supports long-term project evolution
 
 ---
 
