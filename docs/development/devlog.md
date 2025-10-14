@@ -1,22 +1,51 @@
 ---
 tags: [development, devlog, history]
 status: active
-related: [recent_work.md, project_history_oct_2025.md]
+related: [recent_work.md, experiments/README.md, project_history_oct_2025.md]
 summary: >
-  Daily development log - agents MUST update this when completing work
+  Daily development timeline - lightweight entries with links to detailed experiment docs
 ---
 
 # ShadowHound Development Log
 
-**Purpose**: Track daily development activities, decisions, and progress  
+**Purpose**: Lightweight timeline of daily development activities  
 **Audience**: Future developers, AI agents, project stakeholders  
-**Update Frequency**: After every significant activity (feature, fix, PR, merge)
+**Update Frequency**: After completing work (simple entry with link to experiment doc if applicable)
 
-**For Agents**: You MUST add an entry here when completing work. Use `./scripts/devlog-entry.sh` or follow the template below.
+**For Agents**: 
+- **Simple work**: Add lightweight entry here with key results and commits
+- **Experimental work**: Create experiment doc in `experiments/`, link from here
+- **See**: `experiments/README.md` for when to use experiment docs vs. devlog
 
 ---
 
 ## 2025-10-14 (Tuesday)
+
+### Afternoon: Experiment Documentation System Created (02:30-03:30)
+**Type**: Documentation + Process
+**Status**: ✅ Complete
+
+Created experiment documentation system for parallel development without merge conflicts.
+
+**Key Results**:
+- Created `docs/development/experiments/` directory structure
+- Created comprehensive guide: `experiments/README.md`
+- Created template: `experiments/template_experiment.md`
+- Created 2 example docs from historical work:
+  - `local_llm_exploration_oct10_2025.md` (LLM model selection)
+  - `dimos_integration_oct05_2025.md` (Feature branch work)
+- Updated agent instructions (AGENTS.md, copilot-instructions.md)
+- Updated devlog to lightweight timeline format
+
+**Pattern Established**:
+- Simple work → lightweight devlog entry
+- Experimental work → detailed experiment doc + lightweight devlog pointer
+- No merge conflicts (each experiment = unique file)
+- Preserves experimental learning (what worked, what didn't, why)
+
+**Commits**: [pending]
+
+---
 
 ### Morning: PR #25 Review & Devlog Date Corrections (01:00-02:30)
 **Type**: Documentation Review + Fix  
@@ -911,80 +940,88 @@ docs/
 
 ## Template for Future Entries
 
-### [Time Range]: [Activity Name]
-**Type**: Feature | Fix | Refactor | Documentation | Testing | Infrastructure  
-**PR/Issue**: #123 (if applicable)  
-**Status**: ✅ Complete | 🔄 In Progress | ⚠️ Blocked  
-**Impact**: What changed, why it matters
+### Simple Work (Lightweight Entry)
+```markdown
+### [Time]: [Activity Name]
+**Type**: Feature | Fix | Documentation | Refactor
+**Status**: ✅ Complete
+**Experiment Doc**: [experiments/name.md](experiments/name.md) (if applicable)
 
-**Activities**:
-- Bullet list of what was done
-- Key implementation details
-- Integration work
+Brief description of what was done and key results.
 
-**Commits**: 
-- `abc123` - Description
-- `def456` - Description
+**Key Results**:
+- Bullet list of outcomes
+- Performance metrics if applicable
 
-**Files Created/Updated**:
-- `path/to/file.py` (brief description)
+**Commits**: `abc123`, `def456`
+```
 
-**Decisions**:
-- Major technical or architectural decisions
-- Rationale for choices made
+### Experimental Work (Create Experiment Doc + Pointer)
+```markdown
+### [Time]: [Experiment Name]
+**Type**: Feature | Research | Integration
+**Status**: ✅ Complete
+**Experiment Doc**: [experiments/{feature}_{topic}_{date}.md](experiments/{feature}_{topic}_{date}.md)
 
-**Discoveries**:
-- Unexpected findings
-- Constraints identified
-- Lessons learned
+One-sentence summary of the experiment and outcome.
 
-**Notes**: Additional context, gotchas, future work
+**Key Results**:
+- What worked
+- Key metrics
+- Final decision
 
----
+**Commits**: `abc123`, `def456`
+```
 
-### End of Day Summary
-**Completed**: List of achievements  
-**In Progress**: Ongoing work  
-**Blocked By**: Dependencies or issues  
-**Tomorrow**: Planned focus  
-**Velocity**: X commits, Y features
+Then create detailed experiment doc at:
+`docs/development/experiments/{feature}_{topic}_{date}.md`
+
+Use template: `docs/development/experiments/template_experiment.md`
 
 ---
 
 ## Devlog Guidelines for Agents
 
-### When to Update
-You MUST add a devlog entry when:
-1. **Feature complete**: Any new feature or significant enhancement
-2. **PR merged**: Document what was merged and why
-3. **Major fix**: Bug fixes that required investigation
-4. **Architectural decision**: Any design choice that affects future work
-5. **Integration work**: Connecting systems or components
-6. **End of session**: Summary of day's work
+### When to Create Experiment Doc vs Simple Devlog Entry
+
+**Use Experiment Doc** (`experiments/{name}.md`) when:
+- ✅ Testing multiple approaches (e.g., 4 LLM models)
+- ✅ Feature branch spans multiple days
+- ✅ Extensive debugging or investigation
+- ✅ Need to document "what we tried" not just "what worked"
+- ✅ Research-driven development with exploration
+
+**Use Simple Devlog Entry** when:
+- ✅ Straightforward feature implementation
+- ✅ Bug fix with clear solution
+- ✅ Documentation updates
+- ✅ Refactoring with no exploration
+- ✅ Mechanical tasks (file moves, config updates)
 
 ### How to Update
-1. **Use the script**: `./scripts/devlog-entry.sh` (easiest)
-2. **Or manually**: Add entry at top of file (most recent first)
-3. **Follow template**: Use the template above for consistency
-4. **Be specific**: Include commit hashes, file paths, decisions
-5. **Link issues/PRs**: Reference GitHub issues and PRs
-6. **Note discoveries**: Document unexpected findings or constraints
 
-### What to Include
-- **Context**: Why the work was done
-- **Activities**: What was actually built/changed
-- **Commits**: Link to specific commits (use hashes)
-- **Files**: List created or significantly modified files
-- **Decisions**: Architectural or technical choices made
-- **Discoveries**: Unexpected findings, constraints, learnings
-- **Impact**: How this changes the project
+**For Simple Work**:
+1. Add lightweight entry to this file (at top, most recent first)
+2. Include: time, type, status, key results, commits
+3. Commit: `docs(devlog): [activity title]`
 
-### What NOT to Include
-- ❌ Trivial commits (typo fixes, formatting)
-- ❌ Work in progress (wait until complete)
-- ❌ Speculative future work (use roadmap for that)
+**For Experimental Work**:
+1. Create experiment doc: `experiments/{feature}_{topic}_{date}.md`
+2. Use template: `experiments/template_experiment.md`
+3. Document: Context, Hypothesis, Experiments, Final Results
+4. Add pointer entry to this file (lightweight)
+5. Commit experiment doc: `docs(experiments): [title]`
+6. Commit devlog update: `docs(devlog): [title]`
+
+### See Also
+- **Experiment Guide**: [experiments/README.md](experiments/README.md)
+- **Experiment Template**: [experiments/template_experiment.md](experiments/template_experiment.md)
+- **Example Experiments**:
+  - [local_llm_exploration_oct10_2025.md](experiments/local_llm_exploration_oct10_2025.md)
+  - [dimos_integration_oct05_2025.md](experiments/dimos_integration_oct05_2025.md)
 
 ---
 
-**Last Updated**: 2025-10-13  
-**Total Entries**: 14 (covering Oct 3-13, 2025)
+**Last Updated**: 2025-10-14  
+**Pattern Established**: Oct 14, 2025 (Experiment documentation system created)
+**Total Entries**: 15+ (Oct 3-14, 2025)

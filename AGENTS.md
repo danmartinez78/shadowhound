@@ -33,58 +33,75 @@ Recommendation: Add to Future Work instead?
 
 ---
 
-## **CRITICAL: Development Logging** 📝
+## **CRITICAL: Development Documentation** 📝
 
-### YOU MUST UPDATE THE DEVLOG
+### YOU MUST UPDATE DOCUMENTATION AFTER WORK
 
-**Before starting any work**:
-1. Read `docs/development/recent_work.md` (last 5 days summary - START HERE)
-2. Check `docs/development/devlog.md` (detailed recent activity log)
-3. Verify you understand the current system state
+**Before starting work**:
+1. Read `docs/development/recent_work.md` (last 5 days context - START HERE)
+2. Check `docs/development/devlog.md` (recent timeline)
+3. Check `docs/development/experiments/` (active experimental work)
+4. Verify you understand current system state
 
-**After completing ANY significant work** (MANDATORY):
-1. **Preferred**: Run `./scripts/add-devlog-entry.sh` (interactive helper)
-2. **Alternative**: Manually add entry to `docs/development/devlog.md` using template
-3. Include: Type, Status, Impact, Activities, Commits, Files, Decisions
-4. Commit with: `docs(devlog): [your activity title]`
+**After completing work** (REQUIRED):
 
-**What requires a devlog entry**:
-- ✅ Feature complete (any new functionality, no matter how small)
-- ✅ PR merged (document what was merged and impact)
-- ✅ Major bug fix (anything requiring investigation)
-- ✅ Architectural decision (design choices affecting future work)
-- ✅ Integration work (connecting systems or components)
-- ✅ End of work session (daily summary if multiple activities)
-- ✅ Failed attempts with learnings (document what didn't work and why)
+### For Simple/Straightforward Work (use devlog)
+Simple features, bug fixes, documentation updates, refactoring:
 
-**Devlog entry template**:
+1. Add **lightweight entry** to `docs/development/devlog.md`
+2. Include: date, time, type, status, key results, commits
+3. Link to experiment doc if building on experimental work
+4. Commit: `docs(devlog): [activity title]`
+
+**Devlog Entry Format** (SIMPLIFIED):
 ```markdown
-## YYYY-MM-DD (Day Name)
+### Evening: Local LLM Integration Complete
+**Type**: Feature
+**Status**: ✅ Complete
+**Experiment Doc**: [experiments/local_llm_exploration_oct10_2025.md](experiments/local_llm_exploration_oct10_2025.md)
 
-### [Time Range]: [Activity Title]
-**Type**: Feature | Fix | Integration | Documentation | Testing | Infrastructure  
-**PR/Issue**: #123 (if applicable)  
-**Status**: ✅ Complete | 🔄 In Progress | ⚠️ Blocked  
-**Impact**: One-line description of what changed and why it matters
+Tested 4 LLM models, selected Mistral 7B for 24x speed improvement.
 
-**Activities**:
-- Bullet list of what was done
-- Key implementation details
+**Key Results**:
+- vLLM on Thor: 37 tok/s baseline
+- Tool calling validated
+- Local embeddings working
 
-**Commits**: 
-- `abc123` - Commit message
-
-**Files Created/Updated**:
-- `path/to/file.py` (brief description)
-
-**Decisions**:
-- Key technical or architectural decisions with rationale
-
-**Discoveries**:
-- Unexpected findings, constraints, or learnings
-
-**Notes**: Additional context, gotchas, future work
+**Commits**: `3ac1e01`, `45618b2`
 ```
+
+### For Experimental/Research Work (use experiment docs)
+Large feature branches, testing multiple approaches, extensive investigation:
+
+1. Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
+2. Use template: `docs/development/experiments/template_experiment.md`
+3. Document: Context, Hypothesis, all Experiments tried, Final Results
+4. Add lightweight devlog entry with link to experiment doc
+5. Commit experiment doc: `docs(experiments): [experiment title]`
+
+**When to create experiment doc**:
+- ✅ Testing multiple approaches (e.g., 4 LLM models)
+- ✅ Feature branch spans multiple days with iteration
+- ✅ Extensive debugging or investigation
+- ✅ Need to document "what we tried" not just "what worked"
+- ✅ Research-driven development with exploration
+
+**See**: `docs/development/experiments/README.md` for complete guide
+
+**Example experiment docs**:
+- `local_llm_exploration_oct10_2025.md` - LLM model selection
+- `dimos_integration_oct05_2025.md` - Feature branch work
+
+### Why This Pattern?
+
+**Benefits**:
+- ✅ No merge conflicts (experiment docs are unique per branch)
+- ✅ Preserves experimental learning (what worked, what didn't, why)
+- ✅ Lightweight devlog timeline (easy to scan)
+- ✅ Detailed experiment docs (full narrative when needed)
+- ✅ Works with parallel development and large feature branches
+
+**Failure to document = incomplete work**
 
 ### Quick Reference Files for Context
 
@@ -94,10 +111,15 @@ Recommendation: Add to Future Work instead?
 - Active blockers
 - Quick stats
 
-**docs/development/devlog.md** (DETAILED LOG):
-- All development activity since project start
+**docs/development/devlog.md** (LIGHTWEIGHT TIMELINE):
+- Daily development timeline
 - Chronological, most recent first
-- Full details with commits, files, decisions
+- Links to detailed experiment docs
+
+**docs/development/experiments/** (DETAILED EXPERIMENTS):
+- Full experimental narratives
+- Research-driven development
+- What worked, what didn't, why
 
 **docs/history/project_history_oct_2025.md** (HISTORICAL):
 - Comprehensive 10-day history (Oct 3-13)

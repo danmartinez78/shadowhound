@@ -47,54 +47,75 @@ Recommendation: Add to Future Work instead?
 
 ---
 
-## **CRITICAL: Devlog Requirements** 📝
+## **CRITICAL: Development Documentation** 📝
 
-### YOU MUST UPDATE THE DEVLOG
+### YOU MUST UPDATE DOCUMENTATION AFTER WORK
 
 **Before starting work**:
-1. Read `docs/development/recent_work.md` (last 5 days context)
-2. Check `docs/development/devlog.md` (recent entries)
-3. Verify you understand current system state
+1. Read `docs/development/recent_work.md` (last 5 days context - START HERE)
+2. Check `docs/development/devlog.md` (recent timeline)
+3. Check `docs/development/experiments/` (active experimental work)
+4. Verify you understand current system state
 
-**After completing significant work** (REQUIRED):
-1. Run: `./scripts/add-devlog-entry.sh` (interactive)
-2. Or manually add entry to `docs/development/devlog.md`
-3. Follow the template (Type, Status, Impact, Activities, Commits, Decisions)
-4. Commit with message: `docs(devlog): [your activity title]`
+**After completing work** (REQUIRED):
 
-**What counts as "significant work"**:
-- ✅ Feature complete (any new functionality)
-- ✅ PR merged (document what was merged)
-- ✅ Major fix (bugs that required investigation)
-- ✅ Architectural decision (design choice affecting future work)
-- ✅ Integration work (connecting systems/components)
-- ✅ End of work session (daily summary)
+### For Simple/Straightforward Work (use devlog)
+Simple features, bug fixes, documentation updates, refactoring:
 
-**Failure to update devlog = incomplete work**
+1. Add **lightweight entry** to `docs/development/devlog.md`
+2. Include: date, time, type, status, key results, commits
+3. Link to experiment doc if building on experimental work
+4. Commit: `docs(devlog): [activity title]`
 
-Example entry format:
+**Devlog Entry Format** (SIMPLIFIED):
 ```markdown
-## 2025-10-13 (Sunday)
+### Evening: Local LLM Integration Complete
+**Type**: Feature
+**Status**: ✅ Complete
+**Experiment Doc**: [experiments/local_llm_exploration_oct10_2025.md](experiments/local_llm_exploration_oct10_2025.md)
 
-### 14:00-18:00: DIMOS Integration Merge
-**Type**: Integration  
-**PR/Issue**: #21  
-**Status**: ✅ Complete  
-**Impact**: DIMOS validated on physical robot, major milestone
+Tested 4 LLM models, selected Mistral 7B for 24x speed improvement.
 
-**Activities**:
-- Merged feature/dimos-integration branch
-- Validated on Unitree Go2 hardware
-- Documented network architecture
+**Key Results**:
+- vLLM on Thor: 37 tok/s baseline
+- Tool calling validated
+- Local embeddings working
 
-**Commits**: 
-- `f16bda8` - Feature branch merge
-
-**Decisions**:
-- Validate on hardware before merging (de-risks architecture changes)
-
-**Notes**: Working end-to-end with physical robot
+**Commits**: `3ac1e01`, `45618b2`
 ```
+
+### For Experimental/Research Work (use experiment docs)
+Large feature branches, testing multiple approaches, extensive investigation:
+
+1. Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
+2. Use template: `docs/development/experiments/template_experiment.md`
+3. Document: Context, Hypothesis, all Experiments tried, Final Results
+4. Add lightweight devlog entry with link to experiment doc
+5. Commit experiment doc: `docs(experiments): [experiment title]`
+
+**When to create experiment doc**:
+- ✅ Testing multiple approaches (e.g., 4 LLM models)
+- ✅ Feature branch spans multiple days with iteration
+- ✅ Extensive debugging or investigation
+- ✅ Need to document "what we tried" not just "what worked"
+- ✅ Research-driven development with exploration
+
+**See**: `docs/development/experiments/README.md` for complete guide
+
+**Example experiment docs**:
+- `local_llm_exploration_oct10_2025.md` - LLM model selection
+- `dimos_integration_oct05_2025.md` - Feature branch work
+
+### Why This Pattern?
+
+**Benefits**:
+- ✅ No merge conflicts (experiment docs are unique per branch)
+- ✅ Preserves experimental learning (what worked, what didn't, why)
+- ✅ Lightweight devlog timeline (easy to scan)
+- ✅ Detailed experiment docs (full narrative when needed)
+- ✅ Works with parallel development and large feature branches
+
+**Failure to document = incomplete work**
 
 ---
 
