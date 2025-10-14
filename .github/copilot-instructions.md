@@ -593,6 +593,7 @@ mypy src/shadowhound_*/shadowhound_*/
 - This generates `docs_obs/` (gitignored) with wikilinks for Obsidian viewing
 - The generated vault includes the committed `.obsidian/` configuration for graph view colors and layout
 - Regenerate the vault after pulling documentation changes
+- See `docs/tools/obsidian/` for complete documentation
 
 ### Rendering on GitHub Surfaces
 - Documentation is authored in standard Markdown and used directly by MkDocs and the Wiki

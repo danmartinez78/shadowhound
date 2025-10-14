@@ -57,9 +57,9 @@ Complete documentation cleanup and Obsidian graph optimization. All 173 markdown
 
 ## Documentation Added
 
-1. **`docs/obsidian_graph_guide.md`** - User guide for graph navigation (92KB)
-2. **`docs/obsidian_graph_setup.md`** - Manual UI configuration instructions
-3. **`docs/obsidian_graph_persistence.md`** - How to persist graph settings
+1. **`docs/tools/obsidian/guide.md`** - User guide for graph navigation (formerly obsidian_graph_guide.md)
+2. **`docs/tools/obsidian/setup.md`** - Manual UI configuration instructions (formerly obsidian_graph_setup.md)
+3. **`docs/tools/obsidian/persistence.md`** - How to persist graph settings (formerly obsidian_graph_persistence.md)
 4. **`docs/development/pipeline_reversal_proposal.md`** - Future work proposal
 
 ## Validation Checklist

@@ -164,5 +164,5 @@ Create temporary filters in the search bar:
 
 ## References
 - [Obsidian Graph View Docs](https://help.obsidian.md/Plugins/Graph+view)
-- [Documentation Root](index.md) - Start here for navigation
-- [.obsidian/graph.json](.obsidian/graph.json) - Graph configuration file
+- [Documentation Root](../../index.md) - Start here for navigation
+- [.obsidian/graph.json](../../.obsidian/graph.json) - Graph configuration file
