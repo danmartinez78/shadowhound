@@ -32,6 +32,7 @@ This directory contains guides for deploying and operating ShadowHound across mu
 ### Synchronization
 - [Deployment Sync](../deployment/deployment_sync.md) - Syncing code across machines
 - [Laptop Sync After Conversion](../deployment/laptop_sync_after_conversion.md) - Post-migration sync procedures
+- [Wiki Sync](../deployment/wiki_sync.md) - GitHub Wiki synchronization automation
 
 ## Deployment Topologies
 
