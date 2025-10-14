@@ -47,17 +47,19 @@ Configuration:
           --ros-args -p agent_backend:=ollama -p robot_ip:=192.168.1.103
 """
 
-import rclpy
-from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
-from std_msgs.msg import String
-from sensor_msgs.msg import Image
 import os
+from typing import Any, Dict, Optional
+
 import cv2
 import numpy as np
-from typing import Optional, Dict, Any
-from .web_interface import WebInterface
+import rclpy
+from rclpy.node import Node
+from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
+from sensor_msgs.msg import Image
+from std_msgs.msg import String
+
 from .mission_executor import MissionExecutor, MissionExecutorConfig
+from .web_interface import WebInterface
 
 
 class MissionAgentNode(Node):
@@ -406,6 +408,7 @@ class MissionAgentNode(Node):
             bool: True if OpenAI API is accessible
         """
         import os
+
         from openai import OpenAI
 
         # Check API key

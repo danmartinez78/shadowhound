@@ -138,7 +138,7 @@ The MVP is complete when the robot can:
 - **Semantic Mapping**: No room-level understanding ("kitchen" vs "living room")
 - **Map Persistence**: No save/load/localize system
 - **Personality System**: Not implemented
-- **WebRTC API Skills**: Majority broken (documented constraint)
+- **WebRTC API Skills**: **MAJOR BLOCKER** - Majority of DIMOS MyUnitreeSkills use WebRTC API directly and are non-functional. Working with limited set of non-WebRTC skills. This significantly limits available robot behaviors until resolved or Nav2-based custom skills implemented.
 - **Thor GPU**: Performance degraded (37→5 tok/s documented)
 - **Compute Budget**: Unknown if Thor sufficient for full stack
 

@@ -1,9 +1,9 @@
 ---
-tags: [history, project_overview, timeline]
-status: active
-related: [roadmap.md, where_we_are_oct13.md, status_analysis_2025_10.md]
+tags: [legacy, history, timeline]
+status: archived
+related: [legacy_hub.md, mvp_embodied_ai_platform.md]
 summary: >
-  Complete history of ShadowHound project from inception (Oct 3, 2025) through present (Oct 13, 2025) - 389 commits, 10 days of intensive development.
+  Complete history of ShadowHound project from inception (Oct 3, 2025) through Oct 13, 2025 - 389 commits, 10 days of intensive development. CLOSED HISTORICAL PERIOD.
 ---
 
 # ShadowHound Project History: October 2025
@@ -28,9 +28,15 @@ In **10 days**, we built:
 - ✅ **WORKING ROBOT**: Successfully executed motion commands on physical Unitree Go2
 - ✅ **TWO LLM BACKENDS PROVEN**: OpenAI cloud (weekend) + vLLM local on Thor (recent)
 
-**What We Don't Have Yet**: MockRobot for dev testing, ShadowHound-specific skills beyond DIMOS
+**What We Don't Have Yet**: 
+- MockRobot for dev testing
+- ShadowHound-specific skills beyond DIMOS
+- **WebRTC API skills working** (majority of DIMOS skills broken - only limited set functional)
 
-**Current State**: WORKING END-TO-END SYSTEM with physical robot validation, now optimizing for development velocity
+**Current State**: WORKING END-TO-END SYSTEM with physical robot validation (limited working skill set), now need to:
+1. Debug WebRTC API issues blocking most DIMOS skills
+2. Implement MockRobot for development velocity
+3. Build custom skills using Nav2/non-WebRTC APIs
 
 ---
 
@@ -402,26 +408,40 @@ In **10 days**, we built:
 
 ### Configuration Management
 
-**LLM Backends Configured**:
-1. ✅ **Cloud OpenAI** (`cloud_openai.yaml`)
-   - GPT-4o, GPT-4-turbo
-   - OpenAI embeddings
-   - Production-ready
+**LLM Backend Testing**:
+1. ✅ **Cloud OpenAI** (GPT-4o)
+   - Successfully tested on physical robot (weekend)
+   - Agent + ROS2 running on laptop
+   - LLM backend in cloud
 
-2. ✅ **Local Ollama - Laptop** (`laptop_dev_ollama.yaml`)
-   - Mistral 7B via vLLM
-   - Local SentenceTransformer embeddings
-   - Development mode
+2. ⚠️ **Local vLLM on Thor** (Mistral 7B)
+   - "Minor success" status (recent testing)
+   - Agent + ROS2 running on laptop
+   - LLM backend on Thor AGX (192.168.10.116)
+   - 37 tok/s baseline, degradation issue documented
 
-3. ✅ **Local Ollama - Thor** (`thor_onboard_ollama.yaml`)
-   - Onboard Jetson inference
-   - Edge deployment configuration
+**Configuration System** (actual implementation):
+- **.env files** for environment configuration:
+  - `.env.example` - Comprehensive template (300+ lines)
+  - `.env.development` - Development defaults (mock robot, local LLM)
+  - `.env.production` - Production settings (real robot, security)
+- Environment variables loaded via Python `os.getenv()`
+- `MissionExecutorConfig` dataclass reads from environment
+- Key variables: `OPENAI_API_KEY`, `AGENT_BACKEND`, `OLLAMA_BASE_URL`, `OLLAMA_MODEL`, `USE_LOCAL_EMBEDDINGS`, `ROBOT_IP`
 
-**Network Configurations**:
-- ✅ Desktop → Laptop → Thor → Go2 topology
-- ✅ ROS2 domain isolation (ROS_DOMAIN_ID=42)
-- ✅ DDS direct communication guides
-- ✅ WebRTC troubleshooting
+**Legacy YAML configs** (exist but not used):
+- `configs/cloud_openai.yaml` - Old template (not loaded by code)
+- `configs/laptop_dev_ollama.yaml` - Old template (not loaded by code)
+- `configs/thor_onboard_ollama.yaml` - Old template (not loaded by code)
+- Note: Mission agent uses `.env` files exclusively
+
+**Network Topology** (actual deployment):
+- Desktop → Laptop (192.168.10.167) → Thor (192.168.10.116) → Go2
+- Laptop: Agent + ROS2 + Mission execution
+- Thor: vLLM backend (when not using cloud)
+- Go2: Physical robot hardware
+- ROS_DOMAIN_ID=42 for isolation
+- DDS direct communication
 
 ---
 
@@ -583,50 +603,28 @@ In **10 days**, we built:
 **Solution**: Hub structure, Obsidian graph, consistent front-matter  
 **Status**: ✅ Organized and maintainable
 
----
+### 8. WebRTC API Skills Issues
+**Challenge**: Majority of DIMOS MyUnitreeSkills use WebRTC API directly and are non-functional  
+**Solution**: Working with limited set of non-WebRTC skills, documented the constraint  
+**Status**: ⚠️ Ongoing - functional system with limited skill set
 
-## What We Still Need (Reality Check)
+### 9. Camera Feed QoS Compatibility (Oct 8)
+**Challenge**: Camera feed callback never triggered despite topic publishing at 14Hz  
+**Root Cause**: QoS mismatch - camera publishes BEST_EFFORT (sensor pattern), agent subscribed with RELIABLE (default)  
+**Solution**: Matched QoS profile to sensor data pattern (BEST_EFFORT, VOLATILE, depth=5)  
+**Diagnosis**: Used `ros2 topic info -v` to discover incompatible QoS profiles  
+**Status**: ✅ Fixed - camera feed working with proper QoS
 
-### Critical Gaps
+### 10. Agent Refactor Execution Issues (Oct 6)
+**Challenge**: Three runtime bugs discovered during robot deployment  
+**Issues**:
+1. Node.executor naming conflict (ROS2 reserved attribute)
+2. DIMOS parameter mismatch (model_name= not model=)
+3. Token limits needed configuration (max_output=4096, max_input=128000)
 
-1. **MockRobot Implementation** ❌ 
-   - Strategy documented but not implemented
-   - Blocks all skills development
-   - **Priority**: CRITICAL (next task)
-
-2. **Skills Registry** ❌
-   - Design clear but not implemented
-   - Need SkillRegistry, Skill base class, @register_skill
-   - **Priority**: CRITICAL (after MockRobot)
-
-3. **Actual Skills** ❌
-   - Zero skills implemented (nav.stop, nav.rotate, etc.)
-   - Can't test mission execution without skills
-   - **Priority**: HIGH (after registry)
-
-4. **Integration Testing** ❌
-   - Can't run end-to-end tests
-   - No CI for integration tests
-   - **Priority**: HIGH
-
-5. **Hardware Validation** ❌
-   - Haven't tested on real Go2 yet
-   - Safety validation not done
-   - **Priority**: MEDIUM (after MockRobot works)
-
-### Documentation Gaps
-
-1. **Skills Development Guide** ❌
-   - Have DIMOS guide, need ShadowHound-specific
-   - **Priority**: MEDIUM (after skills implemented)
-
-2. **Testing Guide** ❌
-   - Have pytest setup, need comprehensive guide
-   - **Priority**: MEDIUM
-
-3. **Deployment Guide** ❌
-   - Have configuration, need deployment steps
-   - **Priority**: LOW (after hardware validation)
+**Solution**: Renamed to mission_executor, corrected API signatures, added token config  
+**Status**: ✅ Fixed - 47 skills loaded, mission execution functional  
+**Lesson**: Runtime testing on hardware reveals bugs unit tests miss
 
 ---
 
@@ -819,44 +817,6 @@ In **10 days**, we built:
 
 ---
 
-## Next Phase Priorities
-
-### Immediate (This Week)
-
-1. **MockRobot Implementation** (2-3 days)
-   - Highest priority, blocks everything
-   - Clear plan exists in decoupling analysis
-   - **Success**: Can run mission_executor.py without hardware
-
-2. **First 3 Skills** (1-2 days)
-   - nav.stop, nav.rotate, report.log
-   - Prove skills pattern works
-   - **Success**: Can execute "rotate 90, stop" with MockRobot
-
-3. **Skills Registry** (1-2 days)
-   - Implement @register_skill decorator
-   - SkillRegistry and SkillResult
-   - **Success**: Agent can discover and call skills
-
-### Short Term (Next 2 Weeks)
-
-4. **10 More Skills** (1 week)
-   - Navigation: goto, translate, strafe, turn_to
-   - Perception: snapshot, detect, track
-   - System: wait, status, emergency_stop
-
-5. **Integration Testing** (3-4 days)
-   - End-to-end tests with MockRobot
-   - CI pipeline for tests
-   - **Success**: CI validates full stack
-
-6. **Hardware Validation** (1 week)
-   - Test on real Go2
-   - Safety validation
-   - Performance tuning
-
----
-
 ## Conclusion
 
 In **10 days** (Oct 3-13), we:
@@ -872,14 +832,15 @@ In **10 days** (Oct 3-13), we:
 
 **We have a WORKING END-TO-END SYSTEM** validated on physical hardware!
 
-**What we still need**:
-1. MockRobot (for dev without hardware access)
-2. ShadowHound-specific custom skills (beyond DIMOS built-ins)
-3. Thor vLLM optimization (address "minor success" → "reliable success")
+**Project state at end of period** (Oct 13):
+- ✅ Working robot with two LLM backends proven
+- ✅ Clear architecture with comprehensive documentation  
+- ✅ Cloud agent workflow established (8x velocity on structured tasks)
+- ⚠️ Limited skill set due to WebRTC API issues
+- ❌ MockRobot not yet implemented (blocks hardware-free development)
+- ❌ Custom ShadowHound skills not yet implemented
 
-**The project is in excellent shape**: Working robot, two LLM backends proven, clear architecture, comprehensive documentation.
-
-**Next focus**: Development velocity (MockRobot) and mission-specific capabilities (custom skills).
+**Key achievements**: Stable foundation, working end-to-end system, proven on hardware.
 
 **Timeline**: With MockRobot, we can develop custom skills rapidly without hardware dependency.
 
@@ -887,16 +848,16 @@ In **10 days** (Oct 3-13), we:
 
 ## Related Documents
 
-- [Where We Are (Oct 13)](where_we_are_oct13.md) - Current status checkpoint
-- [Status Analysis (Oct 2025)](status_analysis_2025_10.md) - Oct 12 reality check
-- [Roadmap](roadmap.md) - Strategic phases
-- [TODO List](../development/todo.md) - Active tasks
+- [Legacy Hub](legacy_hub.md) - Index of all legacy documentation
+- [MVP Roadmap](../project_overview/mvp_embodied_ai_platform.md) - Current project goals (Oct 14+)
+- [Development Log](../development/devlog.md) - Daily development tracking (Oct 14+)
+- [Recent Work](../development/recent_work.md) - Last 5 days summary
 - [Mission Agent vs Executor](../architecture/mission_agent_vs_executor.md) - Architecture reference
-- [Decoupling Analysis](../development/agent_robot_decoupling_analysis.md) - MockRobot strategy
 - [Cloud Agent Workflow](../development/cloud_agent_workflow.md) - High-velocity collaboration
 
 ---
 
 **History Author**: Project Team  
 **Period Covered**: October 3-13, 2025 (10 days, 389 commits)  
-**Purpose**: Comprehensive record of project development from inception to present
+**Purpose**: Comprehensive record of project bootstrap period  
+**Status**: CLOSED - This is a historical archive. See MVP roadmap and devlog for current state.
