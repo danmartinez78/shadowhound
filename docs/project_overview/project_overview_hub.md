@@ -18,49 +18,58 @@ Serve as the primary entry point for understanding ShadowHound's current status,
 
 ## Quick Navigation
 
-### 🚀 Getting Started
-- **[Quick Start](../project_overview/quick_start.md)** - One-command launch checklist for rapid bring-up
-- **[Quick Reference](../project_overview/quick_reference.md)** - Command cheat sheet and operational shortcuts
-- **[Agent Quick Reference](../project_overview/agent_quick_reference.md)** - Agent types and performance characteristics
+### 🎯 Core Planning Documents
+- **[MVP Roadmap](mvp_embodied_ai_platform.md)** - **SOURCE OF TRUTH** - Embodied AI platform roadmap and milestones
+- **[MVP Protection Policy](MVP_PROTECTION_POLICY.md)** - How to protect MVP scope from unintended changes
+- **[Current Status (Oct 13)](status_analysis_2025_10.md)** - Comprehensive state assessment
 
-### 📋 Planning & Status
-- **[Project Roadmap](../project_overview/roadmap.md)** - High-level phases and strategic milestones
-- **[Project TODO](../project_overview/todo.md)** - Prioritized backlog and task tracking
-- **[Setup Status](../project_overview/setup_status.md)** - DIMOS integration milestone (October 4, 2025)
-- **[Status 2025-10-12](../project_overview/status_2025-10-12.md)** - Recent documentation reorg and handoff
+### 💡 Ideas & Future Work
+- **[Ideas Backlog](ideas_backlog.md)** - Future enhancements and feature ideas
+- **[Ideas Integration Summary](ideas_integration_summary.md)** - Planning history and ideas analysis
 
-### 🏗️ Architecture & Context
-- **[Architecture Review Summary](../project_overview/architecture_review_summary.md)** - October 3 design decisions and layered architecture
+### � Related Quick References (Moved)
+- **[Launch Checklist](../deployment/launch_checklist.md)** - Deployment and startup procedures
+- **[Command Reference](../development/command_reference.md)** - Common commands and shortcuts
+- **[Agent Types Comparison](../software/agent/agent_types_comparison.md)** - OpenAI vs Planning agent guide
+
+### 📜 Historical Documents
+- **[Cleanup Tracking (Oct 14)](../history/project_overview_cleanup_oct14_2025.md)** - Documentation reorganization audit trail
+- **[Skills-First Roadmap (Archived)](../legacy/roadmap_skills_first_oct13.md)** - Historical implementation approach
+- **[Pre-MVP TODO](../history/todo_pre_mvp_oct2025.md)** - Task list before MVP planning
+- **[Status Updates](../history/)** - Point-in-time status snapshots
 
 ## Current Phase
-**Phase 0: Bootstrap & Local LLM Integration**
-- Core ROS2 packages scaffolded with DIMOS framework
-- vLLM backend integration with local embeddings
-- End-to-end testing with Thor (Jetson) deployment
+**Milestone 1: Vision Foundation (MVP)**
+- Testing infrastructure setup
+- Skills definition and audit
+- Vision stack selection (DIMOS vs VLM vs hybrid)
+- Object detection integrated with mission agent
 
-See [Project Roadmap](../project_overview/roadmap.md) for detailed milestone tracking.
+See [MVP Roadmap](mvp_embodied_ai_platform.md) for complete milestones and success criteria.
 
 ## Key Documents by Topic
 
-### Onboarding & Operations
+### Core Planning (In This Directory)
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| [Quick Start](../project_overview/quick_start.md) | Rapid launch checklist using `start.sh` | Operators, new contributors |
-| [Quick Reference](../project_overview/quick_reference.md) | Command cheat sheet and environment presets | Maintainers, operators |
-| [Agent Quick Reference](../project_overview/agent_quick_reference.md) | Agent types (OpenAI vs Planning) performance guide | Mission developers |
+| [MVP Roadmap](mvp_embodied_ai_platform.md) | **SOURCE OF TRUTH** - Embodied AI platform milestones | All stakeholders |
+| [MVP Protection Policy](MVP_PROTECTION_POLICY.md) | Scope protection guidelines | Contributors, AI agents |
+| [Current Status (Oct 13)](status_analysis_2025_10.md) | Comprehensive state assessment | Contributors, stakeholders |
+| [Ideas Backlog](ideas_backlog.md) | Future enhancements and features | Planning, contributors |
 
-### Strategic Planning
+### Operational Guides (Moved to Appropriate Directories)
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| [Project Roadmap](../project_overview/roadmap.md) | High-level phases and target outcomes | Leadership, contributors |
-| [Project TODO](../project_overview/todo.md) | Prioritized backlog with acceptance criteria | Contributors, maintainers |
-| [Architecture Review](../project_overview/architecture_review_summary.md) | October 3 layered design decisions | Architects, technical leads |
+| [Launch Checklist](../deployment/launch_checklist.md) | Deployment and startup procedures | Operators, new contributors |
+| [Command Reference](../development/command_reference.md) | Common commands and shortcuts | Maintainers, operators |
+| [Agent Types Comparison](../software/agent/agent_types_comparison.md) | OpenAI vs Planning agent performance | Mission developers |
 
-### Status & Progress
+### Historical Documentation (Archived)
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| [Setup Status](../project_overview/setup_status.md) | DIMOS integration milestone (Oct 4) | Contributors, onboarding |
-| [Status 2025-10-12](../project_overview/status_2025-10-12.md) | Documentation reorg and handoff | Maintainers, continuity |
+| [Cleanup Tracking (Oct 14)](../history/project_overview_cleanup_oct14_2025.md) | Documentation reorganization audit | Maintainers, continuity |
+| [Skills-First Roadmap](../legacy/roadmap_skills_first_oct13.md) | Historical implementation approach | Architects, historical reference |
+| [Pre-MVP TODO](../history/todo_pre_mvp_oct2025.md) | Task list before MVP planning | Historical reference |
 
 ## Related Documentation
 
@@ -80,11 +89,11 @@ See [Project Roadmap](../project_overview/roadmap.md) for detailed milestone tra
 - **[Robot Testing](../troubleshooting/quick_start_robot_test.md)** - Hardware-in-the-loop validation
 
 ## Validation
-- [ ] Quick start guide launches ShadowHound successfully
-- [ ] Quick reference commands execute without errors
-- [ ] Roadmap milestones align with current repository state
-- [ ] TODO backlog reflects current priorities
-- [ ] Status documents provide clear handoff information
+- [x] MVP roadmap is the authoritative planning document
+- [x] MVP Protection Policy guards scope from unintended changes
+- [x] Operational guides moved to appropriate directories
+- [x] Historical documents archived with proper context
+- [x] Directory reduced from 14 to 6 files for clarity
 
 ## See Also
 - [Documentation Root](../project_overview/project_overview_hub.md) - Complete documentation index
