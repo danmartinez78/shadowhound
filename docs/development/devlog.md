@@ -18,6 +18,60 @@ summary: >
 
 ## 2025-10-14 (Monday)
 
+### Late Night: Obsidian Documentation Consolidation (02:36-02:45 UTC)
+**Type**: Documentation Organization  
+**Issue**: #[pending]  
+**Status**: ✅ Complete  
+**Impact**: Consolidated Obsidian-related documentation under tools structure
+
+**Activities**:
+- Created `docs/tools/` directory structure for development tools
+- Created `docs/tools/obsidian/` directory
+- Moved three Obsidian documentation files:
+  - `docs/obsidian_graph_guide.md` → `docs/tools/obsidian/guide.md`
+  - `docs/obsidian_graph_setup.md` → `docs/tools/obsidian/setup.md`
+  - `docs/obsidian_graph_persistence.md` → `docs/tools/obsidian/persistence.md`
+- Created `docs/tools/obsidian/README.md` explaining:
+  - Purpose of Obsidian integration (graph view for docs)
+  - How to use `scripts/generate_obsidian_vault.sh`
+  - Where the `.obsidian/` config lives (docs/.obsidian/) and why it's committed
+  - Links to the three detailed guides
+- Created `docs/tools/README.md` with Obsidian section and future tools placeholder
+- Updated cross-references in:
+  - `.github/copilot-instructions.md` (added link to docs/tools/obsidian/)
+  - `docs/development/MERGE_READY_docs-wiki-cleanup.md` (updated file paths)
+  - `docs/tools/obsidian/persistence.md` (fixed internal reference)
+  - `docs/tools/obsidian/guide.md` (fixed path to .obsidian/graph.json)
+- Verified `scripts/generate_obsidian_vault.sh` still works (converted 211 files successfully)
+- Confirmed `.obsidian/` directory remains in `docs/.obsidian/` (not moved)
+
+**Commits**:
+- `bce6754` - docs(obsidian): consolidate to docs/tools/obsidian/
+
+**Key Decisions**:
+- **Tools directory pattern**: Established `docs/tools/` as location for development tool documentation
+- **Keep .obsidian in place**: Left `docs/.obsidian/` at root of docs/ (as required)
+- **Clear README structure**: Each tool gets subdirectory with README.md + supporting docs
+- **No functionality changes**: Pure reorganization, script still works identically
+
+**Validation**:
+- ✅ All files moved successfully via `git mv`
+- ✅ Script generates vault without errors (211 files converted)
+- ✅ New files appear in generated vault at correct paths
+- ✅ Old file locations are removed
+- ✅ `.obsidian/` directory remains in `docs/.obsidian/`
+- ✅ All cross-references updated
+- ✅ No broken links
+
+**Notes**:
+- Part of documentation cleanup establishing clear structure
+- Tools documentation now has dedicated section under `docs/tools/`
+- Sets pattern for future tool documentation (ROS2 autodoc, linting, etc.)
+
+---
+
+## 2025-10-14 (Monday)
+
 ### Late Evening: Documentation Cleanup & Organization (21:00-22:30)
 **Type**: Documentation + Organization  
 **Status**: ✅ Complete  
