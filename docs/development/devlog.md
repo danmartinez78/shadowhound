@@ -21,42 +21,46 @@ summary: >
 
 ## 2025-10-14 (Tuesday)
 
-### Evening: Project Overview Directory Cleanup (04:00-06:00)
-**Type**: Documentation Reorganization
+### Evening: PR #28 Review & Merge - Wiki Sync for Dev Branch (06:30-06:45)
+**Type**: PR Review
+**PR**: #28
 **Status**: ✅ Complete
-**Cleanup Doc**: [history/project_overview_cleanup_oct14_2025.md](../history/project_overview_cleanup_oct14_2025.md)
+**Impact**: Dev branch now auto-syncs docs to GitHub Wiki on every push
 
-Cleaned and reorganized project_overview directory for clarity and focus.
+**Activities**:
+- Reviewed PR #28 from cloud agent (Issue #26 - Wiki sync for dev branch)
+- Verified workflow structure mirrors existing docs.yml pattern
+- Validated comprehensive 227-line documentation (wiki_sync.md)
+- Confirmed all CI checks passing
+- Approved and merged via squash commit
 
-**Key Results**:
-- Reduced from 14 to 6 files (57% reduction)
-- Moved operational/technical docs to appropriate directories
-- Archived point-in-time status and pre-MVP planning docs
-- Preserved skills-first roadmap as historical artifact
-- Enhanced MVP doc with testing requirements and success metrics
-- Updated project_overview_hub.md with new structure
+**Files Added**:
+- `.github/workflows/wiki-sync.yml` - Dev branch wiki sync workflow
+- `docs/deployment/wiki_sync.md` - Complete wiki sync documentation (227 lines)
 
-**Files Kept** (6):
-- mvp_embodied_ai_platform.md (SOURCE OF TRUTH)
-- MVP_PROTECTION_POLICY.md
-- ideas_backlog.md, ideas_integration_summary.md
-- status_analysis_2025_10.md
-- project_overview_hub.md
+**Files Updated**:
+- `AGENTS.md` - Clarified CI syncs on both dev and main branches
+- `README.md` - Added wiki and GitHub Pages links
+- `docs/deployment/deployment_hub.md` - Added wiki sync documentation link
 
-**Files Moved** (6):
-- agent_quick_reference.md → software/agent/
-- quick_reference.md → development/
-- quick_start.md → deployment/
-- setup_status.md, status_2025-10-12.md, todo.md → history/
+**Key Decisions**:
+- **Architecture**: main branch (MkDocs + Wiki), dev branch (Wiki only)
+- **Saves CI time**: No MkDocs build on dev branch
+- **Fast feedback**: Dev changes sync to wiki immediately
 
-**MVP Enhancements** (additions-only):
-- Testing infrastructure requirements added to Milestone 1
-- Skills definition tasks added to Milestone 1
-- Enhanced success metrics in Milestone 5
-- Action Items & TODOs section added
-- Video walkthrough added to documentation TODOs
+**Validation**:
+- ✅ Workflow uses existing tools (wiki_sync.py, link_convert.py)
+- ✅ Proper trigger (dev branch, docs/** changes only)
+- ✅ Authentication via GITHUB_TOKEN (standard approach)
+- ✅ Documentation follows ShadowHound patterns
+- ✅ Agent fixed wikilink validation issue during implementation
 
-**Commits**: `4765e4a`, `bafe630`, `615ba21`
+**Next Steps**:
+- Wiki will auto-populate on next docs/ change to dev
+- Verify workflow runs successfully
+- Check wiki at https://github.com/danmartinez78/shadowhound/wiki
+
+**Commits**: `b0217cb` (squash merge)
 
 ---
 
