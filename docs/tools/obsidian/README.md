@@ -40,13 +40,13 @@ All documentation is authored in **standard Markdown** in the `docs/` directory:
 - Works directly on GitHub.com, GitHub Pages, and Wiki
 - Committed to the repository
 
-### 2. Obsidian Configuration (docs/.obsidian/)
-The `.obsidian/` directory (committed at the root of `docs/`) contains:
+### 2. Obsidian Configuration (docs/tools/obsidian/.obsidian/)
+The `.obsidian/` directory (located with the obsidian tool documentation) contains:
 - Graph view color settings
 - Physics settings for node layout
 - Group filters for directory-based coloring
 
-**Why committed?** The configuration ensures consistent graph view for all developers. When you generate the vault, these settings are automatically applied.
+**Why committed?** The configuration template ensures consistent graph view for all developers. When you generate the vault, these settings are automatically copied to the generated vault.
 
 ### 3. Generated Vault (docs_obs/)
 Running `./scripts/generate_obsidian_vault.sh`:
@@ -129,7 +129,7 @@ See [guide.md](guide.md) for complete color legend.
 - **`tools/obsidian_convert.py`** - Python converter (markdown → wikilinks)
 
 ### Configuration Location
-- **Committed**: `docs/.obsidian/` (source of truth for graph settings)
+- **Committed**: `docs/tools/obsidian/.obsidian/` (configuration template)
 - **Generated**: `docs_obs/.obsidian/` (copied during vault generation)
 
 ### Why Not Edit in Obsidian Directly?

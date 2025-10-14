@@ -141,7 +141,7 @@ Recommendation: Add to Future Work instead?
 - Test locally: `mkdocs build --strict` to catch broken links before pushing
 
 ## Git Hygiene
-- The `docs/.obsidian/` directory is committed and contains Obsidian configuration for the generated vault.
+- The `docs/tools/obsidian/.obsidian/` directory is committed and contains Obsidian configuration template for the generated vault.
 - The generated vault `docs_obs/` is gitignored. Regenerate it locally with `./scripts/generate_obsidian_vault.sh` after pulling changes.
 - Use the commit message prefix `docs(<area>): ...` for documentation-related changes.
 - Do not commit build artifacts from MkDocs (`site/`) or wiki sync outputs (`wiki/`).

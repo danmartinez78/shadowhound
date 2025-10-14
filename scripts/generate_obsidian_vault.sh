@@ -23,7 +23,7 @@ REPO_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 # Paths
 DOCS_DIR="$REPO_ROOT/docs"
 VAULT_DIR="$REPO_ROOT/docs_obs"
-OBSIDIAN_CONFIG="$DOCS_DIR/.obsidian"
+OBSIDIAN_CONFIG="$DOCS_DIR/tools/obsidian/.obsidian"
 
 # Check if docs directory exists
 if [ ! -d "$DOCS_DIR" ]; then
