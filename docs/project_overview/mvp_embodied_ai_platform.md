@@ -434,7 +434,19 @@ User interface uses 0-100% scale ("Set humor to 60%"), but the actual LLM prompt
 - [ ] Choose vision stack (DIMOS vs VLM vs hybrid)
 - [ ] Implement object detection skill integrated with mission agent
 - [ ] Test on real household objects (balls, appliances, furniture)
+- [ ] Define minimal skill set needed for MVP missions (see [Skills Inventory](../software/skills_inventory.md))
+- [ ] Audit DIMOS MyUnitreeSkills to identify working vs WebRTC-blocked skills
+- [ ] Decide on skill implementation approach (DIMOS native vs custom wrapper)
 - [ ] **Success Metric**: "Find the red ball" mission succeeds with 80% accuracy
+
+#### Testing Infrastructure Setup
+- [ ] Configure pytest with fixtures and test utilities
+- [ ] Implement mock robot interface for unit testing
+- [ ] Set up CI pipeline (GitHub Actions):
+  - [ ] Run tests on every PR
+  - [ ] Code quality checks (black, flake8, mypy)
+  - [ ] Test coverage reporting (target: >80%)
+- [ ] Document testing patterns and best practices
 
 ### Milestone 2: Voice Interaction (2-3 weeks)
 **Goal**: Robot accepts voice commands and responds with personality
@@ -480,7 +492,11 @@ User interface uses 0-100% scale ("Set humor to 60%"), but the actual LLM prompt
 - [ ] Test onboard hardware (speaker + 4-mic array)
 - [ ] Test TARS personality parameter adjustment
 - [ ] Document known limitations and future work
-- [ ] **Success Metric**: 3 complex missions succeed end-to-end
+- [ ] **Success Metrics**:
+  - 3 complex missions succeed end-to-end
+  - >90% mission success rate in controlled environment (20 test runs)
+  - <5s average response time for multi-step commands
+  - No safety incidents during validation testing
 
 ---
 
@@ -681,6 +697,20 @@ Enable direct visuomotor control for complex terrain navigation where standard m
 - [ ] **Personality Evolution**: MVP or post-MVP?
 - [ ] **Web UI Enhancements**: Persona configuration interface?
 - [ ] **Logging/Telemetry**: What metrics to track long-term?
+
+---
+
+## Action Items & TODOs
+
+### Research & Investigation
+- [ ] Review DIMOS skill extension patterns and decide implementation approach
+- [ ] Determine appropriate task types for cloud agent collaboration (based on experience)
+- [ ] Document cloud agent collaboration strategy when patterns are validated
+
+### Documentation
+- [ ] Complete skills inventory audit (working vs non-working DIMOS skills)
+- [ ] Create testing infrastructure documentation when setup complete
+- [ ] Produce video walkthrough covering architecture, mission authoring, and debugging
 
 ---
 

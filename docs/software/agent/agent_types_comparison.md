@@ -8,6 +8,9 @@ aliases: [agent-reference, agent-types]
 ---
 
 # ShadowHound Agent Quick Reference
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                      🐕 SHADOWHOUND AGENT QUICK REFERENCE                    ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
@@ -212,6 +215,7 @@ Hybrid Agent Selection (Coming Soon):
 Test "rotate right and step back" again and watch it execute properly!
 
 ═══════════════════════════════════════════════════════════════════════════
+```
 
 ## See Also
 - [Project Overview Hub](../project_overview/project_overview_hub.md) - Planning and operations

@@ -1,15 +1,35 @@
 ---
-tags: [project_overview/planning, roadmap, milestones]
-status: active
-related: []
+tags: [project_overview/planning, roadmap, milestones, archived]
+status: archived
+archived_date: 2025-10-14
+archived_reason: Superseded by mvp_embodied_ai_platform.md (capability-driven approach)
+historical_value: Documents skills-first implementation strategy as alternative approach
+related: [mvp_embodied_ai_platform.md]
 summary: >
-  High-level phases and milestones for the ShadowHound robot dog initiative.
+  [ARCHIVED] High-level phases and milestones for the ShadowHound robot dog initiative (skills-first approach).
 aliases: [roadmap]
 ---
 
-# Project Roadmap
+# Project Roadmap (Archived - Skills-First Approach)
 
-## Purpose
+**⚠️ ARCHIVED**: This document has been superseded by [mvp_embodied_ai_platform.md](../project_overview/mvp_embodied_ai_platform.md).
+
+**Historical Context**: This roadmap documented a **skills-first implementation strategy** where development would proceed through phases: build infrastructure → implement skills → add mission agent → hardware validation → advanced features. It represented a 6-month timeline (Oct 2025 - May 2026) with specific skill inventories and phase-based delivery.
+
+**Why Archived**: The project pivoted to a **capability-driven approach** focused on end-to-end MVP delivery with concrete mission scenarios. The new MVP roadmap emphasizes transformer architecture exploration (LLM, VLM, VLA) and defines success through working missions rather than skill counts.
+
+**Valuable Content Preserved Here**:
+- Detailed testing infrastructure requirements (pytest, CI, mock robot)
+- Comprehensive skill categorization (13+ skills across nav/perception/reporting/system)
+- Phase dependency mapping and risk analysis
+- Cloud agent collaboration velocity calculations
+- Hardware validation test suite specifications
+
+Refer to this document when considering alternative implementation approaches or detailed testing/validation strategies.
+
+---
+
+## Purpose (Original)
 Define strategic milestones with specific, measurable deliverables that guide ShadowHound development from infrastructure to field-ready autonomy.
 
 **Last Updated**: 2025-10-13 (Revised with specific deliverables)  
