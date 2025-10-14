@@ -105,7 +105,7 @@ The MVP is complete when the robot can:
 - **Camera**: Front-facing (Go2 built-in) - RGB for VLM/object detection
 - **LiDAR**: 2D planar LiDAR (Go2 built-in) - Depth/occupancy for Nav2 costmaps
 - **IMU**: Inertial measurement unit (Go2 built-in) - Orientation, motion
-- **Odometry**: Wheel encoders (Go2 built-in) - Position estimation
+- **Joint States**: Leg joint encoders (Go2 built-in) - Position estimation, odometry
 
 **Potential Sensor Upgrades (Future/Optional)**:
 - **RealSense Depth Camera**: RGB-D for better 3D understanding (not essential for MVP)
@@ -173,7 +173,7 @@ The MVP is complete when the robot can:
 ┌─────────────────────────────────────────────────────────┐
 │ ROBOT LAYER (Hardware Interface)                         │
 │ • ROS2 bridge to go2_ros2_sdk                           │
-│ • Sensor data (camera, IMU, odometry)                   │
+│ • Sensor data (camera, IMU, LiDAR, joint states)       │
 │ • Motor control and safety                              │
 └─────────────────────────────────────────────────────────┘
 ```
