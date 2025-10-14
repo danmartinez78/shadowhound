@@ -16,6 +16,52 @@ summary: >
 
 ---
 
+## 2025-10-14 (Monday)
+
+### Evening: MVP Definition & Requirements Gathering (18:00-21:00)
+**Type**: Planning + Documentation  
+**Status**: ✅ Complete  
+**Impact**: Complete MVP roadmap defined for household assistant robot
+
+**Activities**:
+- Systematic requirements gathering across 5 capability areas
+- Vision/Perception: DIMOS stack available, VLM branch ready, will experiment
+- Voice Interface: TTS/STT strategy defined, hardware planned
+- Navigation/SLAM: "Birth→Learn→Remember" strategy, semantic mapping approach
+- Compute Budget: Unknown, large effort expected, fallback options identified
+- Personality System: Configurable personas (Tachikoma, TARS), runtime parameters
+
+**Key Decisions**:
+- MVP Goal: "Find the red ball in living room" or "Check if oven is on"
+- Development phases: Laptop dev → Onboard deployment
+- Personality: Fixed per persona (MVP), evolving personality (backlog)
+- Personality scope: Voice responses initially, decision-making (stretch)
+- Compute fallbacks: Cloud, local GPU workstation, or Orin Nano Super
+
+**Files Created**:
+- `docs/project_overview/mvp_household_assistant.md` (comprehensive roadmap)
+
+**Discoveries**:
+- DIMOS perception stack comprehensive but completely untested
+- VLM branch (Qwen) ready but not merged or tested
+- Thor compute budget unknown, needs profiling
+- TARS-style personality parameters (humor, honesty, etc.) resonates with user
+
+**Next Steps**:
+- Milestone 1: Vision Foundation (test DIMOS vs VLM)
+- Milestone 2: Voice Interaction (TTS/STT + personality)
+- Milestone 3: Semantic Navigation (room understanding)
+- Milestone 4: Compute Optimization (Thor profiling)
+- Milestone 5: Integration & Validation (end-to-end)
+
+**Notes**: 
+- User emphasized staying high-level for roadmap creation
+- Multiple course corrections to avoid premature implementation details
+- Clear separation: What needs to be done vs How to implement it
+- Experimental mindset: Will test approaches and choose based on results
+
+---
+
 ## 2025-10-13 (Sunday)
 
 ### Evening: Project History & Context Alignment (19:00-21:00)
