@@ -8,6 +8,10 @@ _Date: October 3, 2025_
 **Problem**: Documentation was aspirational with vague boundaries and missing implementation details.
 
 **Solution**: Created a clear four-layer architecture with explicit responsibilities:
+
+![System Architecture](../_assets/system-architecture.png)
+*Figure 1: Complete system architecture showing the layered design from Web UI through Mission Agent, DIMOS Skills, ROS2 Bridge, to GO2 hardware.*
+
 - **Application Layer**: Launch files, configs, deployment
 - **Agent Layer**: LLM/VLM orchestration, mission planning
 - **Skills Layer**: Execution engine with safety guards
