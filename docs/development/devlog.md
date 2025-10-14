@@ -16,9 +16,93 @@ summary: >
 
 ---
 
-## 2025-10-14 (Monday)
+## 2025-10-14 (Tuesday)
 
-### Late Evening: Documentation Cleanup & Planning (21:00-23:30)
+### Early Morning: Documentation PR Review & Merge (TBD)
+**Type**: Code Review + Integration  
+**PR/Issue**: #24, #25  
+**Status**: 🔄 In Progress  
+**Impact**: TBD
+
+**Activities**:
+- TBD
+
+---
+
+## 2025-10-13 (Monday)
+
+### Late Night: Source Documentation Consolidation (02:36-03:00 UTC / 19:36-20:00 PDT Oct 13)
+**Type**: Documentation + Organization  
+**PR/Issue**: #25  
+**Status**: ✅ Complete  
+**Impact**: All package documentation consolidated under `docs/software/packages/` with clear structure and cross-references
+
+**Activities**:
+- Discovered 7 markdown files in `src/` packages (excluding submodules)
+- Created `docs/software/packages/` directory structure
+- Moved all 3 package READMEs to `docs/software/packages/{package_name}/`
+- Moved 3 mission agent architecture/design docs (lowercase naming convention)
+- Moved legacy architecture doc to `docs/legacy/`
+- Created comprehensive `docs/software/packages/README.md` (242 lines) as package index
+- Created new `src/README.md` (168 lines) as quick reference with links
+- Updated 4 cross-references in other docs (integrations, deployment, development)
+- Fixed 4 broken links in moved docs (skills README references)
+
+**Commits**:
+- `bc7015f` - docs(software): consolidate src/ docs to docs/software/packages/
+
+**Files Moved**:
+```
+src/shadowhound_bringup/README.md → docs/software/packages/shadowhound_bringup/README.md
+src/shadowhound_skills/README.md → docs/software/packages/shadowhound_skills/README.md
+src/shadowhound_mission_agent/README.md → docs/software/packages/shadowhound_mission_agent/README.md
+src/shadowhound_mission_agent/AGENT_ARCHITECTURE.md → docs/software/packages/shadowhound_mission_agent/agent_architecture.md
+src/shadowhound_mission_agent/AGENT_DESIGN.md → docs/software/packages/shadowhound_mission_agent/agent_design.md
+src/shadowhound_mission_agent/WEB_INTERFACE.md → docs/software/packages/shadowhound_mission_agent/web_interface.md
+src/shadowhound_mission_agent/AGENT_ARCHITECTURE_OLD.md → docs/legacy/agent_architecture_old.md
+```
+
+**New Structure**:
+```
+docs/software/packages/
+├── README.md                           # NEW: Comprehensive package index
+├── shadowhound_bringup/
+│   └── README.md
+├── shadowhound_skills/
+│   └── README.md
+└── shadowhound_mission_agent/
+    ├── README.md
+    ├── agent_architecture.md
+    ├── agent_design.md
+    └── web_interface.md
+
+src/
+└── README.md                           # NEW: Quick reference with links
+```
+
+**Decisions**:
+- **Package docs location**: `docs/software/packages/{package_name}/` (follows existing patterns)
+- **Quick reference**: `src/README.md` links to full docs (keeps src/ minimal)
+- **Naming convention**: Lowercase filenames (agent_architecture.md vs AGENT_ARCHITECTURE.md)
+- **Legacy placement**: Historical architecture doc in `docs/legacy/` (not packages/)
+- **Cross-reference updates**: Only active docs updated, legacy docs preserved as-is
+
+**Validation**:
+- ✅ No .md files in `src/` except `src/README.md` (verified with find)
+- ✅ All package docs in `docs/software/packages/{package_name}/`
+- ✅ Package index exists with comprehensive content
+- ✅ Quick reference in `src/README.md` with working links
+- ✅ No broken links (4 cross-references updated, 4 internal links fixed)
+
+**Notes**:
+- Task completed as mechanical reorganization per issue requirements
+- No content changes to existing docs, only moves and link updates
+- Structure now matches three-tier pattern: software (active) vs legacy (historical)
+- Package documentation now centralized and discoverable
+
+---
+
+### Late Evening: Documentation Cleanup & Organization (18:00-22:30 PDT / 01:00-05:30 UTC Oct 14)
 **Type**: Documentation + Organization + Planning  
 **Status**: ✅ Complete  
 **Impact**: Clear three-tier documentation structure established, cloud agent tasks delegated, next session planned
@@ -43,6 +127,56 @@ summary: >
 **Commits**:
 - `e87bd5b` - docs(legacy): reorganize history → legacy, migrate devlog
 - `f17d31d` - docs(devlog): document legacy archive reorganization
+- `56c443e` - docs(history): separate history narratives from legacy artifacts
+- `c22b6d1` - docs(planning): create next session plan and update devlog
+- `a39b5c9` - docs(planning): rename next_session.md to work_plan_oct15.md
+
+**Final Structure**:
+```
+docs/
+├── history/                    # Synthesized historical narratives
+│   ├── history_hub.md         # Index and pattern explanation
+│   └── project_history_oct_2025.md  # Oct 3-13 comprehensive narrative (CLOSED)
+│
+├── development/                # Active tracking
+│   ├── devlog.md              # Daily log (Oct 14+) **THIS FILE**
+│   └── recent_work.md         # Last 5 days summary
+│
+├── legacy/                     # Raw historical artifacts
+│   ├── legacy_hub.md          # Artifact index (points to history/)
+│   └── [41 granular docs]     # Day-by-day working docs from Oct 3-13
+│
+└── project_overview/           # Goals & planning
+    └── mvp_embodied_ai_platform.md  # Current roadmap
+```
+
+**Key Decisions**:
+- **Three-tier structure**: history/ (narratives) ↔ development/ (active) ↔ legacy/ (artifacts)
+- **Pattern established**: devlog (active) → periodic synthesis → history doc (closed)
+- History docs are closed retrospectives, devlog is ongoing chronicle
+- Legacy artifacts are raw materials that informed history synthesis
+- Clear separation prevents confusion about where to add/find content
+- **Documentation consolidation pattern**: root README acts as quick reference linking to detailed docs under `docs/`
+
+**Discoveries**:
+- Initial attempt lumped narratives with artifacts (confusing)
+- History doc doesn't belong in legacy/ (it's a synthesis, not an artifact)
+- Need explicit pattern documentation (history_hub.md explains it)
+
+**Next Steps**:
+- **Tomorrow (Oct 15)**: Interactive tasks (project_overview cleanup, development dir organization)
+- **Cloud agents**: Handle mechanical tasks (#22 Obsidian, #23 src/ docs)
+- **Later**: Legacy mining (review 41 docs for missed info - iterative, do last)
+- Handle dimos-unitree submodule update (verify if intentional)
+
+**Notes**:
+- This structure scales: future histories join history/, devlog keeps growing
+- Clear semantics: history = past (closed), development = present (active), legacy = artifacts (reference)
+- Pattern supports long-term project evolution
+
+---
+
+### Evening: MVP Definition & Requirements Gathering (15:00-18:00 PDT / 22:00-01:00 UTC Oct 14)
 - `56c443e` - docs(history): separate history narratives from legacy artifacts
 - `4e86f03` - docs(devlog): update with final three-tier structure
 
