@@ -591,8 +591,9 @@ mypy src/shadowhound_*/shadowhound_*/
 ### Obsidian Graph View (Optional)
 - To view documentation in Obsidian with graph visualization, run `./scripts/generate_obsidian_vault.sh`
 - This generates `docs_obs/` (gitignored) with wikilinks for Obsidian viewing
-- The generated vault includes the committed `.obsidian/` configuration for graph view colors and layout
+- The generated vault includes the Obsidian configuration template from `docs/tools/obsidian/.obsidian/` for graph view colors and layout
 - Regenerate the vault after pulling documentation changes
+- See `docs/tools/obsidian/` for complete documentation
 
 ### Rendering on GitHub Surfaces
 - Documentation is authored in standard Markdown and used directly by MkDocs and the Wiki
