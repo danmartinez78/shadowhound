@@ -90,9 +90,9 @@ test/test_mission_executor.py  → test_robot_agent.py
 ```
 docs/development/agent_robot_decoupling_analysis.md
 docs/architecture/mission_agent_vs_executor.md  (rename to mission_node_vs_robot_agent.md)
-src/shadowhound_mission_agent/AGENT_DESIGN.md
-src/shadowhound_mission_agent/AGENT_ARCHITECTURE.md
-src/shadowhound_mission_agent/WEB_INTERFACE.md
+docs/software/packages/shadowhound_mission_agent/agent_design.md
+docs/software/packages/shadowhound_mission_agent/agent_architecture.md
+docs/software/packages/shadowhound_mission_agent/web_interface.md
 ```
 
 ### Launch Files (if any reference class names)

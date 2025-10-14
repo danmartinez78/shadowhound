@@ -353,10 +353,10 @@ export ALIBABA_API_KEY='your-key-here'
 
 ## References
 
-- [DIMOS Vision Capabilities](../../docs/DIMOS_VISION_CAPABILITIES.md)
-- [Vision Integration Design](../../docs/VISION_INTEGRATION_DESIGN.md)
-- [Camera Architecture](../../docs/CAMERA_ARCHITECTURE.md)
-- [ShadowHound Project Context](../../docs/project_context.md)
+- [DIMOS Vision Capabilities](../../../integrations/dimos_vision_capabilities.md)
+- [Vision Integration Design](../../../integrations/vision_integration_design.md)
+- [Camera Architecture](../../../architecture/camera_architecture.md)
+- [Project Overview](../../../project_overview/mvp_embodied_ai_platform.md)
 
 ## License
 
