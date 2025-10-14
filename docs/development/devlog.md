@@ -21,6 +21,39 @@ summary: >
 
 ## 2025-10-14 (Tuesday)
 
+### Late Evening: PR #30 Review & Merge - Wiki Sync Fix (07:30-08:00)
+**Type**: PR Review
+**Status**: ✅ Complete
+**Impact**: Wiki now displays cleanly without YAML metadata and all links work correctly
+
+**Problem Solved**:
+- Wiki pages showed raw YAML front-matter at top
+- Links pointed to markdown files instead of wiki pages
+- Navigation broken in wiki interface
+
+**Solution Implemented** (by @copilot-swe-agent):
+- ✅ YAML stripping: Regex pattern removes `---` blocks from file start
+- ✅ Wiki-style links: Converts paths to Title-Case-With-Hyphens format
+- ✅ Comprehensive tests: 7/7 tests passing (`test_link_convert.py`)
+- ✅ Documentation updated: Examples and troubleshooting in `wiki_sync.md`
+
+**Conversions Validated**:
+- `[text](docs/path/page.md)` → `[text](Page)` ✓
+- `[[config_file]]` → `[config_file](Config-File)` ✓
+- `[[path/to/page|Label]]` → `[Label](Page)` ✓
+- External links, anchors, images preserved ✓
+
+**Files Changed**:
+- `tools/link_convert.py` - Added YAML stripping + wiki slugification
+- `tools/test_link_convert.py` - New comprehensive test suite (256 LOC)
+- `docs/deployment/wiki_sync.md` - Updated with examples
+
+**Validation**: 209 markdown files processed successfully, all checks passing
+
+**Commits**: PR #30 (squashed), closes Issue #29
+
+---
+
 ### Late Evening: README Correction & Root Directory Cleanup (07:00-07:30)
 **Type**: Documentation Fix + Repository Organization
 **Status**: ✅ Complete
