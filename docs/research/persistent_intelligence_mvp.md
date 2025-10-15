@@ -276,6 +276,181 @@ This enables early validation and iterative delivery.
 
 ---
 
+### Win #5: Semantic Memory & RAG Already Implemented
+
+**Problem**: Need spatial memory for queries like "What did I see in the kitchen?" and scene similarity matching for transfer learning.
+
+**Discovery**: DIMOS already has complete semantic memory infrastructure!
+
+**What's Already Implemented**:
+
+1. **SpatialMemory** (`dimos/perception/spatial_perception.py`)
+   - Stores video frames with XY locations
+   - Links images to spatial coordinates
+   - Supports named locations ("kitchen", "living room")
+   - Persistent storage via ChromaDB
+
+2. **Image Embeddings** (`dimos/agents/memory/image_embedding.py`)
+   - CLIP embeddings (512D vectors)
+   - ResNet embeddings (alternative)
+   - Semantic similarity search
+   - Scene understanding capability
+
+3. **Vector Database** (`dimos/agents/memory/spatial_vector_db.py`)
+   - ChromaDB integration
+   - Spatial queries (find images near XY location)
+   - Semantic queries (find similar scenes)
+   - Cosine similarity search
+
+4. **Text/Semantic Memory** (`dimos/agents/memory/chroma_impl.py`)
+   - OpenAI embeddings (cloud option)
+   - Local SentenceTransformers (onboard option)
+   - RAG query interface
+   - Persistent collections
+
+**How This Enables Persistent Intelligence**:
+
+```python
+# Example 1: Remember where objects were seen
+spatial_memory.add_observation(
+    image=camera_frame,
+    location=(x, y, theta),
+    label="red_ball",
+    embedding=clip_embedding
+)
+
+# Later: Query semantic memory
+results = spatial_memory.query_by_text("red ball", limit=5)
+# Returns: Images of red balls with their XY locations
+
+# Example 2: Find similar scenes for transfer learning
+current_scene_embedding = clip_model.encode(current_frame)
+similar_trajectories = vector_db.query_by_embedding(
+    current_scene_embedding,
+    limit=10
+)
+# Returns: Past trajectories in similar scenes
+# Use for: "This looks like that hallway where I got stuck"
+
+# Example 3: Spatial queries
+objects_in_kitchen = spatial_memory.query_by_location(
+    x=5.0, y=3.0, radius=2.0
+)
+# Returns: All observations within 2m of kitchen center
+```
+
+**Integration Points**:
+
+| Phase | Semantic Memory Use Case | Implementation |
+|-------|-------------------------|----------------|
+| **Phase 2** | Log scene embeddings with trajectory | Add CLIP encoding to trajectory logger |
+| **Phase 3** | VLM queries use spatial memory | "Did I see a red ball?" → Query vector DB |
+| **Phase 4** | Semantic locations | "Go to the kitchen" → Named location query |
+| **Phase 5** | Transfer learning | Find similar scenes → Retrieve relevant trajectories |
+| **Phase 6** | Multi-brain RAG | Spark queries Thor's spatial memory for curation |
+
+**Benefits**:
+- ✅ Already implemented and tested (DIMOS has tests)
+- ✅ Supports both cloud (OpenAI) and local (SentenceTransformers) embeddings
+- ✅ Persistent storage (survives robot restarts)
+- ✅ Efficient similarity search (ChromaDB HNSW index)
+- ✅ Spatial + semantic queries (location AND scene similarity)
+- ✅ Enables episodic memory ("When did I see X?")
+- ✅ Scene similarity for transfer learning
+- ✅ RAG for LLM context ("Show me images of the living room")
+
+**Effort**: 1-2 days integration (infrastructure already exists!)
+
+**Priority**: **HIGH** - Critical for persistent intelligence, already implemented
+
+**Example Mission Flow with Semantic Memory**:
+
+```
+User: "Find the red ball"
+
+1. Agent: Query spatial memory for past "red ball" observations
+   → Result: "Last seen at (3.2, 1.5) 10 minutes ago"
+
+2. Agent: Navigate to last known location (local planner)
+   → Arrive at (3.2, 1.5)
+
+3. Agent: Camera scan + YOLO detection
+   → Not found at last location (object moved)
+
+4. Agent: Query similar scenes in spatial memory
+   → "Where else have I seen similar rooms with toys?"
+   → Result: Bedroom at (5.0, 8.0) has similar scene embedding
+
+5. Agent: Explore high-probability locations
+   → Navigate to bedroom
+
+6. Agent: Find red ball, update spatial memory
+   → Store new location with timestamp
+```
+
+**Why This is a Game-Changer**:
+
+Traditional robotics: "Ball not found at last location → Give up"
+
+Persistent intelligence: "Ball moved → Query similar contexts → Infer likely locations → Continue search intelligently"
+
+**Technical Details**:
+
+**CLIP Model** (openai/clip-vit-base-patch32):
+- 512D image embeddings
+- Text-image similarity
+- Pre-trained on 400M image-text pairs
+- Runs on Thor AGX
+
+**ChromaDB Storage**:
+```python
+# Initialize persistent spatial memory
+spatial_memory = SpatialMemory(
+    collection_name="shadowhound_spatial",
+    embedding_model="clip",  # or "resnet"
+    db_path="/data/chromadb",  # Persistent storage
+    min_distance_threshold=0.5,  # Store frame every 0.5m
+    min_time_threshold=2.0,  # Or every 2 seconds
+)
+
+# Spatial memory auto-updates from video stream
+spatial_memory.connect_video_stream(robot.camera_stream)
+spatial_memory.connect_transform_provider(robot.get_pose)
+
+# Now spatial memory builds automatically as robot explores!
+```
+
+**Query Examples**:
+
+```python
+# Semantic query
+results = spatial_memory.query_by_text(
+    "red ball on carpet",
+    limit=5
+)
+
+# Spatial query
+results = spatial_memory.query_by_location(
+    x=3.0, y=2.0, radius=1.5
+)
+
+# Hybrid query (semantic + spatial)
+results = spatial_memory.query_hybrid(
+    text="red ball",
+    location=(3.0, 2.0),
+    radius=2.0,
+    limit=5
+)
+
+# Scene similarity (for transfer learning)
+similar_scenes = spatial_memory.find_similar_scenes(
+    current_image,
+    limit=10
+)
+```
+
+---
+
 ## Persistent Intelligence MVP Roadmap
 
 ### Phase 1: Foundation (Week 1) - Original MVP Tier 1
@@ -302,34 +477,43 @@ This enables early validation and iterative delivery.
 
 ### Phase 2: Learning Infrastructure (Week 2) - Beyond Original MVP
 
-**Goal**: Capture decision data for future learning
+**Goal**: Capture decision data for future learning + Enable semantic spatial memory
 
 **Deliverables**:
 1. Trajectory logging system
    - JSON format (simple, readable)
    - Logs: perception, decisions, actions, outcomes
    - Frame consistency (all in odom)
-2. Session management
+2. **Semantic spatial memory integration**
+   - CLIP embeddings for every frame
+   - Link observations to XY locations
+   - Persistent ChromaDB storage
+   - Query interface (text, location, similarity)
+3. Session management
    - Unique session IDs
    - Monotonic timestamps
    - Domain tags (real vs sim)
-3. Data viewer/analyzer
+4. Data viewer/analyzer
    - CLI tool to inspect trajectories
    - Success rate analysis
    - Parameter correlation
+   - Spatial memory visualization
 
 **Success Criteria**:
 - ✅ Every mission logged completely
 - ✅ Logs are parseable and queryable
 - ✅ Can replay decisions offline
-- ✅ Storage < 10MB per hour
+- ✅ Storage < 10MB per hour (trajectories)
+- ✅ **Semantic queries work: "Where did I see a red ball?"**
+- ✅ **Spatial queries work: "What's in the kitchen?"**
+- ✅ **Scene similarity: Find trajectories in similar environments**
 
 **New Capability**: Foundation for persistent intelligence (not in original MVP)
 
 **Implementation Details**:
 
+**Trajectory Log Format** (with semantic memory):
 ```python
-# Trajectory log format
 {
     "session_id": "2025-10-14-12-34-56-abc123",
     "domain": "real",
@@ -347,7 +531,8 @@ This enables early validation and iterative delivery.
                 "detections": [
                     {"label": "ball", "position": [2.0, 0.5], "confidence": 0.8}
                 ],
-                "frame": "odom"
+                "frame": "odom",
+                "scene_embedding_id": "clip_abc123"  # Links to ChromaDB
             },
             "decision": {
                 "type": "set_goal",
@@ -373,23 +558,161 @@ This enables early validation and iterative delivery.
 }
 ```
 
+**Semantic Memory Initialization**:
+```python
+from dimos.perception.spatial_perception import SpatialMemory
+from dimos.agents.memory.image_embedding import ImageEmbeddingProvider
+
+# Initialize spatial memory (persistent across runs)
+spatial_memory = SpatialMemory(
+    collection_name="shadowhound_missions",
+    embedding_model="clip",  # CLIP embeddings for semantic similarity
+    embedding_dimensions=512,
+    db_path="/data/spatial_memory/chromadb",  # Persistent storage
+    visual_memory_path="/data/spatial_memory/images",
+    min_distance_threshold=0.5,  # Store frame every 0.5 meters
+    min_time_threshold=2.0,  # Or every 2 seconds
+    new_memory=False,  # Load existing memory if available
+)
+
+# Connect to robot's video and pose streams
+spatial_memory.connect_video_stream(robot.camera_stream)
+spatial_memory.connect_transform_provider(robot.get_pose)
+
+# Now spatial memory auto-updates as robot operates!
+# Every 0.5m or 2s: Capture frame, generate CLIP embedding, store with XY location
+
+# Query examples:
+# 1. Semantic: "Where did I see a red ball?"
+results = spatial_memory.query_by_text("red ball", limit=5)
+
+# 2. Spatial: "What did I see in the kitchen?"
+results = spatial_memory.query_by_location(x=5.0, y=3.0, radius=2.0)
+
+# 3. Similarity: "Find scenes like this one"
+similar_scenes = spatial_memory.find_similar_scenes(current_image)
+
+# 4. Episodic: "Show me everywhere I've been"
+all_locations = spatial_memory.get_all_locations()
+```
+
+**Integration with Mission Agent**:
+```python
+class MissionAgent:
+    def __init__(self):
+        self.spatial_memory = SpatialMemory(...)  # Initialize as above
+        self.trajectory_logger = TrajectoryLogger(...)
+    
+    def execute_mission(self, instruction: str):
+        # Check spatial memory BEFORE searching
+        if "find" in instruction.lower():
+            # Query past observations
+            query = extract_object(instruction)  # "red ball"
+            past_obs = self.spatial_memory.query_by_text(query, limit=3)
+            
+            if past_obs:
+                # Navigate to last known location first
+                last_location = past_obs[0]["metadata"]["location"]
+                self.logger.info(f"Found {query} in memory at {last_location}")
+                self.navigate_to(last_location)
+        
+        # Execute mission with local planner...
+        # Spatial memory auto-updates as robot moves
+```
+
 ---
 
 ### Phase 3: Enhanced Perception (Week 2-3) - Original MVP Tier 2
 
-**Goal**: Add VLM semantic reasoning
+**Goal**: Add VLM semantic reasoning + Query spatial memory
 
 **Deliverables**:
 1. VLM detector integration (Qwen or local LLaVA)
 2. Sequential YOLO+VLM pipeline
 3. Enhanced missions: "Find the RED ball" (not just any ball)
+4. **VLM queries spatial memory**: "Did I see a red ball earlier?"
+5. **LLM context from RAG**: Show relevant images when planning
 
 **Success Criteria**:
 - ✅ Can distinguish objects by properties (color, state)
 - ✅ VLM latency < 5 seconds
 - ✅ Correct object found in 90% of trials
+- ✅ **Agent can query memory: "Where did I see X?"**
+- ✅ **LLM uses image context: "I saw a red ball in the living room 5 mins ago"**
 
 **Aligns with Original MVP**: Success criteria #2 (vision missions) Tier 2
+
+**Implementation Details**:
+
+**VLM + Spatial Memory Integration**:
+```python
+class EnhancedMissionAgent:
+    def plan_mission(self, instruction: str) -> list[dict]:
+        # Query spatial memory for context
+        relevant_memories = self.spatial_memory.query_by_text(
+            instruction,
+            limit=5
+        )
+        
+        # Build LLM prompt with image context
+        context = self._build_memory_context(relevant_memories)
+        
+        prompt = f"""
+        Instruction: {instruction}
+        
+        Relevant past observations:
+        {context}
+        
+        Generate a skill plan considering what I know from memory.
+        """
+        
+        plan = self.llm.generate(prompt)
+        return plan
+    
+    def _build_memory_context(self, memories: list) -> str:
+        context_lines = []
+        for mem in memories:
+            loc = mem["metadata"]["location"]
+            timestamp = mem["metadata"]["timestamp"]
+            label = mem["metadata"].get("label", "object")
+            
+            context_lines.append(
+                f"- Saw {label} at location ({loc[0]:.1f}, {loc[1]:.1f}) "
+                f"{self._format_time_ago(timestamp)}"
+            )
+        
+        return "\n".join(context_lines)
+
+# Example mission with memory
+instruction = "Find the red ball"
+
+# Agent checks memory first
+memories = agent.spatial_memory.query_by_text("red ball", limit=3)
+
+if memories:
+    # Found in memory!
+    last_seen = memories[0]
+    location = last_seen["metadata"]["location"]
+    time_ago = calculate_time_since(last_seen["metadata"]["timestamp"])
+    
+    agent.say(f"I remember seeing a red ball at {location} {time_ago} ago")
+    agent.navigate_to(location)
+    
+    # Check if still there
+    if agent.detect_object("red ball"):
+        agent.say("Found it! It's still here")
+    else:
+        agent.say("It moved. Let me check similar locations...")
+        # Query similar scenes
+        similar = agent.spatial_memory.find_similar_scenes(
+            last_seen["image"]
+        )
+        agent.explore_locations([s["metadata"]["location"] for s in similar])
+else:
+    # Not in memory, search from scratch
+    agent.say("I don't remember seeing a red ball. Starting search...")
+    agent.explore()
+```
 
 **Implementation**: See `hybrid_perception_architecture.md` Pattern 2 (Sequential)
 
@@ -417,7 +740,7 @@ This enables early validation and iterative delivery.
 
 ### Phase 5: Persistent Intelligence (Week 4-6) - New Capabilities
 
-**Goal**: Enable learning from experience
+**Goal**: Enable learning from experience + Transfer learning via semantic similarity
 
 **Deliverables**:
 1. **WAL (Write-Ahead Logging)**
@@ -430,13 +753,20 @@ This enables early validation and iterative delivery.
    - Success factor analysis
    - Parameter sensitivity studies
    - Failure mode identification
+   - **Scene similarity clustering**
 
 3. **Adaptive Parameters**
    - Learn optimal VFH parameters from data
    - Adjust safety margins based on outcomes
    - Tune perception thresholds
 
-4. **Isaac Sim Integration** (Tower GPU)
+4. **Transfer Learning via Semantic Memory**
+   - Query similar scenes from past trajectories
+   - Retrieve successful strategies for similar situations
+   - "This hallway looks like that hallway where I got stuck"
+   - Apply lessons learned to new situations
+
+5. **Isaac Sim Integration** (Tower GPU)
    - Replay trajectories in simulation
    - Test parameter changes safely
    - Validate improvements before deployment
@@ -446,8 +776,38 @@ This enables early validation and iterative delivery.
 - ✅ Can identify causes of failures
 - ✅ Can test improvements in sim
 - ✅ Parameter changes improve success rate
+- ✅ **Can find similar past situations via scene embeddings**
+- ✅ **Success rate improves in familiar environments (transfer learning)**
 
 **New Capabilities**: Beyond original MVP scope
+
+**Transfer Learning Example**:
+```python
+# Robot encounters difficult navigation scenario
+current_scene = robot.get_camera_frame()
+current_embedding = clip_model.encode(current_scene)
+
+# Query spatial memory for similar scenes
+similar_scenes = spatial_memory.query_by_embedding(
+    current_embedding,
+    limit=10
+)
+
+# Retrieve trajectories from similar scenes
+similar_trajectories = []
+for scene in similar_scenes:
+    session_id = scene["metadata"]["session_id"]
+    trajectory = load_trajectory(session_id)
+    similar_trajectories.append(trajectory)
+
+# Analyze what worked in similar situations
+successful_params = analyze_successful_strategies(similar_trajectories)
+
+# Apply learned parameters
+if successful_params:
+    logger.info(f"Applying strategy from similar scene (similarity: {similar_scenes[0]['distance']:.2f})")
+    vfh_planner.update_parameters(successful_params)
+```
 
 **Implementation Details**:
 
@@ -545,7 +905,9 @@ if sim_results.success_rate > current_success_rate:
 | Phase | Item | Effort | Blocks | Priority |
 |-------|------|--------|--------|----------|
 | 2 | Trajectory logging | 1-2 days | Learning | 🟡 P1 |
+| 2 | **Semantic spatial memory** | 1-2 days | Episodic memory | 🟡 P1 |
 | 3 | VLM integration | 1-2 days | Nuanced missions | 🟡 P1 |
+| 3 | **VLM + memory queries** | 1 day | Smart search | 🟡 P1 |
 | 4 | SLAM + Nav2 | 1 week | Multi-room | 🟡 P1 |
 
 **Total: +2 weeks for enhanced MVP**
@@ -657,21 +1019,34 @@ if sim_results.success_rate > current_success_rate:
 | **Mission Duration** | < 30s | Start to completion |
 | **Collision Rate** | 0% | No collisions in 10 trials |
 
-### Phase 2 (Learning Infrastructure)
+### Phase 2 (Learning Infrastructure + Semantic Memory)
 
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | **Logging Reliability** | 100% | No lost data |
-| **Storage Efficiency** | < 10MB/hr | Disk usage |
+| **Storage Efficiency** | < 10MB/hr | Disk usage (trajectories) |
 | **Replay Accuracy** | 100% | Can reconstruct all decisions |
+| **Semantic Query Accuracy** | > 80% | "Where did I see X?" retrieves correct location |
+| **Spatial Query Speed** | < 100ms | Query response time |
+| **Scene Similarity Precision** | > 0.7 | CLIP embedding cosine similarity |
 
-### Phase 5 (Persistent Intelligence)
+### Phase 3 (Enhanced Perception + Memory Integration)
+
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| **VLM + Memory Success** | > 85% | "Find red ball" uses memory first |
+| **Memory-Guided Search** | 2x faster | Compare with/without memory |
+| **RAG Context Quality** | > 80% | LLM uses relevant images |
+
+### Phase 5 (Persistent Intelligence + Transfer Learning)
 
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | **Learning Improvement** | +10% success rate | After parameter adaptation |
 | **Sim-to-Real Transfer** | > 80% | Sim predictions → real outcomes |
 | **Data Durability** | Zero loss | Survives crashes |
+| **Transfer Learning Benefit** | +15% success | In similar scenes vs novel scenes |
+| **Scene Retrieval Accuracy** | > 0.8 | Find relevant past situations |
 
 ---
 
