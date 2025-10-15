@@ -28,6 +28,12 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 
 ## Architecture & Design Research
 
+### Foundation Models & Frameworks
+
+- **[NVIDIA GR00T Analysis](nvidia_gr00t_analysis.md)** — Comprehensive analysis of Isaac GR00T foundation model for humanoid robotics, alignment with ShadowHound vision, and integration strategy
+
+**Key Findings**: GR00T N1.5 (3B params) is a vision-language-action foundation model that aligns perfectly with our persistent intelligence approach. Uses Eagle 2.5 VLM + flow matching diffusion for cross-embodiment learning. Targets same hardware (Thor AGX). GR00T-Perception workflow explicitly includes "RAG memory" (validates our semantic memory approach!). Recommendation: Integrate GR00T as mission agent backbone while keeping DIMOS local planning + adding our spatial memory layer.
+
 ### Persistent Intelligence (Multi-Brain Learning)
 
 - [Persistent Intelligence Architecture](persistent_intelligence_architecture_shadowHound.md) — Multi-brain architecture (Thor + Spark + Tower) with continuous learning cycles
