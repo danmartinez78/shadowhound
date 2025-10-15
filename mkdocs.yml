@@ -43,7 +43,7 @@ nav:
       - Overview: research/research_hub.md
       - Personality and Mission Execution: research/personality_and_mission_execution.md
       - Alignment Review (Oct 15): research/alignment_review_persistent_intelligence_oct15.md
-      - Ops vs Avatar: Concrete Examples: research/ops_vs_avatar_concrete_examples.md
+      - Ops vs Avatar: Concrete Examples research/ops_vs_avatar_concrete_examples.md
       - Persistent Intelligence:
           - Architecture: research/persistent_intelligence_architecture_shadowHound.md
           - Early Design Priorities: research/shadowHound_early_design_priorities.md
