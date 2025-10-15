@@ -26,10 +26,33 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 - [ ] External papers are cited with accessible links
 - [ ] Conversion pipeline preserves equations and figures
 
+## Architecture & Design Research
+
+### Foundation Models & Frameworks
+
+- **[NVIDIA GR00T Analysis](nvidia_gr00t_analysis.md)** — Comprehensive analysis of Isaac GR00T foundation model for humanoid robotics, alignment with ShadowHound vision, and integration strategy
+
+**Key Findings**: GR00T N1.5 (3B params) is a vision-language-action foundation model that aligns perfectly with our persistent intelligence approach. Uses Eagle 2.5 VLM + flow matching diffusion for cross-embodiment learning. Targets same hardware (Thor AGX). GR00T-Perception workflow explicitly includes "RAG memory" (validates our semantic memory approach!). Recommendation: Integrate GR00T as mission agent backbone while keeping DIMOS local planning + adding our spatial memory layer.
+
+### Persistent Intelligence (Multi-Brain Learning)
+
+- [Persistent Intelligence Architecture](persistent_intelligence_architecture_shadowHound.md) — Multi-brain architecture (Thor + Spark + Tower) with continuous learning cycles
+- [Early Design Priorities](shadowHound_early_design_priorities.md) — Foundational patterns for Isaac Sim and future multi-brain deployment
+- [DIMOS Integration Analysis](persistent_intelligence_dimos_integration.md) — Practical implementation mapping of persistent intelligence to DIMOS-Unitree framework
+
+### MVP Navigation & Perception (Oct 2025 Discovery)
+
+- **[Persistent Intelligence MVP](persistent_intelligence_mvp.md)** — Strategic roadmap building on original MVP with local planning first approach
+- [Local Planning Architecture](local_planning_architecture.md) — VFH + Pure Pursuit local planner architecture (navigation WITHOUT global maps)
+- [Hybrid Perception Architecture](hybrid_perception_architecture.md) — YOLO + VLM integration patterns for embodied AI missions
+- [Local Planning Quickstart](local_planning_quickstart.md) — Technical implementation guide for rapid MVP development
+
+**Key Insight**: DIMOS local planner enables reactive navigation without SLAM, dramatically accelerating MVP (1 week vs 2-3 weeks). Local planning FIRST enables autonomous agent that can optionally use global maps when available. Reactive decisions create richer learning data for future persistent intelligence.
+
 ## See Also
-- [Development Log](../research/devlog.md) — Research and development notes
+- [Development Log](../development/devlog.md) — Research and development notes
 - [LLM Documentation](../software/llm/llm_hub.md) — Local LLM research and benchmarks
-- [Documentation Index](../research/research_hub.md) — Complete documentation map
+- [MVP Roadmap](../project_overview/mvp_embodied_ai_platform.md) — Current MVP scope and milestones
 
 ## References
 - [Documentation Root](../index.md)
