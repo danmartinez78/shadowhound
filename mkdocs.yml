@@ -41,12 +41,17 @@ nav:
       - Overview: troubleshooting/troubleshooting_hub.md
   - Research:
       - Overview: research/research_hub.md
+      - Personality and Mission Execution: research/personality_and_mission_execution.md
+      - Alignment Review (Oct 15): research/alignment_review_persistent_intelligence_oct15.md
+      - Ops vs Avatar: Concrete Examples: research/ops_vs_avatar_concrete_examples.md
       - Persistent Intelligence:
           - Architecture: research/persistent_intelligence_architecture_shadowHound.md
           - Early Design Priorities: research/shadowHound_early_design_priorities.md
           - DIMOS Integration: research/persistent_intelligence_dimos_integration.md
+      - LoRA/Adapters for Persistent Intelligence: research/lora_adapters_persistent_intelligence.md
       - MVP Navigation & Perception (Oct 2025):
           - Persistent Intelligence MVP: research/persistent_intelligence_mvp.md
+          - Day-One System Context: research/persistent_intelligence_day_one_system_context.md
           - Local Planning Architecture: research/local_planning_architecture.md
           - Hybrid Perception Architecture: research/hybrid_perception_architecture.md
           - Local Planning Quickstart: research/local_planning_quickstart.md
