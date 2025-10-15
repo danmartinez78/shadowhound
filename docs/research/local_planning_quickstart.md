@@ -1,18 +1,19 @@
 ---
-tags: [mvp, roadmap, implementation, planning, dimos]
+tags: [quickstart, implementation, planning, dimos, tutorial]
 status: draft
 related:
+  - persistent_intelligence_mvp.md
   - local_planning_architecture.md
   - hybrid_perception_architecture.md
   - persistent_intelligence_dimos_integration.md
   - ../project_overview/mvp_embodied_ai_platform.md
 summary: >
-  Revised MVP implementation roadmap leveraging local planning discovery. Shows how VFH local planner
-  enables 1-week path to embodied AI missions (vs 2-3 weeks with SLAM). Defines concrete phases,
-  deliverables, and success criteria.
+  Technical quickstart guide for implementing local planning first approach. Concrete implementation
+  phases with code examples, testing protocols, and success criteria. Shows how VFH local planner
+  enables 1-week path to embodied AI missions.
 ---
 
-# MVP Implementation Roadmap: Local Planning First Approach
+# Local Planning Quickstart: Implementation Guide
 
 ## Executive Summary
 

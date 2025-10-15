@@ -36,11 +36,12 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 
 ### MVP Navigation & Perception (Oct 2025 Discovery)
 
+- **[Persistent Intelligence MVP](persistent_intelligence_mvp.md)** — Strategic roadmap building on original MVP with local planning first approach
 - [Local Planning Architecture](local_planning_architecture.md) — VFH + Pure Pursuit local planner architecture (navigation WITHOUT global maps)
 - [Hybrid Perception Architecture](hybrid_perception_architecture.md) — YOLO + VLM integration patterns for embodied AI missions
-- [MVP Implementation Roadmap](mvp_implementation_roadmap.md) — Revised 1-week MVP timeline leveraging local planning discovery
+- [Local Planning Quickstart](local_planning_quickstart.md) — Technical implementation guide for rapid MVP development
 
-**Key Insight**: DIMOS local planner enables reactive navigation without SLAM, dramatically accelerating MVP (1 week vs 2-3 weeks). Reactive decisions create richer learning data for future persistent intelligence.
+**Key Insight**: DIMOS local planner enables reactive navigation without SLAM, dramatically accelerating MVP (1 week vs 2-3 weeks). Local planning FIRST enables autonomous agent that can optionally use global maps when available. Reactive decisions create richer learning data for future persistent intelligence.
 
 ## See Also
 - [Development Log](../development/devlog.md) — Research and development notes
