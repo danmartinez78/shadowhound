@@ -17,44 +17,34 @@ summary: >
 - **Experimental work**: Create experiment doc in `experiments/`, link from here
 - **See**: `experiments/README.md` for when to use experiment docs vs. devlog
 
+
+## 2025-10-15 (Wednesday)
+
+### Morning: Persistent Intelligence — Research Docs & Alignment (09:00-11:30)
+**Type**: Documentation + Architecture Research
+**Status**: ✅ Complete
+
+Authored and linked a focused set of research docs to clarify the Day-One system context, Ops vs Avatar separation, LoRA/adapter roles, and how personality overlays vs. evolution are governed. Verified dev branch alignment and committed updates.
+
+**Key Results**:
+- Day-One mission context documented ("check oven" flow, offload to avatar, background learning)
+- Personality decoupling patterns (Ops vs Research modes, overlays vs checkpointed evolution)
+- LoRA/adapter decision guide and serving topologies (local-only for memory write/recall; cloud via prompting)
+- Concrete Ops vs Avatar examples (memory persistence, persona overlays, promotion workflow)
+- Alignment review: reconciled prior plans with current model; locked short-term decisions, flagged follow-ups
+
+**Docs Added**:
+- research: lora_adapters_persistent_intelligence.md
+- research: persistent_intelligence_day_one_system_context.md
+- research: personality_and_mission_execution.md
+- research: ops_vs_avatar_concrete_examples.md
+- research: alignment_review_persistent_intelligence_oct15.md
+
+**Commits**: `4148f28` — docs(research): persistent intelligence exploration — system context, personality decoupling, ops vs avatar examples, LoRA architecture, alignment review
+
 ---
 
 ## 2025-10-14 (Tuesday)
-
-### Late Evening: NVIDIA GR00T Research & Analysis (09:00-10:30)
-**Type**: Research
-**Status**: ✅ Complete
-**Impact**: Comprehensive analysis reveals strong alignment with persistent intelligence vision
-
-Investigated NVIDIA Isaac GR00T framework at user's request after completing semantic memory documentation. Found surprising alignment with our architecture.
-
-**Key Discoveries**:
-- **GR00T N1.5**: 3B parameter VLM-based foundation model for humanoid robotics
-- **Thor AGX native**: Same deployment hardware we're already using!
-- **Cross-embodiment**: Single model supports multiple robot types (Go2 → G1 path)
-- **GR00T-Perception workflow**: Explicitly includes "RAG memory" (validates our approach!)
-- **LeRobot data format**: Standard schema we should adopt
-
-**Architecture**:
-- Eagle 2.5 VLM (frozen, 40.4 IoU grounding)
-- Flow matching diffusion for smooth action generation
-- DiT (Diffusion Transformer) with cross-attention
-- Multi-embodiment action encoders (NEW_EMBODIMENT tag for custom robots)
-
-**Strategic Recommendation**: 
-Integrate GR00T N1.5 as mission agent backbone while keeping DIMOS local planning and adding ShadowHound spatial memory layer. Best of all worlds.
-
-**Document Created**: `docs/research/nvidia_gr00t_analysis.md` (42KB, ~1,500 lines)
-- Executive summary with key findings
-- Architecture deep dive (Eagle 2.5, flow matching, embodiment system)
-- Comparison table: GR00T vs ShadowHound approach
-- Synergies & integration opportunities
-- 6-week implementation roadmap
-- Cost-benefit analysis (ROI: High)
-
-**Commits**: Pending (on research/persistant_intelligence branch)
-
----
 
 ### Late Evening: PR #30 Review & Merge - Wiki Sync Fix (07:30-08:00)
 **Type**: PR Review
