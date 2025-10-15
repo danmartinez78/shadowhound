@@ -30,6 +30,7 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 
 - [Persistent Intelligence Architecture](persistent_intelligence_architecture_shadowHound.md) — Multi-brain architecture (Thor + Spark + Tower) with continuous learning cycles
 - [Early Design Priorities](shadowHound_early_design_priorities.md) — Foundational patterns for Isaac Sim and future multi-brain deployment
+- [DIMOS Integration Analysis](persistent_intelligence_dimos_integration.md) — Practical implementation mapping of persistent intelligence to DIMOS-Unitree framework
 
 ## See Also
 - [Development Log](../development/devlog.md) — Research and development notes

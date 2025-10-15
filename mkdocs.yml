@@ -43,6 +43,7 @@ nav:
       - Overview: research/research_hub.md
       - Persistent Intelligence Architecture: research/persistent_intelligence_architecture_shadowHound.md
       - Early Design Priorities: research/shadowHound_early_design_priorities.md
+      - DIMOS Integration Analysis: research/persistent_intelligence_dimos_integration.md
       - Development Log: research/devlog.md
 markdown_extensions:
   - admonition
