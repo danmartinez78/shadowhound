@@ -60,12 +60,14 @@ Recommendation: Add to Future Work instead?
 **After completing work** (REQUIRED):
 
 ### For Simple/Straightforward Work (use devlog)
-Simple features, bug fixes, documentation updates, refactoring:
+Simple features, bug fixes, documentation updates, refactoring **on dev/main branches**:
 
 1. Add **lightweight entry** to `docs/development/devlog.md`
 2. Include: date, time, type, status, key results, commits
 3. Link to experiment doc if building on experimental work
 4. Commit: `docs(devlog): [activity title]`
+
+**⚠️ IMPORTANT**: For feature branch work, add devlog entry **when merging to dev/main**, not during branch development.
 
 **Devlog Entry Format** (SIMPLIFIED):
 ```markdown
@@ -90,8 +92,10 @@ Large feature branches, testing multiple approaches, extensive investigation:
 1. Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
 2. Use template: `docs/development/experiments/template_experiment.md`
 3. Document: Context, Hypothesis, all Experiments tried, Final Results
-4. Add lightweight devlog entry with link to experiment doc
+4. **When merging to dev/main**: Add lightweight devlog entry with link to experiment doc
 5. Commit experiment doc: `docs(experiments): [experiment title]`
+
+**⚠️ IMPORTANT**: Devlog updates happen **on merge**, not during feature branch development. This prevents merge conflicts and keeps the timeline clean.
 
 **When to create experiment doc**:
 - ✅ Testing multiple approaches (e.g., 4 LLM models)

@@ -76,8 +76,10 @@ Large feature branches, testing multiple approaches, extensive investigation:
 1. Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
 2. Use template: `docs/development/experiments/template_experiment.md`
 3. Document: Context, Hypothesis, all Experiments tried, Final Results
-4. Add lightweight devlog entry with link to experiment doc
+4. **When merging to dev/main**: Add lightweight devlog entry with link to experiment doc
 5. Commit experiment doc: `docs(experiments): [experiment title]`
+
+**⚠️ IMPORTANT**: Devlog updates happen **on merge**, not during feature branch development. This prevents merge conflicts and keeps the timeline clean.
 
 **When to create experiment doc**:
 - ✅ Testing multiple approaches (e.g., 4 LLM models)
