@@ -36,6 +36,26 @@ summary: >
 
 **✅ Integrate GR00T N1.5 as the mission agent backbone** while keeping DIMOS for local planning and adding ShadowHound's semantic memory layer.
 
+### Relationship to Original Plan
+
+**IMPORTANT**: This GR00T analysis represents a **potential enhancement to the mission agent component**, not a replacement of the entire persistent intelligence vision documented tonight (2025-10-14).
+
+**What This Analysis Proposes**:
+- **ALTERNATIVE IMPLEMENTATION**: Use GR00T N1.5 foundation model instead of separate LLM + VLM for mission planning
+- **ENHANCEMENT**: Better vision-language grounding, cross-embodiment learning, synthetic data generation
+- **HYBRID APPROACH**: GR00T (high-level) + DIMOS local planning (low-level) + Spatial Memory (episodic)
+
+**What Stays From Original Plan**:
+- ✅ Local planning first strategy (DIMOS VFH + Pure Pursuit)
+- ✅ Week 1 working mission timeline
+- ✅ YOLO + VLM hybrid perception
+- ✅ Spatial memory (CLIP + ChromaDB)
+- ✅ Trajectory logging for learning
+- ✅ Multi-brain architecture (Thor + Spark + Tower)
+- ✅ Go2 → G1 progressive complexity
+
+**Decision Status**: This is a **research finding**, not a committed roadmap change. The persistent intelligence MVP documents ([persistent_intelligence_mvp.md](persistent_intelligence_mvp.md), [local_planning_architecture.md](local_planning_architecture.md), etc.) remain the current strategic direction. GR00T integration would be evaluated and potentially incorporated during roadmap refinement.
+
 ---
 
 ## What is Isaac GR00T?
@@ -1303,7 +1323,20 @@ NVIDIA GR00T aligns almost perfectly with ShadowHound's persistent intelligence 
 ✅ **Synthetic data** - Solve data scarcity problem  
 ✅ **Isaac Sim** - We have Tower GPU for validation  
 
+### Important Context: Research Finding vs Committed Roadmap
+
+**This document represents a research discovery**, not a finalized plan. The analysis shows GR00T would be an excellent fit, but the decision to integrate it remains open.
+
+**Current Strategic Documents** (created 2025-10-14):
+- [Persistent Intelligence MVP](persistent_intelligence_mvp.md) - Local planning first, LLM + VLM approach
+- [Local Planning Architecture](local_planning_architecture.md) - DIMOS VFH navigation
+- [Hybrid Perception Architecture](hybrid_perception_architecture.md) - YOLO + VLM integration
+
+**This GR00T Analysis**: Alternative implementation path for the mission agent component.
+
 ### Proposed Architecture: **GR00T + DIMOS + Spatial Memory**
+
+**IF adopted**, the hybrid architecture would be:
 
 ```
 Mission Planning     → GR00T N1.5 (VLM perception, cross-embodiment)
@@ -1314,7 +1347,7 @@ Learning             → Trajectory logging + offline analysis
 
 ### Key Differentiators:
 
-| Component | Pure GR00T | ShadowHound Hybrid |
+| Component | Pure GR00T | ShadowHound Hybrid (IF Adopted) |
 |-----------|-----------|-------------------|
 | Mission planning | ✅ Foundation model | ✅ Same (use GR00T) |
 | Local navigation | ⚠️ End-to-end (brittle) | ✅ DIMOS VFH (robust) |
@@ -1324,11 +1357,15 @@ Learning             → Trajectory logging + offline analysis
 
 ### Recommendation: **INTEGRATE GR00T N1.5** ✅
 
-Replace our planned LLM + VLM approach with GR00T N1.5 while:
+**IF pursuing GR00T integration**, replace the planned LLM + VLM mission agent with GR00T N1.5 while:
 - ✅ Keeping DIMOS for local planning (complementary!)
 - ✅ Adding spatial memory layer (fills GR00T gap)
 - ✅ Maintaining modular architecture (easier to debug)
 - ✅ Using Thor AGX for all inference (hardware synergy)
+
+**Alternative Path**: Continue with original LLM + VLM approach documented in persistent intelligence MVP.
+
+**Decision Point**: After review and refinement of tonight's research (2025-10-14).
 
 ### Timeline
 
