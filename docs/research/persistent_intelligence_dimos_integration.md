@@ -132,7 +132,115 @@ This document bridges the **Persistent Intelligence Architecture** (multi-brain,
 | **Replay Buffer** | Not implemented | Need to add (WAL pattern) |
 | **Domain Tags** | Not implemented | Easy to add |
 
-### 3.2 Message Flow Analysis
+### 3.2 Local Planning Discovery (Critical Update)
+
+**Recent Discovery**: DIMOS has complete VFH (Vector Field Histogram) + Pure Pursuit local planner that eliminates SLAM dependency for MVP.
+
+**Impact**: This changes both the current MVP path AND the trajectory logging architecture:
+
+#### **Current MVP Path (Revised)**
+```
+Week 1: Local Planning First (NEW)
+  - Test VFH local planner (no map required)
+  - Add YOLO detection → navigation pipeline
+  - Frame transforms: base_link → odom
+  - End-to-end mission: "Find the ball"
+
+Week 2+: Persistent Intelligence Foundation
+  - Log reactive navigation decisions
+  - Capture perception → action sequences
+  - Build trajectory database
+```
+
+**Why This Matters for Learning**:
+- **Reactive decisions are learnable**: VFH parameter choices, when to re-plan, recovery behaviors
+- **No localization failures**: Simpler failure modes to analyze
+- **Richer data**: More reactive decisions per mission (vs few waypoints in global planning)
+
+#### **Trajectory Logging for Reactive Navigation**
+
+**What to log** (local planning decisions):
+```python
+{
+    "trajectory_type": "reactive_navigation",
+    "mission": "find_red_ball",
+    "steps": [
+        {
+            "timestamp": 1234567890.123,
+            "domain": "real",
+            "perception": {
+                "detected_objects": [
+                    {"label": "ball", "position": [2.0, 0.5], "confidence": 0.8}
+                ],
+                "camera_embedding": [...],  # CLIP/etc for later queries
+            },
+            "decision": {
+                "type": "set_goal",
+                "goal_xy": [2.0, 0.5],
+                "frame": "odom",
+                "reason": "yolo_detection"
+            },
+            "vfh_state": {
+                "histogram": [...],  # 144 bins
+                "selected_direction": 0.35,  # radians
+                "obstacle_density": 0.2,
+                "safety_threshold": 0.8
+            },
+            "action": {
+                "linear_vel": 0.3,
+                "angular_vel": 0.15
+            },
+            "outcome": {
+                "distance_to_goal": 1.2,  # After action
+                "collision": false,
+                "stuck": false
+            }
+        },
+        # ... more steps until goal reached
+    ],
+    "mission_result": {
+        "success": true,
+        "duration_seconds": 12.3,
+        "distance_traveled": 2.8,
+        "goal_accuracy": 0.15  # meters
+    }
+}
+```
+
+**Learning opportunities**:
+1. **Parameter adaptation**: Tune `safety_threshold`, velocities based on outcomes
+2. **Recovery strategies**: Learn when recovery behaviors work
+3. **Perception reliability**: Correlate YOLO confidence with navigation success
+4. **VLM verification value**: Compare missions with/without VLM verification
+
+#### **Frame Transformations in Logged Data**
+
+**Critical**: All positions logged in `odom` frame (VFH's working frame)
+
+```python
+# Detection starts in base_link (camera frame)
+detection_base_link = yolo.detect(frame)  # (x=2.0, y=0.0)
+
+# Transform to odom (for navigation + logging)
+detection_odom = robot.transform(detection_base_link, "base_link" → "odom")
+
+# Log in odom (consistent frame for replay)
+trajectory_logger.log({
+    "perception": {"position": detection_odom, "frame": "odom"},
+    "decision": {"goal_xy": detection_odom, "frame": "odom"}
+})
+```
+
+**Why odom for learning**:
+- Consistent coordinate system across missions
+- Replay in simulator uses same frame
+- Adapter fine-tuning needs consistent input representation
+
+See `local_planning_architecture.md` for complete frame handling details.
+
+---
+
+### 3.3 Message Flow Analysis
 
 #### **Current: Mission Agent → DIMOS Skills**
 

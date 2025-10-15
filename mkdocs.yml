@@ -41,9 +41,14 @@ nav:
       - Overview: troubleshooting/troubleshooting_hub.md
   - Research:
       - Overview: research/research_hub.md
-      - Persistent Intelligence Architecture: research/persistent_intelligence_architecture_shadowHound.md
-      - Early Design Priorities: research/shadowHound_early_design_priorities.md
-      - DIMOS Integration Analysis: research/persistent_intelligence_dimos_integration.md
+      - Persistent Intelligence:
+          - Architecture: research/persistent_intelligence_architecture_shadowHound.md
+          - Early Design Priorities: research/shadowHound_early_design_priorities.md
+          - DIMOS Integration: research/persistent_intelligence_dimos_integration.md
+      - MVP Navigation & Perception (Oct 2025):
+          - Local Planning Architecture: research/local_planning_architecture.md
+          - Hybrid Perception Architecture: research/hybrid_perception_architecture.md
+          - MVP Implementation Roadmap: research/mvp_implementation_roadmap.md
       - Development Log: research/devlog.md
 markdown_extensions:
   - admonition

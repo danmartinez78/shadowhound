@@ -28,9 +28,19 @@ Collect research notes, benchmarking results, and references that inform ShadowH
 
 ## Architecture & Design Research
 
+### Persistent Intelligence (Multi-Brain Learning)
+
 - [Persistent Intelligence Architecture](persistent_intelligence_architecture_shadowHound.md) — Multi-brain architecture (Thor + Spark + Tower) with continuous learning cycles
 - [Early Design Priorities](shadowHound_early_design_priorities.md) — Foundational patterns for Isaac Sim and future multi-brain deployment
 - [DIMOS Integration Analysis](persistent_intelligence_dimos_integration.md) — Practical implementation mapping of persistent intelligence to DIMOS-Unitree framework
+
+### MVP Navigation & Perception (Oct 2025 Discovery)
+
+- [Local Planning Architecture](local_planning_architecture.md) — VFH + Pure Pursuit local planner architecture (navigation WITHOUT global maps)
+- [Hybrid Perception Architecture](hybrid_perception_architecture.md) — YOLO + VLM integration patterns for embodied AI missions
+- [MVP Implementation Roadmap](mvp_implementation_roadmap.md) — Revised 1-week MVP timeline leveraging local planning discovery
+
+**Key Insight**: DIMOS local planner enables reactive navigation without SLAM, dramatically accelerating MVP (1 week vs 2-3 weeks). Reactive decisions create richer learning data for future persistent intelligence.
 
 ## See Also
 - [Development Log](../development/devlog.md) — Research and development notes
