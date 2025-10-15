@@ -807,30 +807,49 @@ def verify_with_vlm(detection, query: str) -> bool:
 
 ### Phase 2: Advanced Capabilities (2-3 weeks)
 
+**Semantic Spatial Memory** (NEW - Critical for Persistent Intelligence)
+- Integrate DIMOS SpatialMemory (CLIP embeddings)
+- Store observations with XY locations in ChromaDB
+- Query interface: "Where did I see X?"
+- Scene similarity for transfer learning
+- Memory-guided search (check memory before exploring)
+- **Effort**: 1-2 days (infrastructure exists in DIMOS)
+
 **Global Planning Integration**
 - Add Nav2 + SLAM for multi-room navigation
 - Return to dock capability
-- Persistent location memory
+- Semantic location memory ("kitchen")
 
 **VLM Enhancement**
 - Local VLM deployment (LLaVA on Thor GPU)
 - Advanced semantic reasoning
 - Multi-step verification
+- VLM queries spatial memory
 
 **Mission Agent**
 - Natural language mission interface
 - Mission planning and decomposition
+- RAG context from spatial memory
 - Telemetry and logging
 
 ### Phase 3: Persistent Intelligence (4-6 weeks)
 
-**Trajectory Logging**
+**Trajectory Logging with Scene Embeddings**
 - Log all decisions and outcomes
+- CLIP embeddings for every frame
+- Link trajectories to spatial memory
 - WAL (Write-Ahead Logging) for durability
 - Message contracts for data consistency
 
+**Transfer Learning via Semantic Memory**
+- Query similar past situations (scene embeddings)
+- Retrieve successful strategies
+- Apply learned parameters
+- "This hallway looks like that hallway where I got stuck"
+
 **Learning Loop**
 - Offline analysis of trajectories
+- Scene similarity clustering (via CLIP embeddings)
 - Adapt parameters based on outcomes
 - Test improvements in Isaac Sim
 
@@ -839,7 +858,7 @@ def verify_with_vlm(detection, query: str) -> bool:
 - Spark (cortex for learning)
 - Tower (simulation/testing)
 
-See `persistent_intelligence_dimos_integration.md` for details.
+See `persistent_intelligence_mvp.md` for complete roadmap with semantic memory integration.
 
 ---
 

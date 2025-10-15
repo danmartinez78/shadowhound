@@ -1074,12 +1074,93 @@ def generate_launch_description():
 - Simplest to implement and debug
 - Good performance/accuracy tradeoff
 
+### Integration with Semantic Memory
+
+Hybrid perception generates observations that should be stored in semantic memory:
+
+**Spatial Memory Integration**:
+```python
+from dimos.perception.spatial_perception import SpatialMemory
+
+# Initialize semantic memory
+spatial_memory = SpatialMemory(
+    collection_name="shadowhound_observations",
+    embedding_model="clip",
+    db_path="/data/spatial_memory"
+)
+
+# Enhanced perception with memory
+class MemoryAwarePerception:
+    def detect_with_memory(self, query: str):
+        # 1. Check memory first (fast)
+        past_obs = self.spatial_memory.query_by_text(query, limit=3)
+        
+        if past_obs and self._is_recent(past_obs[0]):
+            # Navigate to last known location
+            location = past_obs[0]["metadata"]["location"]
+            self.logger.info(f"Found {query} in memory at {location}")
+            return location
+        
+        # 2. Use YOLO for real-time search
+        detections = self.yolo_stream.get_latest()
+        
+        if detections:
+            # 3. VLM verification if needed
+            verified = self.vlm_stream.verify(detections, query)
+            
+            # 4. Store in memory for future
+            if verified:
+                self.spatial_memory.add_observation(
+                    image=self.camera_frame,
+                    location=self.robot.get_pose(),
+                    label=query,
+                    embedding=self.clip_model.encode(self.camera_frame)
+                )
+            
+            return verified
+        
+        return None
+```
+
+**Benefits**:
+- ✅ Query memory before searching (faster)
+- ✅ Store verified detections (episodic memory)
+- ✅ CLIP embeddings enable scene similarity
+- ✅ RAG context for LLM planning
+
+**Memory-Guided Search Example**:
+```
+Mission: "Find the red ball"
+
+1. Query memory: "red ball"
+   → Found at (3.2, 1.5) 10 minutes ago
+
+2. Navigate to last location (local planner)
+   → Arrive in 10 seconds
+
+3. YOLO scan at location
+   → Not found (object moved)
+
+4. Query similar scenes in memory
+   → "Bedroom has similar toys/carpet"
+   → Location (5.0, 8.0)
+
+5. Explore high-probability locations
+   → Navigate to bedroom
+
+6. Find ball, update memory
+   → Success! 2x faster than blind search
+```
+
+See `persistent_intelligence_mvp.md` for complete semantic memory architecture.
+
 ### Next Steps
 
 1. ✅ Implement VLMDetector class (wrap DIMOS Qwen)
 2. ✅ Create SequentialPerceptionStream
-3. ✅ Test on Go2 hardware
-4. ⏸️ Add parallel/adaptive if needed
+3. ✅ **Integrate SpatialMemory** (enable episodic memory)
+4. ✅ Test on Go2 hardware
+5. ⏸️ Add parallel/adaptive if needed
 
 ### Open Questions
 
@@ -1097,4 +1178,5 @@ def generate_launch_description():
 - **DIMOS Qwen Integration**: `src/dimos-unitree/dimos/models/qwen/video_query.py`
 - **Related Docs**:
   - `local_planning_architecture.md` - Navigation system
-  - `mvp_implementation_roadmap.md` - Implementation timeline
+  - `persistent_intelligence_mvp.md` - Strategic roadmap with semantic memory
+  - `local_planning_quickstart.md` - Implementation timeline

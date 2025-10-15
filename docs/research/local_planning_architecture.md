@@ -674,14 +674,57 @@ web = RobotWebInterface(
 3. **Frame handling is robust** (accepts any frame, transforms internally)
 4. **Faster MVP path** (1 week vs 2-3 weeks with SLAM)
 5. **Camera and LiDAR are independent** (safety vs capability)
+6. **Reactive decisions create rich learning data** (for persistent intelligence)
+
+### Integration with Semantic Memory
+
+Local planning's reactive nature generates valuable data for learning:
+
+**Spatial Memory Integration**:
+```python
+from dimos.perception.spatial_perception import SpatialMemory
+
+# Initialize spatial memory (auto-updates during navigation)
+spatial_memory = SpatialMemory(
+    collection_name="shadowhound_navigation",
+    embedding_model="clip",
+    db_path="/data/spatial_memory"
+)
+
+# Connect to robot streams
+spatial_memory.connect_video_stream(robot.camera_stream)
+spatial_memory.connect_transform_provider(robot.get_pose)
+
+# Now as robot navigates:
+# - Every 0.5m or 2s: Capture frame + CLIP embedding
+# - Store with XY location in ChromaDB
+# - Enable "Where did I see X?" queries
+
+# Query before navigation
+if "find" in mission:
+    past_obs = spatial_memory.query_by_text("red ball", limit=3)
+    if past_obs:
+        # Navigate to last known location first
+        last_location = past_obs[0]["metadata"]["location"]
+        local_planner.set_goal(last_location)
+```
+
+**Benefits**:
+- ✅ Episodic memory: "I saw a red ball at (3.2, 1.5) 10 mins ago"
+- ✅ Scene similarity: "This hallway looks familiar"
+- ✅ Transfer learning: "Apply strategies from similar environments"
+- ✅ Smart search: Check memory before exploring
+
+See `persistent_intelligence_mvp.md` for complete integration details.
 
 ### Next Steps
 
 1. ✅ **Test VFH local planner on Go2** (validate obstacle avoidance)
 2. ✅ **Integrate YOLO detection** (validate frame transforms)
 3. ✅ **End-to-end mission** ("Find the ball")
-4. ⏸️ **Add VLM verification** (optional, for nuanced queries)
-5. ⏸️ **Add global planning** (future, for multi-room navigation)
+4. ✅ **Add spatial memory** (enable episodic memory and smart search)
+5. ⏸️ **Add VLM verification** (optional, for nuanced queries)
+6. ⏸️ **Add global planning** (future, for multi-room navigation)
 
 ### Open Questions
 
@@ -699,5 +742,6 @@ web = RobotWebInterface(
 - **DIMOS Local Planner**: `src/dimos-unitree/dimos/robot/local_planner/`
 - **Related Docs**:
   - `hybrid_perception_architecture.md` - YOLO + VLM integration
-  - `mvp_implementation_roadmap.md` - Updated timeline
+  - `persistent_intelligence_mvp.md` - Strategic roadmap with semantic memory
+  - `local_planning_quickstart.md` - Technical implementation guide
   - `persistent_intelligence_dimos_integration.md` - Learning from reactive decisions
