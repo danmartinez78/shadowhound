@@ -37,6 +37,14 @@ nav:
       - ROS 2 DDS Direct Test: networking/dds_direct_test.md
   - Simulation:
       - Overview: simulation/simulation_hub.md
+  - Deployment:
+      - Tower Sim & Data Lake Setup: deployment/tower_sim_datalake_setup.md
+      - Tower Security & Credentials: deployment/tower_security_credentials.md
+      - Tower-Thor-Spark Integration Guide: deployment/tower_thor_spark_integration_guide.md
+      - go2_ros2_sdk + Tower Integration: deployment/go2_ros2_sdk_tower_integration.md
+      - Laptop + Isaac Sim Development: deployment/laptop_isaac_sim_development.md
+      - LeRobot SO-ARM 101 (Optional): deployment/tower_lerobot_soarm101_setup.md
+      - Combined Go2 + SO-ARM Workflows: deployment/combined_go2_soarm_workflows.md
   - Troubleshooting:
       - Overview: troubleshooting/troubleshooting_hub.md
   - Research:
