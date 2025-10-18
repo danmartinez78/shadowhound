@@ -11,6 +11,14 @@ log/
 *.env.backup
 .shadowhound_env
 
+# Credentials (NEVER commit)
+CREDENTIALS.txt
+**/CREDENTIALS.txt
+credentials.txt
+**/credentials.txt
+minio_creds.txt
+tower_credentials.txt
+
 # DIMOS / AI output and data
 assets/output/
 chroma.sqlite3
