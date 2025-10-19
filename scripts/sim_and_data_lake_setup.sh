@@ -561,7 +561,7 @@ $(printf "%b" "$vlines")
     command:
       - -c
       - |
-        mc alias set local http://minio:9000 \$${MINIO_ROOT_USER} \$${MINIO_ROOT_PASSWORD} &&
+        mc alias set local http://minio:9000 \${MINIO_ROOT_USER} \${MINIO_ROOT_PASSWORD} &&
         mc mb -p local/models || true &&
         mc mb -p local/datasets || true &&
         mc mb -p local/logs || true &&
@@ -600,7 +600,7 @@ $(printf "%b" "$vlines")
       - -c
       - |
         mlflow server --host 0.0.0.0 --port 5001 \
-        --backend-store-uri postgresql+psycopg2://mlflow:\$${POSTGRES_PASSWORD}@mlflow-db:5432/mlflow \
+        --backend-store-uri postgresql+psycopg2://mlflow:\${POSTGRES_PASSWORD}@mlflow-db:5432/mlflow \
         --default-artifact-root s3://mlflow
     depends_on:
       mlflow-db:
