@@ -1270,7 +1270,10 @@ smoke_tests(){
   # Test ROS 2 sourcing
   if [[ -f "/opt/ros/${ROS_DISTRO}/setup.bash" ]]; then
     # shellcheck source=/dev/null
+    # Temporarily disable set -u for ROS2 setup (it uses unset variables)
+    set +u
     source "/opt/ros/${ROS_DISTRO}/setup.bash"
+    set -u
     if ros2 --version >/dev/null 2>&1; then
       ok "ROS 2 Humble: PASS"
     else
