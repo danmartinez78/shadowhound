@@ -582,8 +582,13 @@ build_go2_ros2_workspaces(){
   # Install required Python packages for ROS2 builds
   # NOTE: ROS2 Humble requires empy 3.3.4 specifically (not latest 4.x)
   say "Installing ROS2 build dependencies..."
+  # CRITICAL: Uninstall any existing empy first to avoid version conflicts
+  "$env_site/../../bin/pip" uninstall -y empy >> "$LOG_FILE" 2>&1 || true
+  # Install exact versions
   "$env_site/../../bin/pip" install empy==3.3.4 catkin_pkg lark >> "$LOG_FILE" 2>&1
-  ok "Build dependencies installed"
+  # Verify empy version
+  "$env_site/../../bin/python3" -c "import em; print(f'empy version: {em.__version__}')" >> "$LOG_FILE" 2>&1
+  ok "Build dependencies installed (empy 3.3.4)"
   
   # Initialize rosdep if not already done
   if [[ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]]; then

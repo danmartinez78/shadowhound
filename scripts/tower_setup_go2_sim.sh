@@ -45,8 +45,13 @@ ok "Submodules initialized"
 
 # 1. Install required Python packages for ROS2 builds
 say "Installing ROS2 build dependencies..."
+# CRITICAL: Uninstall any existing empy first to avoid conflicts
+pip uninstall -y empy 2>/dev/null || true
+# Install exact versions required by ROS2 Humble
 pip install empy==3.3.4 catkin_pkg lark
-ok "Build dependencies installed"
+# Verify empy version
+python3 -c "import em; print(f'empy version: {em.__version__}')" || err "empy installation failed"
+ok "Build dependencies installed (empy 3.3.4 verified)"
 
 # 2. Initialize rosdep
 say "Configuring rosdep..."
