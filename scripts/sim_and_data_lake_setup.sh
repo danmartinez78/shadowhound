@@ -441,7 +441,7 @@ FROM ghcr.io/mlflow/mlflow:v3.4.0
 RUN pip install --no-cache-dir boto3 psycopg2-binary
 DOCKER
 
-  # Compose file
+  # Compose file - use printf to properly expand \n in vlines
   cat > "$MINIO_COMPOSE_YAML" <<YAML
 services:
   minio:
@@ -451,7 +451,7 @@ services:
     env_file: [.env]
     command: server --console-address ":9001"${dargs}
     volumes:
-${vlines}    ports:
+$(printf "%b" "$vlines")    ports:
       - "9000:9000"
       - "9001:9001"
     healthcheck:
