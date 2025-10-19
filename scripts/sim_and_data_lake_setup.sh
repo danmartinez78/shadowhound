@@ -347,43 +347,104 @@ pick_data_dir(){
 }
 
 pick_minio_drives(){
-  say "\n--- Select one or more mounted directories to back MinIO ---"
-  say "Tip: Use >=4 drives of similar size for erasure-coded resilience. (Smaller drive caps total.)"
-  run "lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,MODEL | sed '1!b; s/.*/(mounted paths you might choose are in the MOUNTPOINT column) &/' || true"
-  local paths=()
-  while :; do
-    read -r -p "Add a mounted path (ENTER to finish, e.g., /mnt/disk1): " p
-    [[ -z "${p:-}" ]] && break
+  say "\n--- Select MinIO Storage Drives ---"
+  say "Tip: Use >=4 drives of similar size for erasure-coded resilience."
+  say ""
+  
+  # Detect all mounted directories with sufficient space
+  local -a available_mounts=()
+  local -a mount_sizes=()
+  
+  # Get all mount points with >10GB free space (excluding special mounts)
+  while IFS= read -r line; do
+    local mount size
+    mount=$(echo "$line" | awk '{print $6}')
+    size=$(echo "$line" | awk '{print $4}' | tr -d 'G')
     
-    # Validate directory exists
-    if [[ ! -d "$p" ]]; then
-      warn "Not a directory: $p"
-      continue
+    # Skip special mounts
+    [[ "$mount" =~ ^/(dev|proc|sys|run|boot|snap) ]] && continue
+    [[ "$mount" == "/" ]] && continue  # Skip root unless it's the only option
+    [[ -z "$mount" ]] && continue
+    
+    # Check if writable and has >10GB
+    if [[ -w "$mount" ]] && ((size > 10)); then
+      available_mounts+=("$mount")
+      mount_sizes+=("$size")
     fi
-    
-    # Validate writable
-    if [[ ! -w "$p" ]]; then
-      warn "Not writable: $p (check permissions)"
-      continue
-    fi
-    
-    # Check available space
-    local space_gb; space_gb=$(df -BG "$p" 2>/dev/null | tail -1 | awk '{print $4}' | tr -d 'G' || echo "0")
-    if ((space_gb < 50)); then
-      warn "$p has only ${space_gb}GB free (50GB+ recommended per drive)"
-      confirm "Use anyway?" || continue
-    else
-      ok "$p: ${space_gb}GB available"
-    fi
-    
-    paths+=("$p")
-  done
-  if ((${#paths[@]}==0)); then
-    warn "No drives selected. Using base data dir as a single drive."
-    paths+=("${DATA_DIR}/lake") ; run "mkdir -p \"${DATA_DIR}/lake\""
+  done < <(df -BG | tail -n +2)
+  
+  # If no mounts found besides root, add root as option
+  if ((${#available_mounts[@]} == 0)); then
+    local root_size; root_size=$(df -BG / | tail -1 | awk '{print $4}' | tr -d 'G')
+    available_mounts+=("/")
+    mount_sizes+=("$root_size")
   fi
-  printf "%s\n" "${paths[@]}" > "$MARKER_DIR/minio_drives.txt"
-  ok "Drives selected: ${paths[*]}"
+  
+  # Display available mounts
+  say "Available mounted directories:"
+  say ""
+  for i in "${!available_mounts[@]}"; do
+    printf "  %d) %-30s (%sGB available)\n" $((i+1)) "${available_mounts[$i]}" "${mount_sizes[$i]}"
+  done
+  say ""
+  say "  0) Custom path (manual entry)"
+  say ""
+  
+  # Get user selection
+  local selected_paths=()
+  say "Select drives for MinIO storage (space-separated numbers, e.g., '1 2 3'):"
+  say "Or press ENTER to use base data directory only."
+  say ""
+  read -r -p "Choice(s): " choices
+  
+  # Handle empty input
+  if [[ -z "$choices" ]]; then
+    warn "No drives selected. Using base data dir as single drive."
+    selected_paths+=("${DATA_DIR}/lake")
+    run "mkdir -p \"${DATA_DIR}/lake\""
+  else
+    # Parse choices
+    for choice in $choices; do
+      if [[ "$choice" == "0" ]]; then
+        # Manual entry
+        read -r -p "Enter custom path: " custom_path
+        if [[ -n "$custom_path" ]]; then
+          # Validate custom path
+          if [[ ! -d "$custom_path" ]]; then
+            warn "Not a directory: $custom_path (skipping)"
+            continue
+          fi
+          if [[ ! -w "$custom_path" ]]; then
+            warn "Not writable: $custom_path (skipping)"
+            continue
+          fi
+          local space_gb; space_gb=$(df -BG "$custom_path" 2>/dev/null | tail -1 | awk '{print $4}' | tr -d 'G' || echo "0")
+          ok "$custom_path: ${space_gb}GB available"
+          selected_paths+=("$custom_path")
+        fi
+      elif [[ "$choice" =~ ^[0-9]+$ ]] && ((choice >= 1 && choice <= ${#available_mounts[@]})); then
+        # Valid numbered choice
+        local idx=$((choice - 1))
+        local path="${available_mounts[$idx]}"
+        local size="${mount_sizes[$idx]}"
+        ok "$path: ${size}GB available"
+        selected_paths+=("$path")
+      else
+        warn "Invalid choice: $choice (skipping)"
+      fi
+    done
+  fi
+  
+  # Fallback if no valid selections
+  if ((${#selected_paths[@]} == 0)); then
+    warn "No valid drives selected. Using base data dir as fallback."
+    selected_paths+=("${DATA_DIR}/lake")
+    run "mkdir -p \"${DATA_DIR}/lake\""
+  fi
+  
+  # Save selections
+  printf "%s\n" "${selected_paths[@]}" > "$MARKER_DIR/minio_drives.txt"
+  ok "Drives selected: ${selected_paths[*]}"
 }
 
 compose_cmd(){
