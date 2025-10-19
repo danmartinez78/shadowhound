@@ -325,14 +325,20 @@ install_ros2_humble(){
 }
 
 clone_isaaclab(){
-  if [[ -f "$MARKER_DIR/isaac_lab_cloned" ]]; then
-    ok "Isaac Lab already cloned - skipping"
+  local ws="$HOME/workspace"; run "mkdir -p \"$ws\""
+  
+  # Check if Isaac Lab is actually installed (not just cloned)
+  if [[ -f "$MARKER_DIR/isaac_lab_cloned" ]] && [[ -d "$ws/IsaacLab/_isaac_sim" ]]; then
+    ok "Isaac Lab already installed - skipping"
     return 0
   fi
+  
   say "\n--- Isaac Lab (source) ---"
-  local ws="$HOME/workspace"; run "mkdir -p \"$ws\""
   if [[ -d "$ws/IsaacLab/.git" ]]; then run "git -C \"$ws/IsaacLab\" pull --ff-only"
   else run "git clone https://github.com/isaac-sim/IsaacLab.git \"$ws/IsaacLab\""; fi
+  
+  # Install Isaac Lab extensions
+  say "Installing Isaac Lab extensions (this may take 5-10 minutes)..."
   # shellcheck source=/dev/null
   source "$CONDA_ROOT/etc/profile.d/conda.sh"
   run "conda run -n \"$ENV_NAME\" bash -lc 'cd \"$ws/IsaacLab\" && ./isaaclab.sh --install'"
