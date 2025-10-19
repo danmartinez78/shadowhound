@@ -252,6 +252,10 @@ install_miniconda(){
   # shellcheck source=/dev/null
   source "$CONDA_ROOT/etc/profile.d/conda.sh"
   conda config --set auto_activate_base false >>"$LOG_FILE" 2>&1 || true
+  
+  # Accept Anaconda Terms of Service (required for recent conda versions)
+  say "Accepting Anaconda Terms of Service..."
+  conda tos accept --all >>"$LOG_FILE" 2>&1 || true
 }
 
 create_env_and_install_isaacsim(){
@@ -259,6 +263,10 @@ create_env_and_install_isaacsim(){
   say "⏱️  This may take 15-30 minutes (downloading ~30GB)..."
   # shellcheck source=/dev/null
   source "$CONDA_ROOT/etc/profile.d/conda.sh"
+  
+  # Ensure conda ToS is accepted (belt and suspenders approach)
+  conda tos accept --all >>"$LOG_FILE" 2>&1 || true
+  
   conda env list | awk '{print $1}' | grep -q "^${ENV_NAME}\$" || run "conda create -y -n \"$ENV_NAME\" python=${PY_VER}"
   run "conda run -n \"$ENV_NAME\" python -V"
 
