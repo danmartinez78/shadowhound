@@ -240,6 +240,27 @@ install_driver_if_needed(){
   fi
   say "\n--- NVIDIA Driver for Isaac Sim 4.5.0 ---"
   
+  # Check Secure Boot status
+  if command -v mokutil >/dev/null 2>&1; then
+    if mokutil --sb-state 2>/dev/null | grep -qi "SecureBoot enabled"; then
+      warn "╔════════════════════════════════════════════════════════════════╗"
+      warn "║  SECURE BOOT IS ENABLED                                        ║"
+      warn "╚════════════════════════════════════════════════════════════════╝"
+      warn ""
+      warn "Secure Boot requires signing NVIDIA kernel modules (MOK enrollment)"
+      warn "This adds complexity and potential boot issues."
+      warn ""
+      warn "RECOMMENDED: Disable Secure Boot in BIOS for smoother installation"
+      warn ""
+      warn "To disable Secure Boot:"
+      warn "  1. Reboot and press Del to enter BIOS"
+      warn "  2. Go to Boot → Secure Boot → Disabled"
+      warn "  3. Save and exit (F10)"
+      warn ""
+      confirm "Continue with Secure Boot enabled (not recommended)?" || exit 1
+    fi
+  fi
+  
   # Get kernel version to determine required driver
   local kernel_ver; kernel_ver="$(uname -r)"
   local kernel_major; kernel_major="$(echo "$kernel_ver" | cut -d. -f1)"
@@ -248,15 +269,14 @@ install_driver_if_needed(){
   
   # Determine target driver version based on kernel
   # Ubuntu 22.04.5+ with kernel 6.8.0-48+ requires driver 535.216.01+
+  # Using 535-server for long-term stability (5+ year support vs 1 year for regular)
   local target_driver="535"
-  local target_driver_full="535-server"  # Use server driver for stability
+  local target_driver_full="535-server"
   
   if [[ "$kernel_major" -eq 6 ]] && [[ "$kernel_minor" -eq 8 ]]; then
     say "Kernel 6.8.x detected - using driver 535-server (>= 535.216.01)"
-    target_driver_full="535-server"
   else
-    say "Using recommended driver 535-server for Isaac Sim 4.5.0"
-    target_driver_full="535-server"
+    say "Using driver 535-server for Isaac Sim 4.5.0 (long-term support branch)"
   fi
   
   # Check if nvidia-smi exists and can communicate with driver

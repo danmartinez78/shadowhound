@@ -2,7 +2,23 @@
 
 ## Pre-Installation Checklist
 
-### 1. Ubuntu 22.04 Installation
+### 1. BIOS Settings (Before Ubuntu Installation)
+
+**CRITICAL: Disable Secure Boot**
+```
+1. Enter BIOS (press Del during boot)
+2. Go to: Boot → Secure Boot
+3. Set to: Disabled
+4. Press F10 to save and exit
+```
+
+**Why?** Secure Boot requires signing NVIDIA driver kernel modules (MOK enrollment), which adds complexity and can cause boot issues. Not needed for workstation use.
+
+**Other recommended BIOS settings (X99-E WS):**
+- Advanced → System Agent → Memory Remap: **Enabled**
+- Boot → Fast Boot: **Disabled**
+
+### 2. Ubuntu 22.04 Installation
 - ✅ Install Ubuntu 22.04.5 LTS Desktop (fresh install)
 - ✅ During installation:
   - Choose "Minimal installation" (faster, cleaner)
@@ -11,7 +27,9 @@
 - ✅ Create user account: `daniel` (or your preferred username)
 - ✅ Set hostname: `sim-tower`
 
-### 2. First Boot Setup
+### 3. First Boot Setup
+
+### 3. First Boot Setup
 After Ubuntu desktop loads:
 
 ```bash
