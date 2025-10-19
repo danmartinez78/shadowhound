@@ -45,13 +45,20 @@ ok "Submodules initialized"
 
 # 1. Install required Python packages for ROS2 builds
 say "Installing ROS2 build dependencies..."
-# CRITICAL: Uninstall any existing empy first to avoid conflicts
+# CRITICAL: ROS2 uses system Python, not conda Python!
+# We need to install empy into the system Python that ROS2 uses
+say "Installing into system Python (ROS2 requirement)..."
+sudo /usr/bin/python3 -m pip uninstall -y empy 2>/dev/null || true
+sudo /usr/bin/python3 -m pip install empy==3.3.4
+/usr/bin/python3 -c "import em; print(f'System empy version: {em.__version__}')" || err "System empy installation failed"
+ok "System Python: empy 3.3.4 installed"
+
+# Also install into conda env for other tools
+say "Installing into conda environment..."
 pip uninstall -y empy 2>/dev/null || true
-# Install exact versions required by ROS2 Humble
 pip install empy==3.3.4 catkin_pkg lark
-# Verify empy version
-python3 -c "import em; print(f'empy version: {em.__version__}')" || err "empy installation failed"
-ok "Build dependencies installed (empy 3.3.4 verified)"
+python3 -c "import em; print(f'Conda empy version: {em.__version__}')" || err "Conda empy installation failed"
+ok "Conda environment: empy 3.3.4 + build tools installed"
 
 # 2. Initialize rosdep
 say "Configuring rosdep..."
