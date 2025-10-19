@@ -46,19 +46,32 @@ ok "Submodules initialized"
 # 1. Install required Python packages for ROS2 builds
 say "Installing ROS2 build dependencies..."
 # CRITICAL: ROS2 uses system Python, not conda Python!
-# We need to install empy into the system Python that ROS2 uses
+# But when conda env is active, it uses conda Python which searches system packages.
+# We need empy in BOTH the conda env AND system Python to be safe.
+
 say "Installing into system Python (ROS2 requirement)..."
 sudo /usr/bin/python3 -m pip uninstall -y empy 2>/dev/null || true
 sudo /usr/bin/python3 -m pip install empy==3.3.4
-/usr/bin/python3 -c "import em; print(f'System empy version: {em.__version__}')" || err "System empy installation failed"
+/usr/bin/python3 -c "import em; print(f'System Python empy: {em.__version__}')" || err "System empy installation failed"
 ok "System Python: empy 3.3.4 installed"
 
-# Also install into conda env for other tools
+# Also install into conda env (which is what colcon actually calls)
 say "Installing into conda environment..."
 pip uninstall -y empy 2>/dev/null || true
 pip install empy==3.3.4 catkin_pkg lark
-python3 -c "import em; print(f'Conda empy version: {em.__version__}')" || err "Conda empy installation failed"
+python3 -c "import em; print(f'Conda Python empy: {em.__version__}')" || err "Conda empy installation failed"
 ok "Conda environment: empy 3.3.4 + build tools installed"
+
+# Verify the conda Python can actually import empy with correct version
+say "Verifying empy is accessible..."
+python3 -c "import em; assert hasattr(em, 'Interpreter'), 'Wrong empy version!'" || err "empy verification failed - wrong version!"
+ok "empy 3.3.4 verified and accessible"
+
+# Clean any previous failed builds
+say "Cleaning previous build artifacts..."
+rm -rf IsaacSim-ros_workspaces/humble_ws/build IsaacSim-ros_workspaces/humble_ws/install
+rm -rf go2_omniverse_ws/build go2_omniverse_ws/install
+ok "Build directories cleaned"
 
 # 2. Initialize rosdep
 say "Configuring rosdep..."
