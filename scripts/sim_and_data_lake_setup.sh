@@ -1367,14 +1367,32 @@ doctor(){
 
 uninstall_all(){
   say "\n--- Uninstall ---"
-  local cmd; cmd="$(compose_cmd)"; cmd="${cmd:-docker compose}"
+  
+  # Load data directories from state if available
+  local DATA_DIR MINIO_DIR MINIO_COMPOSE_YAML
+  if [[ -f "$MARKER_DIR/data_dir.txt" ]]; then
+    DATA_DIR=$(cat "$MARKER_DIR/data_dir.txt")
+  else
+    DATA_DIR="$DATA_DIR_DEFAULT"
+  fi
+  
+  if [[ -f "$MARKER_DIR/minio_dir.txt" ]]; then
+    MINIO_DIR=$(cat "$MARKER_DIR/minio_dir.txt")
+  else
+    MINIO_DIR="${DATA_DIR}/minio"
+  fi
+  MINIO_COMPOSE_YAML="${MINIO_DIR}/docker-compose.yml"
+  
+  local cmd; cmd="$(compose_cmd 2>/dev/null)" || cmd="docker compose"
 
   # Bring down MLflow/MinIO
   if [[ -f "$MINIO_COMPOSE_YAML" ]]; then
-    (cd "$MINIO_DIR" && $cmd down -v || true)
+    say "Stopping MinIO/MLflow services..."
+    (cd "$MINIO_DIR" && $cmd down -v 2>/dev/null || true)
   else
     if [[ -f "$DATA_DIR_DEFAULT/minio/docker-compose.yml" ]]; then
-      (cd "$DATA_DIR_DEFAULT/minio" && $cmd down -v || true)
+      say "Stopping MinIO/MLflow services..."
+      (cd "$DATA_DIR_DEFAULT/minio" && $cmd down -v 2>/dev/null || true)
     fi
   fi
 
