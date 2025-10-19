@@ -175,8 +175,34 @@ ensure_base_tools(){
     ok "Base tools already installed - skipping"
     return 0
   fi
+  say "\n--- Installing Base System Tools ---"
   run "sudo apt-get update"
-  run "sudo apt-get install -y curl wget git unzip zip jq ca-certificates build-essential cmake pkg-config apt-transport-https gnupg software-properties-common"
+  # Essential build tools and utilities
+  run "sudo apt-get install -y \
+    curl wget git unzip zip jq \
+    ca-certificates build-essential cmake pkg-config \
+    apt-transport-https gnupg software-properties-common \
+    lsb-release dmidecode pciutils usbutils \
+    net-tools dnsutils iputils-ping \
+    vim nano less tree \
+    python3-pip python3-dev python3-venv"
+  
+  # Isaac Sim dependencies
+  say "Installing Isaac Sim dependencies..."
+  run "sudo apt-get install -y \
+    libfuse2 \
+    libglu1-mesa \
+    libsm6 \
+    libxi6 \
+    libxrandr2 \
+    libxxf86vm1 \
+    libgl1-mesa-glx \
+    libglew2.2 \
+    libopengl0 \
+    vulkan-tools \
+    mesa-utils"
+  
+  ok "Base tools and Isaac Sim dependencies installed"
   touch "$MARKER_DIR/base_tools_installed"
 }
 
@@ -212,89 +238,76 @@ install_driver_if_needed(){
     ok "NVIDIA driver already checked - skipping"
     return 0
   fi
-  say "\n--- NVIDIA driver ---"
-  if command -v nvidia-smi >/dev/null; then
+  say "\n--- NVIDIA Driver for Isaac Sim 4.5.0 ---"
+  
+  # Get kernel version to determine required driver
+  local kernel_ver; kernel_ver="$(uname -r)"
+  local kernel_major; kernel_major="$(echo "$kernel_ver" | cut -d. -f1)"
+  local kernel_minor; kernel_minor="$(echo "$kernel_ver" | cut -d. -f2)"
+  local kernel_patch; kernel_patch="$(echo "$kernel_ver" | cut -d. -f3 | cut -d- -f1)"
+  
+  # Determine target driver version based on kernel
+  # Ubuntu 22.04.5+ with kernel 6.8.0-48+ requires driver 535.216.01+
+  local target_driver="535"
+  local target_driver_full="535-server"  # Use server driver for stability
+  
+  if [[ "$kernel_major" -eq 6 ]] && [[ "$kernel_minor" -eq 8 ]]; then
+    say "Kernel 6.8.x detected - using driver 535-server (>= 535.216.01)"
+    target_driver_full="535-server"
+  else
+    say "Using recommended driver 535-server for Isaac Sim 4.5.0"
+    target_driver_full="535-server"
+  fi
+  
+  if command -v nvidia-smi >/dev/null 2>&1; then
     local v; v="$(nvidia-smi --query-gpu=driver_version --format=csv,noheader | head -n1 || true)"
     say "Detected driver: $v"
     
-    # Check if driver is in recommended range (535-550 for Isaac Sim 4.5.0)
+    # Extract major version
     local major; major="$(echo "$v" | cut -d. -f1)"
-    if [[ "$major" -ge 535 ]] && [[ "$major" -le 550 ]]; then
-      ok "Driver $v is in recommended range (535-550)"
+    
+    # Check if driver is 535.x (recommended) or 545.x (also works)
+    if [[ "$major" -eq 535 ]] || [[ "$major" -eq 545 ]]; then
+      ok "Driver $v is compatible with Isaac Sim 4.5.0"
+      
+      # Enable persistence mode for multi-GPU stability
+      say "Enabling NVIDIA persistence mode..."
+      sudo nvidia-smi -pm 1 >>"$LOG_FILE" 2>&1 || warn "Could not enable persistence mode (non-fatal)"
+      
       touch "$MARKER_DIR/nvidia_driver_checked"
     else
-      warn "Driver $v detected. Isaac Sim 4.5.0 recommends driver 535-550."
+      warn "Driver $v detected. Isaac Sim 4.5.0 recommends driver 535.129.03+"
       warn "Current driver may cause performance issues or instability."
-      say "Downgrading to recommended driver 550..."
+      say "Installing recommended driver $target_driver_full..."
       
       # Purge existing NVIDIA drivers completely
       say "Removing existing NVIDIA drivers..."
-      run "sudo apt-get purge -y 'nvidia-*' 'libnvidia-*'"
+      run "sudo apt-get purge -y 'nvidia-*' 'libnvidia-*' || true"
       run "sudo apt-get autoremove -y"
       run "sudo apt-get autoclean"
       
-      # Install driver 550
-      run "sudo add-apt-repository -y ppa:graphics-drivers/ppa"
+      # Install driver 535
       run "sudo apt-get update"
-      run "sudo apt-get install -y nvidia-driver-550 nvidia-dkms-550"
+      run "sudo apt-get install -y nvidia-driver-$target_driver_full"
       
       touch "$MARKER_DIR/nvidia_driver_checked"
-      warn "Driver 550 installed. REBOOT REQUIRED before continuing."
+      warn "Driver $target_driver_full installed. REBOOT REQUIRED before continuing."
       warn "After reboot, verify with: nvidia-smi"
+      warn "Expected driver version: 535.129.03 or higher"
       warn "Then re-run: bash $SCRIPT_NAME install"
       exit 0
     fi
   else
-    run "sudo add-apt-repository -y ppa:graphics-drivers/ppa"
+    say "No NVIDIA driver detected. Installing driver $target_driver_full..."
     run "sudo apt-get update"
-    say "Installing NVIDIA driver 550 (recommended for Isaac Sim 4.5.0)..."
-    run "sudo apt-get install -y nvidia-driver-550 nvidia-dkms-550"
+    run "sudo apt-get install -y nvidia-driver-$target_driver_full"
     touch "$MARKER_DIR/nvidia_driver_checked"
-    warn "A reboot is required before continuing. Re-run: bash $SCRIPT_NAME install"
+    warn "Driver $target_driver_full installed. REBOOT REQUIRED before continuing."
+    warn "After reboot, verify with: nvidia-smi"
+    warn "Expected driver version: 535.129.03 or higher"
+    warn "Then re-run: bash $SCRIPT_NAME install"
     exit 0
   fi
-}
-
-install_cuda_toolkit(){
-  if [[ -f "$MARKER_DIR/cuda_toolkit_installed" ]]; then
-    ok "CUDA Toolkit already installed - skipping"
-    return 0
-  fi
-  
-  say "\n--- CUDA Toolkit 11.8 (recommended for Isaac Sim 4.5.0) ---"
-  
-  # Check if CUDA 11.8 is already installed
-  if [[ -d "/usr/local/cuda-11.8" ]] && command -v /usr/local/cuda-11.8/bin/nvcc >/dev/null 2>&1; then
-    ok "CUDA 11.8 already installed"
-    touch "$MARKER_DIR/cuda_toolkit_installed"
-    return 0
-  fi
-  
-  # Install CUDA 11.8
-  say "Downloading CUDA 11.8 repository package..."
-  run "wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin -O /tmp/cuda-ubuntu2204.pin"
-  run "sudo mv /tmp/cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600"
-  run "wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-repo-ubuntu2204-11-8-local_11.8.0-520.61.05-1_amd64.deb -O /tmp/cuda-repo.deb"
-  run "sudo dpkg -i /tmp/cuda-repo.deb"
-  run "sudo cp /var/cuda-repo-ubuntu2204-11-8-local/cuda-*-keyring.gpg /usr/share/keyrings/"
-  run "sudo apt-get update"
-  run "sudo apt-get -y install cuda-toolkit-11-8"
-  
-  # Set up environment
-  if ! grep -q "/usr/local/cuda-11.8/bin" ~/.bashrc; then
-    echo "" >> ~/.bashrc
-    echo "# CUDA 11.8" >> ~/.bashrc
-    echo 'export PATH=/usr/local/cuda-11.8/bin${PATH:+:${PATH}}' >> ~/.bashrc
-    echo 'export LD_LIBRARY_PATH=/usr/local/cuda-11.8/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' >> ~/.bashrc
-  fi
-  
-  # Create symbolic link
-  if [[ ! -L "/usr/local/cuda" ]]; then
-    run "sudo ln -sf /usr/local/cuda-11.8 /usr/local/cuda"
-  fi
-  
-  ok "CUDA 11.8 installed. Source ~/.bashrc or reopen terminal to update PATH"
-  touch "$MARKER_DIR/cuda_toolkit_installed"
 }
 
 install_docker_nvidia(){
@@ -303,6 +316,10 @@ install_docker_nvidia(){
     return 0
   fi
   say "\n--- Docker + NVIDIA Container Toolkit ---"
+  
+  # Note: CUDA toolkit NOT needed - Isaac Sim pip package includes CUDA runtime
+  say "Note: CUDA toolkit not required - Isaac Sim includes CUDA runtime"
+  
   local docker_installed=0
   if ! command -v docker >/dev/null; then
     run "curl -fsSL https://get.docker.com -o /tmp/get-docker.sh"
@@ -1692,7 +1709,6 @@ install(){
   require_ubuntu_2204
   ensure_base_tools
   install_driver_if_needed
-  install_cuda_toolkit
   install_docker_nvidia
   
   # Ensure Docker daemon is running
@@ -2266,12 +2282,12 @@ gpu_diagnostics(){
   echo "GPUs Detected: $gpu_count"
   echo "Driver Version: $driver_ver"
   
-  if [[ "$driver_major" -lt 535 ]] || [[ "$driver_major" -gt 550 ]]; then
+  if [[ "$driver_major" -lt 535 ]] || [[ "$driver_major" -gt 545 ]]; then
     echo ""
-    echo "⚠️  WARNING: Driver $driver_ver is outside recommended range (535-550)"
-    echo "   Isaac Sim 4.5.0 works best with driver 550"
+    echo "⚠️  WARNING: Driver $driver_ver is outside recommended range (535-545)"
+    echo "   Isaac Sim 4.5.0 officially recommends driver 535.129.03"
     echo "   Run: ./scripts/sim_and_data_lake_setup.sh install"
-    echo "   (Will downgrade driver automatically)"
+    echo "   (Will install correct driver automatically)"
   fi
   
   if nvidia-smi --query-gpu=persistence_mode --format=csv,noheader | grep -q "Disabled"; then
