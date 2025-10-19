@@ -1332,6 +1332,15 @@ smoke_tests(){
     ok "MLflow health: PASS (port $MLFLOW_PORT)"
   else
     warn "MLflow not responding on port $MLFLOW_PORT"
+    # Check if container is running
+    if docker ps --filter "name=mlflow" --filter "status=running" --format '{{.Names}}' 2>/dev/null | grep -q '^mlflow$'; then
+      warn "MLflow container is running but not responding yet (may need more time)"
+      warn "Check logs: docker logs mlflow"
+    else
+      warn "MLflow container is not running"
+      warn "Check status: docker ps -a | grep mlflow"
+      warn "Check logs: docker logs mlflow"
+    fi
     ((failed++))
   fi
   
