@@ -255,7 +255,8 @@ install_miniconda(){
   
   # Accept Anaconda Terms of Service (required for recent conda versions)
   say "Accepting Anaconda Terms of Service..."
-  conda tos accept --all >>"$LOG_FILE" 2>&1 || true
+  conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main >>"$LOG_FILE" 2>&1 || true
+  conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r >>"$LOG_FILE" 2>&1 || true
 }
 
 create_env_and_install_isaacsim(){
@@ -265,7 +266,8 @@ create_env_and_install_isaacsim(){
   source "$CONDA_ROOT/etc/profile.d/conda.sh"
   
   # Ensure conda ToS is accepted (belt and suspenders approach)
-  conda tos accept --all >>"$LOG_FILE" 2>&1 || true
+  conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main >>"$LOG_FILE" 2>&1 || true
+  conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r >>"$LOG_FILE" 2>&1 || true
   
   conda env list | awk '{print $1}' | grep -q "^${ENV_NAME}\$" || run "conda create -y -n \"$ENV_NAME\" python=${PY_VER}"
   run "conda run -n \"$ENV_NAME\" python -V"
