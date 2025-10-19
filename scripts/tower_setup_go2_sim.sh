@@ -38,6 +38,11 @@ if [ ! -d "$GO2_DIR" ]; then
 fi
 cd "$GO2_DIR" || err "Failed to cd to $GO2_DIR"
 
+# Initialize git submodules (contains IsaacSim-ros_workspaces)
+say "Initializing git submodules..."
+git submodule update --init --recursive
+ok "Submodules initialized"
+
 # 1. Install empy 3.3.4 (ROS2 Humble requirement)
 say "Installing empy==3.3.4..."
 pip install empy==3.3.4

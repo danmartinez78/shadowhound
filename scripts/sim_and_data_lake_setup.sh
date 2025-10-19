@@ -523,6 +523,10 @@ clone_go2_omniverse_and_patch(){
   else
     run "git clone --branch added_copter https://github.com/abizovnuralem/go2_omniverse \"$ws/go2_omniverse\""
   fi
+  # Initialize submodules (contains IsaacSim-ros_workspaces and go2_omniverse_ws)
+  say "Initializing go2_omniverse submodules..."
+  run "git -C \"$ws/go2_omniverse\" submodule update --init --recursive"
+  ok "Submodules initialized"
   # Copy Unitree LiDAR config into Isaac Sim sensor configs if present
   local env_site; env_site="$(cat "$MARKER_DIR/env_site.txt" 2>/dev/null || true)"
   if [[ -n "$env_site" && -f "$ws/go2_omniverse/repifis/l1.json" ]]; then
