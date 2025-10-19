@@ -543,27 +543,18 @@ generate_minio_mlflow_compose(){
   mapfile -t paths < "$MARKER_DIR/minio_drives.txt"
   run "mkdir -p \"$MINIO_DIR\" \"$MINIO_DIR/config\" \"$MINIO_DIR/data\" \"$DATA_DIR/mlflow\" \"$DATA_DIR/mlflow/pgdata\""
   
-  # credentials - reuse existing if present, otherwise generate new
+  # credentials - use simple fixed passwords for development
+  # In production, users should change these via reconfigure-credentials command
   local MINIO_USER MINIO_PASS POSTGRES_PASSWORD
-  if [[ -f "$MINIO_DIR/.env" ]]; then
-    say "Reusing existing credentials from .env file"
-    # shellcheck source=/dev/null
-    source "$MINIO_DIR/.env"
-    MINIO_USER="$MINIO_ROOT_USER"
-    MINIO_PASS="$MINIO_ROOT_PASSWORD"
-    # POSTGRES_PASSWORD already loaded from .env
-  else
-    say "Generating new random credentials"
-    MINIO_USER="$(openssl rand -hex 8)"
-    MINIO_PASS="$(openssl rand -hex 16)"
-    POSTGRES_PASSWORD="$(openssl rand -hex 16)"
-    
-    # Write to .env file (used by Docker Compose)
-    echo "MINIO_ROOT_USER=$MINIO_USER" > "$MINIO_DIR/.env"
-    echo "MINIO_ROOT_PASSWORD=$MINIO_PASS" >> "$MINIO_DIR/.env"
-    echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> "$MINIO_DIR/.env"
-    run "chmod 600 \"$MINIO_DIR/.env\""
-  fi
+  MINIO_USER="minioadmin"
+  MINIO_PASS="minioadmin123"
+  POSTGRES_PASSWORD="mlflow123"
+  
+  # Write to .env file (used by Docker Compose)
+  echo "MINIO_ROOT_USER=$MINIO_USER" > "$MINIO_DIR/.env"
+  echo "MINIO_ROOT_PASSWORD=$MINIO_PASS" >> "$MINIO_DIR/.env"
+  echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> "$MINIO_DIR/.env"
+  run "chmod 600 \"$MINIO_DIR/.env\""
   # volumes + command args
   for p in "${paths[@]}"; do
     vlines+="      - \"$p:/data$i\"\n"
