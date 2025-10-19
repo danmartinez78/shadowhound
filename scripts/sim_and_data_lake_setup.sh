@@ -2217,6 +2217,80 @@ CREDS
   say "                        docker logs mlflow"
 }
 
+gpu_diagnostics(){
+  say "╔════════════════════════════════════════════════════════════════╗"
+  say "║  GPU Diagnostics & Monitoring                                  ║"
+  say "╚════════════════════════════════════════════════════════════════╝\n"
+  
+  if ! command -v nvidia-smi >/dev/null 2>&1; then
+    echo "ERROR: nvidia-smi not found. NVIDIA driver not installed."
+    exit 1
+  fi
+  
+  say "═══ CURRENT GPU STATUS ═══"
+  nvidia-smi
+  
+  say "\n═══ DETAILED GPU INFORMATION ═══"
+  nvidia-smi --query-gpu=index,name,driver_version,pci.bus_id,pci.device_id,memory.total,memory.free,memory.used,temperature.gpu,power.draw,power.limit,clocks.current.graphics,clocks.max.graphics --format=csv
+  
+  say "\n═══ GPU PERSISTENCE MODE ═══"
+  nvidia-smi --query-gpu=index,name,persistence_mode --format=csv
+  echo ""
+  echo "Note: Persistence mode keeps driver loaded even when no processes use GPU"
+  echo "Enable with: sudo nvidia-smi -pm 1"
+  
+  say "\n═══ PCI DEVICES ═══"
+  lspci | grep -i nvidia
+  
+  say "\n═══ KERNEL MESSAGES (Last 50 NVIDIA-related) ═══"
+  dmesg | grep -i nvidia | tail -50 || echo "No NVIDIA kernel messages found"
+  
+  say "\n═══ GPU POWER READINGS ═══"
+  nvidia-smi -q | grep -A 5 "Power Readings" || echo "Power readings not available"
+  
+  say "\n═══ DRIVER MODULE INFO ═══"
+  lsmod | grep nvidia
+  modinfo nvidia 2>/dev/null | grep -E "^(version|srcversion|filename):" || echo "nvidia module info not available"
+  
+  say "\n═══ XORG PROCESSES ═══"
+  ps aux | grep -E "(Xorg|gnome-shell|nxnode)" | grep -v grep
+  
+  say "\n═══ GPU MEMORY BY PROCESS ═══"
+  nvidia-smi pmon -c 1 2>/dev/null || echo "Process monitoring not available"
+  
+  say "\n═══ RECOMMENDATIONS ═══"
+  local gpu_count; gpu_count=$(nvidia-smi --list-gpus 2>/dev/null | wc -l)
+  local driver_ver; driver_ver=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader | head -n1)
+  local driver_major; driver_major=$(echo "$driver_ver" | cut -d. -f1)
+  
+  echo "GPUs Detected: $gpu_count"
+  echo "Driver Version: $driver_ver"
+  
+  if [[ "$driver_major" -lt 535 ]] || [[ "$driver_major" -gt 550 ]]; then
+    echo ""
+    echo "⚠️  WARNING: Driver $driver_ver is outside recommended range (535-550)"
+    echo "   Isaac Sim 4.5.0 works best with driver 550"
+    echo "   Run: ./scripts/sim_and_data_lake_setup.sh install"
+    echo "   (Will downgrade driver automatically)"
+  fi
+  
+  if nvidia-smi --query-gpu=persistence_mode --format=csv,noheader | grep -q "Disabled"; then
+    echo ""
+    echo "💡 TIP: Enable persistence mode to prevent GPU initialization issues:"
+    echo "   sudo nvidia-smi -pm 1"
+  fi
+  
+  say "\n═══ CONTINUOUS MONITORING ═══"
+  echo "Watch GPU status in real-time:"
+  echo "  watch -n 1 nvidia-smi"
+  echo ""
+  echo "Monitor for GPU disappearance:"
+  echo "  while true; do nvidia-smi -L | tee -a gpu-monitor.log; sleep 5; done"
+  echo ""
+  echo "Check dmesg for errors:"
+  echo "  sudo dmesg -w | grep -i nvidia"
+}
+
 show_help(){
   cat <<HELP
 Robot Simulation + Data Lake Setup Script
@@ -2234,6 +2308,10 @@ COMMANDS:
   
   doctor             - System health check
                        Validates installation and service status
+  
+  gpu-diag           - GPU diagnostics and monitoring
+                       Check driver, power, PCI status, kernel messages
+                       Troubleshoot GPU disappearance issues
   
   test               - Dry-run validation (no changes)
                        Check system requirements before installing
@@ -2259,6 +2337,9 @@ EXAMPLES:
   
   # Check status
   bash $SCRIPT_NAME doctor
+  
+  # Diagnose GPU issues (disappearing GPU, driver problems)
+  bash $SCRIPT_NAME gpu-diag
   
   # Change storage drives (after moving data to new drives)
   bash $SCRIPT_NAME reconfigure-drives
@@ -2299,6 +2380,7 @@ case "${1:-help}" in
   reconfigure-drives) reconfigure_drives ;;
   reconfigure-network) reconfigure_network ;;
   reconfigure-credentials) reconfigure_credentials ;;
+  gpu-diag) gpu_diagnostics ;;
   help|--help|-h) show_help ;;
   *) echo "Unknown command: $1"; echo ""; show_help; exit 1 ;;
 esac
