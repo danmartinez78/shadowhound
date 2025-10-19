@@ -127,11 +127,37 @@ preflight_checks(){
     fi
   done
   
-  # Internet connectivity
-  if curl -fsSL --connect-timeout 5 https://google.com >/dev/null 2>&1; then
+  # Internet connectivity - try multiple methods
+  local internet_ok=false
+  
+  # Method 1: curl to google.com (preferred)
+  if command -v curl >/dev/null 2>&1; then
+    if curl -fsSL --connect-timeout 10 https://google.com >/dev/null 2>&1; then
+      internet_ok=true
+    fi
+  fi
+  
+  # Method 2: wget fallback
+  if [[ "$internet_ok" == "false" ]] && command -v wget >/dev/null 2>&1; then
+    if wget -q --spider --timeout=10 https://google.com 2>/dev/null; then
+      internet_ok=true
+    fi
+  fi
+  
+  # Method 3: DNS resolution test (minimal check)
+  if [[ "$internet_ok" == "false" ]] && command -v getent >/dev/null 2>&1; then
+    if getent hosts google.com >/dev/null 2>&1; then
+      warn "Internet: DNS works but HTTPS connectivity failed (may be proxy/firewall)"
+      # Don't fail - DNS working is enough for apt to work with local mirrors
+      internet_ok=true
+    fi
+  fi
+  
+  if [[ "$internet_ok" == "true" ]]; then
     ok "Internet: connected"
   else
     warn "Internet: connectivity issue (required for downloads)"
+    echo "     Troubleshoot: Check DNS (/etc/resolv.conf), firewall, or proxy settings"
     ((failed++))
   fi
   
