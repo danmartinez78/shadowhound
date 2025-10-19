@@ -242,7 +242,7 @@ create_env_and_install_isaacsim(){
   run "conda run -n \"$ENV_NAME\" python -m pip install --upgrade pip"
   
   say "Installing Isaac Sim (this is the long step - be patient)..."
-  run "conda run -n \"$ENV_NAME\" python -m pip install \"isaacsim${ISAACSIM_PIP_EXTRAS}==${ISAACSIM_PIP_VERSION}\" --extra-index-url https://pypi.nvidia.com"
+  run "conda run -n \"$ENV_NAME\" python -m pip install --timeout 300 \"isaacsim${ISAACSIM_PIP_EXTRAS}==${ISAACSIM_PIP_VERSION}\" --extra-index-url https://pypi.nvidia.com"
 
   # Warm caches to data dir later; capture env site-packages for sensor patching
   local env_site
@@ -364,6 +364,19 @@ compose_cmd(){
 
 generate_minio_mlflow_compose(){
   say "\n--- Writing MinIO + MLflow docker-compose ---"
+  
+  # Clean up any existing containers from previous installs
+  if docker ps -a --format '{{.Names}}' 2>/dev/null | grep -qE '^(minio|mlflow|mlflow-db|mc-bootstrap)$'; then
+    warn "Found existing containers from previous install"
+    if [[ -f "$MINIO_DIR/docker-compose.yml" ]]; then
+      (cd "$MINIO_DIR" && docker compose down -v 2>/dev/null || docker-compose down -v 2>/dev/null || true)
+    else
+      # Remove containers manually if compose file doesn't exist
+      docker rm -f minio mlflow mlflow-db mc-bootstrap 2>/dev/null || true
+    fi
+    ok "Cleaned up existing containers"
+  fi
+  
   local paths=() i=1 vlines="" dargs=""
   mapfile -t paths < "$MARKER_DIR/minio_drives.txt"
   run "mkdir -p \"$MINIO_DIR\" \"$MINIO_DIR/config\" \"$MINIO_DIR/data\" \"$DATA_DIR/mlflow\" \"$DATA_DIR/mlflow/pgdata\""
@@ -1131,12 +1144,25 @@ install(){
   preflight_checks
   
   # Create checkpoint
-  echo "$(date -Iseconds)" > "$MARKER_DIR/install_started.txt"
+  date -Iseconds > "$MARKER_DIR/install_started.txt"
   
   require_ubuntu_2204
   ensure_base_tools
   install_driver_if_needed
   install_docker_nvidia
+  
+  # Ensure Docker daemon is running
+  say "\n--- Starting Docker daemon ---"
+  run "sudo systemctl start docker"
+  run "sudo systemctl enable docker"
+  sleep 2
+  if ! sudo systemctl is-active docker >/dev/null 2>&1; then
+    echo "Error: Docker daemon failed to start"
+    echo "Check logs with: sudo journalctl -u docker -n 50"
+    exit 1
+  fi
+  ok "Docker daemon running"
+  
   install_miniconda
   create_env_and_install_isaacsim
   install_ros2_humble
@@ -1154,7 +1180,7 @@ install(){
   smoke_tests
   
   # Mark install complete
-  echo "$(date -Iseconds)" > "$MARKER_DIR/install_completed.txt"
+  date -Iseconds > "$MARKER_DIR/install_completed.txt"
   
   ok "\n╔════════════════════════════════════════════════════════════════╗"
   ok "║  Installation Complete!                                        ║"
