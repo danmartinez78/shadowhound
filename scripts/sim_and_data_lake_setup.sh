@@ -451,7 +451,8 @@ services:
     env_file: [.env]
     command: server --console-address ":9001"${dargs}
     volumes:
-$(printf "%b" "$vlines")    ports:
+$(printf "%b" "$vlines")
+    ports:
       - "9000:9000"
       - "9001:9001"
     healthcheck:
