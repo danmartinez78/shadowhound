@@ -57,8 +57,8 @@ cd ~/shadowhound
 1. ✅ Install all base tools (curl, wget, git, build-essential, etc.)
 2. ✅ Install Isaac Sim dependencies (libfuse2, mesa, vulkan, etc.)
 3. ✅ Install NVIDIA driver 535-server (535.129.03+) - **REBOOT REQUIRED**
-4. ✅ After reboot, continue with Docker + NVIDIA Container Toolkit
-5. ✅ Install Miniconda3
+4. ✅ After reboot, install Docker + NVIDIA Container Toolkit - **LOGOUT/LOGIN REQUIRED**
+5. ✅ After logout/login, install Miniconda3
 6. ✅ Create Python 3.10 environment
 7. ✅ Install Isaac Sim 4.5.0 via pip (~30GB download, 15-30 minutes)
 8. ✅ Install ROS 2 Humble
@@ -70,19 +70,24 @@ cd ~/shadowhound
 14. ✅ Configure firewall rules
 15. ✅ Enable GPU persistence mode
 
+**Two interruptions required:**
+- **Reboot #1**: After NVIDIA driver installation (kernel module load)
+- **Logout/Login**: After Docker installation (docker group membership activation)
+
 ## Expected Timeline
 
 - **Base tools + dependencies**: 2-3 minutes
 - **NVIDIA driver installation**: 3-5 minutes
-- **REBOOT**: Required after driver install
+- **REBOOT #1**: Required after driver install
 - **Docker + container toolkit**: 3-5 minutes
+- **LOG OUT/IN**: Required after Docker install (for docker group)
 - **Miniconda**: 2-3 minutes
 - **Isaac Sim pip install**: 15-30 minutes (depends on download speed)
 - **ROS 2 Humble**: 5-10 minutes
 - **Isaac Lab extensions**: 5-10 minutes
 - **MinIO/MLflow setup**: 2-3 minutes
 
-**Total: ~45-60 minutes** (mostly automated, requires one reboot)
+**Total: ~45-60 minutes** (mostly automated, requires 1 reboot + 1 logout/login)
 
 ## Installation Flow
 
@@ -136,22 +141,62 @@ nvidia-smi
 ✅ **Persistence-M: On** (script enables this automatically)
 ✅ **Driver version: 535.x**
 
-### Step 3: Continue Installation
+### Step 3: Continue Installation - Docker Setup
 ```bash
 cd ~/shadowhound
 ./scripts/sim_and_data_lake_setup.sh install
 ```
 
 **The script will:**
-- Detect driver 535 is installed ✓
-- Skip driver installation
-- Continue with Docker, Isaac Sim, ROS2, etc.
+- ✓ Detect driver 535 is installed
+- ✓ Skip driver installation
+- ✓ Install Docker + NVIDIA Container Toolkit
+- ✓ Add your user to 'docker' group
+
+**You will see:**
+```
+╔════════════════════════════════════════════════════════════════╗
+║  DOCKER GROUP MEMBERSHIP REQUIRES SESSION REFRESH              ║
+╚════════════════════════════════════════════════════════════════╝
+
+Docker has been installed and your user added to the 'docker' group.
+However, group membership only takes effect after refreshing your session.
+
+OPTION 1 (Recommended): Log out and log back in completely
+  1. Log out of Ubuntu desktop
+  2. Log back in
+  3. Open terminal and run: cd ~/shadowhound && ./scripts/sim_and_data_lake_setup.sh install
+
+After refreshing your session, the installation will continue automatically.
+```
+
+**Action: LOG OUT AND LOG BACK IN**
+```bash
+# Or in terminal: logout
+# Then log back into Ubuntu desktop
+```
+
+### Step 4: Continue Installation - Isaac Sim & Services
+After logging back in:
+
+```bash
+cd ~/shadowhound
+./scripts/sim_and_data_lake_setup.sh install
+```
+
+**The script will now continue with:**
+- ✓ Docker commands work (docker group active)
+- ✓ Install Miniconda3
+- ✓ Install Isaac Sim 4.5.0 (~30GB download, 15-30 min)
+- ✓ Install ROS 2 Humble
+- ✓ Install Isaac Lab extensions
+- ✓ Configure MinIO and MLflow
 
 **Interactive prompts:**
 1. **Data directory selection**: Choose where to store robot data (e.g., `/mnt/disk1/robot-data`)
 2. **MinIO drives selection**: Choose drives for S3 storage (numbered menu, select with spaces)
 
-### Step 4: Verify Installation
+### Step 5: Verify Installation
 After installation completes:
 
 ```bash

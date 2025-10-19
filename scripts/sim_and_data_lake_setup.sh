@@ -373,14 +373,34 @@ install_docker_nvidia(){
   # Check if docker group is active in current session
   if ! id | grep -q docker; then
     if ((docker_installed)); then
-      warn "Docker installed and user added to docker group"
-      warn "You must log out and log back in for group membership to take effect"
-      warn "Or run: newgrp docker"
-      warn "Then re-run: bash $SCRIPT_NAME install"
+      # Docker was just installed in this session
+      warn "╔════════════════════════════════════════════════════════════════╗"
+      warn "║  DOCKER GROUP MEMBERSHIP REQUIRES SESSION REFRESH              ║"
+      warn "╚════════════════════════════════════════════════════════════════╝"
+      warn ""
+      warn "Docker has been installed and your user added to the 'docker' group."
+      warn "However, group membership only takes effect after refreshing your session."
+      warn ""
+      warn "OPTION 1 (Recommended): Log out and log back in completely"
+      warn "  1. Log out of Ubuntu desktop"
+      warn "  2. Log back in"
+      warn "  3. Open terminal and run: cd ~/shadowhound && ./scripts/sim_and_data_lake_setup.sh install"
+      warn ""
+      warn "OPTION 2 (Advanced): Use newgrp to refresh in current session"
+      warn "  Run: newgrp docker"
+      warn "  Then in the NEW shell: cd ~/shadowhound && ./scripts/sim_and_data_lake_setup.sh install"
+      warn ""
+      say "After refreshing your session, the installation will continue automatically."
       exit 0
     else
-      warn "User not in docker group. This may cause permission errors."
-      warn "Run: sudo usermod -aG docker $USER && newgrp docker"
+      # Docker was already installed but user somehow not in group
+      warn "User '$USER' is not in 'docker' group."
+      warn "Adding user to docker group..."
+      run "sudo usermod -aG docker $USER"
+      warn ""
+      warn "Group membership added. Please log out and log back in, then re-run:"
+      warn "  bash $SCRIPT_NAME install"
+      exit 0
     fi
   fi
   
