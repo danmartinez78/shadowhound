@@ -1591,41 +1591,145 @@ reconfigure_network(){
     DATA_DIR="$DATA_DIR_DEFAULT"
   fi
   
-  # Show current network config
-  local old_ip; old_ip=$(cat "$MARKER_DIR/tower_ip.txt" 2>/dev/null || echo "unknown")
-  say "Current Tower IP: $old_ip"
-  
-  # Detect current IP
-  local current_ip; current_ip=$(ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v 127.0.0.1 | head -1 || echo "unknown")
-  say "Detected IP: $current_ip"
-  
-  if [[ "$current_ip" != "$old_ip" ]]; then
-    say "\n⚠️  IP address has changed! Updating configuration..."
+  # Load MINIO_DIR
+  if [[ -f "$MARKER_DIR/minio_dir.txt" ]]; then
+    MINIO_DIR=$(cat "$MARKER_DIR/minio_dir.txt")
   else
-    say "\nIP unchanged, but you can force a full network reconfiguration."
+    MINIO_DIR="${DATA_DIR}/minio"
   fi
   
-  confirm "Update network configuration?" || exit 0
-  
-  # Update IP in state
-  echo "$current_ip" > "$MARKER_DIR/tower_ip.txt"
-  
-  # Regenerate firewall rules
-  configure_firewall_for_network
-  
-  # Regenerate network documentation
-  write_network_config_doc
-  
-  ok "Network configuration updated."
-  say "\nNew Tower IP: $current_ip"
-  say "Network guide updated: $DATA_DIR/NETWORK_SETUP.md"
+  say "=== NETWORK RECONFIGURATION OPTIONS ===\n"
+  say "What would you like to reconfigure?"
   say ""
-  say "⚠️  UPDATE Thor/Spark configuration:"
+  say "1. Dual-NIC Setup (change ethernet configuration)"
+  say "   - Switch between separate networks/bonding/single NIC"
+  say "   - Update network topology"
+  say ""
+  say "2. IP Address & Firewall (update after network change)"
+  say "   - Update Tower IP address"
+  say "   - Regenerate firewall rules"
+  say "   - Update documentation"
+  say ""
+  say "3. Both (full network reconfiguration)"
+  say ""
+  say "4. Cancel"
+  say ""
+  
+  read -r -p "Choose option [1/2/3/4, default=2]: " choice
+  choice="${choice:-2}"
+  
+  case "$choice" in
+    1)
+      say "\n=== Reconfiguring Dual-NIC Setup ===\n"
+      # Show current netplan configs
+      if ls /etc/netplan/*.yaml >/dev/null 2>&1; then
+        say "Current netplan configurations:"
+        ls -lh /etc/netplan/*.yaml
+        say ""
+      fi
+      
+      # Offer to view current config
+      if confirm "View current network configuration?"; then
+        say "\n--- Current netplan config ---"
+        for f in /etc/netplan/*.yaml; do
+          [[ -f "$f" ]] || continue
+          say "\n=== $f ==="
+          cat "$f"
+        done
+        say "\n--- End config ---\n"
+      fi
+      
+      # Run dual-NIC configuration
+      configure_dual_nic_if_available
+      
+      # Update IP and firewall after NIC reconfiguration
+      say "\n--- Updating IP and firewall after NIC reconfiguration ---"
+      sleep 2  # Wait for network to settle
+      local current_ip; current_ip=$(ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v 127.0.0.1 | head -1 || echo "unknown")
+      echo "$current_ip" > "$MARKER_DIR/tower_ip.txt"
+      configure_firewall_for_network
+      write_network_config_doc
+      
+      ok "\nDual-NIC reconfiguration complete!"
+      say "New Tower IP: $current_ip"
+      ;;
+      
+    2)
+      say "\n=== Updating IP Address & Firewall ===\n"
+      
+      # Show current network config
+      local old_ip; old_ip=$(cat "$MARKER_DIR/tower_ip.txt" 2>/dev/null || echo "unknown")
+      say "Previous Tower IP: $old_ip"
+      
+      # Detect current IP
+      local current_ip; current_ip=$(ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v 127.0.0.1 | head -1 || echo "unknown")
+      say "Detected IP: $current_ip"
+      
+      if [[ "$current_ip" != "$old_ip" ]]; then
+        say "\n⚠️  IP address has changed! Updating configuration..."
+      else
+        say "\nIP unchanged, but you can force a full network reconfiguration."
+      fi
+      
+      confirm "Update IP and firewall configuration?" || exit 0
+      
+      # Update IP in state
+      echo "$current_ip" > "$MARKER_DIR/tower_ip.txt"
+      
+      # Regenerate firewall rules
+      configure_firewall_for_network
+      
+      # Regenerate network documentation
+      write_network_config_doc
+      
+      ok "\nNetwork configuration updated."
+      say "New Tower IP: $current_ip"
+      ;;
+      
+    3)
+      say "\n=== Full Network Reconfiguration ===\n"
+      
+      # Step 1: Dual-NIC
+      say "Step 1/2: Dual-NIC Configuration"
+      configure_dual_nic_if_available
+      
+      # Step 2: IP and firewall
+      say "\nStep 2/2: IP Address & Firewall"
+      sleep 2  # Wait for network to settle
+      local current_ip; current_ip=$(ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v 127.0.0.1 | head -1 || echo "unknown")
+      echo "$current_ip" > "$MARKER_DIR/tower_ip.txt"
+      configure_firewall_for_network
+      write_network_config_doc
+      
+      ok "\nFull network reconfiguration complete!"
+      say "New Tower IP: $current_ip"
+      ;;
+      
+    4)
+      say "Cancelled."
+      exit 0
+      ;;
+      
+    *)
+      warn "Invalid choice. Cancelled."
+      exit 1
+      ;;
+  esac
+  
+  # Common final instructions
+  say "\nNetwork guide updated: $DATA_DIR/NETWORK_SETUP.md"
+  say ""
+  say "⚠️  NEXT STEPS - Update Thor/Spark configuration:"
   say "  1. Update TOWER_IP in ~/.bashrc on Thor/Spark"
   say "  2. Update MLFLOW_TRACKING_URI and MLFLOW_S3_ENDPOINT_URL"
-  say "  3. Test connectivity: curl http://$current_ip:$MINIO_PORT/minio/health/live"
+  say "  3. Test connectivity:"
+  say "     curl http://$current_ip:$MINIO_PORT/minio/health/live"
+  say "     curl http://$current_ip:$MLFLOW_PORT/health"
   say ""
-  say "See: $DATA_DIR/NETWORK_SETUP.md for details"
+  say "  4. Transfer updated credentials if needed:"
+  say "     scp $MINIO_DIR/CREDENTIALS.txt thor:~/tower_credentials.txt"
+  say ""
+  say "See: $DATA_DIR/NETWORK_SETUP.md for complete configuration"
 }
 
 reconfigure_credentials(){
@@ -1875,7 +1979,8 @@ COMMANDS:
   reconfigure-drives - Change/add MinIO storage drives
                        Requires manual data migration
   
-  reconfigure-network - Update IP address and firewall rules
+  reconfigure-network - Reconfigure network setup (dual-NIC, IP, firewall)
+                        Options: 1) Dual-NIC topology 2) IP/firewall 3) Both
                         Updates documentation for Thor/Spark
   
   reconfigure-credentials - Rotate MinIO and PostgreSQL passwords
@@ -1896,8 +2001,14 @@ EXAMPLES:
   # Change storage drives (after moving data to new drives)
   bash $SCRIPT_NAME reconfigure-drives
   
-  # Update IP address (after network change)
-  bash $SCRIPT_NAME reconfigure-network
+  # Switch from single NIC to dual-NIC separate networks
+  bash $SCRIPT_NAME reconfigure-network  # Choose option 1
+  
+  # Update IP address after network change
+  bash $SCRIPT_NAME reconfigure-network  # Choose option 2
+  
+  # Full network reconfiguration (NIC topology + IP + firewall)
+  bash $SCRIPT_NAME reconfigure-network  # Choose option 3
   
   # Manual service control
   sudo systemctl status robot-datalake
