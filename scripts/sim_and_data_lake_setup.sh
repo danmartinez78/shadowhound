@@ -578,7 +578,7 @@ build_go2_ros2_workspaces(){
   # Install empy package (required for ROS2 message generation)
   # NOTE: ROS2 Humble requires empy 3.3.4 specifically (not latest 4.x)
   say "Installing Python package 'empy==3.3.4'..."
-  run "\"$env_site/../../bin/pip\" install 'empy==3.3.4' --quiet"
+  "$env_site/../../bin/pip" install 'empy==3.3.4' --quiet >> "$LOG_FILE" 2>&1
   ok "empy 3.3.4 installed"
   
   # Initialize rosdep if not already done
@@ -609,13 +609,13 @@ build_go2_ros2_workspaces(){
     cd "$isaac_ws" || return 1
     
     # Install dependencies
-    run "rosdep install --from-paths src --ignore-src -r -y --quiet 2>&1 | grep -v '^#' || true"
+    rosdep install --from-paths src --ignore-src -r -y --quiet >> "$LOG_FILE" 2>&1 || true
     
     # Build workspace
-    if run "colcon build --symlink-install 2>&1 | tee /tmp/go2_build_isaac_ws.log | grep -E '(Summary|Starting|Finished|Failed)'"; then
+    if colcon build --symlink-install >> "$LOG_FILE" 2>&1; then
       ok "IsaacSim ROS2 workspace built"
     else
-      warn "IsaacSim workspace build had issues - check /tmp/go2_build_isaac_ws.log"
+      warn "IsaacSim workspace build had issues - check $LOG_FILE"
     fi
     
     # Source built workspace
@@ -634,13 +634,13 @@ build_go2_ros2_workspaces(){
     cd "$go2_ws" || return 1
     
     # Install dependencies
-    run "rosdep install --from-paths src --ignore-src -r -y --quiet 2>&1 | grep -v '^#' || true"
+    rosdep install --from-paths src --ignore-src -r -y --quiet >> "$LOG_FILE" 2>&1 || true
     
     # Build workspace
-    if run "colcon build --symlink-install 2>&1 | tee /tmp/go2_build_go2_ws.log | grep -E '(Summary|Starting|Finished|Failed)'"; then
+    if colcon build --symlink-install >> "$LOG_FILE" 2>&1; then
       ok "go2_omniverse workspace built"
     else
-      warn "go2_omniverse workspace build had issues - check /tmp/go2_build_go2_ws.log"
+      warn "go2_omniverse workspace build had issues - check $LOG_FILE"
     fi
     
     # Source built workspace
