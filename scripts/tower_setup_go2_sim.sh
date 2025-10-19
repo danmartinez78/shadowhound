@@ -59,6 +59,22 @@ ok "System Python: empy 3.3.4 installed"
 say "Installing into conda environment..."
 pip uninstall -y empy 2>/dev/null || true
 pip install empy==3.3.4 catkin_pkg lark
+
+# Check for multiple empy installations
+say "Checking for multiple empy installations..."
+python3 -c "import em; print(f'empy version: {em.__version__}, location: {em.__file__}')"
+
+# The issue: Isaac Lab may have installed empy 0.4.0 or 4.x somewhere
+# We need to find and remove ALL other empy installations
+say "Searching for conflicting empy installations..."
+find $CONDA_PREFIX -name "em.py" -o -name "empy*" 2>/dev/null | grep -v "__pycache__" | grep -v ".pyc" || true
+
+# Nuclear option: pip uninstall ALL empy variants and reinstall
+say "Force reinstalling empy (removing all variants)..."
+pip uninstall -y empy em empy-stubs 2>/dev/null || true
+pip install --force-reinstall --no-deps empy==3.3.4
+pip install catkin_pkg lark
+
 python3 -c "import em; print(f'Conda Python empy: {em.__version__}')" || err "Conda empy installation failed"
 ok "Conda environment: empy 3.3.4 + build tools installed"
 
