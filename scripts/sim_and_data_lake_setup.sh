@@ -539,6 +539,116 @@ clone_go2_omniverse_and_patch(){
   touch "$MARKER_DIR/go2_omniverse_cloned"
 }
 
+build_go2_ros2_workspaces(){
+  if [[ -f "$MARKER_DIR/go2_workspaces_built" ]]; then
+    ok "go2_omniverse ROS2 workspaces already built - skipping"
+    return 0
+  fi
+  
+  say "\n--- Building go2_omniverse ROS2 Workspaces ---"
+  
+  local ws="$HOME/workspace/go2_omniverse"
+  if [[ ! -d "$ws" ]]; then
+    warn "go2_omniverse not found at $ws - skipping workspace build"
+    return 0
+  fi
+  
+  # Get conda environment site-packages path
+  local env_site; env_site="$(cat "$MARKER_DIR/env_site.txt" 2>/dev/null || true)"
+  if [[ -z "$env_site" ]]; then
+    warn "env_site.txt not found - cannot determine conda environment path"
+    return 1
+  fi
+  
+  # Install empy package (required for ROS2 message generation)
+  say "Installing Python package 'empy'..."
+  run "\"$env_site/../../bin/pip\" install empy --quiet"
+  ok "empy installed"
+  
+  # Initialize rosdep if not already done
+  if [[ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]]; then
+    say "Initializing rosdep..."
+    run "sudo rosdep init"
+    ok "rosdep initialized"
+  else
+    ok "rosdep already initialized"
+  fi
+  
+  say "Updating rosdep database..."
+  run "rosdep update --quiet"
+  ok "rosdep updated"
+  
+  # Source ROS2 Humble
+  if [[ -f /opt/ros/humble/setup.bash ]]; then
+    # shellcheck disable=SC1091
+    source /opt/ros/humble/setup.bash
+  else
+    warn "ROS2 Humble not found - workspace build may fail"
+  fi
+  
+  # Build IsaacSim-ros_workspaces/humble_ws
+  local isaac_ws="$ws/IsaacSim-ros_workspaces/humble_ws"
+  if [[ -d "$isaac_ws/src" ]]; then
+    say "Building IsaacSim ROS2 workspace..."
+    cd "$isaac_ws" || return 1
+    
+    # Install dependencies
+    run "rosdep install --from-paths src --ignore-src -r -y --quiet 2>&1 | grep -v '^#' || true"
+    
+    # Build workspace
+    if run "colcon build --symlink-install 2>&1 | tee /tmp/go2_build_isaac_ws.log | grep -E '(Summary|Starting|Finished|Failed)'"; then
+      ok "IsaacSim ROS2 workspace built"
+    else
+      warn "IsaacSim workspace build had issues - check /tmp/go2_build_isaac_ws.log"
+    fi
+    
+    # Source built workspace
+    if [[ -f "$isaac_ws/install/setup.bash" ]]; then
+      # shellcheck disable=SC1091
+      source "$isaac_ws/install/setup.bash"
+    fi
+  else
+    warn "IsaacSim workspace src not found at $isaac_ws/src"
+  fi
+  
+  # Build go2_omniverse_ws
+  local go2_ws="$ws/go2_omniverse_ws"
+  if [[ -d "$go2_ws/src" ]]; then
+    say "Building go2_omniverse workspace..."
+    cd "$go2_ws" || return 1
+    
+    # Install dependencies
+    run "rosdep install --from-paths src --ignore-src -r -y --quiet 2>&1 | grep -v '^#' || true"
+    
+    # Build workspace
+    if run "colcon build --symlink-install 2>&1 | tee /tmp/go2_build_go2_ws.log | grep -E '(Summary|Starting|Finished|Failed)'"; then
+      ok "go2_omniverse workspace built"
+    else
+      warn "go2_omniverse workspace build had issues - check /tmp/go2_build_go2_ws.log"
+    fi
+    
+    # Source built workspace
+    if [[ -f "$go2_ws/install/setup.bash" ]]; then
+      # shellcheck disable=SC1091
+      source "$go2_ws/install/setup.bash"
+    fi
+  else
+    warn "go2_omniverse workspace src not found at $go2_ws/src"
+  fi
+  
+  # Return to original directory
+  cd "$HOME" || return 1
+  
+  # Verify builds succeeded
+  if [[ -f "$isaac_ws/install/setup.bash" ]] && [[ -f "$go2_ws/install/setup.bash" ]]; then
+    ok "Both ROS2 workspaces built successfully"
+    touch "$MARKER_DIR/go2_workspaces_built"
+  else
+    warn "One or more workspaces failed to build - simulation may not work"
+    warn "Check build logs: /tmp/go2_build_isaac_ws.log and /tmp/go2_build_go2_ws.log"
+  fi
+}
+
 pick_data_dir(){
   # Skip if data dir already configured
   if [[ -f "$MARKER_DIR/data_dir.txt" ]] && [[ -f "$MARKER_DIR/minio_dir.txt" ]]; then
@@ -1667,6 +1777,33 @@ doctor(){
     echo "Installation: incomplete or not run"
   fi
   
+  say "\n═══ GO2 SIMULATION ═══"
+  if [[ -d "$HOME/workspace/go2_omniverse" ]]; then
+    echo "✓ go2_omniverse: cloned"
+    
+    # Check if workspaces are built
+    if [[ -f "$HOME/workspace/go2_omniverse/IsaacSim-ros_workspaces/humble_ws/install/setup.bash" ]]; then
+      echo "✓ IsaacSim ROS2 workspace: built"
+    else
+      echo "✗ IsaacSim ROS2 workspace: not built"
+    fi
+    
+    if [[ -f "$HOME/workspace/go2_omniverse/go2_omniverse_ws/install/setup.bash" ]]; then
+      echo "✓ go2_omniverse workspace: built"
+    else
+      echo "✗ go2_omniverse workspace: not built"
+    fi
+    
+    if [[ -f "$HOME/workspace/go2_omniverse/run_sim.sh" ]]; then
+      echo "✓ Launch script: present"
+      echo "  → To launch: cd ~/workspace/go2_omniverse && ./run_sim.sh"
+    else
+      echo "✗ Launch script: missing"
+    fi
+  else
+    echo "✗ go2_omniverse: not cloned"
+  fi
+  
   say "\n═══ FILES & LOGS ═══"
   echo "Profile: $PROFILE_FILE ($(test -f "$PROFILE_FILE" && echo "present" || echo "missing"))"
   echo "Network guide: $DATA_DIR/NETWORK_SETUP.md ($(test -f "$DATA_DIR/NETWORK_SETUP.md" && echo "present" || echo "missing"))"
@@ -1807,6 +1944,7 @@ install(){
   install_ros2_humble
   clone_isaaclab
   clone_go2_omniverse_and_patch
+  build_go2_ros2_workspaces  # NEW: Build Go2 simulation workspaces
   install_dev_tools
   pick_data_dir
   link_caches_to_data_dir
@@ -1828,6 +1966,12 @@ install(){
   
   local tower_ip; tower_ip=$(cat "$MARKER_DIR/tower_ip.txt" 2>/dev/null || echo "TOWER_IP")
   
+  say "═══ QUICK START: UNITREE GO2 SIMULATION ═══"
+  say "1. Activate environment:    source ~/.robot-simrc && conda activate env_isaaclab"
+  say "2. Launch Go2 simulation:   cd ~/workspace/go2_omniverse && ./run_sim.sh"
+  say "3. Control robot:           Use W/A/S/D keys, ESC to exit"
+  say "4. ROS2 topics available:   /camera/image_raw, /odom, /cmd_vel, /scan"
+  say ""
   say "═══ LOCAL ACCESS ═══"
   say "1. Add to ~/.bashrc:        source $PROFILE_FILE"
   say "2. Reload shell:            exec bash"
@@ -1857,6 +2001,10 @@ install(){
   say "═══ VALIDATION ═══"
   say "Run smoke tests:            bash $SCRIPT_NAME doctor"
   say "View logs:                  tail -f $LOG_FILE"
+  say ""
+  say "═══ DOCUMENTATION ═══"
+  say "Go2 Sim Quick Start:        ~/shadowhound/docs/deployment/tower_go2_isaac_sim_quickstart.md"
+  say "Tower Setup Guide:          ~/shadowhound/docs/deployment/tower_sim_datalake_setup.md"
 }
 
 test_mode(){
