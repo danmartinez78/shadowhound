@@ -311,6 +311,21 @@ echo $ROS_DOMAIN_ID  # Should match across machines
 export ROS_LOCALHOST_ONLY=0
 ```
 
+### RTX Rendering Warning
+
+**Warning**: `HydraEngine rtx failed creating scene renderer`
+
+This warning is **typically benign** and can be ignored. It occurs during Isaac Sim startup and doesn't prevent simulation from running.
+
+**If simulation doesn't start**:
+1. Check GPU driver: `nvidia-smi` (should show RTX 4070 Ti)
+2. Verify Isaac Sim installed correctly: `python -c "import isaacsim"`
+3. Try software rendering mode (slower):
+   ```bash
+   export OMNI_KIT_ALLOW_ROOT=1
+   python main.py --robot go2 --enable_cameras
+   ```
+
 ---
 
 ## Performance Tips
