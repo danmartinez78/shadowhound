@@ -171,11 +171,20 @@ preflight_checks(){
 }
 
 ensure_base_tools(){
+  if [[ -f "$MARKER_DIR/base_tools_installed" ]]; then
+    ok "Base tools already installed - skipping"
+    return 0
+  fi
   run "sudo apt-get update"
   run "sudo apt-get install -y curl wget git unzip zip jq ca-certificates build-essential cmake pkg-config apt-transport-https gnupg software-properties-common"
+  touch "$MARKER_DIR/base_tools_installed"
 }
 
 install_dev_tools(){
+  if [[ -f "$MARKER_DIR/dev_tools_installed" ]]; then
+    ok "Dev tools already installed - skipping"
+    return 0
+  fi
   say "\n--- Development & Monitoring Tools ---"
   # System monitoring
   run "sudo apt-get install -y htop iotop nethogs ncdu"
@@ -195,23 +204,34 @@ install_dev_tools(){
   # Container debugging
   run "sudo apt-get install -y docker-compose-plugin || true"
   ok "Dev tools installed (htop, nvtop, jupyter, tensorboard, s3cmd, rclone, etc.)"
+  touch "$MARKER_DIR/dev_tools_installed"
 }
 
 install_driver_if_needed(){
+  if [[ -f "$MARKER_DIR/nvidia_driver_checked" ]]; then
+    ok "NVIDIA driver already checked - skipping"
+    return 0
+  fi
   say "\n--- NVIDIA driver ---"
   if command -v nvidia-smi >/dev/null; then
     local v; v="$(nvidia-smi --query-gpu=driver_version --format=csv,noheader | head -n1 || true)"
     say "Detected driver: $v"
+    touch "$MARKER_DIR/nvidia_driver_checked"
   else
     run "sudo add-apt-repository -y ppa:graphics-drivers/ppa"
     run "sudo apt-get update"
     run "sudo ubuntu-drivers autoinstall"
+    touch "$MARKER_DIR/nvidia_driver_checked"
     warn "A reboot may be required before continuing. Re-run: bash $SCRIPT_NAME install"
     exit 0
   fi
 }
 
 install_docker_nvidia(){
+  if [[ -f "$MARKER_DIR/docker_nvidia_installed" ]]; then
+    ok "Docker + NVIDIA toolkit already installed - skipping"
+    return 0
+  fi
   say "\n--- Docker + NVIDIA Container Toolkit ---"
   local docker_installed=0
   if ! command -v docker >/dev/null; then
@@ -240,6 +260,7 @@ install_docker_nvidia(){
   run "sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit"
   run "sudo nvidia-ctk runtime configure --runtime=docker || true"
   run "sudo systemctl restart docker"
+  touch "$MARKER_DIR/docker_nvidia_installed"
 }
 
 install_miniconda(){
@@ -288,6 +309,10 @@ create_env_and_install_isaacsim(){
 }
 
 install_ros2_humble(){
+  if [[ -f "$MARKER_DIR/ros2_installed" ]]; then
+    ok "ROS 2 Humble already installed - skipping"
+    return 0
+  fi
   say "\n--- ROS 2 Humble ---"
   run "sudo apt-get update"
   run "sudo apt-get install -y curl gnupg lsb-release"
@@ -295,9 +320,14 @@ install_ros2_humble(){
   run "curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo gpg --dearmor -o /etc/apt/keyrings/ros-archive-keyring.gpg"
   run "echo \"deb [arch=\$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu \$(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/ros2.list >/dev/null"
   run "sudo apt-get update && sudo apt-get install -y ros-${ROS_DISTRO}-desktop ros-dev-tools"
+  touch "$MARKER_DIR/ros2_installed"
 }
 
 clone_isaaclab(){
+  if [[ -f "$MARKER_DIR/isaac_lab_cloned" ]]; then
+    ok "Isaac Lab already cloned - skipping"
+    return 0
+  fi
   say "\n--- Isaac Lab (source) ---"
   local ws="$HOME/workspace"; run "mkdir -p \"$ws\""
   if [[ -d "$ws/IsaacLab/.git" ]]; then run "git -C \"$ws/IsaacLab\" pull --ff-only"
@@ -305,9 +335,14 @@ clone_isaaclab(){
   # shellcheck source=/dev/null
   source "$CONDA_ROOT/etc/profile.d/conda.sh"
   run "conda run -n \"$ENV_NAME\" bash -lc 'cd \"$ws/IsaacLab\" && ./isaaclab.sh --install'"
+  touch "$MARKER_DIR/isaac_lab_cloned"
 }
 
 clone_go2_omniverse_and_patch(){
+  if [[ -f "$MARKER_DIR/go2_omniverse_cloned" ]]; then
+    ok "go2_omniverse already cloned - skipping"
+    return 0
+  fi
   say "\n--- go2_omniverse (added_copter) ---"
   local ws="$HOME/workspace"; run "mkdir -p \"$ws\""
   if [[ -d "$ws/go2_omniverse/.git" ]]; then
@@ -328,6 +363,7 @@ clone_go2_omniverse_and_patch(){
   else
     warn "LiDAR config source not found or env_site unavailable. Sensor config NOT patched."
   fi
+  touch "$MARKER_DIR/go2_omniverse_cloned"
 }
 
 pick_data_dir(){
