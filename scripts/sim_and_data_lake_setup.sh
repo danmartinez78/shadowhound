@@ -216,15 +216,74 @@ install_driver_if_needed(){
   if command -v nvidia-smi >/dev/null; then
     local v; v="$(nvidia-smi --query-gpu=driver_version --format=csv,noheader | head -n1 || true)"
     say "Detected driver: $v"
-    touch "$MARKER_DIR/nvidia_driver_checked"
+    
+    # Check if driver is in recommended range (535-550 for Isaac Sim 4.5.0)
+    local major; major="$(echo "$v" | cut -d. -f1)"
+    if [[ "$major" -ge 535 ]] && [[ "$major" -le 550 ]]; then
+      ok "Driver $v is in recommended range (535-550)"
+      touch "$MARKER_DIR/nvidia_driver_checked"
+    else
+      warn "Driver $v detected. Isaac Sim 4.5.0 recommends driver 535-550."
+      warn "Current driver may cause performance issues or instability."
+      say "Installing recommended driver 550..."
+      run "sudo apt-get update"
+      run "sudo apt-get install -y nvidia-driver-550 nvidia-dkms-550"
+      touch "$MARKER_DIR/nvidia_driver_checked"
+      warn "Driver installed. Reboot required before continuing."
+      warn "After reboot, re-run: bash $SCRIPT_NAME install"
+      exit 0
+    fi
   else
     run "sudo add-apt-repository -y ppa:graphics-drivers/ppa"
     run "sudo apt-get update"
-    run "sudo ubuntu-drivers autoinstall"
+    say "Installing NVIDIA driver 550 (recommended for Isaac Sim 4.5.0)..."
+    run "sudo apt-get install -y nvidia-driver-550 nvidia-dkms-550"
     touch "$MARKER_DIR/nvidia_driver_checked"
-    warn "A reboot may be required before continuing. Re-run: bash $SCRIPT_NAME install"
+    warn "A reboot is required before continuing. Re-run: bash $SCRIPT_NAME install"
     exit 0
   fi
+}
+
+install_cuda_toolkit(){
+  if [[ -f "$MARKER_DIR/cuda_toolkit_installed" ]]; then
+    ok "CUDA Toolkit already installed - skipping"
+    return 0
+  fi
+  
+  say "\n--- CUDA Toolkit 11.8 (recommended for Isaac Sim 4.5.0) ---"
+  
+  # Check if CUDA 11.8 is already installed
+  if [[ -d "/usr/local/cuda-11.8" ]] && command -v /usr/local/cuda-11.8/bin/nvcc >/dev/null 2>&1; then
+    ok "CUDA 11.8 already installed"
+    touch "$MARKER_DIR/cuda_toolkit_installed"
+    return 0
+  fi
+  
+  # Install CUDA 11.8
+  say "Downloading CUDA 11.8 repository package..."
+  run "wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin -O /tmp/cuda-ubuntu2204.pin"
+  run "sudo mv /tmp/cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600"
+  run "wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-repo-ubuntu2204-11-8-local_11.8.0-520.61.05-1_amd64.deb -O /tmp/cuda-repo.deb"
+  run "sudo dpkg -i /tmp/cuda-repo.deb"
+  run "sudo cp /var/cuda-repo-ubuntu2204-11-8-local/cuda-*-keyring.gpg /usr/share/keyrings/"
+  run "sudo apt-get update"
+  run "sudo apt-get -y install cuda-toolkit-11-8"
+  
+  # Set up environment
+  if ! grep -q "/usr/local/cuda-11.8/bin" ~/.bashrc; then
+    echo "" >> ~/.bashrc
+    echo "# CUDA 11.8" >> ~/.bashrc
+    echo 'export PATH=/usr/local/cuda-11.8/bin${PATH:+:${PATH}}' >> ~/.bashrc
+    echo 'export LD_LIBRARY_PATH=/usr/local/cuda-11.8/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' >> ~/.bashrc
+  fi
+  
+  # Create symbolic link
+  if [[ ! -L "/usr/local/cuda" ]]; then
+    run "sudo ln -sf /usr/local/cuda-11.8 /usr/local/cuda"
+  fi
+  
+  ok "CUDA 11.8 installed. Source ~/.bashrc or reopen terminal to update PATH"
+  touch "$MARKER_DIR/cuda_toolkit_installed"
 }
 
 install_docker_nvidia(){
@@ -1622,6 +1681,7 @@ install(){
   require_ubuntu_2204
   ensure_base_tools
   install_driver_if_needed
+  install_cuda_toolkit
   install_docker_nvidia
   
   # Ensure Docker daemon is running
