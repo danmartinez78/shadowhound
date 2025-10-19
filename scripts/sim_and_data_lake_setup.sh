@@ -259,8 +259,30 @@ install_driver_if_needed(){
     target_driver_full="535-server"
   fi
   
-  if command -v nvidia-smi >/dev/null 2>&1; then
-    local v; v="$(nvidia-smi --query-gpu=driver_version --format=csv,noheader | head -n1 || true)"
+  # Check if nvidia-smi exists and can communicate with driver
+  if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1; then
+    local v; v="$(nvidia-smi --query-gpu=driver_version --format=csv,noheader 2>/dev/null | head -n1 || echo "")"
+    
+    # Check if we got a valid version string
+    if [[ -z "$v" ]] || [[ ! "$v" =~ ^[0-9]+\.[0-9]+ ]]; then
+      say "nvidia-smi found but cannot communicate with driver"
+      say "Driver may be installed but not loaded. Installing/reinstalling driver..."
+      
+      # Purge and reinstall
+      run "sudo apt-get purge -y 'nvidia-*' 'libnvidia-*' || true"
+      run "sudo apt-get autoremove -y"
+      run "sudo apt-get autoclean"
+      run "sudo apt-get update"
+      run "sudo apt-get install -y nvidia-driver-$target_driver_full"
+      
+      touch "$MARKER_DIR/nvidia_driver_checked"
+      warn "Driver $target_driver_full installed. REBOOT REQUIRED before continuing."
+      warn "After reboot, verify with: nvidia-smi"
+      warn "Expected driver version: 535.129.03 or higher"
+      warn "Then re-run: bash $SCRIPT_NAME install"
+      exit 0
+    fi
+    
     say "Detected driver: $v"
     
     # Extract major version
