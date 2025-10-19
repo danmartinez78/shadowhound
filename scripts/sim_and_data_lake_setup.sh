@@ -94,20 +94,24 @@ preflight_checks(){
   fi
   
   # Check data directory space if it's a different filesystem
-  local data_avail_gb; data_avail_gb=$(df -BG "${DATA_DIR_DEFAULT}" 2>/dev/null | tail -1 | awk '{print $4}' | tr -d 'G' || echo "$avail_gb")
-  local data_mount; data_mount=$(df "${DATA_DIR_DEFAULT}" 2>/dev/null | tail -1 | awk '{print $6}')
-  if [[ -n "$data_mount" && "$data_mount" != "/" ]]; then
-    if ((data_avail_gb >= 150)); then
-      ok "Data directory space: ${data_avail_gb}GB available (150GB+ recommended)"
-    else
-      warn "Data directory ${DATA_DIR_DEFAULT}: ${data_avail_gb}GB (150GB+ recommended for Isaac Sim caches)"
-      ((failed++))
+  if [[ -e "${DATA_DIR_DEFAULT}" ]]; then
+    local data_avail_gb; data_avail_gb=$(df -BG "${DATA_DIR_DEFAULT}" 2>/dev/null | tail -1 | awk '{print $4}' | tr -d 'G' || echo "$avail_gb")
+    local data_mount; data_mount=$(df "${DATA_DIR_DEFAULT}" 2>/dev/null | tail -1 | awk '{print $6}' || echo "/")
+    if [[ -n "$data_mount" && "$data_mount" != "/" ]]; then
+      if ((data_avail_gb >= 150)); then
+        ok "Data directory space: ${data_avail_gb}GB available (150GB+ recommended)"
+      else
+        warn "Data directory ${DATA_DIR_DEFAULT}: ${data_avail_gb}GB (150GB+ recommended for Isaac Sim caches)"
+        ((failed++))
+      fi
     fi
+  else
+    ok "Data directory ${DATA_DIR_DEFAULT} will be created during install"
   fi
   
   # NVIDIA GPU check
   if command -v nvidia-smi >/dev/null 2>&1; then
-    local gpu_count; gpu_count=$(nvidia-smi --list-gpus 2>/dev/null | wc -l)
+    local gpu_count; gpu_count=$(nvidia-smi --list-gpus 2>/dev/null | wc -l || echo "0")
     ok "NVIDIA GPU: ${gpu_count} GPU(s) detected"
   else
     warn "NVIDIA GPU: nvidia-smi not found (will install driver)"
