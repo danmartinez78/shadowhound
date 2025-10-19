@@ -579,11 +579,11 @@ build_go2_ros2_workspaces(){
   
   ok "Using conda environment: $env_site"
   
-  # Install empy package (required for ROS2 message generation)
+  # Install required Python packages for ROS2 builds
   # NOTE: ROS2 Humble requires empy 3.3.4 specifically (not latest 4.x)
-  say "Installing Python package 'empy==3.3.4'..."
-  "$env_site/../../bin/pip" install empy==3.3.4 >> "$LOG_FILE" 2>&1
-  ok "empy 3.3.4 installed"
+  say "Installing ROS2 build dependencies..."
+  "$env_site/../../bin/pip" install empy==3.3.4 catkin_pkg lark >> "$LOG_FILE" 2>&1
+  ok "Build dependencies installed"
   
   # Initialize rosdep if not already done
   if [[ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]]; then

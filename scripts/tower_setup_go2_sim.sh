@@ -43,10 +43,10 @@ say "Initializing git submodules..."
 git submodule update --init --recursive
 ok "Submodules initialized"
 
-# 1. Install empy 3.3.4 (ROS2 Humble requirement)
-say "Installing empy==3.3.4..."
-pip install empy==3.3.4
-ok "empy installed"
+# 1. Install required Python packages for ROS2 builds
+say "Installing ROS2 build dependencies..."
+pip install empy==3.3.4 catkin_pkg lark
+ok "Build dependencies installed"
 
 # 2. Initialize rosdep
 say "Configuring rosdep..."
