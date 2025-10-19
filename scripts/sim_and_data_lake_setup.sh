@@ -309,7 +309,8 @@ create_env_and_install_isaacsim(){
 }
 
 install_ros2_humble(){
-  if [[ -f "$MARKER_DIR/ros2_installed" ]]; then
+  # Check if actually installed (marker file alone not sufficient)
+  if [[ -f "/opt/ros/${ROS_DISTRO}/setup.bash" ]] && [[ -f "$MARKER_DIR/ros2_installed" ]]; then
     ok "ROS 2 Humble already installed - skipping"
     return 0
   fi
@@ -1310,7 +1311,7 @@ smoke_tests(){
     set +u
     source "/opt/ros/${ROS_DISTRO}/setup.bash"
     set -u
-    if ros2 --version >/dev/null 2>&1; then
+    if command -v ros2 >/dev/null 2>&1; then
       ok "ROS 2 Humble: PASS"
     else
       warn "ROS 2 commands not available"
