@@ -214,7 +214,7 @@ cd ~/workspace/go2_omniverse
 
 ```bash
 # Set ROS_DOMAIN_ID to match Tower
-export ROS_DOMAIN_ID=42  # Or whatever Tower uses
+export ROS_DOMAIN_ID=0  # Default domain (recommended)
 
 # Set ROS_LOCALHOST_ONLY=0 to allow network communication
 export ROS_LOCALHOST_ONLY=0

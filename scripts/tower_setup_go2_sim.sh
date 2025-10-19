@@ -47,12 +47,9 @@ if [ ! -d "$GO2_DIR" ]; then
 fi
 cd "$GO2_DIR" || err "Failed to cd to $GO2_DIR"
 
-# 1. Install missing Python package (empy for ROS2 message generation)
-say "Installing Python dependencies..."
-pip install empy --quiet
-ok "empy installed"
-
-# 2. Initialize rosdep if needed
+# 1. Install missing Python package (em - empy templating)
+echo "📦 Installing missing Python package 'empy==3.3.4'..."
+pip install 'empy==3.3.4'# 2. Initialize rosdep if needed
 say "Configuring rosdep..."
 if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
     sudo rosdep init
