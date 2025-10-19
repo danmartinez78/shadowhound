@@ -529,14 +529,16 @@ $(printf "%b" "$vlines")
       minio:
         condition: service_healthy
     env_file: [.env]
-    entrypoint: ["/bin/sh","-c"]
-    command: >
-      mc alias set local http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD &&
-      mc mb -p local/models || true &&
-      mc mb -p local/datasets || true &&
-      mc mb -p local/logs || true &&
-      mc mb -p local/mlflow || true &&
-      mc anonymous set download local/models || true
+    entrypoint: ["/bin/sh"]
+    command:
+      - -c
+      - |
+        mc alias set local http://minio:9000 \$${MINIO_ROOT_USER} \$${MINIO_ROOT_PASSWORD} &&
+        mc mb -p local/models || true &&
+        mc mb -p local/datasets || true &&
+        mc mb -p local/logs || true &&
+        mc mb -p local/mlflow || true &&
+        mc anonymous set download local/models || true
     restart: "no"
 
   mlflow-db:
@@ -565,10 +567,13 @@ $(printf "%b" "$vlines")
       MLFLOW_S3_ENDPOINT_URL: http://minio:9000
       AWS_ACCESS_KEY_ID: ${MINIO_USER}
       AWS_SECRET_ACCESS_KEY: ${MINIO_PASS}
-    command: >
-      sh -c "mlflow server --host 0.0.0.0 --port 5001
-      --backend-store-uri postgresql+psycopg2://mlflow:$$POSTGRES_PASSWORD@mlflow-db:5432/mlflow
-      --default-artifact-root s3://mlflow"
+    command:
+      - sh
+      - -c
+      - |
+        mlflow server --host 0.0.0.0 --port 5001 \
+        --backend-store-uri postgresql+psycopg2://mlflow:\$${POSTGRES_PASSWORD}@mlflow-db:5432/mlflow \
+        --default-artifact-root s3://mlflow
     depends_on:
       mlflow-db:
         condition: service_healthy
