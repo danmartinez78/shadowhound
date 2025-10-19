@@ -305,11 +305,28 @@ install_driver_if_needed(){
     
     say "Detected driver: $v"
     
-    # Extract major version
+    # Extract version components
     local major; major="$(echo "$v" | cut -d. -f1)"
+    local minor; minor="$(echo "$v" | cut -d. -f2)"
     
-    # Check if driver is 535.x (recommended) or 545.x (also works)
-    if [[ "$major" -eq 535 ]] || [[ "$major" -eq 545 ]]; then
+    # Isaac Sim 4.5.0 requires driver >= 535.129.03
+    # Check if driver is sufficient
+    local driver_ok=false
+    
+    if [[ "$major" -eq 535 ]] && [[ "$minor" -ge 129 ]]; then
+      # 535.129+ is perfect
+      driver_ok=true
+    elif [[ "$major" -eq 545 ]]; then
+      # 545.x also works
+      driver_ok=true
+    elif [[ "$major" -gt 545 ]]; then
+      # Newer than 545 might work but not officially tested
+      warn "Driver $v is newer than tested range (535.129-545.x)"
+      warn "This may work but is not officially supported by Isaac Sim 4.5.0"
+      driver_ok=true
+    fi
+    
+    if [[ "$driver_ok" == "true" ]]; then
       ok "Driver $v is compatible with Isaac Sim 4.5.0"
       
       # Enable persistence mode for multi-GPU stability
@@ -318,9 +335,9 @@ install_driver_if_needed(){
       
       touch "$MARKER_DIR/nvidia_driver_checked"
     else
-      warn "Driver $v detected. Isaac Sim 4.5.0 recommends driver 535.129.03+"
-      warn "Current driver may cause performance issues or instability."
-      say "Installing recommended driver $target_driver_full..."
+      warn "Driver $v detected. Isaac Sim 4.5.0 REQUIRES driver >= 535.129.03"
+      warn "Your driver ($v) is too old and will cause RTX verification failures."
+      say "Installing correct driver version ($target_driver_full)..."
       
       # Purge existing NVIDIA drivers completely
       say "Removing existing NVIDIA drivers..."
@@ -328,13 +345,13 @@ install_driver_if_needed(){
       run "sudo apt-get autoremove -y"
       run "sudo apt-get autoclean"
       
-      # Install driver 535
+      # Install driver 535-server (should provide 535.129.03 or higher)
       run "sudo apt-get update"
       run "sudo apt-get install -y nvidia-driver-$target_driver_full"
       
       touch "$MARKER_DIR/nvidia_driver_checked"
       warn "Driver $target_driver_full installed. REBOOT REQUIRED before continuing."
-      warn "After reboot, verify with: nvidia-smi"
+      warn "After reboot, verify driver version with: nvidia-smi"
       warn "Expected driver version: 535.129.03 or higher"
       warn "Then re-run: bash $SCRIPT_NAME install"
       exit 0
