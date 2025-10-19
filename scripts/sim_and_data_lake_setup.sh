@@ -553,12 +553,27 @@ build_go2_ros2_workspaces(){
     return 0
   fi
   
-  # Get conda environment site-packages path
-  local env_site; env_site="$(cat "$MARKER_DIR/env_site.txt" 2>/dev/null || true)"
+  # Get conda environment path - try multiple methods
+  local env_site
+  env_site="$(cat "$MARKER_DIR/env_site.txt" 2>/dev/null || true)"
+  
+  # Fallback: detect conda environment path directly
   if [[ -z "$env_site" ]]; then
-    warn "env_site.txt not found - cannot determine conda environment path"
-    return 1
+    say "Detecting conda environment path..."
+    # Source conda and activate environment
+    # shellcheck source=/dev/null
+    source "$CONDA_ROOT/etc/profile.d/conda.sh" 2>/dev/null || true
+    conda activate "$ENV_NAME" 2>/dev/null || true
+    env_site="$(python -c 'import sys;print(next(p for p in sys.path if p.endswith("site-packages")))' 2>/dev/null || true)"
   fi
+  
+  if [[ -z "$env_site" ]]; then
+    warn "Cannot determine conda environment path - skipping Go2 workspace build"
+    warn "You can build manually later with: bash $SCRIPT_DIR/tower_setup_go2_sim.sh"
+    return 0
+  fi
+  
+  ok "Using conda environment: $env_site"
   
   # Install empy package (required for ROS2 message generation)
   # NOTE: ROS2 Humble requires empy 3.3.4 specifically (not latest 4.x)
