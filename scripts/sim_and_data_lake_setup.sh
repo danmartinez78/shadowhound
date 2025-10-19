@@ -1533,6 +1533,17 @@ install(){
   say "║  Tower Setup for Thor/Spark Integration                       ║"
   say "╚════════════════════════════════════════════════════════════════╝\n"
   
+  # Load saved state if exists (for idempotent re-runs)
+  if [[ -f "$MARKER_DIR/data_dir.txt" ]]; then
+    DATA_DIR=$(cat "$MARKER_DIR/data_dir.txt")
+    ok "Loaded DATA_DIR from previous run: $DATA_DIR"
+  fi
+  if [[ -f "$MARKER_DIR/minio_dir.txt" ]]; then
+    MINIO_DIR=$(cat "$MARKER_DIR/minio_dir.txt")
+    MINIO_COMPOSE_YAML="${MINIO_DIR}/docker-compose.yml"
+    ok "Loaded MINIO_DIR from previous run: $MINIO_DIR"
+  fi
+  
   # Check for existing installation
   if [[ -f "$MARKER_DIR/install_completed.txt" ]]; then
     warn "⚠️  Existing installation detected!"
