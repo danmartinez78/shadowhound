@@ -313,18 +313,31 @@ export ROS_LOCALHOST_ONLY=0
 
 ### RTX Rendering Warning
 
-**Warning**: `HydraEngine rtx failed creating scene renderer`
+**Warning**: `HydraEngine rtx failed creating scene renderer`  
+**Error**: `The currently installed NVIDIA graphics driver is unsupported`
 
-This warning is **typically benign** and can be ignored. It occurs during Isaac Sim startup and doesn't prevent simulation from running.
+These warnings occur when the NVIDIA driver is below the minimum recommended version (535.129). The simulation **will still run** but RTX features may be limited.
+
+**Current status**:
+- Tower driver: 535.18.02 (or 535.274.02)
+- Minimum required: 535.129.03
+- Status: ⚠️ Functional but outdated
+
+**To update driver (optional)**:
+```bash
+# Check current version
+nvidia-smi | grep "Driver Version"
+
+# Update to latest (requires reboot)
+sudo apt update
+sudo apt install nvidia-driver-550  # Latest stable as of Oct 2025
+sudo reboot
+```
 
 **If simulation doesn't start**:
-1. Check GPU driver: `nvidia-smi` (should show RTX 4070 Ti)
-2. Verify Isaac Sim installed correctly: `python -c "import isaacsim"`
-3. Try software rendering mode (slower):
-   ```bash
-   export OMNI_KIT_ALLOW_ROOT=1
-   python main.py --robot go2 --enable_cameras
-   ```
+1. Check GPU detected: `nvidia-smi` (should show RTX 4070 Ti)
+2. Verify Isaac Sim installed: `python -c "import isaacsim"`
+3. Check for X11 display issues (if using remote connection)
 
 ---
 
