@@ -225,12 +225,23 @@ install_driver_if_needed(){
     else
       warn "Driver $v detected. Isaac Sim 4.5.0 recommends driver 535-550."
       warn "Current driver may cause performance issues or instability."
-      say "Installing recommended driver 550..."
+      say "Downgrading to recommended driver 550..."
+      
+      # Purge existing NVIDIA drivers completely
+      say "Removing existing NVIDIA drivers..."
+      run "sudo apt-get purge -y 'nvidia-*' 'libnvidia-*'"
+      run "sudo apt-get autoremove -y"
+      run "sudo apt-get autoclean"
+      
+      # Install driver 550
+      run "sudo add-apt-repository -y ppa:graphics-drivers/ppa"
       run "sudo apt-get update"
       run "sudo apt-get install -y nvidia-driver-550 nvidia-dkms-550"
+      
       touch "$MARKER_DIR/nvidia_driver_checked"
-      warn "Driver installed. Reboot required before continuing."
-      warn "After reboot, re-run: bash $SCRIPT_NAME install"
+      warn "Driver 550 installed. REBOOT REQUIRED before continuing."
+      warn "After reboot, verify with: nvidia-smi"
+      warn "Then re-run: bash $SCRIPT_NAME install"
       exit 0
     fi
   else
