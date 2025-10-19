@@ -331,6 +331,17 @@ clone_go2_omniverse_and_patch(){
 }
 
 pick_data_dir(){
+  # Skip if data dir already configured
+  if [[ -f "$MARKER_DIR/data_dir.txt" ]] && [[ -f "$MARKER_DIR/minio_dir.txt" ]]; then
+    DATA_DIR=$(cat "$MARKER_DIR/data_dir.txt")
+    MINIO_DIR=$(cat "$MARKER_DIR/minio_dir.txt")
+    MINIO_COMPOSE_YAML="${MINIO_DIR}/docker-compose.yml"
+    ok "Data directories already configured:"
+    ok "  DATA_DIR:  $DATA_DIR"
+    ok "  MINIO_DIR: $MINIO_DIR"
+    return 0
+  fi
+  
   say "\n--- Base data directory for caches & configs ---"
   run "lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,MODEL || true"
   read -r -p "Path for base data directory [$DATA_DIR_DEFAULT]: " DATA_DIR
@@ -347,6 +358,14 @@ pick_data_dir(){
 }
 
 pick_minio_drives(){
+  # Skip if drives already selected
+  if [[ -f "$MARKER_DIR/minio_drives.txt" ]] && [[ -s "$MARKER_DIR/minio_drives.txt" ]]; then
+    local -a saved_drives
+    mapfile -t saved_drives < "$MARKER_DIR/minio_drives.txt"
+    ok "MinIO drives already selected (${#saved_drives[@]} drive(s)): ${saved_drives[*]}"
+    return 0
+  fi
+  
   say "\n--- Select MinIO Storage Drives ---"
   say "Tip: Use >=4 drives of similar size for erasure-coded resilience."
   say ""
@@ -462,14 +481,23 @@ compose_cmd(){
 generate_minio_mlflow_compose(){
   say "\n--- Writing MinIO + MLflow docker-compose ---"
   
+  # Check if already running successfully
+  if docker ps --filter "name=minio" --filter "status=running" --format '{{.Names}}' 2>/dev/null | grep -q '^minio$' && \
+     docker ps --filter "name=mlflow" --filter "status=running" --format '{{.Names}}' 2>/dev/null | grep -q '^mlflow$' && \
+     curl -fsSL http://localhost:9000/minio/health/live >/dev/null 2>&1; then
+    ok "MinIO + MLflow already running and healthy - skipping"
+    return 0
+  fi
+  
   # Clean up any existing containers from previous installs
-  if docker ps -a --format '{{.Names}}' 2>/dev/null | grep -qE '^(minio|mlflow|mlflow-db|mc-bootstrap)$'; then
-    warn "Found existing containers from previous install"
+  if docker ps -a --format '{{.Names}}' 2>/dev/null | grep -qE '^(minio|mlflow|mlflow-db|mc-bootstrap)'; then
+    warn "Found existing containers from previous install - cleaning up"
     if [[ -f "$MINIO_DIR/docker-compose.yml" ]]; then
       (cd "$MINIO_DIR" && docker compose down -v 2>/dev/null || docker-compose down -v 2>/dev/null || true)
     else
       # Remove containers manually if compose file doesn't exist
-      docker rm -f minio mlflow mlflow-db mc-bootstrap 2>/dev/null || true
+      docker rm -f minio mlflow mlflow-db 2>/dev/null || true
+      docker rm -f minio-mc-bootstrap-1 mc-bootstrap 2>/dev/null || true
     fi
     ok "Cleaned up existing containers"
   fi
