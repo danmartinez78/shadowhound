@@ -112,12 +112,11 @@ def generate_launch_description():
             ("joint_states", "robot0/joint_states"),
             
             # Camera topics (absolute and relative)
-            # Mission agent subscribes to /camera/image_raw (sensor_msgs/Image)
-            # DIMOS subscribes to camera/compressed (relative name!)
-            # Sim publishes /robot0/front_cam/rgb (sensor_msgs/Image)
-            ("/camera/image_raw", "/robot0/front_cam/rgb"),
-            ("camera/image_raw", "robot0/front_cam/rgb"),
-            ("camera/compressed", "robot0/front_cam/rgb"),  # DIMOS uses this but topic doesn't exist
+            # CRITICAL FIX: mission_executor.py now uses use_raw=True
+            # This means DIMOS subscribes to camera/image_raw (Image type)
+            # Sim publishes /robot0/front_cam/rgb (Image type)
+            ("/camera/image_raw", "/robot0/front_cam/rgb"),  # Mission agent absolute
+            ("camera/image_raw", "robot0/front_cam/rgb"),    # DIMOS relative (use_raw=True)
             
             # Robot state topics (DIMOS subscriptions - relative names!)
             ("/go2_states", "/robot0/go2_states"),
