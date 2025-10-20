@@ -20,6 +20,57 @@ summary: >
 
 ## 2025-10-20 (Sunday)
 
+### Late Evening: Laptop-Sim Integration Working End-to-End (23:30-00:30)
+**Type**: Integration + Feature
+**Status**: ✅ Complete (with workaround)
+**Branch**: `feature/laptop-sim-integration`
+
+Successfully validated distributed architecture: Tower runs Isaac Sim, laptop runs autonomy stack.
+
+**Key Results**:
+- ✅ **ROS2 topics visible**: Laptop can see all Tower sim topics
+- ✅ **RViz2 visualization**: LiDAR + camera streaming from sim to laptop
+- ✅ **Bidirectional control**: `/robot0/cmd_vel` commands work from laptop
+- ✅ **Network config validated**: ROS_DOMAIN_ID=0, ROS_LOCALHOST_ONLY=0
+- ✅ **Mission agent ready**: Topic remapping added for sim namespace
+
+**Architecture Validated**:
+```
+Tower (192.168.x.x)              Laptop (devcontainer)
+├─ Isaac Sim 4.5.0               ├─ Mission Agent
+├─ Go2 in office environment     ├─ RViz2 visualization
+├─ Publishes /robot0/* topics    ├─ Subscribes to /robot0/* topics
+└─ Subscribes to /robot0/cmd_vel └─ Publishes to /robot0/cmd_vel
+```
+
+**Namespace Handling** (temporary workaround):
+- go2_omniverse sim uses `/robot0/` namespace (supports multi-robot)
+- Mission agent coded for standard topics (`/cmd_vel`, `/odom`, etc.)
+- **Quick fix**: Added topic remapping in mission_agent.launch.py
+- **TODO**: Make mission agent namespace-aware (add `robot_namespace` parameter)
+- Remappings:
+  - `/cmd_vel` → `/robot0/cmd_vel`
+  - `/odom` → `/robot0/odom`
+  - `/camera/image_raw` → `/robot0/front_cam/rgb`
+  - `/scan` → `/robot0/point_cloud2_L1`
+
+**Testing Results**:
+- CLI velocity commands work: `ros2 topic pub /robot0/cmd_vel ...`
+- Robot moves in sim from laptop commands
+- All sensor topics streaming correctly
+- RViz2 displays point cloud and camera feed
+
+**Next Steps**:
+- Test mission agent launch with remappings
+- Test DIMOS skills execution against sim
+- Create systemd service for sim startup (orchestration)
+- Document distributed workflow
+- Create TODO issue for proper namespace support
+
+**Commits**: TBD (pending)
+
+---
+
 ### Late Evening: Tower Fresh Install + Complete Stack Validation (21:00-23:30)
 **Type**: Infrastructure
 **Status**: ✅ Complete

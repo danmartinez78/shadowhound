@@ -66,6 +66,8 @@ def generate_launch_description():
     )
 
     # Mission agent node
+    # TODO: Remove topic remapping once namespace support is added (make robot_namespace configurable)
+    # This is a temporary workaround for go2_omniverse sim which uses /robot0/* namespace
     mission_agent_node = Node(
         package="shadowhound_mission_agent",
         executable="mission_agent",
@@ -81,6 +83,15 @@ def generate_launch_description():
                 "ollama_base_url": LaunchConfiguration("ollama_base_url"),
                 "ollama_model": LaunchConfiguration("ollama_model"),
             }
+        ],
+        remappings=[
+            # Map standard topics to robot0 namespace (go2_omniverse sim)
+            ("/cmd_vel", "/robot0/cmd_vel"),
+            ("/odom", "/robot0/odom"),
+            ("/imu", "/robot0/imu"),
+            ("/joint_states", "/robot0/joint_states"),
+            ("/camera/image_raw", "/robot0/front_cam/rgb"),
+            ("/scan", "/robot0/point_cloud2_L1"),  # Point cloud, not laser scan
         ],
         emulate_tty=True,
     )
