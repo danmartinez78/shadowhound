@@ -836,19 +836,28 @@ build_go2_ros2_workspaces(){
   # Return to original directory
   cd "$HOME" || return 1
   
-  # Copy Unitree L1 LiDAR config file to Isaac Lab
+  # Copy Unitree L1 LiDAR config files to Isaac Sim 4.5 installation
   say "Installing Unitree L1 LiDAR configuration..."
-  local isaaclab_dir="${HOME}/IsaacLab-0.3.1"
-  local lidar_config_source="$ws/Isaac_sim/Unitree/Unitree_L1.json"
-  local lidar_config_dest="$isaaclab_dir/source/data/sensors/lidar/Unitree_L1.json"
+  local conda_env="${HOME}/miniconda3/envs/env_isaaclab"
+  local isaac_sim_lidar_dir="$conda_env/lib/python3.10/site-packages/omni/data/Kit/Isaac-Sim/4.5/exts/3/isaacsim.sensors.rtx-13.6.4+106.5.0.lx64.r.cp310/data/lidar_configs"
+  local lidar_source_dir="$ws/Isaac_sim/Unitree"
   
-  if [[ -f "$lidar_config_source" ]]; then
-    run "mkdir -p $(dirname "$lidar_config_dest")"
-    run "cp -f \"$lidar_config_source\" \"$lidar_config_dest\""
-    ok "Unitree L1 LiDAR config installed to Isaac Lab"
+  if [[ -d "$lidar_source_dir" ]] && [[ -d "$isaac_sim_lidar_dir" ]]; then
+    # Copy both L1 and L1_old config files
+    if [[ -f "$lidar_source_dir/Unitree_L1.json" ]]; then
+      run "cp -f \"$lidar_source_dir/Unitree_L1.json\" \"$isaac_sim_lidar_dir/\""
+      ok "Unitree L1 LiDAR config installed"
+    fi
+    
+    if [[ -f "$lidar_source_dir/Unitree_L1_old.json" ]]; then
+      run "cp -f \"$lidar_source_dir/Unitree_L1_old.json\" \"$isaac_sim_lidar_dir/\""
+      ok "Unitree L1_old LiDAR config installed"
+    fi
   else
-    warn "Unitree L1 config not found at $lidar_config_source"
-    warn "LiDAR simulation may not work correctly"
+    warn "LiDAR config source or Isaac Sim directory not found"
+    warn "Source: $lidar_source_dir"
+    warn "Dest: $isaac_sim_lidar_dir"
+    warn "LiDAR simulation may not work - configs may need manual installation"
   fi
   
   # Verify builds succeeded
