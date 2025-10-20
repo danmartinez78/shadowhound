@@ -49,19 +49,44 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate env_isaaclab
 
 echo ""
-echo "Reinstalling Isaac Lab packages..."
+echo "Cleaning old Isaac Lab packages (v2.1.0 artifacts)..."
 cd ~/workspace/IsaacLab
 
-# Remove old installed packages to force reinstall
-pip uninstall -y isaaclab isaacsim-rl isaacsim-replicator isaacsim-extscache-physics isaacsim-extscache-kit-sdk isaacsim-extscache-kit isaacsim-app 2>/dev/null || true
+# Remove ALL old Isaac Lab packages to avoid version conflicts
+pip uninstall -y isaaclab isaaclab-rl isaaclab-tasks isaacsim-rl isaacsim-replicator \
+    isaacsim-extscache-physics isaacsim-extscache-kit-sdk isaacsim-extscache-kit \
+    isaacsim-app isaacsim.core.nodes isaacsim.sensors.rtx 2>/dev/null || true
 
-# Run Isaac Lab installer
+echo ""
+echo "Removing cached pip wheels to force clean install..."
+pip cache purge
+
+echo ""
+echo "Installing Isaac Lab v2.2.1 with PyTorch 2.7.0..."
+# Run Isaac Lab installer with clean environment
 ./isaaclab.sh --install
 
 echo ""
+echo "Upgrading PyTorch to v2.7.0+cu128 (required by v2.2.1)..."
+# Force upgrade torch to match v2.2.1 requirements
+pip install --upgrade torch==2.7.0+cu128 torchvision --index-url https://download.pytorch.org/whl/cu128
+
+echo ""
+echo "Reinstalling Isaac Lab packages with correct PyTorch version..."
+# Reinstall Isaac Lab packages to rebuild against new PyTorch
+pip install -e source/extensions/omni.isaac.lab --no-deps
+pip install -e source/extensions/omni.isaac.lab_tasks --no-deps
+pip install -e source/extensions/omni.isaac.lab_assets --no-deps
+
+echo ""
 echo "Step 6: Verifying installation..."
+python -c "import torch; print(f'PyTorch version: {torch.__version__}')"
 python -c "import isaaclab; print(f'Isaac Lab imported successfully')"
-python -c "import rsl_rl; print(f'rsl_rl version: {rsl_rl.__version__}')"
+python -c "import rsl_rl; print(f'rsl_rl imported successfully')"
+
+echo ""
+echo "Checking for dependency conflicts..."
+pip check || echo "⚠️  Some dependency warnings exist (usually non-critical)"
 
 echo ""
 echo "============================================"
