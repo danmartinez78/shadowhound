@@ -78,6 +78,11 @@ pip install catkin_pkg lark
 python3 -c "import em; print(f'Conda Python empy: {em.__version__}')" || err "Conda empy installation failed"
 ok "Conda environment: empy 3.3.4 + build tools installed"
 
+# Install tf_transformations for go2_omniverse
+say "Installing tf_transformations for simulation..."
+pip install transforms3d
+ok "tf_transformations installed"
+
 # Verify the conda Python can actually import empy with correct version
 say "Verifying empy is accessible..."
 python3 -c "import em; assert hasattr(em, 'Interpreter'), 'Wrong empy version!'" || err "empy verification failed - wrong version!"
