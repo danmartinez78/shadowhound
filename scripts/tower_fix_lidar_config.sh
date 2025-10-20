@@ -18,12 +18,25 @@ echo ""
 say "🔧 Installing Unitree L1 LiDAR config for Isaac Sim"
 echo ""
 
-# Check if go2_omniverse exists
-if [[ ! -f "$HOME/workspace/go2_omniverse/repifis/l1.json" ]]; then
+# Check if go2_omniverse LiDAR config exists (correct location)
+LIDAR_CONFIG="$HOME/workspace/go2_omniverse/Isaac_sim/Unitree/L1.json"
+
+if [[ ! -f "$LIDAR_CONFIG" ]]; then
     warn "Unitree L1 config not found in go2_omniverse"
-    warn "Expected: ~/workspace/go2_omniverse/repifis/l1.json"
-    exit 1
+    warn "Expected: $LIDAR_CONFIG"
+    warn "Trying alternate locations..."
+    
+    # Try alternate locations
+    if [[ -f "$HOME/workspace/go2_omniverse/repifis/l1.json" ]]; then
+        LIDAR_CONFIG="$HOME/workspace/go2_omniverse/repifis/l1.json"
+        ok "Found config at: $LIDAR_CONFIG"
+    else
+        warn "Could not find L1.json in any known location"
+        exit 1
+    fi
 fi
+
+say "Using LiDAR config: $LIDAR_CONFIG"
 
 # Find Isaac Sim LiDAR config directory
 ISAAC_SIM_BASE="/home/$USER/miniconda3/envs/env_isaaclab/lib/python3.10/site-packages/isaacsim"
@@ -59,7 +72,7 @@ say "Found LiDAR config directory: $TARGET_DIR"
 
 # Copy Unitree L1 config
 say "Installing Unitree_L1.json..."
-sudo cp -f "$HOME/workspace/go2_omniverse/repifis/l1.json" "$TARGET_DIR/Unitree_L1.json"
+sudo cp -f "$LIDAR_CONFIG" "$TARGET_DIR/Unitree_L1.json"
 ok "Unitree_L1.json installed"
 
 # Verify
