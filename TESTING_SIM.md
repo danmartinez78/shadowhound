@@ -4,22 +4,31 @@
 
 ## Setup (One-Time)
 
-### 1. On Tower: Start Isaac Sim
-```bash
-cd ~/workspace/go2_omniverse
-./run_sim.sh
-```
-
-### 2. On Laptop: Setup Environment
+### 1. On Laptop: Setup Secrets
 ```bash
 cd ~/shadowhound
 
-# Copy simulation config
+# Create secrets file (one-time setup)
+cp .env.secrets.example .env.secrets
+
+# Edit with your actual OpenAI API key
+nano .env.secrets
+# Change: OPENAI_API_KEY=sk-proj-your-actual-key-here
+```
+
+### 2. On Laptop: Setup Simulation Config
+```bash
+# Copy simulation config template
 cp .env.simulation .env
 
-# Edit .env and add your OpenAI API key
-nano .env
-# Change: OPENAI_API_KEY=sk-proj-your-key-here
+# That's it! API key comes from .env.secrets
+# start.sh loads both files automatically
+```
+
+### 3. On Tower: Start Isaac Sim
+```bash
+cd ~/workspace/go2_omniverse
+./run_sim.sh
 ```
 
 ## Testing
