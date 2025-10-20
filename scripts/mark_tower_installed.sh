@@ -43,7 +43,12 @@ if conda info --envs | grep -q env_isaaclab; then
 fi
 
 # Isaac Lab (source install at ~/workspace/IsaacLab)
-if [[ -d "$HOME/workspace/IsaacLab/_isaac_sim" ]]; then
+# For pip-based Isaac Sim: Check for IsaacLab directory (no _isaac_sim subdir)
+# For source Isaac Sim: Also check for _isaac_sim subdirectory
+if [[ -d "$HOME/workspace/IsaacLab" ]] && [[ -f "$HOME/workspace/IsaacLab/setup.py" ]]; then
+    touch "$MARKER_DIR/isaac_lab_cloned"
+    echo "✓ isaac_lab_cloned"
+elif [[ -d "$HOME/workspace/IsaacLab/_isaac_sim" ]]; then
     touch "$MARKER_DIR/isaac_lab_cloned"
     echo "✓ isaac_lab_cloned"
 else
