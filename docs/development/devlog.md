@@ -18,6 +18,91 @@ summary: >
 - **See**: `experiments/README.md` for when to use experiment docs vs. devlog
 
 
+## 2025-10-20 (Sunday)
+
+### Evening: Repository Cleanup After Isaac Sim Success (19:00-20:00)
+**Type**: Cleanup + Refactoring
+**Status**: ✅ Complete
+
+Archived 14 obsolete debugging scripts and 8 experimental/completed documentation files after successful Tower Isaac Sim + Isaac Lab deployment. Cleaned repository to remove troubleshooting artifacts from multi-day debugging session.
+
+**Key Results**:
+- **Scripts archived** (14): tower_setup_go2_sim.sh superseded; debugging tools (diagnose, fix, test); version management scripts (rollback, upgrade, downgrade)
+- **Docs archived** (8): Tower troubleshooting guides (3); Docker containerization experiments (2, not adopted); legacy Codex notes (2); completed vcs→submodule conversion guide (1)
+- **Kept active**: sim_and_data_lake_setup.sh (complete working solution), tower_update_nvidia_driver.sh (referenced), laptop_isaac_sim_development.md (distributed dev workflow)
+- **Repository cleaner**: Only production scripts and active documentation remain
+
+**Archived Scripts**:
+- tower_setup_go2_sim.sh → scripts/legacy/ (replaced by sim_and_data_lake_setup.sh)
+- tower_diagnose_isaac_freeze.sh, tower_diagnostic_isaaclab.sh, tower_quick_import_test.sh
+- tower_fix_lidar_config.sh (manual fix, now automated)
+- tower_rollback_*.sh, tower_check_*.sh, tower_upgrade_*.sh, tower_downgrade_*.sh
+- tower_test_sim_after_upgrade.sh, tower_try_v2.1.1.sh
+- tower_complete_uninstall_isaac.sh
+
+**Archived Docs**:
+- TOWER_UPGRADE_QUICKSTART.md, tower_isaaclab_upgrade_guide.md, tower_version_compatibility.md
+- isaac_sim_containerized_setup.md, isaac_sim_docker_scripts_comparison.md (Docker experiments)
+- codex_24_04_plan.md, codex_environment_strategy.md (legacy Codex notes)
+- laptop_sync_after_conversion.md (vcs→submodule conversion complete)
+
+**Commits**: `97f56fe` — chore: archive obsolete Isaac Sim debugging scripts and docs
+
+---
+
+## 2025-10-19 (Saturday)
+
+### All Day: Tower Isaac Sim + Isaac Lab Complete Deployment (08:00-23:00)
+**Type**: Infrastructure + Debugging
+**Status**: ✅ Complete  
+**Experiment Doc**: [experiments/tower_isaac_sim_deployment_oct19_2025.md](experiments/tower_isaac_sim_deployment_oct19_2025.md)
+
+Successfully deployed complete Isaac Sim 4.5.0 + Isaac Lab v2.1.0 + go2_omniverse simulation stack on Tower with full ROS2 integration. Resolved 9 critical issues through systematic debugging spanning 15+ hours and 48+ commits.
+
+**Key Results**:
+- ✅ **Full simulation working**: LiDAR and camera streaming to RViz2
+- ✅ **Isaac Sim 4.5.0**: pip install to conda env (env_isaaclab)
+- ✅ **Isaac Lab v2.1.0**: Source install, April 24 2025 commit (validated compatible)
+- ✅ **NVIDIA Driver 580.95.05**: Validated and working
+- ✅ **ROS2 Humble**: Complete workspace builds with system Python separation
+- ✅ **go2_omniverse**: added_copter branch fully functional
+
+**9 Issues Resolved**:
+1. Driver check early return (removed marker file bypass)
+2. ROS_DISTRO undefined (added to .bashrc)
+3. 404 errors for ROS2 packages (always update apt cache)
+4. Conda/Python conflicts (force deactivation before builds)
+5. Missing lark-parser (install hyphenated version to system Python)
+6. Symlink conflicts (clean build directories)
+7. Missing ros-humble-tf-transformations (apt-get install)
+8. Missing transforms3d (conda env install)
+9. LiDAR config files missing (copy to Isaac Sim 4.5 directory, not Isaac Lab)
+
+**Script Enhanced**: `scripts/sim_and_data_lake_setup.sh`
+- System Python dependencies (empy==3.3.4, lark-parser)
+- Conda environment dependencies (transforms3d, etc)
+- ROS2 system packages (ros-humble-tf-transformations)
+- Environment variable management (ROS_DISTRO=humble)
+- Conda deactivation before builds (prevents conflicts)
+- Build directory cleaning (removes stale symlinks)
+- Correct LiDAR config paths (Isaac Sim 4.5, not Isaac Lab)
+
+**Validation**:
+- User confirmed: "the sim is running, no errors and we have lidar and camera in rviz2!!!!!"
+- LiDAR configs in correct location: `~/.local/share/ov/pkg/isaac-sim-4.5.0/exts/omni.isaac.sensor/data/lidar_configs/`
+- Complete setup script validated against working Tower configuration
+
+**Architecture Validated**:
+- System Python (/usr/bin/python3) for ROS2 builds
+- Conda Python (env_isaaclab) for Isaac Sim execution
+- Separation critical for avoiding libpython conflicts
+
+**Next Phase**: Distributed testing (laptop connecting to Tower Isaac Sim)
+
+**Commits**: 48+ commits including `6085b24`, `7793d78`, `f7ca46a`, `196338c`, `6d5fb2f`, `b0d2618`
+
+---
+
 ## 2025-10-18 (Friday)
 
 ### Morning: Tower Setup Script Production Hardening (06:00-09:00)
