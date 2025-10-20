@@ -498,12 +498,15 @@ setup_config() {
     fi
     print_success "OpenAI API key configured"
     
-    # Check mock robot mode
-    MOCK_ROBOT=${MOCK_ROBOT:-${MOCK_ROBOT_ENV:-false}}
-    if [ "$MOCK_ROBOT" = "true" ]; then
-        print_info "Using MOCK robot mode (no hardware needed)"
-    else
-        print_info "Using REAL robot mode"
+    # Check robot mode (new: supports hardware/simulation/mock)
+    ROBOT_MODE=${ROBOT_MODE:-mock}
+    if [ "$ROBOT_MODE" = "mock" ]; then
+        print_info "Robot mode: MOCK (pure software, no hardware/sim needed)"
+    elif [ "$ROBOT_MODE" = "simulation" ]; then
+        print_info "Robot mode: SIMULATION (Isaac Sim on Tower)"
+        print_info "Ensure Isaac Sim is running and topics are visible"
+    elif [ "$ROBOT_MODE" = "hardware" ]; then
+        print_info "Robot mode: HARDWARE (real Unitree Go2)"
         # Use ROBOT_IP (aligned with ROS2 SDK)
         if [ -z "$ROBOT_IP" ]; then
             export ROBOT_IP="192.168.10.167"  # Default IP
@@ -511,6 +514,10 @@ setup_config() {
         else
             print_success "Robot IP: $ROBOT_IP"
         fi
+    else
+        print_error "Invalid ROBOT_MODE: $ROBOT_MODE"
+        print_info "Valid values: 'hardware', 'simulation', 'mock'"
+        exit 1
     fi
 }
 
@@ -867,8 +874,8 @@ check_llm_backend() {
 # ============================================================================
 
 check_network() {
-    if [ "$MOCK_ROBOT" = "true" ]; then
-        return 0  # Skip network checks for mock robot
+    if [ "$ROBOT_MODE" = "mock" ] || [ "$ROBOT_MODE" = "simulation" ]; then
+        return 0  # Skip network checks for mock/simulation modes
     fi
     
     print_section "Network Check"
@@ -881,11 +888,11 @@ check_network() {
         print_success "Robot is reachable at $robot_ip"
     else
         print_warning "Cannot reach robot at $robot_ip"
-        print_info "This is OK if you're using mock mode"
+        print_info "This is OK if you're using mock or simulation mode"
         
         read -p "Continue anyway? [y/N]: " continue_choice
         if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
-            print_info "Exiting. Fix network connection or use --mock flag"
+            print_info "Exiting. Fix network connection or check ROBOT_MODE"
             exit 1
         fi
     fi
@@ -931,7 +938,7 @@ EOF
     echo ""
     echo "Configuration:"
     echo "  • Mode: ${CONFIG_MODE:-default}"
-    echo "  • Mock Robot: ${MOCK_ROBOT:-false}"
+    echo "  • Robot Mode: ${ROBOT_MODE:-mock}"
     echo "  • Connection: ${CONN_TYPE:-webrtc}"
     echo "  • Web Interface: ${WEB_INTERFACE:-true}"
     echo "  • Web Port: ${WEB_PORT:-8080}"
@@ -970,8 +977,8 @@ EOF
 # ============================================================================
 
 launch_robot_driver() {
-    if [ "$MOCK_ROBOT" = "true" ]; then
-        print_info "Mock robot mode - skipping robot driver launch"
+    if [ "$ROBOT_MODE" = "mock" ] || [ "$ROBOT_MODE" = "simulation" ]; then
+        print_info "Robot mode: $ROBOT_MODE - skipping robot driver launch"
         return 0
     fi
     
@@ -1072,8 +1079,8 @@ launch_robot_driver() {
 # ============================================================================
 
 verify_robot_topics() {
-    if [ "$MOCK_ROBOT" = "true" ]; then
-        print_info "Mock robot mode - skipping topic verification"
+    if [ "$ROBOT_MODE" = "mock" ] || [ "$ROBOT_MODE" = "simulation" ]; then
+        print_info "Robot mode: $ROBOT_MODE - skipping topic verification"
         return 0
     fi
     
@@ -1207,9 +1214,9 @@ launch_mission_agent() {
         fi
     fi
     
-    # Add robot parameters
-    if [ -n "$MOCK_ROBOT" ]; then
-        launch_cmd="$launch_cmd mock_robot:=$MOCK_ROBOT"
+    # Add robot mode parameter
+    if [ -n "$ROBOT_MODE" ]; then
+        launch_cmd="$launch_cmd robot_mode:=$ROBOT_MODE"
     fi
     
     # Add planning agent parameter
@@ -1275,7 +1282,7 @@ launch_system() {
     
     echo ""
     print_info "Launch sequence:"
-    if [ "$SKIP_DRIVER" = true ] || [ "$MOCK_ROBOT" = "true" ]; then
+    if [ "$SKIP_DRIVER" = true ] || [ "$ROBOT_MODE" = "mock" ] || [ "$ROBOT_MODE" = "simulation" ]; then
         print_info "  1. [SKIPPED] Launch robot driver"
         print_info "  2. [SKIPPED] Verify robot topics"
         print_info "  3. Launch mission agent (DIMOS)"
@@ -1300,8 +1307,8 @@ launch_system() {
         print_info "Skipping robot driver launch (--skip-driver flag)"
     fi
     
-    # Stage 2: Verify topics (unless skipped or mock mode)
-    if [ "$SKIP_DRIVER" != true ] && [ "$MOCK_ROBOT" != "true" ]; then
+    # Stage 2: Verify topics (unless skipped or mock/sim mode)
+    if [ "$SKIP_DRIVER" != true ] && [ "$ROBOT_MODE" = "hardware" ]; then
         if ! verify_robot_topics; then
             print_error "Topic verification failed"
             read -p "Launch mission agent anyway? [y/N]: " continue_choice
