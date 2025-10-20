@@ -332,17 +332,49 @@ install_driver_if_needed(){
       
       # Check if driver should be upgraded to 580 for best performance
       if [[ "$major" -lt 580 ]]; then
-        warn "Driver $v is compatible but not optimal."
-        warn "Isaac Sim 4.5.0 works best with driver 580.x (tested with 580.95.05)"
+        warn "╔════════════════════════════════════════════════════════════════╗"
+        warn "║  DRIVER UPGRADE RECOMMENDED                                    ║"
+        warn "╚════════════════════════════════════════════════════════════════╝"
         warn ""
-        say "Optional: Upgrade to driver 580 for:"
-        say "  - Best RTX raytracing performance"
-        say "  - Optimal rendering quality"
-        say "  - No RTX verification warnings"
+        warn "Current driver: $v (compatible but not optimal)"
+        warn "Recommended driver: 580.x (tested with 580.95.05)"
+        warn ""
+        say "Benefits of upgrading to driver 580:"
+        say "  ✓ Best RTX raytracing performance"
+        say "  ✓ Optimal rendering quality"
+        say "  ✓ No RTX verification warnings"
+        say "  ✓ Tested configuration for Isaac Sim 4.5.0"
         say ""
-        say "To upgrade after installation completes:"
-        say "  bash ~/shadowhound/scripts/tower_update_nvidia_driver.sh"
+        say "You can:"
+        say "  1. Upgrade now (install will pause for reboot)"
+        say "  2. Continue with driver $v (upgrade later)"
         say ""
+        
+        if confirm "Upgrade to driver 580 now?"; then
+          say "Upgrading NVIDIA driver to 580..."
+          
+          # Purge existing NVIDIA drivers
+          say "Removing existing NVIDIA drivers..."
+          run "sudo apt-get purge -y 'nvidia-*' 'libnvidia-*' || true"
+          run "sudo apt-get autoremove -y"
+          run "sudo apt-get autoclean"
+          
+          # Install driver 580
+          run "sudo apt-get update"
+          run "sudo apt-get install -y nvidia-driver-$target_driver_full"
+          
+          warn "╔════════════════════════════════════════════════════════════════╗"
+          warn "║  REBOOT REQUIRED                                               ║"
+          warn "╚════════════════════════════════════════════════════════════════╝"
+          warn ""
+          warn "Driver 580 installed but requires reboot to activate."
+          warn "After reboot, re-run: bash $SCRIPT_NAME install"
+          warn ""
+          exit 0
+        else
+          say "Continuing with driver $v."
+          say "To upgrade later: bash ~/shadowhound/scripts/tower_update_nvidia_driver.sh"
+        fi
       fi
       
       # Enable persistence mode for multi-GPU stability
