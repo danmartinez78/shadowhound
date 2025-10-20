@@ -536,6 +536,20 @@ install_ros2_humble(){
   run "curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo gpg --dearmor -o /etc/apt/keyrings/ros-archive-keyring.gpg"
   run "echo \"deb [arch=\$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu \$(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/ros2.list >/dev/null"
   run "sudo apt-get update && sudo apt-get install -y ros-${ROS_DISTRO}-desktop ros-dev-tools"
+  
+  # Initialize rosdep immediately after ROS2 installation
+  if [[ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]]; then
+    say "Initializing rosdep..."
+    run "sudo rosdep init"
+    ok "rosdep initialized"
+  else
+    ok "rosdep already initialized"
+  fi
+  
+  say "Updating rosdep database..."
+  run "rosdep update"
+  ok "rosdep updated"
+  
   touch "$MARKER_DIR/ros2_installed"
 }
 
