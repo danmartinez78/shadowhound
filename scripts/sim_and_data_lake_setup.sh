@@ -609,6 +609,11 @@ build_go2_ros2_workspaces(){
   "$env_site/../../bin/pip" install empy==3.3.4 catkin_pkg lark >> "$LOG_FILE" 2>&1
   ok "Conda environment: build tools installed"
   
+  # Install ROS2 tf-transformations package (required by go2_omniverse)
+  say "Installing ROS2 tf-transformations package..."
+  run "sudo apt-get install -y ros-humble-tf-transformations"
+  ok "ros-humble-tf-transformations installed"
+  
   # Initialize rosdep if not already done
   if [[ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]]; then
     say "Initializing rosdep..."
