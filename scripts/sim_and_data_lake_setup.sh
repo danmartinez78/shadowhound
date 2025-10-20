@@ -694,24 +694,35 @@ build_go2_ros2_workspaces(){
   ok "Using conda environment: $env_site"
   
   # Install required Python packages for ROS2 builds
-  # NOTE: ROS2 Humble requires empy 3.3.4 specifically (not latest 4.x)
   # CRITICAL: ROS2 uses system Python (/usr/bin/python3), NOT conda Python!
+  # ROS2 workspace builds MUST happen with conda DEACTIVATED
   say "Installing ROS2 build dependencies into system Python..."
-  # Install into system Python (where ROS2 looks for packages)
+  
+  # System Python packages (for ROS2 rosidl generators and build tools)
+  # NOTE: ROS2 Humble requires empy 3.3.4 specifically (not latest 4.x)
   run "sudo /usr/bin/python3 -m pip uninstall -y empy" || true
   run "sudo /usr/bin/python3 -m pip install empy==3.3.4"
   ok "System Python: empy 3.3.4 installed"
   
-  # Also install into conda env for other tools (catkin_pkg, lark)
-  say "Installing build tools into conda environment..."
+  # lark-parser is required by rosidl_parser (note hyphen in package name)
+  run "sudo /usr/bin/python3 -m pip install lark-parser"
+  ok "System Python: lark-parser installed"
+  
+  # Also install into conda env for Isaac Sim scripts (not for ROS2 builds)
+  say "Installing Isaac Sim dependencies into conda environment..."
   "$env_site/../../bin/pip" uninstall -y empy >> "$LOG_FILE" 2>&1 || true
   "$env_site/../../bin/pip" install empy==3.3.4 catkin_pkg lark >> "$LOG_FILE" 2>&1
-  ok "Conda environment: build tools installed"
+  ok "Conda environment: Isaac Sim dependencies installed"
   
   # Install ROS2 tf-transformations package (required by go2_omniverse)
-  say "Installing ROS2 tf-transformations package..."
+  say "Installing ROS2 dependencies..."
   run "sudo apt-get install -y ros-humble-tf-transformations"
   ok "ros-humble-tf-transformations installed"
+  
+  # Install transforms3d for Isaac Sim (into conda env)
+  say "Installing transforms3d into conda environment..."
+  "$env_site/../../bin/pip" install transforms3d >> "$LOG_FILE" 2>&1
+  ok "transforms3d installed"
   
   # Initialize rosdep if not already done
   if [[ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]]; then
@@ -725,6 +736,22 @@ build_go2_ros2_workspaces(){
   say "Updating rosdep database..."
   run "rosdep update"
   ok "rosdep updated"
+  
+  # CRITICAL: Deactivate conda before building ROS2 workspaces
+  # ROS2 builds MUST use system Python, not conda Python
+  say "Deactivating conda for ROS2 workspace builds..."
+  conda deactivate 2>/dev/null || true
+  # Verify we're using system Python
+  if command -v python3 &>/dev/null; then
+    local py_path
+    py_path=$(command -v python3)
+    if [[ "$py_path" == "/usr/bin/python3" ]]; then
+      ok "Using system Python: $py_path"
+    else
+      warn "Python path is $py_path (expected /usr/bin/python3)"
+      warn "This may cause build failures - conda may still be active"
+    fi
+  fi
   
   # Source ROS2 Humble
   if [[ -f /opt/ros/humble/setup.bash ]]; then
@@ -740,14 +767,25 @@ build_go2_ros2_workspaces(){
     say "Building IsaacSim ROS2 workspace..."
     cd "$isaac_ws" || return 1
     
+    # Clean previous build artifacts to avoid symlink conflicts
+    if [[ -d "build" ]] || [[ -d "install" ]]; then
+      say "Cleaning previous build artifacts..."
+      rm -rf build install log
+      ok "Build directories cleaned"
+    fi
+    
     # Install dependencies
     rosdep install --from-paths src --ignore-src -r -y >> "$LOG_FILE" 2>&1 || true
     
-    # Build workspace
+    # Build workspace (WITHOUT conda activated!)
+    say "Building with system Python (this may take a few minutes)..."
     if colcon build --symlink-install >> "$LOG_FILE" 2>&1; then
       ok "IsaacSim ROS2 workspace built"
     else
       warn "IsaacSim workspace build had issues - check $LOG_FILE"
+      warn "Common causes:"
+      warn "  - conda still active (run: conda deactivate)"
+      warn "  - missing lark-parser (run: sudo /usr/bin/python3 -m pip install lark-parser)"
     fi
     
     # Source built workspace
@@ -765,14 +803,25 @@ build_go2_ros2_workspaces(){
     say "Building go2_omniverse workspace..."
     cd "$go2_ws" || return 1
     
+    # Clean previous build artifacts to avoid symlink conflicts
+    if [[ -d "build" ]] || [[ -d "install" ]]; then
+      say "Cleaning previous build artifacts..."
+      rm -rf build install log
+      ok "Build directories cleaned"
+    fi
+    
     # Install dependencies
     rosdep install --from-paths src --ignore-src -r -y >> "$LOG_FILE" 2>&1 || true
     
-    # Build workspace
+    # Build workspace (WITHOUT conda activated!)
+    say "Building with system Python (this may take a few minutes)..."
     if colcon build --symlink-install >> "$LOG_FILE" 2>&1; then
       ok "go2_omniverse workspace built"
     else
       warn "go2_omniverse workspace build had issues - check $LOG_FILE"
+      warn "Common causes:"
+      warn "  - conda still active (run: conda deactivate)"
+      warn "  - missing lark-parser (run: sudo /usr/bin/python3 -m pip install lark-parser)"
     fi
     
     # Source built workspace
@@ -786,6 +835,21 @@ build_go2_ros2_workspaces(){
   
   # Return to original directory
   cd "$HOME" || return 1
+  
+  # Copy Unitree L1 LiDAR config file to Isaac Lab
+  say "Installing Unitree L1 LiDAR configuration..."
+  local isaaclab_dir="${HOME}/IsaacLab-0.3.1"
+  local lidar_config_source="$ws/Isaac_sim/Unitree/Unitree_L1.json"
+  local lidar_config_dest="$isaaclab_dir/source/data/sensors/lidar/Unitree_L1.json"
+  
+  if [[ -f "$lidar_config_source" ]]; then
+    run "mkdir -p $(dirname "$lidar_config_dest")"
+    run "cp -f \"$lidar_config_source\" \"$lidar_config_dest\""
+    ok "Unitree L1 LiDAR config installed to Isaac Lab"
+  else
+    warn "Unitree L1 config not found at $lidar_config_source"
+    warn "LiDAR simulation may not work correctly"
+  fi
   
   # Verify builds succeeded
   if [[ -f "$isaac_ws/install/setup.bash" ]] && [[ -f "$go2_ws/install/setup.bash" ]]; then
