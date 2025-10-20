@@ -686,11 +686,9 @@ build_go2_ros2_workspaces(){
   # Fallback: detect conda environment path directly
   if [[ -z "$env_site" ]]; then
     say "Detecting conda environment path..."
-    # Source conda and activate environment
-    # shellcheck source=/dev/null
-    source "$CONDA_ROOT/etc/profile.d/conda.sh" 2>/dev/null || true
-    conda activate "$ENV_NAME" 2>/dev/null || true
-    env_site="$(python -c 'import sys;print(next(p for p in sys.path if p.endswith("site-packages")))' 2>/dev/null || true)"
+    # Use conda run to get the CORRECT site-packages path
+    # This avoids sys.path contamination from old workspace builds
+    env_site="$(conda run -n "$ENV_NAME" python -c 'import site; print(site.getsitepackages()[0])' 2>/dev/null || true)"
   fi
   
   if [[ -z "$env_site" ]]; then
@@ -719,8 +717,8 @@ build_go2_ros2_workspaces(){
   # Also install into conda env for Isaac Sim scripts (not for ROS2 builds)
   say "Installing Isaac Sim dependencies into conda environment..."
   say "(This may take 1-2 minutes - installing empy, catkin_pkg, lark...)"
-  "$env_site/../../bin/pip" uninstall -y empy >> "$LOG_FILE" 2>&1 || true
-  "$env_site/../../bin/pip" install empy==3.3.4 catkin_pkg lark 2>&1 | tee -a "$LOG_FILE" | grep -v "^Requirement already satisfied" || true
+  conda run -n "$ENV_NAME" pip uninstall -y empy >> "$LOG_FILE" 2>&1 || true
+  conda run -n "$ENV_NAME" pip install empy==3.3.4 catkin_pkg lark 2>&1 | tee -a "$LOG_FILE" | grep -v "^Requirement already satisfied" || true
   ok "Conda environment: Isaac Sim dependencies installed"
   
   # Install ROS2 tf-transformations package (required by go2_omniverse)
@@ -730,7 +728,7 @@ build_go2_ros2_workspaces(){
   
   # Install transforms3d for Isaac Sim (into conda env)
   say "Installing transforms3d into conda environment..."
-  "$env_site/../../bin/pip" install transforms3d 2>&1 | tee -a "$LOG_FILE" | grep -v "^Requirement already satisfied" || true
+  conda run -n "$ENV_NAME" pip install transforms3d 2>&1 | tee -a "$LOG_FILE" | grep -v "^Requirement already satisfied" || true
   ok "transforms3d installed"
   
   # Initialize rosdep if not already done
@@ -764,8 +762,11 @@ build_go2_ros2_workspaces(){
   
   # Source ROS2 Humble
   if [[ -f /opt/ros/humble/setup.bash ]]; then
+    # Temporarily disable 'set -u' because ROS setup.bash may reference unset variables
+    set +u
     # shellcheck disable=SC1091
     source /opt/ros/humble/setup.bash
+    set -u
   else
     warn "ROS2 Humble not found - workspace build may fail"
   fi
@@ -799,8 +800,10 @@ build_go2_ros2_workspaces(){
     
     # Source built workspace
     if [[ -f "$isaac_ws/install/setup.bash" ]]; then
+      set +u  # Allow unset variables for ROS workspace sourcing
       # shellcheck disable=SC1091
       source "$isaac_ws/install/setup.bash"
+      set -u
     fi
   else
     warn "IsaacSim workspace src not found at $isaac_ws/src"
@@ -835,8 +838,10 @@ build_go2_ros2_workspaces(){
     
     # Source built workspace
     if [[ -f "$go2_ws/install/setup.bash" ]]; then
+      set +u  # Allow unset variables for ROS workspace sourcing
       # shellcheck disable=SC1091
       source "$go2_ws/install/setup.bash"
+      set -u
     fi
   else
     warn "go2_omniverse workspace src not found at $go2_ws/src"
