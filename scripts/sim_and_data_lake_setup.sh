@@ -540,6 +540,15 @@ install_ros2_humble(){
       ok "rosdep updated"
     fi
     
+    # Ensure ROS_DISTRO is in .bashrc
+    if ! grep -q "export ROS_DISTRO=humble" "$HOME/.bashrc"; then
+      say "Adding ROS_DISTRO to .bashrc..."
+      echo "" >> "$HOME/.bashrc"
+      echo "# ROS2 Humble environment (added by sim_and_data_lake_setup.sh)" >> "$HOME/.bashrc"
+      echo "export ROS_DISTRO=humble" >> "$HOME/.bashrc"
+      ok "ROS_DISTRO added to .bashrc"
+    fi
+    
     return 0
   fi
   
@@ -562,6 +571,17 @@ install_ros2_humble(){
   say "Updating rosdep database..."
   run "rosdep update"
   ok "rosdep updated"
+  
+  # Add ROS_DISTRO to .bashrc for user convenience
+  if ! grep -q "export ROS_DISTRO=humble" "$HOME/.bashrc"; then
+    say "Adding ROS_DISTRO to .bashrc..."
+    echo "" >> "$HOME/.bashrc"
+    echo "# ROS2 Humble environment (added by sim_and_data_lake_setup.sh)" >> "$HOME/.bashrc"
+    echo "export ROS_DISTRO=humble" >> "$HOME/.bashrc"
+    ok "ROS_DISTRO added to .bashrc"
+  else
+    ok "ROS_DISTRO already in .bashrc"
+  fi
   
   touch "$MARKER_DIR/ros2_installed"
 }
