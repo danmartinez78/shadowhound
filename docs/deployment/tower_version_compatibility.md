@@ -37,11 +37,11 @@ summary: >
 | Component | Version | Status | Notes |
 |-----------|---------|--------|-------|
 | **Isaac Sim** | 4.5.0 | ✅ Working | Installed via pip |
-| **Isaac Lab** | v2.1.0 | 🔄 Testing | Downgraded for go2_omniverse compat |
+| **Isaac Lab** | v2.1.0 (0.36.21) | 🔄 Testing | Downgraded for go2_omniverse compat |
 | **Isaac Lab (Latest)** | 0.47.1 | ❌ Incompatible | Has rsl_rl 2.x breaking changes |
 | **Python** | 3.10 | ✅ Required | From conda env_isaaclab |
 
-**Key Insight**: Isaac Lab 0.47.1 has rsl_rl 2.x which breaks go2_omniverse. Use v2.1.0 instead.
+**Key Insight**: Isaac Lab 0.47.1 has rsl_rl 2.x which breaks go2_omniverse. Use v2.1.0 (code version 0.36.21) instead.
 
 **Installation**:
 ```bash
@@ -234,7 +234,7 @@ nvidia-smi
 ```bash
 conda activate env_isaaclab
 python -c "import isaaclab; print(isaaclab.__version__)"
-# Should show: 2.1.0
+# Should show: 0.36.21 (from v2.1.0 tag)
 ```
 
 ### Verify empy Version

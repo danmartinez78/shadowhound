@@ -85,14 +85,17 @@ say "Verifying installation..."
 NEW_VERSION=$(python -c "import isaaclab; print(isaaclab.__version__)" 2>/dev/null || echo "unknown")
 echo "New version: $NEW_VERSION"
 
-if [[ "$NEW_VERSION" == "2.1.0" ]] || [[ "$NEW_VERSION" =~ ^2\.1\. ]]; then
-    ok "Isaac Lab v2.1.0 installed successfully"
+# v2.1.0 tag corresponds to version 0.36.21 in the code
+if [[ "$NEW_VERSION" == "0.36.21" ]] || [[ "$NEW_VERSION" =~ ^0\.36\. ]]; then
+    ok "Isaac Lab v2.1.0 (0.36.21) installed successfully"
 else
-    warn "Version mismatch - got $NEW_VERSION, expected 2.1.0"
+    warn "Version mismatch - got $NEW_VERSION, expected 0.36.21"
+    warn "This may still work - continuing..."
 fi
 
 # Update version marker
-echo "v2.1.0" > "$MARKER_DIR/isaac_lab_version.txt"
+mkdir -p "$MARKER_DIR"
+echo "v2.1.0 (0.36.21)" > "$MARKER_DIR/isaac_lab_version.txt"
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
