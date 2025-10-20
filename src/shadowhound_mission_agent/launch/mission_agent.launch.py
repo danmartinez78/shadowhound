@@ -2,10 +2,12 @@
 
 import os
 from pathlib import Path
+
+from launch_ros.actions import Node
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
 
 
 def generate_launch_description():
@@ -27,10 +29,14 @@ def generate_launch_description():
         description="Agent backend: 'openai' (cloud) or 'ollama' (self-hosted)",
     )
 
-    mock_robot_arg = DeclareLaunchArgument(
-        "mock_robot",
-        default_value="true",
-        description="Use mock robot connection (true/false)",
+    robot_mode_arg = DeclareLaunchArgument(
+        "robot_mode",
+        default_value="mock",
+        description=(
+            "Robot mode: 'hardware' (real Unitree Go2), "
+            "'simulation' (Isaac Sim with namespace), "
+            "'mock' (pure software mock)"
+        ),
     )
 
     use_planning_arg = DeclareLaunchArgument(
@@ -66,8 +72,10 @@ def generate_launch_description():
     )
 
     # Mission agent node
-    # TODO: Remove topic remapping once namespace support is added (make robot_namespace configurable)
-    # This is a temporary workaround for go2_omniverse sim which uses /robot0/* namespace
+    # Robot mode determines topic remapping and connection type:
+    # - 'hardware': Real robot, no remapping, WebRTC connection
+    # - 'simulation': Isaac Sim, robot0 namespace remapping, CycloneDDS
+    # - 'mock': Pure software mock, no remapping, no external topics
     mission_agent_node = Node(
         package="shadowhound_mission_agent",
         executable="mission_agent",
@@ -76,7 +84,7 @@ def generate_launch_description():
         parameters=[
             {
                 "agent_backend": LaunchConfiguration("agent_backend"),
-                "mock_robot": LaunchConfiguration("mock_robot"),
+                "robot_mode": LaunchConfiguration("robot_mode"),
                 "use_planning_agent": LaunchConfiguration("use_planning_agent"),
                 "openai_model": LaunchConfiguration("openai_model"),
                 "openai_base_url": LaunchConfiguration("openai_base_url"),
@@ -85,7 +93,9 @@ def generate_launch_description():
             }
         ],
         remappings=[
-            # Map standard topics to robot0 namespace (go2_omniverse sim)
+            # Topic remapping for simulation mode (go2_omniverse uses /robot0/* namespace)
+            # For hardware and mock modes, these remappings are harmless (topics don't exist anyway)
+            # TODO: Make this conditional based on robot_mode once LaunchCondition supports it
             ("/cmd_vel", "/robot0/cmd_vel"),
             ("/odom", "/robot0/odom"),
             ("/imu", "/robot0/imu"),
@@ -100,7 +110,7 @@ def generate_launch_description():
         [
             pythonpath_env,
             agent_backend_arg,
-            mock_robot_arg,
+            robot_mode_arg,
             use_planning_arg,
             openai_model_arg,
             openai_base_url_arg,
