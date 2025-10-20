@@ -496,6 +496,12 @@ install_miniconda(){
 }
 
 create_env_and_install_isaacsim(){
+  # Check if Isaac Lab is already installed (indicates Isaac Sim is also installed)
+  if [[ -f "$MARKER_DIR/isaac_lab_cloned" ]]; then
+    ok "Isaac Sim + Isaac Lab already installed - skipping"
+    return 0
+  fi
+  
   say "\n--- Isaac Sim 4.5 (pip) ---"
   say "⏱️  This may take 15-30 minutes (downloading ~30GB)..."
   # shellcheck source=/dev/null
@@ -589,8 +595,8 @@ install_ros2_humble(){
 clone_isaaclab(){
   local ws="$HOME/workspace"; run "mkdir -p \"$ws\""
   
-  # Check if Isaac Lab is actually installed (not just cloned)
-  if [[ -f "$MARKER_DIR/isaac_lab_cloned" ]] && [[ -d "$ws/IsaacLab/_isaac_sim" ]]; then
+  # Check if Isaac Lab is already installed (marker file indicates valid installation)
+  if [[ -f "$MARKER_DIR/isaac_lab_cloned" ]]; then
     ok "Isaac Lab already installed - skipping"
     return 0
   fi
