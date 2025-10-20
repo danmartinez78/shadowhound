@@ -62,24 +62,15 @@ echo "Removing cached pip wheels to force clean install..."
 pip cache purge
 
 echo ""
-echo "Installing Isaac Lab v2.2.1 with PyTorch 2.7.0..."
-# Run Isaac Lab installer with clean environment
+echo "Installing Isaac Lab v2.2.1..."
+echo "Note: This will also upgrade PyTorch to 2.7.0+cu128"
+echo ""
+# Run Isaac Lab installer - it handles all dependencies including PyTorch
 ./isaaclab.sh --install
 
 echo ""
-echo "Upgrading PyTorch to v2.7.0+cu128 (required by v2.2.1)..."
-# Force upgrade torch to match v2.2.1 requirements
-pip install --upgrade torch==2.7.0+cu128 torchvision --index-url https://download.pytorch.org/whl/cu128
-
-echo ""
-echo "Reinstalling Isaac Lab packages with correct PyTorch version..."
-# Reinstall Isaac Lab packages to rebuild against new PyTorch
-pip install -e source/extensions/omni.isaac.lab --no-deps
-pip install -e source/extensions/omni.isaac.lab_tasks --no-deps
-pip install -e source/extensions/omni.isaac.lab_assets --no-deps
-
-echo ""
 echo "Step 6: Verifying installation..."
+cd ~/workspace/IsaacLab
 python -c "import torch; print(f'PyTorch version: {torch.__version__}')"
 python -c "import isaaclab; print(f'Isaac Lab imported successfully')"
 python -c "import rsl_rl; print(f'rsl_rl imported successfully')"
