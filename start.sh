@@ -62,6 +62,13 @@ if [ -f ".env" ]; then
     set +a
 fi
 
+# Load .env.secrets if it exists (API keys, credentials)
+if [ -f ".env.secrets" ]; then
+    set -a  # automatically export all variables
+    source .env.secrets
+    set +a
+fi
+
 # Default options
 MOCK_ROBOT=""
 WEB_INTERFACE=""
