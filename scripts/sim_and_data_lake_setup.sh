@@ -329,6 +329,21 @@ install_driver_if_needed(){
     if [[ "$driver_ok" == "true" ]]; then
       ok "Driver $v is compatible with Isaac Sim 4.5.0"
       
+      # Check if driver should be upgraded (optional, for better RTX support)
+      if [[ "$major" -eq 535 ]] && [[ "$minor" -lt 216 ]]; then
+        warn "Driver $v is compatible but older than recommended."
+        warn "Isaac Sim recommends driver >= 535.129 for full RTX features."
+        warn ""
+        say "Optional: Upgrade to latest driver (550+) for:"
+        say "  - Full RTX raytracing support"
+        say "  - Better rendering performance"
+        say "  - No RTX verification warnings"
+        say ""
+        say "To upgrade after installation completes:"
+        say "  bash ~/shadowhound/scripts/tower_update_nvidia_driver.sh"
+        say ""
+      fi
+      
       # Enable persistence mode for multi-GPU stability
       say "Enabling NVIDIA persistence mode..."
       sudo nvidia-smi -pm 1 >>"$LOG_FILE" 2>&1 || warn "Could not enable persistence mode (non-fatal)"
@@ -2000,6 +2015,12 @@ install(){
   say "2. Launch Go2 simulation:   cd ~/workspace/go2_omniverse && ./run_sim.sh"
   say "3. Control robot:           Use W/A/S/D keys, ESC to exit"
   say "4. ROS2 topics available:   /camera/image_raw, /odom, /cmd_vel, /scan"
+  say ""
+  say "═══ OPTIONAL: UPGRADE NVIDIA DRIVER ═══"
+  say "Current driver may show RTX warnings in Isaac Sim."
+  say "To upgrade to driver 550 for full RTX support:"
+  say "  bash ~/shadowhound/scripts/tower_update_nvidia_driver.sh"
+  say "  sudo reboot"
   say ""
   say "═══ LOCAL ACCESS ═══"
   say "1. Add to ~/.bashrc:        source $PROFILE_FILE"
