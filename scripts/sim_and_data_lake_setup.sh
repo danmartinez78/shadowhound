@@ -496,6 +496,10 @@ install_miniconda(){
 }
 
 create_env_and_install_isaacsim(){
+  # Source conda first (needed even if we skip installation)
+  # shellcheck source=/dev/null
+  source "$CONDA_ROOT/etc/profile.d/conda.sh"
+  
   # Check if Isaac Lab is already installed (indicates Isaac Sim is also installed)
   if [[ -f "$MARKER_DIR/isaac_lab_cloned" ]]; then
     ok "Isaac Sim + Isaac Lab already installed - skipping"
@@ -504,8 +508,6 @@ create_env_and_install_isaacsim(){
   
   say "\n--- Isaac Sim 4.5 (pip) ---"
   say "⏱️  This may take 15-30 minutes (downloading ~30GB)..."
-  # shellcheck source=/dev/null
-  source "$CONDA_ROOT/etc/profile.d/conda.sh"
   
   # Ensure conda ToS is accepted (belt and suspenders approach)
   conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main >>"$LOG_FILE" 2>&1 || true
@@ -716,8 +718,9 @@ build_go2_ros2_workspaces(){
   
   # Also install into conda env for Isaac Sim scripts (not for ROS2 builds)
   say "Installing Isaac Sim dependencies into conda environment..."
+  say "(This may take 1-2 minutes - installing empy, catkin_pkg, lark...)"
   "$env_site/../../bin/pip" uninstall -y empy >> "$LOG_FILE" 2>&1 || true
-  "$env_site/../../bin/pip" install empy==3.3.4 catkin_pkg lark >> "$LOG_FILE" 2>&1
+  "$env_site/../../bin/pip" install empy==3.3.4 catkin_pkg lark 2>&1 | tee -a "$LOG_FILE" | grep -v "^Requirement already satisfied" || true
   ok "Conda environment: Isaac Sim dependencies installed"
   
   # Install ROS2 tf-transformations package (required by go2_omniverse)
@@ -727,7 +730,7 @@ build_go2_ros2_workspaces(){
   
   # Install transforms3d for Isaac Sim (into conda env)
   say "Installing transforms3d into conda environment..."
-  "$env_site/../../bin/pip" install transforms3d >> "$LOG_FILE" 2>&1
+  "$env_site/../../bin/pip" install transforms3d 2>&1 | tee -a "$LOG_FILE" | grep -v "^Requirement already satisfied" || true
   ok "transforms3d installed"
   
   # Initialize rosdep if not already done
