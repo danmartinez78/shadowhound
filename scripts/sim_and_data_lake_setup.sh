@@ -234,11 +234,12 @@ install_dev_tools(){
 }
 
 install_driver_if_needed(){
-  if [[ -f "$MARKER_DIR/nvidia_driver_checked" ]]; then
-    ok "NVIDIA driver already checked - skipping"
-    return 0
-  fi
   say "\n--- NVIDIA Driver for Isaac Sim 4.5.0 ---"
+  
+  # Always verify driver version (upgrade may be available)
+  if [[ -f "$MARKER_DIR/nvidia_driver_checked" ]]; then
+    ok "Driver previously checked - verifying current version..."
+  fi
   
   # Check Secure Boot status
   if command -v mokutil >/dev/null 2>&1; then
