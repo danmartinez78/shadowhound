@@ -1,5 +1,5 @@
 #!/bin/bash
-# Update NVIDIA driver on Tower to version 550 (latest stable)
+# Update NVIDIA driver on Tower to version 580 (tested with Isaac Sim 4.5.0)
 # Run this on Tower: bash ~/shadowhound/scripts/tower_update_nvidia_driver.sh
 
 set -e
@@ -17,7 +17,7 @@ warn() { echo -e "${YELLOW}⚠${NC} $1"; }
 err() { echo -e "${RED}✗${NC} $1"; exit 1; }
 
 echo ""
-say "🔧 NVIDIA Driver Update to 550 (Tower)"
+say "🔧 NVIDIA Driver Update to 580 (Tower)"
 echo ""
 
 # Check we're on Tower (has GPU)
@@ -31,10 +31,12 @@ nvidia-smi | grep "Driver Version" || err "Failed to get driver version"
 
 # Confirm with user
 echo ""
-warn "This will:"
-warn "  1. Update NVIDIA driver from 535.x to 550.x"
-warn "  2. Require a system reboot"
-warn "  3. Take about 5-10 minutes"
+warn "This script will:"
+warn "  1. Update NVIDIA driver to 580.x"
+warn "  2. Reboot the system (required)"
+warn ""
+warn "Isaac Sim 4.5.0 tested with driver 580.95.05"
+warn "Driver 580.x provides best performance and RTX support."
 echo ""
 read -p "Continue? (y/N): " -n 1 -r
 echo
@@ -52,17 +54,17 @@ ok "Package lists updated"
 say "Available NVIDIA drivers:"
 apt-cache search nvidia-driver | grep "^nvidia-driver-[0-9]" | sort -V | tail -5
 
-# Install driver 550
-say "Installing nvidia-driver-550..."
-sudo apt install -y nvidia-driver-550
-ok "Driver 550 installed"
+# Install driver 580
+say "Installing nvidia-driver-580..."
+sudo apt install -y nvidia-driver-580
+ok "Driver 580 installed"
 
 # Verify installation
 say "Verifying installation..."
-if dpkg -l | grep -q "nvidia-driver-550"; then
-    ok "nvidia-driver-550 package installed"
+if dpkg -l | grep -q "nvidia-driver-580"; then
+    ok "nvidia-driver-580 package installed"
 else
-    err "nvidia-driver-550 package not found"
+    err "nvidia-driver-580 package not found"
 fi
 
 echo ""
@@ -77,5 +79,5 @@ echo "  sudo reboot"
 echo ""
 echo "After reboot, verify driver:"
 echo "  nvidia-smi | grep 'Driver Version'"
-echo "  # Should show: Driver Version: 550.xx"
+echo "  # Should show: Driver Version: 580.xx"
 echo ""

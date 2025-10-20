@@ -268,15 +268,15 @@ install_driver_if_needed(){
   local kernel_patch; kernel_patch="$(echo "$kernel_ver" | cut -d. -f3 | cut -d- -f1)"
   
   # Determine target driver version based on kernel
-  # Ubuntu 22.04.5+ with kernel 6.8.0-48+ requires driver 535.216.01+
-  # Using 535-server for long-term stability (5+ year support vs 1 year for regular)
-  local target_driver="535"
-  local target_driver_full="535-server"
+  # Ubuntu 22.04.5+ with kernel 6.8.0-85+ works well with driver 580.x
+  # Using 580 for best Isaac Sim 4.5.0 performance and RTX support
+  local target_driver="580"
+  local target_driver_full="580"
   
   if [[ "$kernel_major" -eq 6 ]] && [[ "$kernel_minor" -eq 8 ]]; then
-    say "Kernel 6.8.x detected - using driver 535-server (>= 535.216.01)"
+    say "Kernel 6.8.x detected - using driver 580 (tested with 580.95.05)"
   else
-    say "Using driver 535-server for Isaac Sim 4.5.0 (long-term support branch)"
+    say "Using driver 580 for Isaac Sim 4.5.0 (best performance and RTX support)"
   fi
   
   # Check if nvidia-smi exists and can communicate with driver
@@ -298,7 +298,7 @@ install_driver_if_needed(){
       touch "$MARKER_DIR/nvidia_driver_checked"
       warn "Driver $target_driver_full installed. REBOOT REQUIRED before continuing."
       warn "After reboot, verify with: nvidia-smi"
-      warn "Expected driver version: 535.129.03 or higher"
+      warn "Expected driver version: 580.95.05 or higher"
       warn "Then re-run: bash $SCRIPT_NAME install"
       exit 0
     fi
@@ -309,34 +309,35 @@ install_driver_if_needed(){
     local major; major="$(echo "$v" | cut -d. -f1)"
     local minor; minor="$(echo "$v" | cut -d. -f2)"
     
-    # Isaac Sim 4.5.0 requires driver >= 535.129.03
+    # Isaac Sim 4.5.0 works with driver >= 535.129.03, but 580.x is recommended
     # Check if driver is sufficient
     local driver_ok=false
     
-    if [[ "$major" -eq 535 ]] && [[ "$minor" -ge 129 ]]; then
-      # 535.129+ is perfect
+    if [[ "$major" -eq 580 ]]; then
+      # 580.x is ideal (tested with 580.95.05)
       driver_ok=true
-    elif [[ "$major" -eq 545 ]]; then
-      # 545.x also works
+    elif [[ "$major" -eq 535 ]] && [[ "$minor" -ge 129 ]]; then
+      # 535.129+ works but may show RTX warnings
       driver_ok=true
-    elif [[ "$major" -gt 545 ]]; then
-      # Newer than 545 might work but not officially tested
-      warn "Driver $v is newer than tested range (535.129-545.x)"
-      warn "This may work but is not officially supported by Isaac Sim 4.5.0"
+    elif [[ "$major" -eq 545 ]] || [[ "$major" -eq 550 ]]; then
+      # 545.x and 550.x also work
+      driver_ok=true
+    elif [[ "$major" -gt 580 ]]; then
+      # Newer than 580 should work
       driver_ok=true
     fi
     
     if [[ "$driver_ok" == "true" ]]; then
       ok "Driver $v is compatible with Isaac Sim 4.5.0"
       
-      # Check if driver should be upgraded (optional, for better RTX support)
-      if [[ "$major" -eq 535 ]] && [[ "$minor" -lt 216 ]]; then
-        warn "Driver $v is compatible but older than recommended."
-        warn "Isaac Sim recommends driver >= 535.129 for full RTX features."
+      # Check if driver should be upgraded to 580 for best performance
+      if [[ "$major" -lt 580 ]]; then
+        warn "Driver $v is compatible but not optimal."
+        warn "Isaac Sim 4.5.0 works best with driver 580.x (tested with 580.95.05)"
         warn ""
-        say "Optional: Upgrade to latest driver (550+) for:"
-        say "  - Full RTX raytracing support"
-        say "  - Better rendering performance"
+        say "Optional: Upgrade to driver 580 for:"
+        say "  - Best RTX raytracing performance"
+        say "  - Optimal rendering quality"
         say "  - No RTX verification warnings"
         say ""
         say "To upgrade after installation completes:"
@@ -350,9 +351,9 @@ install_driver_if_needed(){
       
       touch "$MARKER_DIR/nvidia_driver_checked"
     else
-      warn "Driver $v detected. Isaac Sim 4.5.0 REQUIRES driver >= 535.129.03"
-      warn "Your driver ($v) is too old and will cause RTX verification failures."
-      say "Installing correct driver version ($target_driver_full)..."
+      warn "Driver $v detected. Isaac Sim 4.5.0 works best with driver 580.x"
+      warn "Your driver ($v) may cause performance or compatibility issues."
+      say "Installing recommended driver version ($target_driver_full)..."
       
       # Purge existing NVIDIA drivers completely
       say "Removing existing NVIDIA drivers..."
@@ -360,14 +361,14 @@ install_driver_if_needed(){
       run "sudo apt-get autoremove -y"
       run "sudo apt-get autoclean"
       
-      # Install driver 535-server (should provide 535.129.03 or higher)
+      # Install driver 580 (should provide 580.95.05 or higher)
       run "sudo apt-get update"
       run "sudo apt-get install -y nvidia-driver-$target_driver_full"
       
       touch "$MARKER_DIR/nvidia_driver_checked"
       warn "Driver $target_driver_full installed. REBOOT REQUIRED before continuing."
       warn "After reboot, verify driver version with: nvidia-smi"
-      warn "Expected driver version: 535.129.03 or higher"
+      warn "Expected driver version: 580.95.05 or higher"
       warn "Then re-run: bash $SCRIPT_NAME install"
       exit 0
     fi
@@ -378,7 +379,7 @@ install_driver_if_needed(){
     touch "$MARKER_DIR/nvidia_driver_checked"
     warn "Driver $target_driver_full installed. REBOOT REQUIRED before continuing."
     warn "After reboot, verify with: nvidia-smi"
-    warn "Expected driver version: 535.129.03 or higher"
+    warn "Expected driver version: 580.95.05 or higher"
     warn "Then re-run: bash $SCRIPT_NAME install"
     exit 0
   fi
