@@ -134,17 +134,30 @@ cd ~/workspace/go2_omniverse
 
 ### Custom Launch Options
 
+**Recommended Method**: Edit `run_sim.sh` and run it:
+
+```bash
+cd ~/workspace/go2_omniverse
+nano run_sim.sh  # Uncomment --custom_env line and modify options
+./run_sim.sh
+```
+
+**Direct Python Launch** (requires `LD_PRELOAD` for ROS2 compatibility):
+
 ```bash
 # Activate environment
 source ~/.robot-simrc
 conda activate env_isaaclab
 cd ~/workspace/go2_omniverse
 
+# CRITICAL: Set LD_PRELOAD to avoid libstdc++ conflicts with ROS2
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
+
 # Multiple robots
 python main.py --robot_amount 4 --robot go2 --device cuda --enable_cameras
 
 # Different environment (office)
-python main.py --robot go2 --device cuda --custom_env office
+python main.py --robot go2 --device cuda --custom_env office --enable_cameras
 
 # Headless mode (no GUI, faster)
 python main.py --robot go2 --device cuda --headless
@@ -158,8 +171,14 @@ python main.py --robot g1 --device cuda --enable_cameras
 - `--robot go2|g1` - Robot type (Go2 quadruped or G1 humanoid)
 - `--device cuda|cpu` - Compute device
 - `--enable_cameras` - Enable camera sensors
-- `--custom_env office|warehouse` - Custom environment
+- `--custom_env office|warehouse` - Custom environment (place USD files in `envs/` directory)
 - `--headless` - Run without GUI (faster)
+
+**⚠️ Important**: When launching via `python main.py` directly (not using `run_sim.sh`), you **must** set `LD_PRELOAD` first:
+```bash
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
+```
+This forces the system's `libstdc++.so.6` to load before conda's older version, preventing ROS2 import errors (`GLIBCXX_3.4.30 not found`).
 
 ---
 
@@ -259,6 +278,23 @@ python main.py --robot go2 --custom_env office --enable_cameras
 ---
 
 ## Troubleshooting
+
+### Error: "GLIBCXX_3.4.30 not found" or ROS2 Import Failures
+
+**Error**:
+```
+ImportError: /home/daniel/miniconda3/envs/env_isaaclab/bin/../lib/libstdc++.so.6: version `GLIBCXX_3.4.30' not found (required by /opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/_rclpy_pybind11.cpython-310-x86_64-linux-gnu.so)
+```
+
+**Root Cause**: Conda's `libstdc++.so.6` is older than what ROS2 compiled extensions require.
+
+**Solution**: Use `run_sim.sh` which handles this automatically, OR set `LD_PRELOAD` when using `python main.py`:
+```bash
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
+python main.py --robot go2 --device cuda --enable_cameras
+```
+
+This forces the system's newer `libstdc++` to load before conda's version.
 
 ### Error: "ModuleNotFoundError: No module named 'em'"
 
