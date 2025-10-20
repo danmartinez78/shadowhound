@@ -18,25 +18,12 @@ echo ""
 say "🔧 Installing Unitree L1 LiDAR config for Isaac Sim"
 echo ""
 
-# Check if go2_omniverse LiDAR config exists (correct location)
-LIDAR_CONFIG="$HOME/workspace/go2_omniverse/Isaac_sim/Unitree/Unitree_L1"
+# Check if go2_omniverse LiDAR config exists
+LIDAR_CONFIG="$HOME/workspace/go2_omniverse/Isaac_sim/Unitree/Unitree_L1.json"
 
 if [[ ! -f "$LIDAR_CONFIG" ]]; then
-    warn "Unitree L1 config not found in go2_omniverse"
-    warn "Expected: $LIDAR_CONFIG"
-    warn "Trying alternate locations..."
-    
-    # Try alternate locations
-    if [[ -f "$HOME/workspace/go2_omniverse/Isaac_sim/Unitree/L1.json" ]]; then
-        LIDAR_CONFIG="$HOME/workspace/go2_omniverse/Isaac_sim/Unitree/L1.json"
-        ok "Found config at: $LIDAR_CONFIG"
-    elif [[ -f "$HOME/workspace/go2_omniverse/repifis/l1.json" ]]; then
-        LIDAR_CONFIG="$HOME/workspace/go2_omniverse/repifis/l1.json"
-        ok "Found config at: $LIDAR_CONFIG"
-    else
-        warn "Could not find Unitree_L1 config in any known location"
-        exit 1
-    fi
+    warn "Unitree L1 config not found: $LIDAR_CONFIG"
+    exit 1
 fi
 
 say "Using LiDAR config: $LIDAR_CONFIG"
