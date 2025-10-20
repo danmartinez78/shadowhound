@@ -96,12 +96,25 @@ def generate_launch_description():
             # Topic remapping for simulation mode (go2_omniverse uses /robot0/* namespace)
             # For hardware and mock modes, these remappings are harmless (topics don't exist anyway)
             # TODO: Make this conditional based on robot_mode once LaunchCondition supports it
+            # Command topics
             ("/cmd_vel", "/robot0/cmd_vel"),
+            ("/cmd_vel_out", "/robot0/cmd_vel"),  # Alternative command topic
+            # Sensor topics
             ("/odom", "/robot0/odom"),
             ("/imu", "/robot0/imu"),
             ("/joint_states", "/robot0/joint_states"),
+            # Camera topics
+            # Mission agent subscribes to /camera/image_raw (sensor_msgs/Image)
+            # Sim publishes /robot0/front_cam/rgb (sensor_msgs/Image)
             ("/camera/image_raw", "/robot0/front_cam/rgb"),
+            # Robot state topics (DIMOS subscriptions)
+            ("/go2_states", "/robot0/go2_states"),
+            # LiDAR/Scan topics
             ("/scan", "/robot0/point_cloud2_L1"),  # Point cloud, not laser scan
+            # Navigation topics (costmaps)
+            ("/local_costmap/costmap", "/robot0/local_costmap/costmap"),
+            ("/global_costmap/costmap", "/robot0/global_costmap/costmap"),
+            ("/map", "/robot0/map"),
         ],
         emulate_tty=True,
     )
