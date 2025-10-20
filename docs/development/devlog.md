@@ -20,6 +20,55 @@ summary: >
 
 ## 2025-10-20 (Sunday)
 
+### Late Evening: Tower Fresh Install + Complete Stack Validation (21:00-23:30)
+**Type**: Infrastructure
+**Status**: ✅ Complete
+
+Fresh Tower installation after deleting `.go2_stack_state` markers. Successfully deployed complete simulation + data lake stack.
+
+**Key Results**:
+- ✅ **Simulation working**: Go2 in Isaac Sim with LiDAR + camera streaming
+- ✅ **Keyboard control**: Teleoperation functional
+- ✅ **ROS2 topics**: All topics visible and streaming
+- ✅ **RViz2 visualization**: LiDAR point cloud + camera feed working
+- ✅ **MinIO**: Object storage running on dual drives
+- ✅ **MLflow**: Experiment tracking operational
+- ✅ **Data persistence**: 5.4TB total storage (1.8TB + 3.6TB platters)
+
+**Configuration**:
+- **Platter drives mounted**:
+  - sda1 (1.8TB): UUID=a28b5c28-f459-41a6-9d25-b0a50c7c9d8a → `/mnt/data1`
+  - sdb1 (3.6TB): UUID=c7951339-6757-43ec-ac78-0a0fd6ed9d5f → `/mnt/data2`
+  - Added to `/etc/fstab` for auto-mount on boot
+- **Base data dir**: `/mnt/data1`
+- **MinIO drives**: Both `/mnt/data1` and `/mnt/data2` for distributed storage
+
+**Issues Resolved**:
+1. **LiDAR Config Workaround** (known limitation):
+   - Script tries to copy LiDAR configs during workspace build
+   - Destination directory created only after Isaac Sim first run
+   - **Workaround**: Manually copy files after Isaac Sim runs once:
+     ```bash
+     cp ~/workspace/go2_omniverse/Isaac_sim/Unitree/Unitree_L1*.json \
+        ~/miniconda3/envs/env_isaaclab/lib/python3.10/site-packages/omni/data/Kit/Isaac-Sim/4.5/exts/3/isaacsim.sensors.rtx*/data/lidar_configs/
+     ```
+   - Root cause: pip install creates base structure, runtime directories populated on first launch
+
+2. **MinIO Volume Mapping** (configuration issue):
+   - Docker compose had volumes swapped (`/mnt/data2:/data1`, `/mnt/data1:/data2`)
+   - Caused by drive selection order during installation
+   - Fixed by correcting volume mappings in `docker-compose.yml`
+   - MinIO and MLflow now operational
+
+**Next Phase**:
+- Explore laptop stack running against Go2 robot in simulation
+- Design simulation orchestration (startup automation)
+- Work to be done in new feature branch
+
+**Commits**: TBD (pending)
+
+---
+
 ### Evening: Repository Cleanup After Isaac Sim Success (19:00-20:00)
 **Type**: Cleanup + Refactoring
 **Status**: ✅ Complete
