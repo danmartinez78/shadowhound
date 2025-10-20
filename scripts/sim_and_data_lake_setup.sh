@@ -524,13 +524,26 @@ create_env_and_install_isaacsim(){
 }
 
 install_ros2_humble(){
+  say "\n--- ROS 2 Humble ---"
+  
+  # Always update apt cache (package versions change frequently)
+  run "sudo apt-get update"
+  
   # Check if actually installed (marker file alone not sufficient)
   if [[ -f "/opt/ros/${ROS_DISTRO}/setup.bash" ]] && [[ -f "$MARKER_DIR/ros2_installed" ]]; then
-    ok "ROS 2 Humble already installed - skipping"
+    ok "ROS 2 Humble already installed - refreshing package metadata"
+    
+    # Even if installed, update rosdep to get latest package versions
+    if [[ -f /etc/ros/rosdep/sources.list.d/20-default.list ]]; then
+      say "Updating rosdep database..."
+      run "rosdep update"
+      ok "rosdep updated"
+    fi
+    
     return 0
   fi
-  say "\n--- ROS 2 Humble ---"
-  run "sudo apt-get update"
+  
+  say "Installing ROS 2 Humble..."
   run "sudo apt-get install -y curl gnupg lsb-release"
   run "sudo mkdir -p /etc/apt/keyrings"
   run "curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo gpg --dearmor -o /etc/apt/keyrings/ros-archive-keyring.gpg"
