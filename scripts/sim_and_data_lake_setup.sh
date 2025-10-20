@@ -514,9 +514,27 @@ clone_isaaclab(){
     return 0
   fi
   
-  say "\n--- Isaac Lab (source) ---"
-  if [[ -d "$ws/IsaacLab/.git" ]]; then run "git -C \"$ws/IsaacLab\" pull --ff-only"
-  else run "git clone https://github.com/isaac-sim/IsaacLab.git \"$ws/IsaacLab\""; fi
+  say "\n--- Isaac Lab v2.1.0 (source) ---"
+  say "Note: Pinning to v2.1.0 (April 24, 2025) for Isaac Sim 4.5.0 compatibility"
+  
+  if [[ -d "$ws/IsaacLab/.git" ]]; then
+    # Existing repo - fetch updates and checkout v2.1.0
+    run "git -C \"$ws/IsaacLab\" fetch --all --tags"
+    run "git -C \"$ws/IsaacLab\" checkout v2.1.0"
+  else
+    # Fresh clone
+    run "git clone https://github.com/isaac-sim/IsaacLab.git \"$ws/IsaacLab\""
+    run "git -C \"$ws/IsaacLab\" checkout v2.1.0"
+  fi
+  
+  # Verify version
+  local current_version; current_version=$(git -C "$ws/IsaacLab" describe --tags --exact-match 2>/dev/null || echo "unknown")
+  if [[ "$current_version" == "v2.1.0" ]]; then
+    ok "Isaac Lab v2.1.0 checked out successfully"
+  else
+    warn "Isaac Lab version is $current_version (expected v2.1.0)"
+    warn "Continuing anyway, but simulation may have compatibility issues"
+  fi
   
   # Install Isaac Lab extensions
   say "Installing Isaac Lab extensions (this may take 5-10 minutes)..."
