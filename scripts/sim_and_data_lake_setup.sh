@@ -649,19 +649,9 @@ clone_go2_omniverse_and_patch(){
   say "Initializing go2_omniverse submodules..."
   run "git -C \"$ws/go2_omniverse\" submodule update --init --recursive"
   ok "Submodules initialized"
-  # Copy Unitree LiDAR config into Isaac Sim sensor configs if present
-  local env_site; env_site="$(cat "$MARKER_DIR/env_site.txt" 2>/dev/null || true)"
-  if [[ -n "$env_site" && -f "$ws/go2_omniverse/repifis/l1.json" ]]; then
-    local target_path="$env_site/isaacsim/_isaac_sim/kit/shared/rtx_sensor/sensor_config/config_files/RTXS_Lidar.json"
-    if [[ -d "$(dirname "$target_path")" ]]; then
-      run "cp -f \"$ws/go2_omniverse/repifis/l1.json\" \"$target_path\""
-      ok "LiDAR config patched: $target_path"
-    else
-      warn "LiDAR config target path not found (Isaac Sim structure may have changed): $(dirname "$target_path")"
-    fi
-  else
-    warn "LiDAR config source not found or env_site unavailable. Sensor config NOT patched."
-  fi
+  
+  # LiDAR configs are copied later in build_go2_ros2_workspaces() after env_site is properly detected
+  
   touch "$MARKER_DIR/go2_omniverse_cloned"
 }
 
@@ -854,18 +844,22 @@ build_go2_ros2_workspaces(){
   say "Installing Unitree L1 LiDAR configuration..."
   local conda_env="${HOME}/miniconda3/envs/env_isaaclab"
   local isaac_sim_lidar_dir="$conda_env/lib/python3.10/site-packages/omni/data/Kit/Isaac-Sim/4.5/exts/3/isaacsim.sensors.rtx-13.6.4+106.5.0.lx64.r.cp310/data/lidar_configs"
-  local lidar_source_dir="$ws/Isaac_sim/Unitree"
+  local lidar_source_dir="$HOME/workspace/go2_omniverse/Isaac_sim/Unitree"
   
   if [[ -d "$lidar_source_dir" ]] && [[ -d "$isaac_sim_lidar_dir" ]]; then
     # Copy both L1 and L1_old config files
     if [[ -f "$lidar_source_dir/Unitree_L1.json" ]]; then
       run "cp -f \"$lidar_source_dir/Unitree_L1.json\" \"$isaac_sim_lidar_dir/\""
-      ok "Unitree L1 LiDAR config installed"
+      ok "Unitree_L1.json installed to Isaac Sim 4.5"
+    else
+      warn "Unitree_L1.json not found at $lidar_source_dir"
     fi
     
     if [[ -f "$lidar_source_dir/Unitree_L1_old.json" ]]; then
       run "cp -f \"$lidar_source_dir/Unitree_L1_old.json\" \"$isaac_sim_lidar_dir/\""
-      ok "Unitree L1_old LiDAR config installed"
+      ok "Unitree_L1_old.json installed to Isaac Sim 4.5"
+    else
+      warn "Unitree_L1_old.json not found at $lidar_source_dir"
     fi
   else
     warn "LiDAR config source or Isaac Sim directory not found"
