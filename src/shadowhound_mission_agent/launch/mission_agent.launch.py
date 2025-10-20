@@ -96,25 +96,44 @@ def generate_launch_description():
             # Topic remapping for simulation mode (go2_omniverse uses /robot0/* namespace)
             # For hardware and mock modes, these remappings are harmless (topics don't exist anyway)
             # TODO: Make this conditional based on robot_mode once LaunchCondition supports it
-            # Command topics
+            
+            # Command topics (absolute and relative)
             ("/cmd_vel", "/robot0/cmd_vel"),
-            ("/cmd_vel_out", "/robot0/cmd_vel"),  # Alternative command topic
-            # Sensor topics
+            ("cmd_vel", "robot0/cmd_vel"),  # Relative (DIMOS uses relative names)
+            ("/cmd_vel_out", "/robot0/cmd_vel"),
+            ("cmd_vel_out", "robot0/cmd_vel"),
+            
+            # Sensor topics (absolute and relative)
             ("/odom", "/robot0/odom"),
+            ("odom", "robot0/odom"),
             ("/imu", "/robot0/imu"),
+            ("imu", "robot0/imu"),
             ("/joint_states", "/robot0/joint_states"),
-            # Camera topics
+            ("joint_states", "robot0/joint_states"),
+            
+            # Camera topics (absolute and relative)
             # Mission agent subscribes to /camera/image_raw (sensor_msgs/Image)
+            # DIMOS subscribes to camera/compressed (relative name!)
             # Sim publishes /robot0/front_cam/rgb (sensor_msgs/Image)
             ("/camera/image_raw", "/robot0/front_cam/rgb"),
-            # Robot state topics (DIMOS subscriptions)
+            ("camera/image_raw", "robot0/front_cam/rgb"),
+            ("camera/compressed", "robot0/front_cam/rgb"),  # DIMOS uses this but topic doesn't exist
+            
+            # Robot state topics (DIMOS subscriptions - relative names!)
             ("/go2_states", "/robot0/go2_states"),
-            # LiDAR/Scan topics
-            ("/scan", "/robot0/point_cloud2_L1"),  # Point cloud, not laser scan
-            # Navigation topics (costmaps)
+            ("go2_states", "robot0/go2_states"),
+            
+            # LiDAR/Scan topics (absolute and relative)
+            ("/scan", "/robot0/point_cloud2_L1"),
+            ("scan", "robot0/point_cloud2_L1"),
+            
+            # Navigation topics (absolute and relative)
             ("/local_costmap/costmap", "/robot0/local_costmap/costmap"),
+            ("local_costmap/costmap", "robot0/local_costmap/costmap"),
             ("/global_costmap/costmap", "/robot0/global_costmap/costmap"),
+            ("global_costmap/costmap", "robot0/global_costmap/costmap"),
             ("/map", "/robot0/map"),
+            ("map", "robot0/map"),
         ],
         emulate_tty=True,
     )
