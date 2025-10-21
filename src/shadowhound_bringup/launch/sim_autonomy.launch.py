@@ -121,27 +121,18 @@ def create_launch_arguments() -> List[DeclareLaunchArgument]:
     ]
 
 
-def create_robot_state_publisher(config: SimAutonomyConfig) -> Node:
-    """Create robot state publisher for TF transforms"""
-    use_sim_time = LaunchConfiguration("use_sim_time")
+def create_robot_state_publisher(config: SimAutonomyConfig) -> None:
+    """
+    Robot state publisher NOT NEEDED for simulation.
     
-    # Load URDF content
-    with open(config.config_paths["urdf"], "r") as file:
-        robot_desc = file.read()
+    Isaac Sim on Tower already publishes TF frames (robot0/base_link, robot0/UnitreeL1_link, etc.)
+    Launching robot_state_publisher here would create conflicting TF publishers.
     
-    return Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        name="go2_robot_state_publisher",
-        namespace=config.robot_namespace,
-        output="screen",
-        parameters=[
-            {
-                "use_sim_time": use_sim_time,
-                "robot_description": robot_desc,
-            }
-        ],
-    )
+    Tower's TF frames will propagate over the network to laptop.
+    
+    Returns None to skip this component.
+    """
+    return None
 
 
 def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
@@ -285,7 +276,6 @@ def generate_launch_description():
     print("     - ROS_LOCALHOST_ONLY=0")
     print("     - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp")
     print("\nLaunching:")
-    print("  ✅ Robot state publisher (TF transforms)")
     print("  ✅ Pointcloud to laserscan converter")
     print("  ✅ Nav2 (if enabled)")
     print("  ✅ SLAM Toolbox (if enabled)")
@@ -293,12 +283,13 @@ def generate_launch_description():
     print("  ✅ RViz2 (if enabled)")
     print("\nNOT Launching:")
     print("  ❌ go2_driver_node (Isaac Sim replaces this!)")
+    print("  ❌ robot_state_publisher (Tower provides TF frames)")
     print("="*60 + "\n")
     
-    # Combine all elements
+    # Combine all elements (filter out None values)
     launch_entities = (
         launch_args +
-        [robot_state_pub] +
+        ([robot_state_pub] if robot_state_pub is not None else []) +
         [pointcloud_converter] +
         nav_stack +
         viz_nodes
