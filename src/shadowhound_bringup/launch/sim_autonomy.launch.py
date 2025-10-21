@@ -90,11 +90,23 @@ class SimAutonomyConfig:
         else:
             nav2_config = os.path.join(self.go2_sdk_dir, "config", "nav2_params.yaml")
 
+        # Prefer simulation-specific slam config if available (has robot0/ frames)
+        # Falls back to default config if not found
+        slam_sim_config = os.path.join(
+            shadowhound_config_dir, "mapper_params_simulation.yaml"
+        )
+        slam_default_config = os.path.join(
+            self.go2_sdk_dir, "config", "mapper_params_online_async.yaml"
+        )
+
+        if os.path.exists(slam_sim_config):
+            slam_config = slam_sim_config
+        else:
+            slam_config = slam_default_config
+
         return {
             "nav2": nav2_config,
-            "slam": os.path.join(
-                self.go2_sdk_dir, "config", "mapper_params_online_async.yaml"
-            ),
+            "slam": slam_config,
             "rviz": os.path.join(self.go2_sdk_dir, "config", "single_robot_conf.rviz"),
             "urdf": os.path.join(self.go2_sdk_dir, "urdf", "go2.urdf"),
         }

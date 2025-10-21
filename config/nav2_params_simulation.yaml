@@ -255,7 +255,7 @@ global_costmap:
         publish_voxel_map: True
         observation_sources: scan
         scan:
-          topic: robot0/scan
+          topic: /robot0/scan
           max_obstacle_height: 2.0
           clearing: True
           marking: True
