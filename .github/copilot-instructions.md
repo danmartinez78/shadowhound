@@ -123,28 +123,53 @@ Large feature branches, testing multiple approaches, extensive investigation:
 
 ## 🎯 **WORK COMPLETION CHECKLIST** (MANDATORY)
 
-**After completing ANY work (simple or experimental), you MUST:**
+**CRITICAL RULE**: Devlog entries are **ONLY** added when merging to `dev` or `main` branches.
 
-### For Simple Work (bug fixes, small features, docs)
+**Why?**: Prevents merge conflicts when multiple feature branches are developed in parallel.
+
+---
+
+### For Work on `dev` or `main` Branches (simple fixes, docs)
 - [ ] Code is committed with clear message
-- [ ] Added lightweight entry to `docs/development/devlog.md`
+- [ ] **Immediately add** lightweight entry to `docs/development/devlog.md`
 - [ ] Entry includes: date, time, type, status, key results, commit hashes
 - [ ] Build verified: `colcon build` succeeds without errors
 - [ ] Tests pass: `pytest` or `colcon test` (if applicable)
 - [ ] **Commit devlog update**: `git add docs/development/devlog.md && git commit -m "docs(devlog): [title]"`
 
-### For Experimental Work (feature branches, large changes)
-- [ ] Created experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
+### For Work on Feature Branches (experimental, large changes)
+
+#### During Feature Branch Development
+- [ ] Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
 - [ ] Document includes: Context, Hypothesis, Experiments tried, Final Results
 - [ ] Build verified: `colcon build` succeeds
 - [ ] Code committed to feature branch with clear messages
-- [ ] **When merging to dev/main**:
-  - [ ] Add lightweight devlog entry with link to experiment doc
-  - [ ] Commit: `docs(devlog): [title] - Experiment: [doc]`
+- [ ] **DO NOT** update `devlog.md` yet (prevents merge conflicts)
+
+#### When Merging Feature Branch to `dev` or `main`
+- [ ] Add lightweight devlog entry with link to experiment doc
+- [ ] Entry format:
+  ```markdown
+  ### [Time]: [Title]
+  **Type**: [Feature/Fix/Experiment]
+  **Status**: ✅ Complete
+  **Branch**: `feature/branch-name`
+  **Experiment Doc**: [experiments/doc_name.md](experiments/doc_name.md)
+  
+  [Brief summary]
+  
+  **Key Results**:
+  - [Result 1]
+  - [Result 2]
+  
+  **Commits**: `abc123`, `def456`
+  ```
+- [ ] Commit devlog: `git add docs/development/devlog.md && git commit -m "docs(devlog): [title]"`
+- [ ] Merge to `dev` or `main`
 
 ### Verification
 - [ ] Git log shows commits present
-- [ ] Devlog entry shows up in `docs/development/devlog.md`
+- [ ] Devlog entry shows up in `docs/development/devlog.md` (on dev/main only)
 - [ ] Linked files exist (experiment docs, referenced issues)
 
 ---

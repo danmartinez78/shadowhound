@@ -45,19 +45,43 @@ Recommendation: Add to Future Work instead?
 
 **After completing work** (REQUIRED):
 
-### For Simple/Straightforward Work (use devlog)
+**CRITICAL RULE**: Devlog entries are **ONLY** added when merging to `dev` or `main` branches.
+
+**Why?**: Prevents merge conflicts when multiple feature branches are developed in parallel.
+
+---
+
+### For Work on `dev` or `main` Branches
 Simple features, bug fixes, documentation updates, refactoring:
 
-1. Add **lightweight entry** to `docs/development/devlog.md`
-2. Include: date, time, type, status, key results, commits
-3. Link to experiment doc if building on experimental work
-4. Commit: `docs(devlog): [activity title]`
+1. Complete the work and commit to `dev` or `main`
+2. **Immediately add** lightweight entry to `docs/development/devlog.md`
+3. Include: date, time, type, status, key results, commits
+4. Link to experiment doc if building on experimental work
+5. Commit: `docs(devlog): [activity title]`
+
+### For Work on Feature Branches
+Large feature branches, testing multiple approaches, extensive investigation:
+
+#### During Feature Branch Development
+1. Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
+2. Use template: `docs/development/experiments/template_experiment.md`
+3. Document: Context, Hypothesis, all Experiments tried, Final Results
+4. Commit experiment doc: `docs(experiments): [experiment title]`
+5. **DO NOT** update `devlog.md` yet (prevents merge conflicts)
+
+#### When Merging Feature Branch to `dev` or `main`
+1. Add lightweight devlog entry with link to experiment doc
+2. Entry includes: date, time, type, status, key results, commits
+3. Commit devlog: `git add docs/development/devlog.md && git commit -m "docs(devlog): [title]"`
+4. Merge to `dev` or `main`
 
 **Devlog Entry Format** (SIMPLIFIED):
 ```markdown
 ### Evening: Local LLM Integration Complete
 **Type**: Feature
 **Status**: ✅ Complete
+**Branch**: `feature/local-llm`
 **Experiment Doc**: [experiments/local_llm_exploration_oct10_2025.md](experiments/local_llm_exploration_oct10_2025.md)
 
 Tested 4 LLM models, selected Mistral 7B for 24x speed improvement.
@@ -70,7 +94,9 @@ Tested 4 LLM models, selected Mistral 7B for 24x speed improvement.
 **Commits**: `3ac1e01`, `45618b2`
 ```
 
-### For Experimental/Research Work (use experiment docs)
+---
+
+### For Work on Feature Branches
 Large feature branches, testing multiple approaches, extensive investigation:
 
 1. Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
@@ -94,6 +120,79 @@ Large feature branches, testing multiple approaches, extensive investigation:
 - `local_llm_exploration_oct10_2025.md` - LLM model selection
 - `dimos_integration_oct05_2025.md` - Feature branch work
 
+---
+
+## 🎯 **WORK COMPLETION CHECKLIST** (MANDATORY)
+
+**CRITICAL RULE**: Devlog entries are **ONLY** added when merging to `dev` or `main` branches.
+
+**Why?**: Prevents merge conflicts when multiple feature branches are developed in parallel.
+
+---
+
+### For Work on `dev` or `main` Branches (simple fixes, docs)
+- [ ] Code is committed with clear message
+- [ ] **Immediately add** lightweight entry to `docs/development/devlog.md`
+- [ ] Entry includes: date, time, type, status, key results, commit hashes
+- [ ] Build verified: `colcon build` succeeds without errors
+- [ ] Tests pass: `pytest` or `colcon test` (if applicable)
+- [ ] **Commit devlog update**: `git add docs/development/devlog.md && git commit -m "docs(devlog): [title]"`
+
+### For Work on Feature Branches (experimental, large changes)
+
+#### During Feature Branch Development
+- [ ] Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
+- [ ] Document includes: Context, Hypothesis, Experiments tried, Final Results
+- [ ] Build verified: `colcon build` succeeds
+- [ ] Code committed to feature branch with clear messages
+- [ ] **DO NOT** update `devlog.md` yet (prevents merge conflicts)
+
+#### When Merging Feature Branch to `dev` or `main`
+- [ ] Add lightweight devlog entry with link to experiment doc
+- [ ] Entry format:
+  ```markdown
+  ### [Time]: [Title]
+  **Type**: [Feature/Fix/Experiment]
+  **Status**: ✅ Complete
+  **Branch**: `feature/branch-name`
+  **Experiment Doc**: [experiments/doc_name.md](experiments/doc_name.md)
+  
+  [Brief summary]
+  
+  **Key Results**:
+  - [Result 1]
+  - [Result 2]
+  
+  **Commits**: `abc123`, `def456`
+  ```
+- [ ] Commit devlog: `git add docs/development/devlog.md && git commit -m "docs(devlog): [title]"`
+- [ ] Merge to `dev` or `main`
+
+### Verification
+- [ ] Git log shows commits present
+- [ ] Devlog entry shows up in `docs/development/devlog.md` (on dev/main only)
+- [ ] Linked files exist (experiment docs, referenced issues)
+
+---
+
+## ⚠️ **CRITICAL ENFORCEMENT**
+
+**"Failure to document = incomplete work"**
+
+Work without documentation updates will be considered incomplete and may be reverted. This is not optional.
+
+**Examples**:
+- ❌ Code committed, devlog not updated = INCOMPLETE
+- ❌ Large feature merged, no experiment doc = INCOMPLETE  
+- ❌ Bug fix without devlog entry = INCOMPLETE
+
+**Examples**:
+- ✅ Code + devlog entry + commits = COMPLETE
+- ✅ Feature branch + experiment doc + devlog link + merge = COMPLETE
+- ✅ Fix + test + devlog + commit = COMPLETE
+
+---
+
 ### Why This Pattern?
 
 **Benefits**:
@@ -103,7 +202,7 @@ Large feature branches, testing multiple approaches, extensive investigation:
 - ✅ Detailed experiment docs (full narrative when needed)
 - ✅ Works with parallel development and large feature branches
 
-**Failure to document = incomplete work**
+---
 
 ### Quick Reference Files for Context
 
