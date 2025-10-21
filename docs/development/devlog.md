@@ -48,7 +48,12 @@ Created comprehensive namespace migration plan for entire ShadowHound stack.
 - DIMOS-first (wait for proper namespace support)
 
 **Files Created**:
-- `docs/architecture/namespace_migration_plan.md` (complete specification)
+- `docs/architecture/namespace_migration_plan.md` (complete specification - 800+ lines)
+- `docs/architecture/NAMESPACE_MIGRATION_SUMMARY.md` (quick reference)
+
+**DIMOS Update**:
+- ✅ DIMOS namespace support merged to dev branch! (commit 531de18)
+- Stage 0 UNBLOCKED - can proceed with Stage 1 implementation
 
 **Commits**: TBD (pending)
 
