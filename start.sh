@@ -1129,7 +1129,8 @@ launch_robot_driver() {
     
     if [ "$ROBOT_MODE" = "simulation" ]; then
         # For simulation, launch autonomy stack instead of driver
-        return $(launch_sim_autonomy_stack)
+        launch_sim_autonomy_stack
+        return $?
     fi
     
     print_section "Stage 1: Launching Robot Driver"
