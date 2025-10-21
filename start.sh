@@ -33,6 +33,7 @@
 # ============================================================================
 
 set -e  # Exit on error
+set -o pipefail  # Propagate pipe failures
 
 # Colors for output
 RED='\033[0;31m'
@@ -553,13 +554,26 @@ build_workspace() {
     # Build all Go2 SDK packages (nested submodule in DIMOS)
     # Core packages: go2_interfaces, unitree_go, go2_robot_sdk
     # Perception packages: lidar_processor, lidar_processor_cpp, coco_detector, speech_processor
-    if colcon build --packages-select \
+    # Note: These often have build issues (nested submodule), non-critical for mission agent
+    
+    # Temporarily disable 'exit on error' for optional Go2 build
+    set +e
+    colcon build --packages-select \
         go2_interfaces unitree_go go2_robot_sdk \
         lidar_processor lidar_processor_cpp coco_detector speech_processor \
-        --symlink-install 2>&1 | tee -a /tmp/colcon_build.log | tail -10; then
-        print_success "Go2 SDK packages built"
+        --symlink-install > /tmp/go2_build.log 2>&1
+    local go2_result=$?
+    set -e
+    
+    if [ $go2_result -eq 0 ]; then
+        print_success "Go2 SDK packages built successfully"
     else
-        print_warning "Go2 SDK build had issues (may be OK if already built)"
+        if grep -q "Failed.*go2_interfaces" /tmp/go2_build.log; then
+            print_warning "Go2 SDK build had issues (non-critical)"
+            print_info "This is expected if packages were already built in a previous run"
+        else
+            print_warning "Some Go2 SDK packages failed to build (non-critical for mission agent)"
+        fi
     fi
     
     # Build our packages (skip DIMOS perception models with CUDA issues)
