@@ -257,6 +257,48 @@ CONN_TYPE=cyclonedds  # (webrtc not available in sim mode)
 
 ---
 
+## Critical Issues Found and Fixed
+
+### Issue 1: SLAM Configuration Missing robot0/ Frames ❌→✅
+
+**Problem Discovered**:
+- SLAM Toolbox (mapper_params_online_async.yaml) was hardcoded with hardware frames
+- Was using: `base_frame: base_link`, `odom_frame: odom`, `map_frame: map`
+- Scan topic was: `/scan` (not `/robot0/scan`)
+- This prevented SLAM from finding TF frames in simulation
+- Result: `/robot0/map` frame never published → mission agent timeout
+
+**Root Cause Impact**:
+```
+Isaac Sim publishes: /robot0/base_link (TF frame)
+SLAM looks for: base_link (TF frame) ❌ NOT FOUND
+SLAM cannot initialize → No /map frame published
+Nav2 AMCL initializes but with incomplete TF tree
+Mission agent waits for /map frame → TIMEOUT
+```
+
+**Solution Implemented**:
+- ✅ Created `config/mapper_params_simulation.yaml` (SLAM config for simulation)
+- ✅ Updated frames to use robot0/ namespace:
+  - `base_frame: robot0/base_link`
+  - `odom_frame: robot0/odom`
+  - `map_frame: robot0/map`
+  - `scan_topic: /robot0/scan`
+- ✅ Updated `sim_autonomy.launch.py` to use smart config selection (like Nav2)
+
+### Issue 2: Scan Topic Path Inconsistency in Nav2 Config ❌→✅
+
+**Problem Found**:
+- Local costmap voxel layer: `topic: /robot0/scan` ✅
+- Global costmap voxel layer: `topic: robot0/scan` ❌ (relative path!)
+- Inconsistent topic paths could cause lookup failures
+
+**Solution Implemented**:
+- ✅ Fixed global costmap scan topic to `/robot0/scan` (absolute path)
+- ✅ Now both costmaps use same consistent path
+
+---
+
 ## Data Flow Analysis - Complete Verification
 
 ### Scan Topic Data Flow (Most Critical)
