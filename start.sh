@@ -1546,46 +1546,32 @@ launch_system() {
 kill_all_ros_nodes() {
     print_info "Killing any existing ROS nodes for clean start..."
     
-    # Kill mission agent processes
+    # Use robust pattern to kill ALL ROS2 processes
+    # This catches every process launched by ros2 (including nested/orphaned ones)
+    # Much more reliable than individual process-specific pkill commands
+    if pgrep -f "ros-args" > /dev/null 2>&1; then
+        print_info "Killing ROS2 processes via pgrep..."
+        pgrep -f "ros-args" | awk '{print "kill -9 " $1}' | sh 2>/dev/null || true
+    fi
+    
+    # Fallback: also try individual kill patterns for any stragglers
+    # (in case some processes were launched without ros-args)
     pkill -f "shadowhound_mission_agent" 2>/dev/null || true
     pkill -f "mission_agent.launch" 2>/dev/null || true
-    
-    # Kill simulation autonomy stack
     pkill -f "sim_autonomy.launch" 2>/dev/null || true
-    
-    # Kill robot driver processes
-    pkill -f "go2_driver_node" 2>/dev/null || true
     pkill -f "robot.launch" 2>/dev/null || true
-    pkill -f "go2_rviz2" 2>/dev/null || true
-    
-    # Kill Nav2 nodes
-    pkill -f "behavior_server" 2>/dev/null || true
-    pkill -f "controller_server" 2>/dev/null || true
-    pkill -f "planner_server" 2>/dev/null || true
-    pkill -f "bt_navigator" 2>/dev/null || true
-    pkill -f "waypoint_follower" 2>/dev/null || true
-    pkill -f "velocity_smoother" 2>/dev/null || true
-    
-    # Kill SLAM and visualization
-    pkill -f "slam_toolbox" 2>/dev/null || true
-    pkill -f "foxglove_bridge" 2>/dev/null || true
-    
-    # Kill DIMOS-specific nodes
-    pkill -f "pointcloud_aggregator" 2>/dev/null || true
-    pkill -f "tts_node" 2>/dev/null || true
-    
-    # Kill generic ROS launch processes
     pkill -f "ros2 launch" 2>/dev/null || true
-    
-    # Final sweep: kill all nodes in current ROS_DOMAIN_ID
-    if command -v ros2 &> /dev/null && [ -n "$ROS_DOMAIN_ID" ]; then
-        ros2 node list 2>/dev/null | while read node; do
-            pkill -f "$node" 2>/dev/null || true
-        done
-    fi
     
     # Give processes time to die
     sleep 2
+    
+    # Verify clean state
+    if pgrep -f "ros-args" > /dev/null 2>&1; then
+        print_warning "Some ROS processes still running after cleanup"
+        print_info "Attempting secondary cleanup..."
+        pkill -9 -f "ros2" 2>/dev/null || true
+        sleep 2
+    fi
     
     print_success "Existing ROS nodes cleaned up"
 }
@@ -1607,10 +1593,6 @@ cleanup() {
     print_section "Shutting Down"
     print_info "Cleaning up..."
     
-    # Kill mission agent and all its child processes
-    pkill -f "shadowhound_mission_agent" 2>/dev/null || true
-    pkill -f "mission_agent.launch" 2>/dev/null || true
-    
     # Kill simulation autonomy stack if we started it
     if [ -f "/tmp/shadowhound_autonomy.pid" ]; then
         local autonomy_pid=$(cat /tmp/shadowhound_autonomy.pid 2>/dev/null)
@@ -1622,9 +1604,6 @@ cleanup() {
         fi
         rm -f /tmp/shadowhound_autonomy.pid
     fi
-    
-    # Kill autonomy stack processes
-    pkill -f "sim_autonomy.launch" 2>/dev/null || true
     
     # Kill robot driver if we started it
     if [ -f "/tmp/shadowhound_driver.pid" ]; then
@@ -1638,41 +1617,15 @@ cleanup() {
         rm -f /tmp/shadowhound_driver.pid
     fi
     
-    # Kill any remaining go2/robot processes
-    pkill -f "go2_driver_node" 2>/dev/null || true
-    pkill -f "robot.launch" 2>/dev/null || true
-    pkill -f "go2_rviz2" 2>/dev/null || true
-    
-    # Kill all Nav2 nodes
-    pkill -f "behavior_server" 2>/dev/null || true
-    pkill -f "controller_server" 2>/dev/null || true
-    pkill -f "planner_server" 2>/dev/null || true
-    pkill -f "bt_navigator" 2>/dev/null || true
-    pkill -f "waypoint_follower" 2>/dev/null || true
-    pkill -f "velocity_smoother" 2>/dev/null || true
-    
-    # Kill SLAM and other common nodes
-    pkill -f "slam_toolbox" 2>/dev/null || true
-    pkill -f "foxglove_bridge" 2>/dev/null || true
-    
-    # Kill DIMOS-specific nodes
-    pkill -f "pointcloud_aggregator" 2>/dev/null || true
-    pkill -f "tts_node" 2>/dev/null || true
-    
-    # More aggressive: kill any ros2 launch processes
-    pkill -f "ros2 launch" 2>/dev/null || true
-    
-    # Give processes time to die
-    sleep 1
-    
-    # Final aggressive cleanup - kill any remaining ROS nodes from this domain
-    if [ -n "$ROS_DOMAIN_ID" ]; then
-        print_info "Killing remaining ROS2 nodes in domain $ROS_DOMAIN_ID..."
-        # Get all running ROS nodes and kill their processes
-        ros2 node list 2>/dev/null | while read node; do
-            pkill -f "$node" 2>/dev/null || true
-        done
+    # Use robust pattern to kill ALL ROS2 processes
+    # This catches every process launched by ros2 (including nested/orphaned ones)
+    if pgrep -f "ros-args" > /dev/null 2>&1; then
+        print_info "Killing remaining ROS2 processes..."
+        pgrep -f "ros-args" | awk '{print "kill -9 " $1}' | sh 2>/dev/null || true
     fi
+    
+    # Final aggressive cleanup - kill any remaining ros2 executables
+    pkill -9 -f "ros2" 2>/dev/null || true
     
     print_success "Shutdown complete"
     echo ""
