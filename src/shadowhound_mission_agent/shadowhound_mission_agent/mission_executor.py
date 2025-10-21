@@ -221,18 +221,6 @@ class MissionExecutor:
         )
 
         self.logger.info(f"Robot initialized (ip={self.config.robot_ip})")
-        
-        # FIX: Spatial memory transform provider must use correct map frame name
-        # =====================================================================
-        # DIMOS Robot initializes SpatialMemory with a transform_provider that
-        # calls transform_euler("base_link") with hardcoded target_frame="map".
-        # In simulation mode with Isaac Sim, the frame is "robot0/map", not "map",
-        # which causes TF lookup failures during initialization.
-        #
-        # Solution: Detect robot mode and override the transform provider.
-        robot_mode = os.getenv("ROBOT_MODE", "hardware").lower()
-        self._fix_spatial_memory_transform_provider(robot_mode)
-        self.logger.info(f"Spatial memory transform provider configured for {robot_mode} mode")
 
     def _init_skills(self) -> None:
         """Initialize DIMOS skill library.
@@ -510,87 +498,6 @@ class MissionExecutor:
             raise RuntimeError("Skills not initialized")
 
         return self.skills.get()
-
-    def _fix_spatial_memory_transform_provider(self, robot_mode: str) -> None:
-        """Fix spatial memory transform provider for correct map frame name.
-        
-        DIMOS Robot initializes SpatialMemory with a transform_provider that
-        has hardcoded target_frame="map", which fails in simulation mode where
-        the frame is actually "robot0/map". This method fixes the transform
-        provider to use the correct frame name based on robot mode.
-        
-        Args:
-            robot_mode: Either "simulation" or "hardware"
-        """
-        try:
-            if not self.robot:
-                self.logger.warning("Robot not initialized, skipping transform provider fix")
-                return
-            
-            # Get spatial memory instance from robot
-            spatial_memory = self.robot.get_spatial_memory()
-            if spatial_memory is None:
-                self.logger.warning("SpatialMemory not available, skipping transform provider fix")
-                return
-            
-            # Verify ros_control is available
-            if not self.robot.ros_control:
-                self.logger.warning("ROS control not available, skipping transform provider fix")
-                return
-            
-            # Determine correct map frame name based on mode
-            if robot_mode == "simulation":
-                map_frame = "robot0/map"
-                source_frame = "robot0/base_link"
-                self.logger.debug(f"Using simulation frame names: source={source_frame}, target={map_frame}")
-            else:
-                map_frame = "map"
-                source_frame = "base_link"
-                self.logger.debug(f"Using hardware frame names: source={source_frame}, target={map_frame}")
-            
-            # Stop existing processing if active
-            spatial_memory.stop_continuous_processing()
-            
-            # Create new transform provider with correct map frame name
-            def corrected_transform_provider():
-                """Transform provider that uses mode-correct frame names."""
-                try:
-                    ros_control = self.robot.ros_control if self.robot else None
-                    if not ros_control:
-                        return {"position": None, "rotation": None}
-                    
-                    position, rotation = ros_control.transform_euler(
-                        source_frame=source_frame,
-                        target_frame=map_frame,
-                        timeout=1.0
-                    )
-                    if position is None or rotation is None:
-                        return {
-                            "position": None,
-                            "rotation": None
-                        }
-                    return {
-                        "position": position,
-                        "rotation": rotation
-                    }
-                except Exception as e:
-                    self.logger.debug(f"Transform lookup failed (expected until SLAM initializes): {e}")
-                    return {
-                        "position": None,
-                        "rotation": None
-                    }
-            
-            # Restart continuous processing with corrected provider
-            if spatial_memory.video_stream is not None:
-                spatial_memory.start_continuous_processing(
-                    spatial_memory.video_stream,
-                    corrected_transform_provider
-                )
-                self.logger.info(f"SpatialMemory transform provider restarted with {robot_mode} frames")
-            
-        except Exception as e:
-            self.logger.warning(f"Error fixing spatial memory transform provider: {e}")
-            self.logger.warning("SpatialMemory may experience frame lookup issues")
 
     def cleanup(self) -> None:
         """Clean up resources."""
