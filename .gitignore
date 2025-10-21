@@ -8,6 +8,7 @@ log/
 # Environment configuration
 .env
 .env.local
+.env.secrets
 *.env.backup
 .shadowhound_env
 

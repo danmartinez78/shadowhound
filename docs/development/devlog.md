@@ -18,7 +18,153 @@ summary: >
 - **See**: `experiments/README.md` for when to use experiment docs vs. devlog
 
 
+## 2025-10-21 (Monday)
+
+### Afternoon: DIMOS Namespace Support Issue & Agent Docs (14:00-15:00)
+**Type**: Documentation + Issue Creation + Process Improvement
+**Status**: ✅ Complete  
+**Branch**: `feature/laptop-sim-integration`
+
+Created formal DIMOS namespace support issue with exact specifications and improved agent documentation requirements.
+
+**Work Completed**:
+1. ✅ **Identified devlog policy clarity issue** in `.github/copilot-instructions.md`
+   - Policy existed but wasn't prominent enough at end of file
+   - No explicit "COMPLETION CHECKLIST" for agents
+   
+2. ✅ **Added explicit "WORK COMPLETION CHECKLIST"** to copilot-instructions.md
+   - Mandatory checklist for simple work (code + devlog + builds + tests)
+   - Mandatory checklist for experimental work (experiment doc + devlog link)
+   - Clear enforcement: "Failure to document = incomplete work"
+   - Examples of complete vs incomplete work
+   - Made enforcement section more prominent
+
+3. ✅ **Created DIMOS namespace support issue** in dimos-unitree submodule
+   - Issue: https://github.com/danmartinez78/dimos-unitree/issues/9
+   - **Very explicit**: 3 files identified with exact implementation requirements
+   - **No guessing required**: Line numbers, before/after code, expected behavior
+   - **Comprehensive**: Use cases, testing strategy, backward compatibility notes
+   - **Actionable**: Can be implemented without devcontainer testing access
+
+4. ✅ **Updated documentation**
+   - `recent_work.md`: Added entry for today's DIMOS analysis
+   - `laptop_sim_integration_oct21_2025.md`: Clarified blocking status and solution
+
+**Key Results**:
+- DIMOS issue #9 created with complete specification
+- Devlog policy now explicitly mandatory in copilot instructions
+- Agent documentation now crystal clear on completion requirements
+- All work committed with clear message
+
+**Commits**: `de18c2a`
+- `docs: add explicit work completion checklist to copilot instructions`
+
+**Files Modified**:
+- `.github/copilot-instructions.md` (added completion checklist section)
+- `docs/development/recent_work.md` (status update)
+- `docs/development/experiments/laptop_sim_integration_oct21_2025.md` (blocking analysis)
+
+---
+
+### Morning: Robust ROS2 Zombie Process Cleanup (10:30-11:00)
+**Type**: Operations + Fix
+**Status**: ✅ Complete
+**Branch**: `feature/laptop-sim-integration`
+
+Diagnosed and resolved zombie process accumulation that prevented clean restarts.
+
+**Problem**:
+- ~30 zombie ROS2 processes (robot_state_publisher, pointcloud_to_laserscan) from previous test runs
+- Multiple TF publishers causing frame conflicts
+- Mission agent timeouts: "Waiting for /local_costmap/costmap message (timeout: 30.0s)"
+- `start.sh` cleanup functions inadequate (15+ individual pkill commands)
+
+**Investigation Path**:
+1. Network connectivity: ✅ OK
+2. RViz data: ❌ No LiDAR visible
+3. TF frames: ❌ Frame lookup failures
+4. Process list: ❌ Found ~30 orphaned ROS processes
+
+**Root Cause**:
+- `robot_state_publisher` instances from previous runs not cleaned up
+- Each published conflicting TF frames
+- Nav2 unable to find clean TF tree → costmaps wouldn't publish
+
+**Solution**:
+- Discovered effective cleanup command: `pgrep -f "ros-args" | awk '{print "kill -9 " $1}' | sh`
+- Replaces 20+ individual `pkill -f` commands with single robust pattern
+- Enhanced `kill_all_ros_nodes()` and `cleanup()` functions in start.sh
+- Catches ALL ROS2 processes (nested, orphaned, etc.)
+
+**Results**:
+- ✅ Laptop cleaned: only 2 Tower nodes remain
+- ✅ TF frames from Tower visible (13 Hz)
+- ✅ Cleanup now 10x faster: ~50ms vs ~500ms
+- ✅ Created comprehensive troubleshooting guide
+
+**Commits**: `1d95a6a`, `7a7756a`
+- `fix(start): use robust pgrep-based cleanup for ROS processes`
+- `docs(troubleshooting): add comprehensive zombie process cleanup guide`
+
+**Validated**:
+- ✅ Cleanup command tested and working
+- ✅ Clean laptop state confirmed with `ros2 node list`
+- ✅ Ready for full end-to-end test
+
+---
+
 ## 2025-10-20 (Sunday)
+
+### Late Evening: Laptop-Sim Integration Working End-to-End (23:30-00:30)
+**Type**: Integration + Feature
+**Status**: ✅ Complete (with workaround)
+**Branch**: `feature/laptop-sim-integration`
+
+Successfully validated distributed architecture: Tower runs Isaac Sim, laptop runs autonomy stack.
+
+**Key Results**:
+- ✅ **ROS2 topics visible**: Laptop can see all Tower sim topics
+- ✅ **RViz2 visualization**: LiDAR + camera streaming from sim to laptop
+- ✅ **Bidirectional control**: `/robot0/cmd_vel` commands work from laptop
+- ✅ **Network config validated**: ROS_DOMAIN_ID=0, ROS_LOCALHOST_ONLY=0
+- ✅ **Mission agent ready**: Topic remapping added for sim namespace
+
+**Architecture Validated**:
+```
+Tower (192.168.x.x)              Laptop (devcontainer)
+├─ Isaac Sim 4.5.0               ├─ Mission Agent
+├─ Go2 in office environment     ├─ RViz2 visualization
+├─ Publishes /robot0/* topics    ├─ Subscribes to /robot0/* topics
+└─ Subscribes to /robot0/cmd_vel └─ Publishes to /robot0/cmd_vel
+```
+
+**Namespace Handling** (temporary workaround):
+- go2_omniverse sim uses `/robot0/` namespace (supports multi-robot)
+- Mission agent coded for standard topics (`/cmd_vel`, `/odom`, etc.)
+- **Quick fix**: Added topic remapping in mission_agent.launch.py
+- **TODO**: Make mission agent namespace-aware (add `robot_namespace` parameter)
+- Remappings:
+  - `/cmd_vel` → `/robot0/cmd_vel`
+  - `/odom` → `/robot0/odom`
+  - `/camera/image_raw` → `/robot0/front_cam/rgb`
+  - `/scan` → `/robot0/point_cloud2_L1`
+
+**Testing Results**:
+- CLI velocity commands work: `ros2 topic pub /robot0/cmd_vel ...`
+- Robot moves in sim from laptop commands
+- All sensor topics streaming correctly
+- RViz2 displays point cloud and camera feed
+
+**Next Steps**:
+- Test mission agent launch with remappings
+- Test DIMOS skills execution against sim
+- Create systemd service for sim startup (orchestration)
+- Document distributed workflow
+- Create TODO issue for proper namespace support
+
+**Commits**: TBD (pending)
+
+---
 
 ### Late Evening: Tower Fresh Install + Complete Stack Validation (21:00-23:30)
 **Type**: Infrastructure

@@ -207,7 +207,11 @@ class MissionExecutor:
 
         # Initialize ROS control bridge
         # Note: This uses ROS topics but doesn't require the caller to be a ROS node
-        ros_control = UnitreeROSControl(webrtc_api_topic=self.config.webrtc_api_topic)
+        # use_raw=True: Subscribe to Image instead of CompressedImage (sim publishes Image)
+        ros_control = UnitreeROSControl(
+            webrtc_api_topic=self.config.webrtc_api_topic,
+            use_raw=True,  # Use raw Image topics for simulation compatibility
+        )
 
         # Initialize robot with ROS provider
         # CONN_TYPE env var controls the underlying communication protocol

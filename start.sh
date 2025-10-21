@@ -62,6 +62,13 @@ if [ -f ".env" ]; then
     set +a
 fi
 
+# Load .env.secrets if it exists (API keys, credentials)
+if [ -f ".env.secrets" ]; then
+    set -a  # automatically export all variables
+    source .env.secrets
+    set +a
+fi
+
 # Default options
 MOCK_ROBOT=""
 WEB_INTERFACE=""
@@ -491,12 +498,15 @@ setup_config() {
     fi
     print_success "OpenAI API key configured"
     
-    # Check mock robot mode
-    MOCK_ROBOT=${MOCK_ROBOT:-${MOCK_ROBOT_ENV:-false}}
-    if [ "$MOCK_ROBOT" = "true" ]; then
-        print_info "Using MOCK robot mode (no hardware needed)"
-    else
-        print_info "Using REAL robot mode"
+    # Check robot mode (new: supports hardware/simulation/mock)
+    ROBOT_MODE=${ROBOT_MODE:-mock}
+    if [ "$ROBOT_MODE" = "mock" ]; then
+        print_info "Robot mode: MOCK (pure software, no hardware/sim needed)"
+    elif [ "$ROBOT_MODE" = "simulation" ]; then
+        print_info "Robot mode: SIMULATION (Isaac Sim on Tower)"
+        print_info "Ensure Isaac Sim is running and topics are visible"
+    elif [ "$ROBOT_MODE" = "hardware" ]; then
+        print_info "Robot mode: HARDWARE (real Unitree Go2)"
         # Use ROBOT_IP (aligned with ROS2 SDK)
         if [ -z "$ROBOT_IP" ]; then
             export ROBOT_IP="192.168.10.167"  # Default IP
@@ -504,6 +514,10 @@ setup_config() {
         else
             print_success "Robot IP: $ROBOT_IP"
         fi
+    else
+        print_error "Invalid ROBOT_MODE: $ROBOT_MODE"
+        print_info "Valid values: 'hardware', 'simulation', 'mock'"
+        exit 1
     fi
 }
 
@@ -860,8 +874,8 @@ check_llm_backend() {
 # ============================================================================
 
 check_network() {
-    if [ "$MOCK_ROBOT" = "true" ]; then
-        return 0  # Skip network checks for mock robot
+    if [ "$ROBOT_MODE" = "mock" ] || [ "$ROBOT_MODE" = "simulation" ]; then
+        return 0  # Skip network checks for mock/simulation modes
     fi
     
     print_section "Network Check"
@@ -874,11 +888,11 @@ check_network() {
         print_success "Robot is reachable at $robot_ip"
     else
         print_warning "Cannot reach robot at $robot_ip"
-        print_info "This is OK if you're using mock mode"
+        print_info "This is OK if you're using mock or simulation mode"
         
         read -p "Continue anyway? [y/N]: " continue_choice
         if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
-            print_info "Exiting. Fix network connection or use --mock flag"
+            print_info "Exiting. Fix network connection or check ROBOT_MODE"
             exit 1
         fi
     fi
@@ -924,7 +938,7 @@ EOF
     echo ""
     echo "Configuration:"
     echo "  • Mode: ${CONFIG_MODE:-default}"
-    echo "  • Mock Robot: ${MOCK_ROBOT:-false}"
+    echo "  • Robot Mode: ${ROBOT_MODE:-mock}"
     echo "  • Connection: ${CONN_TYPE:-webrtc}"
     echo "  • Web Interface: ${WEB_INTERFACE:-true}"
     echo "  • Web Port: ${WEB_PORT:-8080}"
@@ -959,13 +973,164 @@ EOF
 }
 
 # ============================================================================
+# Simulation Autonomy Stack Launch
+# ============================================================================
+
+launch_sim_autonomy_stack() {
+    print_section "Stage 1: Launching Simulation Autonomy Stack"
+    
+    print_info "Launching Nav2, SLAM Toolbox, Foxglove, and RViz2..."
+    echo ""
+    print_info "Prerequisites:"
+    print_info "  • Isaac Sim running on Tower (192.168.10.167)"
+    print_info "  • Publishing topics under /robot0/ namespace"
+    echo ""
+    
+    # Check if Isaac Sim topics are visible
+    print_info "Checking for Isaac Sim topics..."
+    if ! ros2 topic list 2>/dev/null | grep -q "robot0"; then
+        print_warning "No /robot0/* topics detected from Isaac Sim"
+        echo ""
+        print_info "Expected topics from Isaac Sim:"
+        echo "  • /robot0/odom"
+        echo "  • /robot0/imu"
+        echo "  • /robot0/front_cam/rgb"
+        echo "  • /robot0/point_cloud2_L1"
+        echo "  • /robot0/cmd_vel"
+        echo ""
+        
+        read -p "Continue anyway? (Mission agent may fail) [y/N]: " continue_choice
+        if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
+            print_error "Aborting. Start Isaac Sim on Tower and try again."
+            return 1
+        fi
+        print_warning "Continuing without sim topics - expect errors"
+    else
+        print_success "Isaac Sim topics detected!"
+        ros2 topic list 2>/dev/null | grep "robot0" | head -5 | sed 's/^/  • /'
+        if [ $(ros2 topic list 2>/dev/null | grep "robot0" | wc -l) -gt 5 ]; then
+            echo "  ... and more"
+        fi
+    fi
+    echo ""
+    
+    # Check if autonomy stack is already running
+    if ros2 node list 2>/dev/null | grep -q "behavior_server\|controller_server"; then
+        print_warning "Autonomy stack nodes already detected"
+        echo ""
+        ros2 node list 2>/dev/null | grep -E "behavior|controller|planner|slam" | sed 's/^/  • /'
+        echo ""
+        
+        read -p "Use existing autonomy stack? [Y/n]: " use_existing
+        if [[ "$use_existing" != "n" && "$use_existing" != "N" ]]; then
+            print_success "Using existing autonomy stack"
+            return 0
+        else
+            print_info "Stopping existing autonomy stack..."
+            pkill -f "sim_autonomy.launch" 2>/dev/null || true
+            pkill -f "behavior_server" 2>/dev/null || true
+            pkill -f "controller_server" 2>/dev/null || true
+            pkill -f "planner_server" 2>/dev/null || true
+            pkill -f "slam_toolbox" 2>/dev/null || true
+            pkill -f "foxglove_bridge" 2>/dev/null || true
+            sleep 3
+        fi
+    fi
+    
+    # Launch autonomy stack in background
+    local launch_file="src/shadowhound_bringup/launch/sim_autonomy.launch.py"
+    if [ ! -f "$launch_file" ]; then
+        print_error "Simulation autonomy launch file not found: $launch_file"
+        print_info "Expected: src/shadowhound_bringup/launch/sim_autonomy.launch.py"
+        return 1
+    fi
+    
+    print_info "Launching autonomy stack in background..."
+    print_info "Launch file: $launch_file"
+    echo ""
+    
+    # Launch with log file
+    local log_file="/tmp/shadowhound_sim_autonomy.log"
+    ros2 launch "$launch_file" \
+        rviz2:=true \
+        nav2:=true \
+        slam:=true \
+        foxglove:=true \
+        > "$log_file" 2>&1 &
+    local autonomy_pid=$!
+    
+    print_success "Autonomy stack launched (PID: $autonomy_pid)"
+    print_info "Logs: $log_file"
+    echo ""
+    
+    # Wait for Nav2 nodes to appear
+    print_info "Waiting for Nav2 nodes to initialize..."
+    local max_wait=30
+    local waited=0
+    
+    while [ $waited -lt $max_wait ]; do
+        if ros2 node list 2>/dev/null | grep -q "behavior_server"; then
+            print_success "Nav2 nodes detected!"
+            break
+        fi
+        
+        # Check if process is still alive
+        if ! kill -0 $autonomy_pid 2>/dev/null; then
+            print_error "Autonomy stack process died"
+            print_info "Check logs: $log_file"
+            tail -20 "$log_file"
+            return 1
+        fi
+        
+        echo -n "."
+        sleep 1
+        waited=$((waited + 1))
+    done
+    echo ""
+    
+    if [ $waited -ge $max_wait ]; then
+        print_error "Timeout waiting for Nav2 nodes"
+        print_info "Stack may still be starting. Check logs: $log_file"
+        return 1
+    fi
+    
+    # Wait for Nav2 action servers to register
+    print_info "Waiting for Nav2 action servers..."
+    sleep 3
+    
+    if ros2 action list 2>/dev/null | grep -q "/spin"; then
+        print_success "Nav2 /spin action server available!"
+    else
+        print_warning "/spin action not yet available (may take a few more seconds)"
+    fi
+    
+    # Show what's running
+    echo ""
+    print_info "Active nodes:"
+    ros2 node list 2>/dev/null | grep -E "behavior|controller|planner|slam|foxglove|robot_state" | sed 's/^/  • /'
+    echo ""
+    
+    # Save PID for cleanup
+    echo $autonomy_pid > /tmp/shadowhound_autonomy.pid
+    
+    print_success "Autonomy stack ready!"
+    return 0
+}
+
+# ============================================================================
 # Robot Driver Launch
 # ============================================================================
 
 launch_robot_driver() {
-    if [ "$MOCK_ROBOT" = "true" ]; then
-        print_info "Mock robot mode - skipping robot driver launch"
+    if [ "$ROBOT_MODE" = "mock" ]; then
+        print_info "Robot mode: mock - skipping driver launch"
         return 0
+    fi
+    
+    if [ "$ROBOT_MODE" = "simulation" ]; then
+        # For simulation, launch autonomy stack instead of driver
+        launch_sim_autonomy_stack
+        return $?
     fi
     
     print_section "Stage 1: Launching Robot Driver"
@@ -1065,11 +1230,69 @@ launch_robot_driver() {
 # ============================================================================
 
 verify_robot_topics() {
-    if [ "$MOCK_ROBOT" = "true" ]; then
-        print_info "Mock robot mode - skipping topic verification"
+    if [ "$ROBOT_MODE" = "mock" ]; then
+        print_info "Robot mode: mock - skipping topic verification"
         return 0
     fi
     
+    if [ "$ROBOT_MODE" = "simulation" ]; then
+        print_section "Stage 2: Verifying Simulation Topics"
+        
+        print_info "Checking Isaac Sim topics..."
+        local sim_topics=(
+            "/robot0/odom"
+            "/robot0/imu"
+            "/robot0/front_cam/rgb"
+            "/robot0/cmd_vel"
+        )
+        
+        local all_ok=true
+        for topic in "${sim_topics[@]}"; do
+            if ros2 topic list 2>/dev/null | grep -q "^${topic}$"; then
+                print_success "$topic"
+            else
+                print_warning "$topic (missing)"
+                all_ok=false
+            fi
+        done
+        
+        echo ""
+        
+        # Check Nav2 action server (critical for DIMOS)
+        print_info "Checking Nav2 action server..."
+        if ros2 action list 2>/dev/null | grep -q "/spin"; then
+            print_success "/spin action server available"
+        else
+            print_warning "/spin action not available yet"
+            print_info "Waiting a few more seconds..."
+            sleep 5
+            
+            if ros2 action list 2>/dev/null | grep -q "/spin"; then
+                print_success "/spin action server now available"
+            else
+                print_error "/spin action still not available"
+                print_warning "Mission agent may hang during initialization"
+                all_ok=false
+            fi
+        fi
+        
+        echo ""
+        
+        if [ "$all_ok" = false ]; then
+            print_warning "Some topics/actions are missing"
+            read -p "Continue anyway? [y/N]: " continue_choice
+            if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
+                print_info "Launch aborted"
+                return 1
+            fi
+        else
+            print_success "All simulation topics verified!"
+        fi
+        
+        return 0
+    fi
+    
+    # Hardware mode verification
     print_section "Stage 2: Verifying Robot Topics"
     
     # Wait for Nav2 nodes to fully initialize (they take time after driver starts)
@@ -1200,9 +1423,9 @@ launch_mission_agent() {
         fi
     fi
     
-    # Add robot parameters
-    if [ -n "$MOCK_ROBOT" ]; then
-        launch_cmd="$launch_cmd mock_robot:=$MOCK_ROBOT"
+    # Add robot mode parameter
+    if [ -n "$ROBOT_MODE" ]; then
+        launch_cmd="$launch_cmd robot_mode:=$ROBOT_MODE"
     fi
     
     # Add planning agent parameter
@@ -1268,7 +1491,11 @@ launch_system() {
     
     echo ""
     print_info "Launch sequence:"
-    if [ "$SKIP_DRIVER" = true ] || [ "$MOCK_ROBOT" = "true" ]; then
+    if [ "$ROBOT_MODE" = "simulation" ]; then
+        print_info "  1. Launch simulation autonomy stack (Nav2, SLAM, Foxglove, RViz2)"
+        print_info "  2. Verify Isaac Sim topics and Nav2 actions"
+        print_info "  3. Launch mission agent (DIMOS)"
+    elif [ "$SKIP_DRIVER" = true ] || [ "$ROBOT_MODE" = "mock" ]; then
         print_info "  1. [SKIPPED] Launch robot driver"
         print_info "  2. [SKIPPED] Verify robot topics"
         print_info "  3. Launch mission agent (DIMOS)"
@@ -1279,10 +1506,10 @@ launch_system() {
     fi
     echo ""
     
-    # Stage 1: Launch robot driver (unless skipped)
-    if [ "$SKIP_DRIVER" != true ]; then
+    # Stage 1: Launch robot driver (unless skipped) or sim autonomy stack
+    if [ "$SKIP_DRIVER" != true ] && [ "$ROBOT_MODE" != "mock" ]; then
         if ! launch_robot_driver; then
-            print_error "Failed to launch robot driver"
+            print_error "Failed to launch robot driver/autonomy stack"
             read -p "Continue anyway? [y/N]: " continue_choice
             if [[ "$continue_choice" != "y" && "$continue_choice" != "Y" ]]; then
                 return 1
@@ -1290,11 +1517,15 @@ launch_system() {
         fi
         sleep 2
     else
-        print_info "Skipping robot driver launch (--skip-driver flag)"
+        if [ "$SKIP_DRIVER" = true ]; then
+            print_info "Skipping robot driver launch (--skip-driver flag)"
+        else
+            print_info "Skipping robot driver launch (mock mode)"
+        fi
     fi
     
     # Stage 2: Verify topics (unless skipped or mock mode)
-    if [ "$SKIP_DRIVER" != true ] && [ "$MOCK_ROBOT" != "true" ]; then
+    if [ "$SKIP_DRIVER" != true ] && [ "$ROBOT_MODE" != "mock" ]; then
         if ! verify_robot_topics; then
             print_error "Topic verification failed"
             read -p "Launch mission agent anyway? [y/N]: " continue_choice
@@ -1315,43 +1546,32 @@ launch_system() {
 kill_all_ros_nodes() {
     print_info "Killing any existing ROS nodes for clean start..."
     
-    # Kill mission agent processes
+    # Use robust pattern to kill ALL ROS2 processes
+    # This catches every process launched by ros2 (including nested/orphaned ones)
+    # Much more reliable than individual process-specific pkill commands
+    if pgrep -f "ros-args" > /dev/null 2>&1; then
+        print_info "Killing ROS2 processes via pgrep..."
+        pgrep -f "ros-args" | awk '{print "kill -9 " $1}' | sh 2>/dev/null || true
+    fi
+    
+    # Fallback: also try individual kill patterns for any stragglers
+    # (in case some processes were launched without ros-args)
     pkill -f "shadowhound_mission_agent" 2>/dev/null || true
     pkill -f "mission_agent.launch" 2>/dev/null || true
-    
-    # Kill robot driver processes
-    pkill -f "go2_driver_node" 2>/dev/null || true
+    pkill -f "sim_autonomy.launch" 2>/dev/null || true
     pkill -f "robot.launch" 2>/dev/null || true
-    pkill -f "go2_rviz2" 2>/dev/null || true
-    
-    # Kill Nav2 nodes
-    pkill -f "behavior_server" 2>/dev/null || true
-    pkill -f "controller_server" 2>/dev/null || true
-    pkill -f "planner_server" 2>/dev/null || true
-    pkill -f "bt_navigator" 2>/dev/null || true
-    pkill -f "waypoint_follower" 2>/dev/null || true
-    pkill -f "velocity_smoother" 2>/dev/null || true
-    
-    # Kill SLAM and visualization
-    pkill -f "slam_toolbox" 2>/dev/null || true
-    pkill -f "foxglove_bridge" 2>/dev/null || true
-    
-    # Kill DIMOS-specific nodes
-    pkill -f "pointcloud_aggregator" 2>/dev/null || true
-    pkill -f "tts_node" 2>/dev/null || true
-    
-    # Kill generic ROS launch processes
     pkill -f "ros2 launch" 2>/dev/null || true
-    
-    # Final sweep: kill all nodes in current ROS_DOMAIN_ID
-    if command -v ros2 &> /dev/null && [ -n "$ROS_DOMAIN_ID" ]; then
-        ros2 node list 2>/dev/null | while read node; do
-            pkill -f "$node" 2>/dev/null || true
-        done
-    fi
     
     # Give processes time to die
     sleep 2
+    
+    # Verify clean state
+    if pgrep -f "ros-args" > /dev/null 2>&1; then
+        print_warning "Some ROS processes still running after cleanup"
+        print_info "Attempting secondary cleanup..."
+        pkill -9 -f "ros2" 2>/dev/null || true
+        sleep 2
+    fi
     
     print_success "Existing ROS nodes cleaned up"
 }
@@ -1373,9 +1593,17 @@ cleanup() {
     print_section "Shutting Down"
     print_info "Cleaning up..."
     
-    # Kill mission agent and all its child processes
-    pkill -f "shadowhound_mission_agent" 2>/dev/null || true
-    pkill -f "mission_agent.launch" 2>/dev/null || true
+    # Kill simulation autonomy stack if we started it
+    if [ -f "/tmp/shadowhound_autonomy.pid" ]; then
+        local autonomy_pid=$(cat /tmp/shadowhound_autonomy.pid 2>/dev/null)
+        if [ -n "$autonomy_pid" ]; then
+            print_info "Stopping simulation autonomy stack (PID: $autonomy_pid)..."
+            kill $autonomy_pid 2>/dev/null || true
+            sleep 1
+            kill -9 $autonomy_pid 2>/dev/null || true
+        fi
+        rm -f /tmp/shadowhound_autonomy.pid
+    fi
     
     # Kill robot driver if we started it
     if [ -f "/tmp/shadowhound_driver.pid" ]; then
@@ -1389,41 +1617,15 @@ cleanup() {
         rm -f /tmp/shadowhound_driver.pid
     fi
     
-    # Kill any remaining go2/robot processes
-    pkill -f "go2_driver_node" 2>/dev/null || true
-    pkill -f "robot.launch" 2>/dev/null || true
-    pkill -f "go2_rviz2" 2>/dev/null || true
-    
-    # Kill all Nav2 nodes
-    pkill -f "behavior_server" 2>/dev/null || true
-    pkill -f "controller_server" 2>/dev/null || true
-    pkill -f "planner_server" 2>/dev/null || true
-    pkill -f "bt_navigator" 2>/dev/null || true
-    pkill -f "waypoint_follower" 2>/dev/null || true
-    pkill -f "velocity_smoother" 2>/dev/null || true
-    
-    # Kill SLAM and other common nodes
-    pkill -f "slam_toolbox" 2>/dev/null || true
-    pkill -f "foxglove_bridge" 2>/dev/null || true
-    
-    # Kill DIMOS-specific nodes
-    pkill -f "pointcloud_aggregator" 2>/dev/null || true
-    pkill -f "tts_node" 2>/dev/null || true
-    
-    # More aggressive: kill any ros2 launch processes
-    pkill -f "ros2 launch" 2>/dev/null || true
-    
-    # Give processes time to die
-    sleep 1
-    
-    # Final aggressive cleanup - kill any remaining ROS nodes from this domain
-    if [ -n "$ROS_DOMAIN_ID" ]; then
-        print_info "Killing remaining ROS2 nodes in domain $ROS_DOMAIN_ID..."
-        # Get all running ROS nodes and kill their processes
-        ros2 node list 2>/dev/null | while read node; do
-            pkill -f "$node" 2>/dev/null || true
-        done
+    # Use robust pattern to kill ALL ROS2 processes
+    # This catches every process launched by ros2 (including nested/orphaned ones)
+    if pgrep -f "ros-args" > /dev/null 2>&1; then
+        print_info "Killing remaining ROS2 processes..."
+        pgrep -f "ros-args" | awk '{print "kill -9 " $1}' | sh 2>/dev/null || true
     fi
+    
+    # Final aggressive cleanup - kill any remaining ros2 executables
+    pkill -9 -f "ros2" 2>/dev/null || true
     
     print_success "Shutdown complete"
     echo ""
