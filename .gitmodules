@@ -1,4 +1,4 @@
 [submodule "src/dimos-unitree"]
 	path = src/dimos-unitree
 	url = https://github.com/danmartinez78/dimos-unitree.git
-	branch = fix/webrtc-instant-commands-and-progress
+	branch = dev
