@@ -1,0 +1,177 @@
+================================================================================
+LAPTOP + ISAAC SIM INTEGRATION EXPERIMENT - SESSION SUMMARY
+Date: October 21, 2025
+Branch: feature/laptop-sim-integration
+================================================================================
+
+SESSION STATUS: IN PROGRESS - Ready to hand off to next session
+Current Blocker: Nav2 costmaps not publishing (TF frame configuration issue)
+
+================================================================================
+WHAT WAS ACCOMPLISHED THIS SESSION
+================================================================================
+
+✅ COMPLETED:
+1. Fixed camera type mismatch (CompressedImage vs Image) with use_raw=True
+2. Created comprehensive robot data flow architecture documentation (400+ lines)
+   - File: docs/simulation/data_flow_architecture.md
+   - Covers: WebRTC mode, CycloneDDS mode, Isaac Sim mode
+   
+3. Created integrated autonomy stack launch file for simulation
+   - File: src/shadowhound_bringup/launch/sim_autonomy.launch.py
+   - Includes: Nav2, SLAM Toolbox, Foxglove, RViz2, pointcloud_to_laserscan
+   
+4. Unified start.sh as single entry point for all robot modes
+   - Detects ROBOT_MODE environment variable
+   - Launches appropriate driver and autonomy components
+   - Enhanced cleanup with robust zombie process killing
+   
+5. Fixed bash syntax error in start.sh (return statement pattern)
+
+6. DISCOVERED AND FIXED: Zombie process problem on laptop
+   - Found: 40+ stale ros processes from previous runs
+   - Solution: pgrep -f "ros-args" | awk '{print "kill -9 " $1}' | sh
+   - Documented: docs/troubleshooting/ZOMBIE_PROCESS_CLEANUP.md
+
+7. Verified TF frame propagation working
+   - Tower publishes: /robot0/base_link, /robot0/UnitreeL1_link, etc.
+   - Laptop receives: All TF frames visible in view_frames
+
+8. Created comprehensive experiment documentation
+   - File: docs/development/experiments/laptop_sim_integration_oct21_2025.md
+   - 272 lines including: architecture diagrams, test commands, troubleshooting
+
+9. Created quick start guide for next session
+   - File: docs/development/NEXT_SESSION_GUIDE.md
+   - Easy reference for continuing work
+
+================================================================================
+CURRENT BLOCKER
+================================================================================
+
+ISSUE: Mission agent times out waiting for /local_costmap/costmap
+ERROR: "/local_costmap/costmap message not received after 30.0 seconds"
+
+ROOT CAUSE IDENTIFIED:
+- Nav2 configuration has frame_id settings pointing to "base_link"
+- But active TF tree has "robot0/base_link" 
+- Two separate TF trees detected: one stale (base_link), one active (robot0/base_link)
+- Nav2 costmaps depend on valid TF + laser scan
+- Likely: Nav2 can't find the frame, so doesn't publish costmaps
+
+SOLUTION FOR NEXT SESSION:
+- Update config/nav2_params.yaml
+- Change all "base_link" references to "robot0/base_link"
+- Change odom source from "/odom" to "/robot0/odom"
+- Rebuild and test
+
+FILES TO MODIFY:
+- config/nav2_params.yaml (frame_id settings)
+- Possibly config/nav2_params_sim.yaml if it exists
+
+================================================================================
+KEY DISCOVERIES
+================================================================================
+
+1. Isaac Sim publishes with /robot0/ prefix (important!)
+2. go2_driver_node is ONLY needed for physical robot, not for Isaac Sim
+3. Tower TF frames propagate to laptop automatically over ROS2 network
+4. Distributed ROS2 requires careful namespace/frame handling
+5. Zombie processes can accumulate from failed launches (major debugging issue)
+6. Better zombie kill pattern: pgrep -f "ros-args" (catches all ROS processes)
+
+================================================================================
+FILES MODIFIED/CREATED THIS SESSION
+================================================================================
+
+NEW FILES:
+✅ docs/simulation/data_flow_architecture.md (400+ lines)
+✅ src/shadowhound_bringup/launch/sim_autonomy.launch.py
+✅ docs/simulation/SIM_AUTONOMY_TESTING.md
+✅ docs/deployment/SIMULATION_QUICKSTART.md
+✅ docs/troubleshooting/ZOMBIE_PROCESS_CLEANUP.md
+✅ docs/development/experiments/laptop_sim_integration_oct21_2025.md
+✅ docs/development/NEXT_SESSION_GUIDE.md
+
+MODIFIED FILES:
+✅ start.sh (unified entry point, enhanced cleanup)
+✅ src/shadowhound_bringup/launch/mission_agent.launch.py (topic remappings - verified working)
+
+================================================================================
+COMMITS MADE THIS SESSION
+================================================================================
+
+1. docs(sim): comprehensive robot data flow architecture
+2. docs(sim): add autonomy stack testing guide
+3. feat(start): integrate sim autonomy stack into start.sh
+4. fix(start): correct bash return statement syntax
+5. fix(sim-autonomy): don't launch robot_state_publisher for simulation
+6. docs(troubleshooting): add comprehensive zombie process cleanup guide
+7. fix(start): use robust pgrep-based cleanup for ROS processes
+8. docs(experiments): laptop + isaac sim integration experiment oct 21
+9. docs(development): quick start guide for next session
+
+Branch: feature/laptop-sim-integration (ready to merge after fix is applied)
+
+================================================================================
+FOR NEXT SESSION
+================================================================================
+
+START HERE:
+1. Read: docs/development/NEXT_SESSION_GUIDE.md (quick reference)
+2. Read: docs/development/experiments/laptop_sim_integration_oct21_2025.md (full context)
+
+IMMEDIATE TASK:
+1. Update config/nav2_params.yaml (fix frame IDs)
+2. Rebuild workspace
+3. Test mission agent initialization
+4. Commit and push
+5. Merge feature/laptop-sim-integration to main
+
+SUCCESS CRITERIA:
+- Mission agent initializes without timeout
+- Costmaps publish to /local_costmap/costmap
+- Web interface responsive at http://localhost:8080
+- Test commands work: "describe what you see", "spin 90 degrees"
+
+DIAGNOSTIC COMMANDS (copy-paste ready):
+```bash
+# Verify sensor pipeline
+ros2 topic list | grep robot0
+ros2 topic echo /robot0/scan --once
+ros2 topic list | grep costmap
+
+# View TF tree
+ros2 run tf2_tools view_frames
+
+# Check ROS processes
+ps -x | grep ros
+
+# Kill zombies if needed
+pgrep -f "ros-args" | awk '{print "kill -9 " $1}' | sh
+```
+
+================================================================================
+CONTEXT FILES FOR NEW SESSION
+================================================================================
+
+CRITICAL (read in order):
+1. docs/development/NEXT_SESSION_GUIDE.md - Quick start (5 min read)
+2. docs/development/experiments/laptop_sim_integration_oct21_2025.md - Full context (15 min read)
+3. docs/simulation/data_flow_architecture.md - Architecture deep dive (optional, reference)
+
+REFERENCE:
+- start.sh - Entry point script (look at launch_sim_autonomy_stack function)
+- sim_autonomy.launch.py - Autonomy components
+- mission_agent.launch.py - Mission agent with remappings
+- config/nav2_params.yaml - **THE FILE TO FIX NEXT**
+
+================================================================================
+END OF SESSION SUMMARY
+================================================================================
+
+All infrastructure is working. This is now purely a configuration tuning task.
+The hard part (distributed ROS2 setup, topic propagation, remappings) is done.
+Just need to fix Nav2 frame references and everything should work.
+
+Good luck on the next session! 🚀

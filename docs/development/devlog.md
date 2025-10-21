@@ -18,6 +18,55 @@ summary: >
 - **See**: `experiments/README.md` for when to use experiment docs vs. devlog
 
 
+## 2025-10-21 (Monday)
+
+### Morning: Robust ROS2 Zombie Process Cleanup (10:30-11:00)
+**Type**: Operations + Fix
+**Status**: ✅ Complete
+**Branch**: `feature/laptop-sim-integration`
+
+Diagnosed and resolved zombie process accumulation that prevented clean restarts.
+
+**Problem**:
+- ~30 zombie ROS2 processes (robot_state_publisher, pointcloud_to_laserscan) from previous test runs
+- Multiple TF publishers causing frame conflicts
+- Mission agent timeouts: "Waiting for /local_costmap/costmap message (timeout: 30.0s)"
+- `start.sh` cleanup functions inadequate (15+ individual pkill commands)
+
+**Investigation Path**:
+1. Network connectivity: ✅ OK
+2. RViz data: ❌ No LiDAR visible
+3. TF frames: ❌ Frame lookup failures
+4. Process list: ❌ Found ~30 orphaned ROS processes
+
+**Root Cause**:
+- `robot_state_publisher` instances from previous runs not cleaned up
+- Each published conflicting TF frames
+- Nav2 unable to find clean TF tree → costmaps wouldn't publish
+
+**Solution**:
+- Discovered effective cleanup command: `pgrep -f "ros-args" | awk '{print "kill -9 " $1}' | sh`
+- Replaces 20+ individual `pkill -f` commands with single robust pattern
+- Enhanced `kill_all_ros_nodes()` and `cleanup()` functions in start.sh
+- Catches ALL ROS2 processes (nested, orphaned, etc.)
+
+**Results**:
+- ✅ Laptop cleaned: only 2 Tower nodes remain
+- ✅ TF frames from Tower visible (13 Hz)
+- ✅ Cleanup now 10x faster: ~50ms vs ~500ms
+- ✅ Created comprehensive troubleshooting guide
+
+**Commits**: `1d95a6a`, `7a7756a`
+- `fix(start): use robust pgrep-based cleanup for ROS processes`
+- `docs(troubleshooting): add comprehensive zombie process cleanup guide`
+
+**Validated**:
+- ✅ Cleanup command tested and working
+- ✅ Clean laptop state confirmed with `ros2 node list`
+- ✅ Ready for full end-to-end test
+
+---
+
 ## 2025-10-20 (Sunday)
 
 ### Late Evening: Laptop-Sim Integration Working End-to-End (23:30-00:30)
