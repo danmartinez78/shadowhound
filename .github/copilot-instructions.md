@@ -121,6 +121,37 @@ Large feature branches, testing multiple approaches, extensive investigation:
 
 ---
 
+## ⚠️ **CRITICAL: NEVER UPDATE DEVLOG ON FEATURE BRANCHES** ⚠️
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  🚨 STOP! ARE YOU ON A FEATURE BRANCH? 🚨                       │
+│                                                                 │
+│  If branch != "dev" and branch != "main":                      │
+│    ❌ DO NOT edit docs/development/devlog.md                   │
+│    ✅ DO create experiment doc instead                         │
+│    ⏳ WAIT to update devlog until merge                        │
+│                                                                 │
+│  WHY? Prevents merge conflicts in parallel development         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Quick Check**: Run `git branch --show-current`
+- Result is `dev` or `main` → ✅ OK to update devlog
+- Result is anything else (e.g., `feature/xyz`) → ❌ NO devlog updates
+
+**What to do on feature branches**:
+1. Create experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
+2. Commit code + experiment doc
+3. **WAIT** until merging to `dev`/`main` to add devlog entry
+
+**What to do when merging**:
+1. Add lightweight devlog entry linking to experiment doc
+2. Commit devlog update
+3. Merge to `dev` or `main`
+
+---
+
 ## 🎯 **WORK COMPLETION CHECKLIST** (MANDATORY)
 
 **CRITICAL RULE**: Devlog entries are **ONLY** added when merging to `dev` or `main` branches.
