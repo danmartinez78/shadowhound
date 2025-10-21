@@ -119,7 +119,51 @@ Large feature branches, testing multiple approaches, extensive investigation:
 - ✅ Detailed experiment docs (full narrative when needed)
 - ✅ Works with parallel development and large feature branches
 
-**Failure to document = incomplete work**
+---
+
+## 🎯 **WORK COMPLETION CHECKLIST** (MANDATORY)
+
+**After completing ANY work (simple or experimental), you MUST:**
+
+### For Simple Work (bug fixes, small features, docs)
+- [ ] Code is committed with clear message
+- [ ] Added lightweight entry to `docs/development/devlog.md`
+- [ ] Entry includes: date, time, type, status, key results, commit hashes
+- [ ] Build verified: `colcon build` succeeds without errors
+- [ ] Tests pass: `pytest` or `colcon test` (if applicable)
+- [ ] **Commit devlog update**: `git add docs/development/devlog.md && git commit -m "docs(devlog): [title]"`
+
+### For Experimental Work (feature branches, large changes)
+- [ ] Created experiment doc: `docs/development/experiments/{feature}_{topic}_{date}.md`
+- [ ] Document includes: Context, Hypothesis, Experiments tried, Final Results
+- [ ] Build verified: `colcon build` succeeds
+- [ ] Code committed to feature branch with clear messages
+- [ ] **When merging to dev/main**:
+  - [ ] Add lightweight devlog entry with link to experiment doc
+  - [ ] Commit: `docs(devlog): [title] - Experiment: [doc]`
+
+### Verification
+- [ ] Git log shows commits present
+- [ ] Devlog entry shows up in `docs/development/devlog.md`
+- [ ] Linked files exist (experiment docs, referenced issues)
+
+---
+
+## ⚠️ **CRITICAL ENFORCEMENT**
+
+**"Failure to document = incomplete work"**
+
+Work without documentation updates will be considered incomplete and may be reverted. This is not optional.
+
+**Examples**:
+- ❌ Code committed, devlog not updated = INCOMPLETE
+- ❌ Large feature merged, no experiment doc = INCOMPLETE  
+- ❌ Bug fix without devlog entry = INCOMPLETE
+
+**Examples**:
+- ✅ Code + devlog entry + commits = COMPLETE
+- ✅ Feature branch + experiment doc + devlog link + merge = COMPLETE
+- ✅ Fix + test + devlog + commit = COMPLETE
 
 ---
 

@@ -5,38 +5,103 @@ related:
   - ../devlog.md
   - ../../simulation/data_flow_architecture.md
   - ../../deployment/SIMULATION_QUICKSTART.md
+  - ../../issues/dimos_namespace_support_issue.md
+  - ../../issues/dimos_namespace_support_implementation.md
 summary: >
   Laptop + Isaac Sim integration - Distributed ROS2 testing and debugging.
-  Fixed: TF frame initialization issue in mission agent spatial memory.
+  Identified core DIMOS issues requiring namespace support for simulation.
 ---
 
 # Laptop + Isaac Sim Integration Experiment
 **Date**: October 21, 2025  
 **Branch**: `feature/laptop-sim-integration`  
-**Status**: � TESTING - TF frame fix implemented, awaiting full test
+**Status**: 🟡 BLOCKED - Awaiting DIMOS namespace support implementation
+
+**Blocking Issue**: DIMOS hardcoded assumptions for non-namespaced environments
+- See: `docs/issues/dimos_namespace_support_issue.md` (complete analysis)
+- Implementation: `docs/issues/dimos_namespace_support_implementation.md` (code changes)
+
+---
+
+## Blocking Issues Analysis
+
+### Core Problem: DIMOS Hardcoded Assumptions
+
+DIMOS was designed for **single-robot, non-namespaced ROS2 environments**. It fails in simulation with Isaac Sim because:
+
+1. **Hardcoded Topic Names** (Line 167 in `unitree_go2.py`)
+   - Planner looks for: `/local_costmap/costmap`
+   - Actually published at: `/robot0/local_costmap/costmap` ❌
+   - Result: 30-second timeout, robot fails to initialize
+
+2. **Hardcoded Frame Names** (Lines 49-62 in `ros_transform.py`)
+   - Transform defaults to: `target_frame="map"`
+   - Actually available: `robot0/map` ❌
+   - Result: SpatialMemory initialization fails with frame lookup error
+
+3. **No Namespace Support**
+   - `UnitreeGo2.__init__()` has no namespace parameter
+   - `ROSTransformAbility` has no frame namespace parameter
+   - All topic/frame names hardcoded with no way to customize
+
+### Solution: DIMOS Enhancement
+
+**This is a DIMOS limitation, not a ShadowHound bug.**
+
+✅ **Created comprehensive specifications**:
+- **Issue Analysis**: `docs/issues/dimos_namespace_support_issue.md`
+- **Implementation Guide**: `docs/issues/dimos_namespace_support_implementation.md`
+
+These documents detail:
+- Root causes across 3 DIMOS files
+- Proposed solution with backward compatibility
+- Exact code changes needed
+- Testing recommendations
+- Deployment path
+
+### Why Not Hack Around It?
+
+We **deliberately removed hacky workarounds**:
+- ❌ Disabled video stream to skip planners
+- ❌ Monkey-patched transform providers
+- ❌ Custom frame name detection logic
+
+These workarounds are:
+- Fragile (break if DIMOS internals change)
+- Incomplete (only fix symptoms, not root cause)
+- Non-scalable (won't work for multi-robot)
+- Against project policy (temporary hacks blocked)
+
+### Current Status
+
+**Configuration Ready** ✅:
+- Nav2 simulation config created with robot0/ namespace
+- SLAM simulation config created with robot0/ namespace
+- Mission agent remappings correct for simulation
+
+**Blocked on DIMOS** 🔴:
+- Cannot initialize robot without DIMOS namespace support
+- Cannot run integration tests
+- Cannot validate end-to-end pipeline
 
 ---
 
 ## Current Situation
 
-### What Works ✅
+### What's Ready ✅
 - **Isaac Sim on Tower** publishing topics at good rates (`/robot0/*` namespace)
 - **Network ROS2** configured and working (CycloneDDS, ROS_DOMAIN_ID=0)
-- **Topic remappings** in mission_agent.launch.py mapping `/robot0/` topics
+- **Topic remappings** in mission_agent.launch.py correctly mapped
 - **Autonomy stack** launches on laptop (Nav2, SLAM, Foxglove, RViz2)
-- **TF frames from Tower** visible on laptop (`robot0/base_link`, `robot0/UnitreeL1_link`)
-- **Laptop cleanup** working - zombie process issue resolved with `pgrep -f "ros-args"` command
-- **Single-entry start.sh** integrated with sim autonomy stack launch
-- **Mission agent TF initialization** fixed - spatial memory now uses correct frame names
+- **Laptop cleanup** working - zombie process issue resolved
+- **Configuration files** created for simulation-specific frame namespacing
+- **ShadowHound codebase** clean (hacky workarounds removed)
 
-### What's Being Fixed 🟡
-- **Mission agent initialization** - TF frame lookup now adaptive to robot mode
-- **Spatial memory** - No longer fails trying to access non-existent "map" frame
-
-### Previous Issues (RESOLVED) ✅
-- **Nav2 costmaps not publishing** - Root cause was frame name mismatches (now fixed)
-- **TF frame mismatch** - Created simulation-specific configs with robot0/ namespace (now fixed)
-- **Spatial memory initialization failing** - Frame name now adaptive by robot mode (JUST FIXED)
+### What's Blocked 🔴
+- **DIMOS namespace support** - Required for robot initialization
+- **Planner initialization** - Times out waiting for namespaced costmaps
+- **SpatialMemory initialization** - Fails on frame name mismatch
+- **Integration testing** - Cannot proceed until DIMOS fixed
 
 ---
 
@@ -434,56 +499,126 @@ bt_navigator.robot_base_frame: robot0/base_link
 
 ---
 
-## Summary for Next Steps
+## Next Steps: DIMOS Enhancement Implementation
 
-**Status**: Core fixes complete - ready for integration testing ✅
+### Required Before Testing
 
-### Completed Fixes
-1. ✅ **SLAM frame namespace** - Created `mapper_params_simulation.yaml` with robot0/ frames
-2. ✅ **Nav2 frame namespace** - Created `nav2_params_simulation.yaml` with robot0/ frames  
-3. ✅ **Topic consistency** - Fixed global_costmap scan topic path inconsistency
-4. ✅ **Launch file routing** - Added smart config selection for simulation vs hardware mode
-5. ✅ **Mission agent TF init** - Fixed SpatialMemory to use mode-specific frame names
+**DIMOS namespace support must be implemented** in `src/dimos-unitree/` submodule.
 
-### What We Know
-1. Scan topic flows: Isaac Sim → converter → Nav2 AMCL ✅
-2. Frame IDs all use robot0/ namespace consistently ✅
-3. Mission agent remappings handle both pointcloud and laserscan ✅
-4. Network ROS2 configured for cross-laptop/tower communication ✅
-5. TF frame initialization now adaptive to robot mode ✅
+See detailed specifications:
+1. **Issue**: `docs/issues/dimos_namespace_support_issue.md`
+   - Complete problem analysis
+   - Root causes (3 files affected)
+   - Proposed solution with 3 implementation phases
+   - Backward compatibility guarantee
 
-### Remaining Work
-- [ ] Test simulation mode: `ROBOT_MODE=simulation ./start.sh --dev`
-- [ ] Verify mission agent initializes WITHOUT timeouts
-- [ ] Verify hardware mode still works (unchanged config path)
-- [ ] Commit all changes and merge to dev/main
-- [ ] Add devlog entry on merge
+2. **Implementation**: `docs/issues/dimos_namespace_support_implementation.md`
+   - Exact code changes with before/after examples
+   - Line-by-line change locations
+   - Unit and integration test recommendations
 
-### Testing Checklist
-```bash
-# Test simulation mode
-export ROBOT_MODE=simulation
-./start.sh --dev
+### What Will Be Fixed in DIMOS
 
-# Watch for these successful signs:
-# 1. Mission agent initializes without TF lookup errors
-# 2. Nav2 publishes costmaps (/local_costmap/costmap, /global_costmap/costmap)
-# 3. RViz2 shows map and costmaps
-# 4. Mission agent doesn't timeout waiting for costmap
+After implementation, the following will work:
 
-# Test hardware mode (unaffected)
-export ROBOT_MODE=hardware
-./start.sh  # or tests if robot available
+```python
+# Simulation mode with namespace support
+robot = UnitreeGo2(
+    ros_control=ros_control,
+    namespace="robot0"  # NEW: Enables all topics/frames to use robot0/ prefix
+)
+# Result:
+# - Planners look for /robot0/local_costmap/costmap ✅
+# - Transforms use robot0/base_link → robot0/map ✅
+# - SpatialMemory initializes without timeout ✅
 
-# Verify no regressions:
-# 1. Physical robot still initializes
-# 2. TF tree uses base_link, map, odom (no robot0/)
-# 3. All autonomous behaviors still work
+# Hardware mode (unchanged)
+robot = UnitreeGo2(ros_control)  # namespace defaults to ""
+# Result: Works exactly as before ✅
 ```
 
-**Quick Start New Chat**: 
-> "Laptop + Isaac Sim integration - All fixes complete. Core issues resolved:
-> 1. Frame namespacing (robot0/ for sim, plain for hardware)
-> 2. TF initialization adaptive to robot mode  
-> 3. All topic paths now consistent
-> Ready for integration testing. See `/workspaces/shadowhound/docs/development/experiments/laptop_sim_integration_oct21_2025.md` for complete technical details."
+### After DIMOS Fix: ShadowHound Can Test
+
+1. **Integration Test Phase 1**:
+   ```bash
+   export ROBOT_MODE=simulation
+   ./start.sh --dev
+   # Should initialize mission agent successfully without timeouts
+   ```
+
+2. **Validation**:
+   - ✅ Robot initializes in < 2 seconds (no blocking topic_latest timeouts)
+   - ✅ Mission agent starts without TF lookup errors
+   - ✅ Nav2 publishes costmaps correctly
+   - ✅ RViz2 visualization shows map and costmaps
+
+3. **Regression Testing**:
+   - ✅ Hardware mode still works (if robot available)
+   - ✅ Physical robot initializes normally
+   - ✅ All autonomous behaviors functional
+
+---
+
+## ShadowHound Changes Ready to Merge
+
+Once DIMOS is fixed, merge the following:
+
+### 1. Configuration Files ✅
+- `config/nav2_params_simulation.yaml` - Nav2 with robot0/ namespace
+- `config/mapper_params_simulation.yaml` - SLAM with robot0/ namespace
+- Updated `sim_autonomy.launch.py` with config selection
+
+### 2. Mission Agent ✅
+- **Cleaned**: All hacky workarounds removed
+- **Status**: Ready to use DIMOS namespace parameter (after DIMOS fix)
+- **Clean**: `mission_executor.py` now has clean initialization
+
+### 3. Documentation ✅
+- **Issue Analysis**: Complete specification for DIMOS changes
+- **Implementation Guide**: Exact code changes needed
+- **This Experiment Doc**: Full context and blocking issues identified
+
+### Why We Stopped
+
+We had two choices:
+
+❌ **Option A: Hacky Workarounds**
+- Disable video streams to skip planner init
+- Monkey-patch transform providers
+- Custom frame name detection
+- *Problem*: Fragile, incomplete, non-scalable
+
+✅ **Option B: Fix Root Cause** ← **We chose this**
+- Document real DIMOS issues
+- Create implementation specification
+- Remove all workarounds from ShadowHound
+- Let DIMOS be fixed properly
+- *Benefit*: Clean, scalable, enables multi-robot scenarios
+
+This is the right approach - proper architecture over quick hacks.
+
+---
+
+## ShadowHound Project Impact
+
+**Blocked**: Simulation integration testing  
+**Unblocked by this**: All ShadowHound code work is done  
+**Next**: Wait for DIMOS enhancement, then run integration tests
+
+**Files Ready to Merge**:
+- ✅ Config files (nav2, slam simulation variants)
+- ✅ Launch files (smart config selection)
+- ✅ Mission agent (clean initialization)
+- ✅ Documentation (issue and implementation specs)
+
+**Estimated DIMOS Work**: 4-6 hours implementation + 2-3 hours testing  
+**ShadowHound Time Savings**: Avoided week of debugging with hacks
+
+---
+
+**Status Summary**:
+- ShadowHound codebase: ✅ Complete and ready
+- Configuration: ✅ Complete and ready
+- Documentation: ✅ Complete and ready
+- Blocker: 🔴 Awaiting DIMOS namespace support
+- Next: Implement DIMOS changes, then run integration test
