@@ -76,14 +76,22 @@ class SimAutonomyConfig:
             "config",
         )
 
+        # Prefer simulation-specific nav2 config if available (has robot0/ frames)
+        # Falls back to default config if not found
+        nav2_sim_config = os.path.join(
+            shadowhound_config_dir, "nav2_params_simulation.yaml"
+        )
+        nav2_default_config = os.path.join(shadowhound_config_dir, "nav2_params.yaml")
+
+        if os.path.exists(nav2_sim_config):
+            nav2_config = nav2_sim_config
+        elif os.path.exists(nav2_default_config):
+            nav2_config = nav2_default_config
+        else:
+            nav2_config = os.path.join(self.go2_sdk_dir, "config", "nav2_params.yaml")
+
         return {
-            "nav2": (
-                os.path.join(shadowhound_config_dir, "nav2_params.yaml")
-                if os.path.exists(
-                    os.path.join(shadowhound_config_dir, "nav2_params.yaml")
-                )
-                else os.path.join(self.go2_sdk_dir, "config", "nav2_params.yaml")
-            ),
+            "nav2": nav2_config,
             "slam": os.path.join(
                 self.go2_sdk_dir, "config", "mapper_params_online_async.yaml"
             ),
