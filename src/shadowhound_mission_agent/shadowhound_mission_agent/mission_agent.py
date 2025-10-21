@@ -73,6 +73,9 @@ class MissionAgentNode(Node):
         super().__init__("shadowhound_mission_agent")
 
         # Declare ROS parameters
+        self.declare_parameter(
+            "robot_namespace", "tachi"
+        )  # Robot namespace (tachi, ghost, motoko)
         self.declare_parameter("agent_backend", "openai")  # 'openai' or 'ollama'
         self.declare_parameter(
             "use_planning_agent", False
@@ -91,6 +94,7 @@ class MissionAgentNode(Node):
         self.declare_parameter("ollama_model", "llama3.1:70b")
 
         # Get parameters
+        robot_namespace = self.get_parameter("robot_namespace").value
         agent_backend = self.get_parameter("agent_backend").value
         use_planning = self.get_parameter("use_planning_agent").value
         enable_web = self.get_parameter("enable_web_interface").value
@@ -108,6 +112,7 @@ class MissionAgentNode(Node):
         self.agent_model = ollama_model if agent_backend == "ollama" else openai_model
 
         self.get_logger().info("Configuration:")
+        self.get_logger().info(f"  Robot namespace: /{robot_namespace}")
         self.get_logger().info(f"  Agent backend: {agent_backend}")
         self.get_logger().info(f"  Use planning: {use_planning}")
         if agent_backend == "openai":
@@ -127,6 +132,7 @@ class MissionAgentNode(Node):
         # Create MissionExecutor with configuration
         self.get_logger().info("Creating MissionExecutor...")
         config = MissionExecutorConfig(
+            robot_namespace=robot_namespace,
             agent_backend=agent_backend,
             use_planning_agent=use_planning,
             robot_ip=robot_ip,
