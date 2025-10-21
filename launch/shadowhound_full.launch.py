@@ -17,6 +17,12 @@ def generate_launch_description():
     """Generate launch description for full ShadowHound system."""
 
     # Declare launch arguments
+    robot_namespace_arg = DeclareLaunchArgument(
+        "robot_namespace",
+        default_value="tachi",
+        description="Robot namespace (e.g., tachi, ghost, motoko). Used in hardware and sim.",
+    )
+
     robot_ip_arg = DeclareLaunchArgument(
         "robot_ip",
         default_value=os.getenv("ROBOT_IP", "192.168.1.103"),
@@ -42,6 +48,7 @@ def generate_launch_description():
     )
 
     # Get launch configurations
+    robot_namespace = LaunchConfiguration("robot_namespace")
     robot_ip = LaunchConfiguration("robot_ip")
     mock_robot = LaunchConfiguration("mock_robot")
     agent_backend = LaunchConfiguration("agent_backend")
@@ -78,6 +85,7 @@ def generate_launch_description():
             ]
         ),
         launch_arguments={
+            "robot_namespace": robot_namespace,
             "agent_backend": agent_backend,
             "mock_robot": mock_robot,
             "use_planning_agent": use_planning,
@@ -87,6 +95,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             # Arguments
+            robot_namespace_arg,
             robot_ip_arg,
             mock_robot_arg,
             agent_backend_arg,

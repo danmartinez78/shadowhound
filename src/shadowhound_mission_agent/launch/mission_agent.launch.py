@@ -23,6 +23,12 @@ def generate_launch_description():
     )
 
     # Declare launch arguments
+    robot_namespace_arg = DeclareLaunchArgument(
+        "robot_namespace",
+        default_value="tachi",
+        description="Robot namespace (e.g., tachi, ghost, motoko). Used in hardware and sim.",
+    )
+
     agent_backend_arg = DeclareLaunchArgument(
         "agent_backend",
         default_value="openai",
@@ -72,10 +78,9 @@ def generate_launch_description():
     )
 
     # Mission agent node
-    # Robot mode determines topic remapping and connection type:
-    # - 'hardware': Real robot, no remapping, WebRTC connection
-    # - 'simulation': Isaac Sim, robot0 namespace remapping, CycloneDDS
-    # - 'mock': Pure software mock, no remapping, no external topics
+    # Robot namespace is now passed as parameter to mission_executor.py
+    # DIMOS UnitreeGo2(namespace=robot_namespace) handles topic namespacing automatically
+    # No need for topic remappings - DIMOS handles it!
     mission_agent_node = Node(
         package="shadowhound_mission_agent",
         executable="mission_agent",
@@ -83,6 +88,7 @@ def generate_launch_description():
         output="screen",
         parameters=[
             {
+                "robot_namespace": LaunchConfiguration("robot_namespace"),
                 "agent_backend": LaunchConfiguration("agent_backend"),
                 "robot_mode": LaunchConfiguration("robot_mode"),
                 "use_planning_agent": LaunchConfiguration("use_planning_agent"),
@@ -92,51 +98,13 @@ def generate_launch_description():
                 "ollama_model": LaunchConfiguration("ollama_model"),
             }
         ],
-        remappings=[
-            # Topic remapping for simulation mode (go2_omniverse uses /robot0/* namespace)
-            # For hardware and mock modes, these remappings are harmless (topics don't exist anyway)
-            # TODO: Make this conditional based on robot_mode once LaunchCondition supports it
-            # Command topics (absolute and relative)
-            ("/cmd_vel", "/robot0/cmd_vel"),
-            ("cmd_vel", "robot0/cmd_vel"),  # Relative (DIMOS uses relative names)
-            ("/cmd_vel_out", "/robot0/cmd_vel"),
-            ("cmd_vel_out", "robot0/cmd_vel"),
-            # Sensor topics (absolute and relative)
-            ("/odom", "/robot0/odom"),
-            ("odom", "robot0/odom"),
-            ("/imu", "/robot0/imu"),
-            ("imu", "robot0/imu"),
-            ("/joint_states", "/robot0/joint_states"),
-            ("joint_states", "robot0/joint_states"),
-            # Camera topics (absolute and relative)
-            # CRITICAL FIX: mission_executor.py now uses use_raw=True
-            # This means DIMOS subscribes to camera/image_raw (Image type)
-            # Sim publishes /robot0/front_cam/rgb (Image type)
-            ("/camera/image_raw", "/robot0/front_cam/rgb"),  # Mission agent absolute
-            (
-                "camera/image_raw",
-                "robot0/front_cam/rgb",
-            ),  # DIMOS relative (use_raw=True)
-            # Robot state topics (DIMOS subscriptions - relative names!)
-            ("/go2_states", "/robot0/go2_states"),
-            ("go2_states", "robot0/go2_states"),
-            # LiDAR/Scan topics (absolute and relative)
-            ("/scan", "/robot0/point_cloud2_L1"),
-            ("scan", "robot0/point_cloud2_L1"),
-            # Navigation topics (absolute and relative)
-            ("/local_costmap/costmap", "/robot0/local_costmap/costmap"),
-            ("local_costmap/costmap", "robot0/local_costmap/costmap"),
-            ("/global_costmap/costmap", "/robot0/global_costmap/costmap"),
-            ("global_costmap/costmap", "robot0/global_costmap/costmap"),
-            ("/map", "/robot0/map"),
-            ("map", "robot0/map"),
-        ],
         emulate_tty=True,
     )
 
     return LaunchDescription(
         [
             pythonpath_env,
+            robot_namespace_arg,
             agent_backend_arg,
             robot_mode_arg,
             use_planning_arg,

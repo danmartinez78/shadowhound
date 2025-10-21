@@ -53,8 +53,8 @@ class SimAutonomyConfig:
     """Configuration for simulation autonomy stack"""
 
     def __init__(self):
-        # Robot namespace from sim
-        self.robot_namespace = "robot0"
+        # Robot namespace from launch argument (defaults to "tachi")
+        self.robot_namespace = LaunchConfiguration("robot_namespace")
 
         # Package paths
         self.shadowhound_dir = get_package_share_directory("shadowhound_bringup")
@@ -64,7 +64,7 @@ class SimAutonomyConfig:
         self.config_paths = self._get_config_paths()
 
         print("🤖 Simulation Autonomy Stack Configuration:")
-        print(f"   Robot namespace: {self.robot_namespace}")
+        print(f"   Robot namespace: {self.robot_namespace} (from launch arg)")
         print(f"   Nav2 params: {self.config_paths['nav2']}")
         print(f"   SLAM params: {self.config_paths['slam']}")
 
@@ -115,6 +115,11 @@ class SimAutonomyConfig:
 def create_launch_arguments() -> List[DeclareLaunchArgument]:
     """Create launch arguments for optional components"""
     return [
+        DeclareLaunchArgument(
+            "robot_namespace",
+            default_value="tachi",
+            description="Robot namespace (e.g., tachi, ghost, motoko)",
+        ),
         DeclareLaunchArgument(
             "rviz2", default_value="true", description="Launch RViz2 for visualization"
         ),
