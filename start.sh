@@ -341,7 +341,7 @@ check_git_updates() {
                     if [ "$behind" -gt 0 ]; then
                         submodules_behind=true
                         echo "  ${WARN}  $submodule_name: $behind commit(s) behind"
-                        git log --oneline HEAD..origin/$current_branch | head -3 | sed "s/^/      /"
+                        git log --oneline HEAD..origin/$current_branch | head -3 | sed "s/^/      /" || true
                         submodule_details="${submodule_details}${submodule_name} (${behind} commits), "
                     fi
                 else
