@@ -7,6 +7,13 @@
 # It checks dependencies, validates configuration, and provides helpful
 # guidance for first-time setup.
 #
+# Features:
+#   - Automatic submodule sync detection (prevents stale build errors)
+#   - Dependency validation (ROS2, Python, CycloneDDS)
+#   - Configuration management (dev/prod modes)
+#   - Workspace building and sourcing
+#   - Robot driver and mission agent launch
+#
 # Usage:
 #   ./start.sh [OPTIONS]
 #
@@ -17,18 +24,24 @@
 #   --no-web       Disable web interface
 #   --web-port N   Set web port (default: 8080)
 #   --skip-update  Skip git repository update check
-#   --auto-update  Automatically pull updates without prompting
+#   --auto-update  Automatically pull updates (main repo + submodules)
 #   --skip-driver  Skip launching robot driver (use existing)
 #   --agent-only   Only launch mission agent (skip driver + verification)
 #   --help         Show this help message
 #
 # Examples:
-#   ./start.sh                    # Interactive mode
+#   ./start.sh                    # Interactive mode (checks submodules)
 #   ./start.sh --dev              # Development mode
 #   ./start.sh --prod --no-web    # Production without web UI
 #   ./start.sh --mock             # Mock robot mode
-#   ./start.sh --auto-update      # Auto-pull latest changes
+#   ./start.sh --auto-update      # Auto-pull latest changes + submodules
 #   ./start.sh --skip-update      # Don't check for updates
+#
+# Submodule Sync:
+#   The script automatically detects when submodules (like dimos-unitree) are
+#   behind their remote branches and offers to sync them. This prevents common
+#   build errors caused by stale submodule code (e.g., missing parameters,
+#   import errors). Use --auto-update to sync without prompting.
 #
 # ============================================================================
 
@@ -296,95 +309,151 @@ check_git_updates() {
     # Check submodules for updates
     print_info "Checking submodules..."
     
+    local submodules_behind=false
+    local submodule_details=""
+    
     if [ -f ".gitmodules" ]; then
-        # Update submodule references
-        git submodule update --init --remote 2>/dev/null || true
+        # Initialize submodules if needed
+        git submodule update --init 2>/dev/null || true
         
         # Check each submodule
-        git submodule foreach --quiet '
-            submodule_name=$(basename "$sm_path")
-            local_commit=$(git rev-parse HEAD 2>/dev/null)
-            
-            # Fetch updates
-            git fetch origin 2>/dev/null || exit 0
-            
-            current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-            remote_commit=$(git rev-parse origin/$current_branch 2>/dev/null)
-            
-            if [ "$local_commit" != "$remote_commit" ]; then
-                behind=$(git rev-list --count HEAD..origin/$current_branch 2>/dev/null || echo "0")
-                if [ "$behind" -gt 0 ]; then
-                    echo "⚠️  $submodule_name: $behind commit(s) behind"
-                    git log --oneline HEAD..origin/$current_branch | head -2 | sed "s/^/      /"
+        while IFS= read -r line; do
+            if [[ $line =~ path\ =\ (.+) ]]; then
+                submodule_path="${BASH_REMATCH[1]}"
+                submodule_name=$(basename "$submodule_path")
+                
+                # Enter submodule directory
+                pushd "$submodule_path" > /dev/null 2>&1 || continue
+                
+                # Get local commit
+                local_commit=$(git rev-parse HEAD 2>/dev/null)
+                
+                # Fetch updates silently
+                git fetch origin 2>/dev/null || { popd > /dev/null; continue; }
+                
+                # Get remote commit for current branch
+                current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+                remote_commit=$(git rev-parse origin/$current_branch 2>/dev/null)
+                
+                if [ "$local_commit" != "$remote_commit" ]; then
+                    behind=$(git rev-list --count HEAD..origin/$current_branch 2>/dev/null || echo "0")
+                    if [ "$behind" -gt 0 ]; then
+                        submodules_behind=true
+                        echo "  ${WARN}  $submodule_name: $behind commit(s) behind"
+                        git log --oneline HEAD..origin/$current_branch | head -3 | sed "s/^/      /"
+                        submodule_details="${submodule_details}${submodule_name} (${behind} commits), "
+                    fi
+                else
+                    echo "  ${CHECK} $submodule_name: up to date"
                 fi
-            else
-                echo "✓ $submodule_name: up to date"
+                
+                popd > /dev/null
             fi
-        ' | sed 's/^/  /'
+        done < .gitmodules
     fi
     
     echo ""
     
-    # Prompt to update if needed
-    if [ "$updates_available" = true ]; then
+    # Prompt to update if main repo or submodules need updates
+    if [ "$updates_available" = true ] || [ "$submodules_behind" = true ]; then
         echo ""
-        print_warning "Updates are available!"
+        
+        if [ "$updates_available" = true ]; then
+            print_warning "Updates are available for main repository!"
+        fi
+        
+        if [ "$submodules_behind" = true ]; then
+            print_warning "Submodules are out of sync: ${submodule_details%, }"
+            echo ""
+            echo -e "${YELLOW}${WARN}  Out-of-sync submodules can cause build errors!${NC}"
+            echo -e "${YELLOW}${INFO}  Example: Missing parameters, import errors, stale code${NC}"
+        fi
+        
         echo ""
         
         if [ "$AUTO_UPDATE" = true ]; then
             print_info "Auto-updating (--auto-update flag)..."
-            pull_updates
+            pull_updates "$submodules_behind"
         else
-            read -p "Pull latest changes from remote? [Y/n]: " pull_choice
+            local prompt_msg="Pull latest changes"
+            if [ "$updates_available" = true ] && [ "$submodules_behind" = true ]; then
+                prompt_msg="Pull latest changes (main repo + submodules)"
+            elif [ "$submodules_behind" = true ]; then
+                prompt_msg="Update submodules only"
+            fi
+            
+            read -p "${prompt_msg}? [Y/n]: " pull_choice
             
             if [[ "$pull_choice" != "n" && "$pull_choice" != "N" ]]; then
-                pull_updates
+                pull_updates "$submodules_behind"
             else
-                print_info "Skipping updates (you can run 'git pull' manually later)"
+                if [ "$submodules_behind" = true ]; then
+                    print_warning "Submodules not updated - you may see build errors!"
+                    print_info "To update manually: git submodule update --remote"
+                else
+                    print_info "Skipping updates (you can run 'git pull' manually later)"
+                fi
             fi
         fi
     fi
 }
 
 pull_updates() {
+    local update_submodules_only="${1:-false}"
+    
     print_info "Pulling latest changes..."
     
-    # Check for uncommitted changes
-    if ! git diff-index --quiet HEAD -- 2>/dev/null; then
-        print_warning "You have uncommitted changes"
-        echo ""
-        git status --short
-        echo ""
-        read -p "Stash changes before pulling? [Y/n]: " stash_choice
+    # If only updating submodules, skip main repo
+    if [ "$update_submodules_only" = false ]; then
+        # Check for uncommitted changes
+        if ! git diff-index --quiet HEAD -- 2>/dev/null; then
+            print_warning "You have uncommitted changes"
+            echo ""
+            git status --short
+            echo ""
+            read -p "Stash changes before pulling? [Y/n]: " stash_choice
+            
+            if [[ "$stash_choice" != "n" && "$stash_choice" != "N" ]]; then
+                git stash push -m "Auto-stash by start.sh at $(date)"
+                print_success "Changes stashed"
+                local stashed=true
+            else
+                print_error "Cannot pull with uncommitted changes"
+                print_info "Either commit, stash, or discard your changes first"
+                exit 1
+            fi
+        fi
         
-        if [[ "$stash_choice" != "n" && "$stash_choice" != "N" ]]; then
-            git stash push -m "Auto-stash by start.sh at $(date)"
-            print_success "Changes stashed"
-            local stashed=true
+        # Pull main repo
+        if git pull origin $current_branch; then
+            print_success "Main repo updated"
         else
-            print_error "Cannot pull with uncommitted changes"
-            print_info "Either commit, stash, or discard your changes first"
+            print_error "Failed to pull main repo"
+            if [ "$stashed" = true ]; then
+                print_info "Your changes are stashed. Run 'git stash pop' to restore them."
+            fi
             exit 1
         fi
     fi
     
-    # Pull main repo
-    if git pull origin $current_branch; then
-        print_success "Main repo updated"
-    else
-        print_error "Failed to pull main repo"
-        if [ "$stashed" = true ]; then
-            print_info "Your changes are stashed. Run 'git stash pop' to restore them."
-        fi
-        exit 1
-    fi
-    
-    # Update submodules
+    # Update submodules (always, whether main repo updated or not)
     print_info "Updating submodules..."
     if git submodule update --remote --merge; then
         print_success "Submodules updated"
+        
+        # Show what changed in submodules
+        git submodule foreach --quiet '
+            submodule_name=$(basename "$sm_path")
+            current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+            recent_commits=$(git log --oneline -3 origin/$current_branch 2>/dev/null | head -3)
+            if [ -n "$recent_commits" ]; then
+                echo "  📦 $submodule_name recent changes:"
+                echo "$recent_commits" | sed "s/^/      /"
+            fi
+        '
     else
         print_warning "Some submodules may not have updated successfully"
+        print_info "You can try manually: git submodule update --remote --merge"
     fi
     
     # Pop stash if we stashed
