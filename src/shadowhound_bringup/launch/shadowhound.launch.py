@@ -17,6 +17,12 @@ def generate_launch_description():
         description="Use mock robot connection (true/false)",
     )
 
+    robot_namespace_arg = DeclareLaunchArgument(
+        "robot_namespace",
+        default_value="",
+        description="Robot namespace (empty for hardware, 'robot0' for sim, 'tachi' for named robot, etc.)",
+    )
+
     agent_backend_arg = DeclareLaunchArgument(
         "agent_backend",
         default_value="cloud",
@@ -40,6 +46,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             "mock_robot": LaunchConfiguration("mock_robot"),
+            "robot_namespace": LaunchConfiguration("robot_namespace"),
             "agent_backend": LaunchConfiguration("agent_backend"),
             "use_planning_agent": LaunchConfiguration("use_planning_agent"),
         }.items(),
@@ -48,6 +55,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             mock_robot_arg,
+            robot_namespace_arg,
             agent_backend_arg,
             use_planning_arg,
             mission_agent_launch,
