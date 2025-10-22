@@ -323,26 +323,34 @@ check_git_updates() {
                 submodule_path="${BASH_REMATCH[1]}"
                 submodule_name=$(basename "$submodule_path")
                 
+                # Get what commit the parent repo expects for this submodule
+                expected_commit=$(git ls-tree HEAD "$submodule_path" 2>/dev/null | awk '{print $3}')
+                
                 # Enter submodule directory
                 pushd "$submodule_path" > /dev/null 2>&1 || continue
                 
-                # Get local commit
+                # Get actual local commit
                 local_commit=$(git rev-parse HEAD 2>/dev/null)
                 
-                # Fetch updates silently
-                git fetch origin 2>/dev/null || { popd > /dev/null; continue; }
-                
-                # Get remote commit for current branch
-                current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
-                remote_commit=$(git rev-parse origin/$current_branch 2>/dev/null)
-                
-                if [ "$local_commit" != "$remote_commit" ]; then
-                    behind=$(git rev-list --count HEAD..origin/$current_branch 2>/dev/null || echo "0")
+                if [ "$local_commit" != "$expected_commit" ]; then
+                    # Fetch to ensure we have latest commits for accurate counting
+                    git fetch origin 2>/dev/null || true
+                    
+                    # Count commits between local and expected
+                    behind=$(git rev-list --count ${local_commit}..${expected_commit} 2>/dev/null || echo "0")
                     if [ "$behind" -gt 0 ]; then
                         submodules_behind=true
-                        echo "  ${WARN}  $submodule_name: $behind commit(s) behind"
-                        git log --oneline HEAD..origin/$current_branch | head -3 | sed "s/^/      /" || true
+                        echo "  ${WARN}  $submodule_name: $behind commit(s) behind expected"
+                        git log --oneline ${local_commit}..${expected_commit} 2>/dev/null | head -3 | sed "s/^/      /" || true
                         submodule_details="${submodule_details}${submodule_name} (${behind} commits), "
+                    else
+                        # Local is ahead or diverged
+                        ahead=$(git rev-list --count ${expected_commit}..${local_commit} 2>/dev/null || echo "0")
+                        if [ "$ahead" -gt 0 ]; then
+                            echo "  ${INFO}  $submodule_name: $ahead commit(s) ahead (local development?)"
+                        else
+                            echo "  ${WARN}  $submodule_name: diverged from expected commit"
+                        fi
                     fi
                 else
                     echo "  ${CHECK} $submodule_name: up to date"
