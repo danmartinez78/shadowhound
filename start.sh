@@ -317,6 +317,7 @@ check_git_updates() {
         git submodule update --init 2>/dev/null || true
         
         # Check each submodule
+        # NOTE: Using process substitution to avoid subshell variable scope issues
         while IFS= read -r line; do
             if [[ $line =~ path\ =\ (.+) ]]; then
                 submodule_path="${BASH_REMATCH[1]}"
@@ -349,7 +350,7 @@ check_git_updates() {
                 
                 popd > /dev/null
             fi
-        done < .gitmodules
+        done < <(cat .gitmodules)
     fi
     
     echo ""
