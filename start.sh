@@ -204,7 +204,7 @@ check_system() {
     
     # Check CycloneDDS if RMW_IMPLEMENTATION is set to it
     if [ "${RMW_IMPLEMENTATION:-}" = "rmw_cyclonedds_cpp" ]; then
-        if dpkg -l | grep -q ros-humble-rmw-cyclonedds-cpp; then
+        if dpkg -s ros-humble-rmw-cyclonedds-cpp &> /dev/null; then
             print_success "CycloneDDS middleware installed"
         else
             print_error "CycloneDDS not installed but RMW_IMPLEMENTATION=$RMW_IMPLEMENTATION"
