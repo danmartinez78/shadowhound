@@ -62,17 +62,26 @@ The system should support **three deployment modes** with clean configuration:
 
 ## Migration Stages
 
-### Stage 0: BLOCKED - DIMOS Namespace Support ⏳
+### Stage 0: ✅ COMPLETE - DIMOS Namespace Support
 
-**Status**: Waiting on DIMOS Issue #9 implementation  
-**Blocker**: https://github.com/danmartinez78/dimos-unitree/issues/9
+**Status**: DIMOS namespace support merged to dev branch!  
+**Commit**: `531de18` - Add namespace support for multi-robot ROS2 environments  
+**Date**: October 21, 2025
 
-**What's Needed**:
-- DIMOS `UnitreeGo2` accepts `namespace` parameter
-- DIMOS planners use namespaced topics
-- DIMOS transforms use namespaced frames
+**Implemented**:
+- ✅ DIMOS `UnitreeGo2` accepts `namespace` parameter
+- ✅ DIMOS planners use namespaced topics (`local_costmap`, `map`)
+- ✅ DIMOS transforms use namespaced frames (`frame_namespace` parameter)
+- ✅ 125 lines of tests added for namespace functionality
+- ✅ 100% backward compatibility maintained (namespace defaults to "")
 
-**When Complete**: Move to Stage 1
+**Files Changed** (229 lines):
+- `dimos/robot/robot.py` - Added namespace storage
+- `dimos/robot/ros_transform.py` - Frame namespace support
+- `dimos/robot/unitree/unitree_go2.py` - Namespace parameter + topic prefixing
+- `tests/test_namespace_support.py` - Comprehensive test coverage
+
+**Next**: Proceed to Stage 1
 
 ---
 
