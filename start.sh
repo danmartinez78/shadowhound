@@ -348,7 +348,7 @@ check_git_updates() {
                     echo "  ${CHECK} $submodule_name: up to date"
                 fi
                 
-                popd > /dev/null
+                popd > /dev/null || true
             fi
         done < <(cat .gitmodules)
     fi
