@@ -355,11 +355,6 @@ check_git_updates() {
     
     echo ""
     
-    # DEBUG: Check variable states
-    echo "DEBUG: updates_available=$updates_available"
-    echo "DEBUG: submodules_behind=$submodules_behind"
-    echo "DEBUG: submodule_details=$submodule_details"
-    
     # Prompt to update if main repo or submodules need updates
     if [ "$updates_available" = true ] || [ "$submodules_behind" = true ]; then
         echo ""
