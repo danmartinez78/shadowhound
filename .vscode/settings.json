@@ -17,6 +17,9 @@
             "source.organizeImports": "explicit"
         }
     },
+    // Disable format-on-save for submodule directories
+    "editor.formatOnSaveMode": "file",
+    "files.exclude": {},
     // Disable formatting for submodule paths
     "python.formatting.blackArgs": [
         "--line-length=99",

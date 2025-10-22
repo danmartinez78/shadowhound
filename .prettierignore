@@ -1,0 +1,7 @@
+# Ignore submodules
+src/dimos-unitree/
+
+# Ignore build artifacts
+build/
+install/
+log/
