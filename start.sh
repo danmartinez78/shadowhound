@@ -1035,7 +1035,8 @@ EOF
         echo ""
     fi
     
-    echo "ROS Topics:"
+    # Mission control topics (global, not namespaced)
+    echo "Mission Control Topics:"
     echo "  • Commands: /mission_command"
     echo "  • Status: /mission_status"
     echo ""
@@ -1052,20 +1053,22 @@ launch_sim_autonomy_stack() {
     echo ""
     print_info "Prerequisites:"
     print_info "  • Isaac Sim running on Tower (192.168.10.167)"
-    print_info "  • Publishing topics under /robot0/ namespace"
+    # Determine robot namespace for checks
+    local robot_ns="${ROBOT_NAMESPACE:-robot0}"
+    print_info "  • Publishing topics under /${robot_ns}/ namespace"
     echo ""
     
     # Check if Isaac Sim topics are visible
     print_info "Checking for Isaac Sim topics..."
-    if ! ros2 topic list 2>/dev/null | grep -q "robot0"; then
-        print_warning "No /robot0/* topics detected from Isaac Sim"
+    if ! ros2 topic list 2>/dev/null | grep -q "$robot_ns"; then
+        print_warning "No /${robot_ns}/* topics detected from Isaac Sim"
         echo ""
         print_info "Expected topics from Isaac Sim:"
-        echo "  • /robot0/odom"
-        echo "  • /robot0/imu"
-        echo "  • /robot0/front_cam/rgb"
-        echo "  • /robot0/point_cloud2_L1"
-        echo "  • /robot0/cmd_vel"
+        echo "  • /${robot_ns}/odom"
+        echo "  • /${robot_ns}/imu"
+        echo "  • /${robot_ns}/front_cam/rgb"
+        echo "  • /${robot_ns}/point_cloud2_L1"
+        echo "  • /${robot_ns}/cmd_vel"
         echo ""
         
         read -p "Continue anyway? (Mission agent may fail) [y/N]: " continue_choice
@@ -1076,8 +1079,8 @@ launch_sim_autonomy_stack() {
         print_warning "Continuing without sim topics - expect errors"
     else
         print_success "Isaac Sim topics detected!"
-        ros2 topic list 2>/dev/null | grep "robot0" | head -5 | sed 's/^/  • /'
-        if [ $(ros2 topic list 2>/dev/null | grep "robot0" | wc -l) -gt 5 ]; then
+        ros2 topic list 2>/dev/null | grep "$robot_ns" | head -5 | sed 's/^/  • /'
+        if [ $(ros2 topic list 2>/dev/null | grep "$robot_ns" | wc -l) -gt 5 ]; then
             echo "  ... and more"
         fi
     fi
@@ -1312,12 +1315,15 @@ verify_robot_topics() {
     if [ "$ROBOT_MODE" = "simulation" ]; then
         print_section "Stage 2: Verifying Simulation Topics"
         
+        # Use robot namespace from environment
+        local robot_ns="${ROBOT_NAMESPACE:-robot0}"
+        
         print_info "Checking Isaac Sim topics..."
         local sim_topics=(
-            "/robot0/odom"
-            "/robot0/imu"
-            "/robot0/front_cam/rgb"
-            "/robot0/cmd_vel"
+            "/${robot_ns}/odom"
+            "/${robot_ns}/imu"
+            "/${robot_ns}/front_cam/rgb"
+            "/${robot_ns}/cmd_vel"
         )
         
         local all_ok=true
