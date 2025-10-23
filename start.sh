@@ -1129,10 +1129,10 @@ launch_sim_autonomy_stack() {
     
     ros2 launch "$launch_file" \
         robot_namespace:="$robot_ns" \
-        rviz2:=true \
-        nav2:=true \
-        slam:=true \
-        foxglove:=true \
+        rviz2:=True \
+        nav2:=True \
+        slam:=True \
+        foxglove:=True \
         > "$log_file" 2>&1 &
     local autonomy_pid=$!
     
