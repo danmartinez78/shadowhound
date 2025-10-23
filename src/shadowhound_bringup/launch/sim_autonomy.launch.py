@@ -121,16 +121,16 @@ def create_launch_arguments() -> List[DeclareLaunchArgument]:
             description="Robot namespace (e.g., tachi, ghost, motoko)",
         ),
         DeclareLaunchArgument(
-            "rviz2", default_value="true", description="Launch RViz2 for visualization"
+            "rviz2", default_value="True", description="Launch RViz2 for visualization"
         ),
         DeclareLaunchArgument(
-            "nav2", default_value="true", description="Launch Nav2 navigation stack"
+            "nav2", default_value="True", description="Launch Nav2 navigation stack"
         ),
         DeclareLaunchArgument(
-            "slam", default_value="true", description="Launch SLAM Toolbox for mapping"
+            "slam", default_value="True", description="Launch SLAM Toolbox for mapping"
         ),
         DeclareLaunchArgument(
-            "foxglove", default_value="true", description="Launch Foxglove Bridge"
+            "foxglove", default_value="True", description="Launch Foxglove Bridge"
         ),
         DeclareLaunchArgument(
             "use_sim_time",
