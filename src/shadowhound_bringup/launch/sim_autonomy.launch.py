@@ -213,13 +213,13 @@ def create_navigation_stack(
             ),
             condition=IfCondition(with_nav2),
             launch_arguments={
-                "namespace": config.robot_namespace,
-                "use_namespace": "true",  # lowercase for ROS2 launch boolean
-                "slam": LaunchConfiguration("slam"),  # Pass through slam parameter
-                "map": "",  # Empty when using SLAM (SLAM creates the map)
-                "params_file": config.config_paths["nav2"],
-                "use_sim_time": use_sim_time,
-                "autostart": "true",  # lowercase for ROS2 launch boolean
+                'namespace': config.robot_namespace,
+                'use_namespace': 'true',
+                'slam': with_slam,
+                'map': '',
+                'params_file': config.config_paths["nav2"],
+                'use_sim_time': use_sim_time,
+                'autostart': 'true',
             }.items(),
         ),
     ]
