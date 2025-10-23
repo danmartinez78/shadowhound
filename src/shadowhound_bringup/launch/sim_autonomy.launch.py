@@ -212,6 +212,7 @@ def create_navigation_stack(
             ),
             condition=IfCondition(with_slam),
             launch_arguments={
+                "namespace": config.robot_namespace,
                 "slam_params_file": config.config_paths["slam"],
                 "use_sim_time": use_sim_time,
             }.items(),
@@ -229,6 +230,7 @@ def create_navigation_stack(
             ),
             condition=IfCondition(with_nav2),
             launch_arguments={
+                "namespace": config.robot_namespace,
                 "params_file": config.config_paths["nav2"],
                 "use_sim_time": use_sim_time,
             }.items(),
