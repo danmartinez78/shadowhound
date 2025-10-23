@@ -1120,7 +1120,12 @@ launch_sim_autonomy_stack() {
     
     # Launch with log file
     local log_file="/tmp/shadowhound_sim_autonomy.log"
+    
+    # Determine robot namespace (use ROBOT_NAMESPACE env var or default based on mode)
+    local robot_ns="${ROBOT_NAMESPACE:-robot0}"
+    
     ros2 launch "$launch_file" \
+        robot_namespace:="$robot_ns" \
         rviz2:=true \
         nav2:=true \
         slam:=true \
