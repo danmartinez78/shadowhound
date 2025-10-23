@@ -46,7 +46,12 @@ from launch.launch_description_sources import (
     FrontendLaunchDescriptionSource,
     PythonLaunchDescriptionSource,
 )
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution, TextSubstitution
+from launch.substitutions import (
+    Command,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    TextSubstitution,
+)
 
 
 class SimAutonomyConfig:
@@ -173,7 +178,10 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
         ],
         parameters=[
             {
-                "target_frame": [config.robot_namespace, TextSubstitution(text="/base_link")],
+                "target_frame": [
+                    config.robot_namespace,
+                    TextSubstitution(text="/base_link"),
+                ],
                 "transform_tolerance": 0.01,
                 "min_height": 0.0,
                 "max_height": 1.0,
@@ -213,13 +221,13 @@ def create_navigation_stack(
             ),
             condition=IfCondition(with_nav2),
             launch_arguments={
-                "namespace": config.robot_namespace,
-                "use_namespace": "true",
-                "slam": with_slam,
-                "map": "",
-                "params_file": config.config_paths["nav2"],
-                "use_sim_time": use_sim_time,
-                "autostart": "true",
+                'namespace': config.robot_namespace,
+                'use_namespace': 'True',
+                'slam': with_slam,
+                'map': '',
+                'params_file': config.config_paths["nav2"],
+                'use_sim_time': use_sim_time,
+                'autostart': 'True',
             }.items(),
         ),
     ]
