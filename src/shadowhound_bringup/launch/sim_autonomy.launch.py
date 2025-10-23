@@ -168,9 +168,8 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
         namespace=config.robot_namespace,
         output="screen",
         remappings=[
-            # Isaac Sim publishes point_cloud2_L1
+            # Isaac Sim publishes point_cloud2_L1 instead of default cloud_in
             ("cloud_in", "point_cloud2_L1"),
-            ("scan", "scan"),
         ],
         parameters=[
             {
