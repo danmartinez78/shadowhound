@@ -1472,11 +1472,73 @@ verify_robot_topics() {
 }
 
 # ============================================================================
+# Wait for Nav2 Costmaps (Simulation Only)
+# ============================================================================
+
+wait_for_costmap_topics() {
+    local robot_ns="${1:-robot0}"
+    local timeout=120  # 2 minutes
+    local elapsed=0
+    local check_interval=5
+    
+    print_info "Waiting for Nav2 costmaps to initialize..."
+    print_info "  Looking for: ${robot_ns}/local_costmap/costmap"
+    
+    while [ $elapsed -lt $timeout ]; do
+        if ros2 topic list 2>/dev/null | grep -q "${robot_ns}/local_costmap/costmap"; then
+            print_success "Costmap topics detected!"
+            
+            # Give it a moment to stabilize
+            print_info "Waiting 5s for costmaps to stabilize..."
+            sleep 5
+            
+            # Verify costmap is actually publishing
+            if timeout 10 ros2 topic hz "${robot_ns}/local_costmap/costmap" --window 5 2>&1 | grep -q "average rate"; then
+                print_success "Costmaps are publishing data"
+                return 0
+            else
+                print_warning "Costmap topic exists but no data yet..."
+            fi
+        fi
+        
+        sleep $check_interval
+        elapsed=$((elapsed + check_interval))
+        
+        if [ $((elapsed % 15)) -eq 0 ]; then
+            print_info "  Still waiting... (${elapsed}s/${timeout}s)"
+            print_info "  Available topics with '${robot_ns}':"
+            ros2 topic list 2>/dev/null | grep "${robot_ns}" | head -5
+        fi
+    done
+    
+    print_error "Costmap topics not found after ${timeout}s"
+    print_info "Available topics:"
+    ros2 topic list 2>/dev/null | grep -E "${robot_ns}|costmap" || echo "  (none found)"
+    print_info ""
+    print_info "Possible causes:"
+    print_info "  1. Nav2 failed to start - check logs"
+    print_info "  2. SLAM Toolbox not publishing map"
+    print_info "  3. TF frames misconfigured"
+    print_info "  4. Scan topic not available"
+    return 1
+}
+
+# ============================================================================
 # Launch Mission Agent
 # ============================================================================
 
 launch_mission_agent() {
     print_section "Stage 3: Launching Mission Agent"
+    
+    # In simulation mode, wait for costmaps before launching agent
+    if [ "$ROBOT_MODE" = "simulation" ]; then
+        local robot_ns="${ROBOT_NAMESPACE:-robot0}"
+        if ! wait_for_costmap_topics "$robot_ns"; then
+            print_error "Costmaps not ready - cannot launch mission agent safely"
+            print_info "Debug with: ros2 topic list | grep costmap"
+            return 1
+        fi
+    fi
     
     # Build launch command
     local launch_cmd="ros2 launch shadowhound_mission_agent mission_agent.launch.py"
