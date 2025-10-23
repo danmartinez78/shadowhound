@@ -627,36 +627,13 @@ build_workspace() {
     
     print_info "Building ShadowHound packages..."
     
-    # Build Go2 ROS2 SDK packages first (needed by DIMOS)
-    print_info "Building Go2 ROS2 SDK packages..."
-    # Build all Go2 SDK packages (nested submodule in DIMOS)
-    # Core packages: go2_interfaces, unitree_go, go2_robot_sdk
-    # Perception packages: lidar_processor, lidar_processor_cpp, coco_detector, speech_processor
-    # Note: These often have build issues (nested submodule), non-critical for mission agent
+    # Do a SINGLE complete build to ensure all packages are fresh
+    # This prevents stale files in build/ from partial builds
+    # Note: Some Go2 SDK packages may fail (nested submodule), non-critical for mission agent
+    print_info "Building all packages (Go2 SDK + ShadowHound)..."
     
-    # Temporarily disable 'exit on error' for optional Go2 build
-    set +e
-    colcon build --packages-select \
-        go2_interfaces unitree_go go2_robot_sdk \
-        lidar_processor lidar_processor_cpp coco_detector speech_processor \
-        --symlink-install > /tmp/go2_build.log 2>&1
-    local go2_result=$?
-    set -e
-    
-    if [ $go2_result -eq 0 ]; then
-        print_success "Go2 SDK packages built successfully"
-    else
-        if grep -q "Failed.*go2_interfaces" /tmp/go2_build.log; then
-            print_warning "Go2 SDK build had issues (non-critical)"
-            print_info "This is expected if packages were already built in a previous run"
-        else
-            print_warning "Some Go2 SDK packages failed to build (non-critical for mission agent)"
-        fi
-    fi
-    
-    # Build our packages (skip DIMOS perception models with CUDA issues)
-    print_info "Building ShadowHound mission agent..."
-    if colcon build --packages-select shadowhound_mission_agent shadowhound_bringup --symlink-install 2>&1 | tee -a /tmp/colcon_build.log; then
+    # Use --continue-on-error to build what we can (Go2 SDK optional)
+    if colcon build --symlink-install --merge-install --continue-on-error 2>&1 | tee /tmp/colcon_build.log; then
         print_success "Build completed successfully"
     else
         print_error "Build failed"

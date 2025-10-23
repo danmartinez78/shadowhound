@@ -79,6 +79,7 @@ class MissionExecutorConfig:
     - Cloud Fallback: agent_backend='openai' (slower but higher quality)
     """
 
+    robot_namespace: str = "tachi"  # Robot namespace (e.g., tachi, ghost, motoko)
     agent_backend: str = "openai"  # 'openai' or 'ollama'
     use_planning_agent: bool = False  # Use PlanningAgent vs OpenAIAgent
     robot_ip: str = "192.168.1.103"  # Robot IP address
@@ -207,20 +208,21 @@ class MissionExecutor:
 
         # Initialize ROS control bridge
         # Note: This uses ROS topics but doesn't require the caller to be a ROS node
-        # use_raw=True: Subscribe to Image instead of CompressedImage (sim publishes Image)
-        ros_control = UnitreeROSControl(
-            webrtc_api_topic=self.config.webrtc_api_topic,
-            use_raw=True,  # Use raw Image topics for simulation compatibility
-        )
+        ros_control = UnitreeROSControl(webrtc_api_topic=self.config.webrtc_api_topic)
 
         # Initialize robot with ROS provider
         # CONN_TYPE env var controls the underlying communication protocol
+        # namespace parameter enables multi-robot support and hardware/sim parity
         self.robot = UnitreeGo2(
             ros_control=ros_control,
             ip=self.config.robot_ip,
+            namespace=self.config.robot_namespace,
         )
 
-        self.logger.info(f"Robot initialized (ip={self.config.robot_ip})")
+        self.logger.info(
+            f"Robot initialized (ip={self.config.robot_ip}, "
+            f"namespace=/{self.config.robot_namespace})"
+        )
 
     def _init_skills(self) -> None:
         """Initialize DIMOS skill library.
