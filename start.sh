@@ -1497,6 +1497,19 @@ launch_mission_agent() {
         launch_cmd="$launch_cmd robot_mode:=$ROBOT_MODE"
     fi
     
+    # Add robot namespace parameter
+    # Use ROBOT_NAMESPACE from environment/config, with smart defaults based on robot mode
+    if [ -n "$ROBOT_NAMESPACE" ]; then
+        # Explicit namespace set in .env or environment
+        launch_cmd="$launch_cmd robot_namespace:=$ROBOT_NAMESPACE"
+    elif [ "$ROBOT_MODE" = "simulation" ]; then
+        # Isaac Sim default namespace
+        launch_cmd="$launch_cmd robot_namespace:=robot0"
+    else
+        # Hardware/mock default namespace
+        launch_cmd="$launch_cmd robot_namespace:=tachi"
+    fi
+    
     # Add planning agent parameter
     if [ -n "$USE_PLANNING_AGENT" ]; then
         launch_cmd="$launch_cmd use_planning_agent:=$USE_PLANNING_AGENT"
