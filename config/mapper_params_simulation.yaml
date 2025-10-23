@@ -1,8 +1,8 @@
 # SLAM Mapper Parameters for Simulation Mode
 # This file is used when running with Isaac Sim (ROBOT_MODE=simulation)
-# Differences from mapper_params_online_async.yaml:
-# - Frame IDs use robot0/ prefix (robot0/odom, robot0/map, robot0/base_link)
-# - Scan topic uses robot0 namespace (/robot0/scan instead of /scan)
+# 
+# IMPORTANT: This config is namespace-agnostic. The robot namespace (e.g., robot0, robot1, tachi)
+# is applied by the launch system. Frame IDs and topic names should NOT include namespace prefixes.
 
 slam_toolbox:
   ros__parameters:
@@ -16,10 +16,10 @@ slam_toolbox:
     ceres_loss_function: None
 
     # ROS Parameters
-    odom_frame: robot0/odom
-    map_frame: robot0/map
-    base_frame: robot0/base_link
-    scan_topic: /robot0/scan
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_link
+    scan_topic: scan
     use_map_saver: true
     mode: mapping
 
