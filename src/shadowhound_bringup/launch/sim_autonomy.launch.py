@@ -36,9 +36,8 @@ import os
 from typing import List
 
 from ament_index_python.packages import get_package_share_directory
-from launch_ros.actions import Node
+from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.parameter_descriptions import ParameterValue
-from launch_ros.actions import PushRosNamespace
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
@@ -217,6 +216,7 @@ def create_navigation_stack(
                 "namespace": config.robot_namespace,
                 "use_namespace": "True",
                 "slam": LaunchConfiguration("slam"),  # Pass through slam parameter
+                "map": "",  # Empty when using SLAM (SLAM creates the map)
                 "params_file": config.config_paths["nav2"],
                 "use_sim_time": use_sim_time,
                 "autostart": "True",
