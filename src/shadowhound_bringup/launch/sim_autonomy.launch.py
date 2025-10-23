@@ -38,9 +38,10 @@ from typing import List
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
+from launch_ros.actions import PushRosNamespace
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import (
     FrontendLaunchDescriptionSource,
@@ -192,38 +193,22 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
 def create_navigation_stack(
     config: SimAutonomyConfig,
 ) -> List[IncludeLaunchDescription]:
-    """Create Nav2 and SLAM stack"""
+    """Create Nav2 and SLAM stack using bringup_launch.py for proper namespacing"""
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
     return [
-        # SLAM Toolbox for mapping
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [
-                    os.path.join(
-                        get_package_share_directory("slam_toolbox"),
-                        "launch",
-                        "online_async_launch.py",
-                    )
-                ]
-            ),
-            condition=IfCondition(with_slam),
-            launch_arguments={
-                "namespace": config.robot_namespace,
-                "slam_params_file": config.config_paths["slam"],
-                "use_sim_time": use_sim_time,
-            }.items(),
-        ),
-        # Nav2 Navigation Stack
+        # Nav2 Bringup (includes both navigation and optional SLAM)
+        # Using bringup_launch.py instead of navigation_launch.py because only
+        # bringup_launch.py supports the use_namespace parameter for multi-robot
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 [
                     os.path.join(
                         get_package_share_directory("nav2_bringup"),
                         "launch",
-                        "navigation_launch.py",
+                        "bringup_launch.py",
                     )
                 ]
             ),
@@ -231,8 +216,10 @@ def create_navigation_stack(
             launch_arguments={
                 "namespace": config.robot_namespace,
                 "use_namespace": "True",
+                "slam": LaunchConfiguration("slam"),  # Pass through slam parameter
                 "params_file": config.config_paths["nav2"],
                 "use_sim_time": use_sim_time,
+                "autostart": "True",
             }.items(),
         ),
     ]
