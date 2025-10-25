@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+CycloneDDS Configuration for Network Communication
+
+Optimized for large messages (LiDAR point clouds) over wired network.
+
+Reference: https://docs.ros.org/en/humble/How-To-Guides/DDS-tuning.html
+
+Usage:
+    export CYCLONEDDS_URI=file://$(pwd)/config/cyclonedds_network.xml
+-->
+<CycloneDDS xmlns="https://cdds.io/config" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+    <Domain id="any">
+        <Internal>
+            <!-- Increase socket receive buffer for large messages (10MB minimum) -->
+            <SocketReceiveBufferSize min="10MB"/>
+            
+            <!-- Fragment size for large messages - default is 1280, increase for better performance -->
+            <FragmentSize>4096</FragmentSize>
+        </Internal>
+        
+        <Discovery>
+            <!-- Use multicast for discovery on local network -->
+            <ParticipantIndex>auto</ParticipantIndex>
+        </Discovery>
+    </Domain>
+</CycloneDDS>
