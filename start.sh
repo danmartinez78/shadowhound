@@ -982,7 +982,12 @@ show_summary() {
 
 export ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
 export ROBOT_IP=${ROBOT_IP:-192.168.10.167}
-export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+# RMW Implementation - only set if already configured
+# Must match what Isaac Sim/Tower nodes use (usually FastDDS default)
+if [ -n "${RMW_IMPLEMENTATION:-}" ]; then
+    export RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION}
+fi
 
 # Connection type for Unitree Go2 (cyclonedds for Ethernet, webrtc for WiFi)
 # WebRTC required for DIMOS high-level API commands (sit, stand, wave, etc.)
