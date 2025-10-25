@@ -221,13 +221,13 @@ def create_navigation_stack(
             ),
             condition=IfCondition(with_nav2),
             launch_arguments={
-                'namespace': config.robot_namespace,
-                'use_namespace': 'True',
-                'slam': with_slam,
-                'map': '',
-                'params_file': config.config_paths["nav2"],
-                'use_sim_time': use_sim_time,
-                'autostart': 'True',
+                "namespace": config.robot_namespace,
+                "use_namespace": "True",
+                "slam": with_slam,
+                "map": "",
+                "params_file": config.config_paths["nav2"],
+                "use_sim_time": use_sim_time,
+                "autostart": "True",
             }.items(),
         ),
     ]
@@ -259,7 +259,7 @@ def create_visualization_nodes(config: SimAutonomyConfig) -> List:
         Node(
             package="rviz2",
             executable="rviz2",
-            name="rviz2",
+            name="rviz2_laptop",  # Unique name to avoid conflict with Tower's RViz
             output="screen",
             arguments=["-d", config.config_paths["rviz"]],
             condition=IfCondition(with_rviz2),
