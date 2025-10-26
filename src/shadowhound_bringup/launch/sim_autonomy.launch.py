@@ -236,12 +236,15 @@ def create_navigation_stack(
             ),
             condition=IfCondition(with_nav2),
             launch_arguments={
+                "namespace": "",  # Empty because PushRosNamespace handles it
                 "use_namespace": "false",  # We handle namespacing via GroupAction
                 "slam": "False",
                 "map": "",
                 "params_file": config.config_paths["nav2"],
                 "use_sim_time": use_sim_time,
                 "autostart": "True",
+                "use_composition": "True",  # Use component container
+                "use_respawn": "False",
             }.items(),
         )
     ])
