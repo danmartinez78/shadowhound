@@ -237,14 +237,14 @@ def create_navigation_stack(
             "namespace": config.robot_namespace,  # Nav2 will namespace everything
             "use_namespace": "true",  # Enable Nav2's internal namespacing + TF remaps
             "slam": "False",
-                "map": "",
-                "params_file": config.config_paths["nav2"],
-                "use_sim_time": use_sim_time,
-                "autostart": "True",
-                "use_composition": "True",  # Use component container
-                "use_respawn": "False",
-            }.items(),
-        )
+            "map": "",
+            "params_file": config.config_paths["nav2"],
+            "use_sim_time": use_sim_time,
+            "autostart": "True",
+            "use_composition": "False",  # Disable composition to avoid RewrittenYaml issues
+            "use_respawn": "False",
+        }.items(),
+    )
 
     # SLAM Toolbox with explicit TF remappings
     slam_node = Node(
