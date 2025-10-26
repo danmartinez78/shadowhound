@@ -202,7 +202,7 @@ def create_navigation_stack(
 ) -> List:
     """
     Create Nav2 and SLAM stack with proper namespacing.
-    
+
     STRATEGY:
     1. Use GroupAction + PushRosNamespace to namespace all nodes/topics
     2. Use use_namespace="true" so Nav2 applies TF remappings correctly
@@ -215,8 +215,11 @@ def create_navigation_stack(
     with_slam = LaunchConfiguration("slam")
 
     # Nav2 Navigation Stack
-    # Use namespace + use_namespace="true" WITHOUT PushRosNamespace
-    # Nav2's bringup already handles namespacing correctly with these arguments
+    # MULTI-ROBOT STRATEGY:
+    # - use_namespace="false" so Nav2 doesn't modify frame IDs
+    # - Pass namespace to namespace nodes/topics manually
+    # - Params file must have ABSOLUTE frame IDs (robot0/odom, robot0/base_link)
+    # - This matches what Isaac Sim publishes on global /tf
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -230,7 +233,7 @@ def create_navigation_stack(
         condition=IfCondition(with_nav2),
         launch_arguments={
             "namespace": config.robot_namespace,
-            "use_namespace": "true",  # Enables namespacing + TF remappings
+            "use_namespace": "false",  # Don't modify frame IDs - use absolute IDs from params
             "slam": "False",
             "map": "",
             "params_file": config.config_paths["nav2"],
