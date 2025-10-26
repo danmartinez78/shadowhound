@@ -20,8 +20,11 @@ summary: >
 ## 🎯 Current Status
 
 **PROBLEM SOLVED**: Nav2 costmap TF timeout errors  
-**ROOT CAUSE IDENTIFIED**: Nav2's `bringup_launch.py` doesn't propagate TF remappings to SLAM  
-**SOLUTION IMPLEMENTED**: Launch SLAM separately with explicit TF remappings  
+**ROOT CAUSE IDENTIFIED**: Frame IDs in config were absolute (robot0/odom) but Nav2 with use_namespace=True expects relative (odom)  
+**SOLUTION IMPLEMENTED**: 
+1. Launch SLAM separately with explicit TF remappings
+2. Use relative frame IDs in Nav2 params (Nav2 adds namespace automatically)
+
 **READY FOR**: Laptop testing to verify Nav2 + SLAM work end-to-end
 
 ---
@@ -72,15 +75,15 @@ summary: >
 ### 1. Pull Latest Changes
 ```bash
 cd ~/shadowhound
-git pull origin feature/laptop-sim-integration  # Get commit ccd33db
+git pull origin feature/laptop-sim-integration  # Get commit e494604
 ```
 
 **Expected Output**:
 ```
-Updating f172df3..ccd33db
+Updating f633bb7..e494604
 Fast-forward
- src/shadowhound_bringup/launch/sim_autonomy.launch.py | 95 ++++++++++++--------
- 1 file changed, 55 insertions(+), 40 deletions(-)
+ config/nav2_params_simulation.yaml | 28 ++++++++++++----------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 ```
 
 ### 2. Rebuild
@@ -213,10 +216,14 @@ Laptop:
 
 ### Why This Fix Works
 1. **Nav2's `bringup_launch.py`** has remappings: `[('/tf', 'tf'), ('/tf_static', 'tf_static')]`
-2. BUT these remappings only apply to the `nav2_container` node
-3. Included launch files (like `slam_launch.py`) don't inherit remappings
-4. **Solution**: Launch SLAM as direct `Node` so remappings work
-5. Result: Both Nav2 and SLAM subscribe to global `/tf` correctly
+2. These remappings only apply to the `nav2_container` node, not included launches
+3. **Solution Part 1**: Launch SLAM as direct `Node` so remappings work
+4. **Solution Part 2**: Use **relative frame IDs** (odom, base_link) in params
+5. When `use_namespace=True`, Nav2 automatically prepends namespace: `odom` → `robot0/odom`
+6. Result: Nav2 looks for `robot0/odom` which matches what Isaac Sim publishes ✅
+
+**Key Insight**: Absolute frame IDs (`robot0/odom`) in params + `use_namespace=True` = Nav2 looks for `robot0/robot0/odom` ❌  
+**Correct Pattern**: Relative frame IDs (`odom`) in params + `use_namespace=True` = Nav2 looks for `robot0/odom` ✅
 
 ### Code Structure
 ```python
@@ -252,7 +259,9 @@ Node(
 
 1. **`344aba2`** - First attempt: Added `SetRemap` in `GroupAction` (failed - LaunchConfiguration issue)
 2. **`f172df3`** - Fixed outdated RMW comment (CycloneDDS → FastDDS)
-3. **`ccd33db`** - Final fix: Launch SLAM separately with remappings (current)
+3. **`ccd33db`** - Launch SLAM separately with remappings (fixed parse error but frames still wrong)
+4. **`f633bb7`** - Created handoff document
+5. **`e494604`** - **CRITICAL FIX**: Use relative frame IDs in Nav2 params (current)
 
 ---
 
