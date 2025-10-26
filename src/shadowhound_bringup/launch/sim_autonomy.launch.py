@@ -233,8 +233,8 @@ def create_navigation_stack(
         ),
         condition=IfCondition(with_nav2),
         launch_arguments={
-            "namespace": config.robot_namespace,  # robot0
-            "use_namespace": "true",  # Isolate nodes/topics, NOT frame IDs
+            "namespace": "",  # Empty - let frame IDs be absolute
+            "use_namespace": "false",  # Don't modify anything
             "slam": "False",
             "map": "",
             "params_file": config.config_paths["nav2"],
