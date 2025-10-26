@@ -214,34 +214,37 @@ def create_navigation_stack(
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
-    # Nav2 Navigation Stack
-    # MULTI-ROBOT STRATEGY:
-    # - use_namespace="true" enables Nav2's built-in multi-robot support
-    # - Nav2 will namespace nodes/topics AND prepend namespace to RELATIVE frame IDs
-    # - Params file must use RELATIVE frame IDs (odom, base_link)
-    # - Nav2 converts: odom -> robot0/odom to match Isaac Sim's TF frames
-    # - Built-in TF remappings keep /tf and /tf_static global
-    nav2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [
-                os.path.join(
-                    get_package_share_directory("nav2_bringup"),
-                    "launch",
-                    "bringup_launch.py",
-                )
-            ]
-        ),
-        condition=IfCondition(with_nav2),
-        launch_arguments={
-            "namespace": config.robot_namespace,
-            "use_namespace": "true",  # Enable proper namespacing + frame ID prepending
-            "slam": "False",
-            "map": "",
-            "params_file": config.config_paths["nav2"],
-            "use_sim_time": use_sim_time,
-            "autostart": "True",
-        }.items(),
-    )
+    # Nav2 Navigation Stack wrapped in GroupAction for proper namespacing
+    # MULTI-ROBOT STRATEGY (based on ROS2 multi-robot research):
+    # - Isaac Sim publishes namespaced TF frames (robot0/odom, robot0/base_link) to global /tf
+    # - We need to namespace Nav2 nodes/topics BUT keep /tf global
+    # - GroupAction with PushRosNamespace handles node/topic namespacing
+    # - Explicit remappings keep /tf and /tf_static global
+    # - use_namespace="false" prevents Nav2 from applying its own namespacing
+    # - Params use absolute frame IDs (robot0/odom) matching Isaac Sim's TF frames
+    nav2_launch = GroupAction([
+        PushRosNamespace(config.robot_namespace),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                [
+                    os.path.join(
+                        get_package_share_directory("nav2_bringup"),
+                        "launch",
+                        "bringup_launch.py",
+                    )
+                ]
+            ),
+            condition=IfCondition(with_nav2),
+            launch_arguments={
+                "use_namespace": "false",  # We handle namespacing via GroupAction
+                "slam": "False",
+                "map": "",
+                "params_file": config.config_paths["nav2"],
+                "use_sim_time": use_sim_time,
+                "autostart": "True",
+            }.items(),
+        )
+    ])
 
     # SLAM Toolbox with explicit TF remappings
     slam_node = Node(
