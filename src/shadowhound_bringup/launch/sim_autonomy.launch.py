@@ -214,14 +214,13 @@ def create_navigation_stack(
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
-    # Nav2 Navigation Stack
-    # MULTI-ROBOT STRATEGY (after extensive research and testing):
-    # - Isaac Sim publishes namespaced TF frames (robot0/odom, robot0/base_link) to global /tf
-    # - Nav2 use_namespace="true" applies PushRosNamespace internally for nodes/topics
-    # - Nav2 has built-in TF remappings when use_namespace=true: /tf -> tf, /tf_static -> tf_static
-    # - These remappings make namespaced nodes subscribe to GLOBAL /tf (what we want)
-    # - Params use absolute frame IDs (robot0/odom) since Isaac Sim already namespaces them
-    # - DO NOT wrap in additional GroupAction - Nav2 handles namespacing internally
+    # Nav2 Navigation Stack - ChatGPT's multi-robot pattern
+    # Following: https://chatgpt.com/share guidance
+    # - Isaac Sim publishes robot0/odom -> robot0/base_link on GLOBAL /tf
+    # - Params have absolute frame IDs (robot0/odom, robot0/base_link) matching Isaac Sim
+    # - use_namespace:=True isolates nodes/topics, does NOT modify frame IDs
+    # - namespace:=robot0 for node/topic namespacing
+    # - Frame IDs stay as written in params (robot0/odom stays robot0/odom)
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -234,14 +233,14 @@ def create_navigation_stack(
         ),
         condition=IfCondition(with_nav2),
         launch_arguments={
-            "namespace": config.robot_namespace,  # Nav2 will namespace everything
-            "use_namespace": "true",  # Enable Nav2's internal namespacing + TF remaps
+            "namespace": config.robot_namespace,  # robot0
+            "use_namespace": "true",  # Isolate nodes/topics, NOT frame IDs
             "slam": "False",
             "map": "",
             "params_file": config.config_paths["nav2"],
             "use_sim_time": use_sim_time,
             "autostart": "True",
-            "use_composition": "False",  # Disable composition to avoid RewrittenYaml issues
+            "use_composition": "False",  # Non-composed for simpler param loading
             "use_respawn": "False",
         }.items(),
     )
