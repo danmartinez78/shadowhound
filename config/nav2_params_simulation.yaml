@@ -13,12 +13,12 @@ amcl:
     alpha3: 0.2
     alpha4: 0.2
     alpha5: 0.2
-    base_frame_id: "robot0/base_link"
+    base_frame_id: "base_link"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
     beam_skip_threshold: 0.3
     do_beamskip: false
-    global_frame_id: "robot0/odom"
+    global_frame_id: "odom"
     lambda_short: 0.1
     laser_likelihood_max_dist: 2.0
     laser_max_range: 100.0
@@ -27,7 +27,7 @@ amcl:
     max_beams: 60
     max_particles: 2000
     min_particles: 500
-    odom_frame_id: "robot0/odom"
+    odom_frame_id: "odom"
     pf_err: 0.05
     pf_z: 0.99
     recovery_alpha_fast: 0.0
@@ -49,8 +49,8 @@ amcl:
 bt_navigator:
   ros__parameters:
     use_sim_time: False
-    global_frame: robot0/odom
-    robot_base_frame: robot0/base_link
+    global_frame: odom
+    robot_base_frame: base_link
     odom_topic: odom
     bt_loop_duration: 10
     default_server_timeout: 20
@@ -190,8 +190,8 @@ local_costmap:
     ros__parameters:
       update_frequency: 1.0
       publish_frequency: 1.0
-      global_frame: robot0/odom
-      robot_base_frame: robot0/base_link
+      global_frame: odom
+      robot_base_frame: base_link
       use_sim_time: False
       rolling_window: true
       width: 6
@@ -231,8 +231,8 @@ global_costmap:
     ros__parameters:
       update_frequency: 1.0
       publish_frequency: 1.0
-      global_frame: robot0/odom
-      robot_base_frame: robot0/base_link
+      global_frame: odom
+      robot_base_frame: base_link
       use_sim_time: False
       resolution: 0.05
       track_unknown_space: False
@@ -273,8 +273,8 @@ global_costmap:
 map_server:
   ros__parameters:
     use_sim_time: False
-    # Overridden in launch by the "robot0/map" launch configuration or provided default value.
-    # To use in yaml, remove the default "robot0/map" value in the tb3_simulation_launch.py file & provide full path to map below.
+    # Overridden in launch by the "map" launch configuration or provided default value.
+    # To use in yaml, remove the default "map" value in the tb3_simulation_launch.py file & provide full path to map below.
     yaml_filename: ""
 
 map_saver:
@@ -338,8 +338,8 @@ behavior_server:
       plugin: "nav2_behaviors/Wait"
     assisted_teleop:
       plugin: "nav2_behaviors/AssistedTeleop"
-    global_frame: robot0/odom
-    robot_base_frame: robot0/base_link
+    global_frame: odom
+    robot_base_frame: base_link
     transform_tolerance: 0.1
     use_sim_time: true
     simulate_ahead_time: 2.0
