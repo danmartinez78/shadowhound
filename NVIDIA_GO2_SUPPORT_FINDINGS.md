@@ -192,7 +192,8 @@ git log -1 --oneline > ~/backups/isaac_lab_commit_$(date +%Y%m%d).txt
 - Isaac Sim GitHub: https://github.com/isaac-sim/IsaacSim
 
 ### go2_omniverse (Community)
-- Repository: https://github.com/abizovnuralem/go2_omniverse
+- Repository: https://github.com/danmartinez78/go2_omniverse (our fork)
+- Upstream: https://github.com/abizovnuralem/go2_omniverse
 - Branch: `added_copter` (May 28, 2025)
 - Features: RTX LiDAR, Nav2, SLAM
 

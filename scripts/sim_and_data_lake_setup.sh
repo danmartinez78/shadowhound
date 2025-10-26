@@ -643,7 +643,7 @@ clone_go2_omniverse_and_patch(){
   if [[ -d "$ws/go2_omniverse/.git" ]]; then
     run "git -C \"$ws/go2_omniverse\" fetch && git -C \"$ws/go2_omniverse\" checkout added_copter && git -C \"$ws/go2_omniverse\" pull --ff-only"
   else
-    run "git clone --branch added_copter https://github.com/abizovnuralem/go2_omniverse \"$ws/go2_omniverse\""
+    run "git clone --branch added_copter https://github.com/danmartinez78/go2_omniverse \"$ws/go2_omniverse\""
   fi
   # Initialize submodules (contains IsaacSim-ros_workspaces and go2_omniverse_ws)
   say "Initializing go2_omniverse submodules..."

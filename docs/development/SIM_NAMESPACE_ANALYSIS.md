@@ -2,7 +2,8 @@
 
 **Date**: October 22, 2025  
 **Issue**: Simulation currently hardcodes `robot0` namespace, need configurable namespace support  
-**Repository**: https://github.com/abizovnuralem/go2_omniverse (branch: `added_copter`)
+**Repository**: https://github.com/danmartinez78/go2_omniverse (fork, branch: `added_copter`)  
+**Upstream**: https://github.com/abizovnuralem/go2_omniverse
 
 ---
 
@@ -70,7 +71,7 @@ Since this is NOT part of our shadowhound repository, we need to:
 
 1. **Clone and inspect go2_omniverse**:
    ```bash
-   git clone --branch added_copter https://github.com/abizovnuralem/go2_omniverse /tmp/go2_omniverse
+   git clone --branch added_copter https://github.com/danmartinez78/go2_omniverse /tmp/go2_omniverse
    cd /tmp/go2_omniverse
    ```
 
@@ -223,7 +224,7 @@ remappings=[
 1. **Clone go2_omniverse** to inspect:
    ```bash
    cd /tmp
-   git clone --branch added_copter https://github.com/abizovnuralem/go2_omniverse
+   git clone --branch added_copter https://github.com/danmartinez78/go2_omniverse
    cd go2_omniverse
    git submodule update --init --recursive
    ```
@@ -509,7 +510,8 @@ python main.py --robot_amount 3 --device cuda \
 - **Stage 3 SDK Complete**: `docs/development/STAGE3_SDK_COMPLETE.md`
 - **Stage 2 Already Complete**: `docs/development/STAGE2_ALREADY_COMPLETE.md`
 - **Tower Quickstart**: `docs/deployment/tower_go2_isaac_sim_quickstart.md`
-- **go2_omniverse repo**: https://github.com/abizovnuralem/go2_omniverse
+- **go2_omniverse repo (our fork)**: https://github.com/danmartinez78/go2_omniverse
+- **go2_omniverse upstream**: https://github.com/abizovnuralem/go2_omniverse
 
 ---
 

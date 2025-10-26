@@ -474,7 +474,7 @@ main() {
     echo ""
     echo "• Clone go2_omniverse:"
     echo "  cd ~/workspace"
-    echo "  git clone --branch added_copter https://github.com/abizovnuralem/go2_omniverse"
+    echo "  git clone --branch added_copter https://github.com/danmartinez78/go2_omniverse"
     echo ""
     echo "• Run Go2 simulation:"
     echo "  cd ~/workspace/go2_omniverse"
