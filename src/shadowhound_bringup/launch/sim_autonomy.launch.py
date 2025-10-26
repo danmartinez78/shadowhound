@@ -216,10 +216,11 @@ def create_navigation_stack(
 
     # Nav2 Navigation Stack
     # MULTI-ROBOT STRATEGY:
-    # - use_namespace="false" so Nav2 doesn't modify frame IDs
-    # - Pass namespace to namespace nodes/topics manually
-    # - Params file must have ABSOLUTE frame IDs (robot0/odom, robot0/base_link)
-    # - This matches what Isaac Sim publishes on global /tf
+    # - use_namespace="true" enables Nav2's built-in multi-robot support
+    # - Nav2 will namespace nodes/topics AND prepend namespace to RELATIVE frame IDs
+    # - Params file must use RELATIVE frame IDs (odom, base_link)
+    # - Nav2 converts: odom -> robot0/odom to match Isaac Sim's TF frames
+    # - Built-in TF remappings keep /tf and /tf_static global
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -233,7 +234,7 @@ def create_navigation_stack(
         condition=IfCondition(with_nav2),
         launch_arguments={
             "namespace": config.robot_namespace,
-            "use_namespace": "false",  # Don't modify frame IDs - use absolute IDs from params
+            "use_namespace": "true",  # Enable proper namespacing + frame ID prepending
             "slam": "False",
             "map": "",
             "params_file": config.config_paths["nav2"],
