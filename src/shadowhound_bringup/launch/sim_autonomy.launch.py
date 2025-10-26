@@ -122,8 +122,8 @@ def create_launch_arguments() -> List[DeclareLaunchArgument]:
     return [
         DeclareLaunchArgument(
             "robot_namespace",
-            default_value="tachi",
-            description="Robot namespace (e.g., tachi, ghost, motoko)",
+            default_value="robot0",
+            description="Robot namespace (e.g., robot0, robot1)",
         ),
         DeclareLaunchArgument(
             "rviz2", default_value="True", description="Launch RViz2 for visualization"
@@ -163,8 +163,8 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
     """
     Convert LiDAR pointcloud to laserscan for Nav2
 
-    Subscribes to: /robot0/point_cloud2_L1 (from Isaac Sim)
-    Publishes to: /robot0/scan (for Nav2)
+    Subscribes to: /robot0/point_cloud2_L1 (from Isaac Sim - absolute path)
+    Publishes to: /robot0/scan (namespaced, for Nav2)
     """
     return Node(
         package="pointcloud_to_laserscan",
@@ -173,8 +173,9 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
         namespace=config.robot_namespace,
         output="screen",
         remappings=[
-            # Isaac Sim publishes point_cloud2_L1 instead of default cloud_in
-            ("cloud_in", "point_cloud2_L1"),
+            # Absolute path to Isaac Sim's topic
+            ("cloud_in", "/robot0/point_cloud2_L1"),
+            ("scan", "scan"),  # Publishes to /robot0/scan (relative under namespace)
         ],
         parameters=[
             {
@@ -182,11 +183,11 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
                     config.robot_namespace,
                     TextSubstitution(text="/base_link"),
                 ],
-                "transform_tolerance": 0.01,
-                "min_height": 0.0,
-                "max_height": 1.0,
-                "angle_min": -1.5708,  # -90 degrees
-                "angle_max": 1.5708,  # +90 degrees
+                "transform_tolerance": 0.05,
+                "min_height": -0.2,
+                "max_height": 1.5,
+                "angle_min": -3.14159,
+                "angle_max": 3.14159,
                 "angle_increment": 0.0087,  # ~0.5 degrees
                 "scan_time": 0.1,
                 "range_min": 0.1,
@@ -203,24 +204,16 @@ def create_navigation_stack(
     """
     Create Nav2 and SLAM stack with proper namespacing.
 
-    STRATEGY:
-    1. Use GroupAction + PushRosNamespace to namespace all nodes/topics
-    2. Use use_namespace="true" so Nav2 applies TF remappings correctly
-    3. Use RELATIVE frame IDs in params (odom, base_link) - namespace auto-prepended
-    4. Isaac Sim publishes robot0/odom → robot0/base_link on GLOBAL /tf
-    5. Nav2's TF remappings keep TF topics global while frame IDs get namespaced
+    ChatGPT's multi-robot pattern:
+    - All nodes under /robot0/* namespace (matches Isaac Sim)
+    - use_namespace="true" isolates topics/services
+    - TF stays global (/tf), frames are robot0/* in params
+    - Scan publishes to /robot0/scan (matches costmap expectation)
     """
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
-    # Nav2 Navigation Stack - ChatGPT's multi-robot pattern
-    # Following: https://chatgpt.com/share guidance
-    # - Isaac Sim publishes robot0/odom -> robot0/base_link on GLOBAL /tf
-    # - Params have absolute frame IDs (robot0/odom, robot0/base_link) matching Isaac Sim
-    # - use_namespace:=True isolates nodes/topics, does NOT modify frame IDs
-    # - namespace:=robot0 for node/topic namespacing
-    # - Frame IDs stay as written in params (robot0/odom stays robot0/odom)
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -233,33 +226,33 @@ def create_navigation_stack(
         ),
         condition=IfCondition(with_nav2),
         launch_arguments={
-            "namespace": "",  # Empty - let frame IDs be absolute
-            "use_namespace": "false",  # Don't modify anything
+            "namespace": config.robot_namespace,  # /robot0/*
+            "use_namespace": "true",  # Isolate topics/services
             "slam": "False",
             "map": "",
             "params_file": config.config_paths["nav2"],
             "use_sim_time": use_sim_time,
             "autostart": "True",
-            "use_composition": "False",  # Non-composed for simpler param loading
+            "use_composition": "False",
             "use_respawn": "False",
         }.items(),
     )
 
-    # SLAM Toolbox with explicit TF remappings
     slam_node = Node(
         condition=IfCondition(with_slam),
         package="slam_toolbox",
         executable="sync_slam_toolbox_node",
         name="slam_toolbox",
-        namespace=config.robot_namespace,
+        namespace=config.robot_namespace,  # /robot0/*
         output="screen",
         parameters=[
             config.config_paths["slam"],
             {"use_sim_time": use_sim_time},
         ],
+        # Keep TF global; frames must be robot0/* in SLAM params
         remappings=[
-            ("tf", "/tf"),  # Remap relative tf to global /tf
-            ("tf_static", "/tf_static"),  # Remap relative tf_static to global
+            ("tf", "/tf"),
+            ("tf_static", "/tf_static"),
         ],
     )
 
