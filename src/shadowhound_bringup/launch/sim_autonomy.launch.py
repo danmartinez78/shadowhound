@@ -200,63 +200,67 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
 def create_navigation_stack(
     config: SimAutonomyConfig,
 ) -> List:
-    """Create Nav2 and SLAM stack separately for proper TF remapping"""
+    """
+    Create Nav2 and SLAM stack with proper namespacing.
+    
+    STRATEGY:
+    1. Use GroupAction + PushRosNamespace to namespace all nodes/topics
+    2. Use use_namespace="true" so Nav2 applies TF remappings correctly
+    3. Use RELATIVE frame IDs in params (odom, base_link) - namespace auto-prepended
+    4. Isaac Sim publishes robot0/odom → robot0/base_link on GLOBAL /tf
+    5. Nav2's TF remappings keep TF topics global while frame IDs get namespaced
+    """
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
-    nodes = []
-
-    # Nav2 Navigation Stack (without SLAM - we launch it separately)
-    # CRITICAL: We use use_namespace=False to avoid Nav2's TF remapping issues
-    # The namespace is manually specified which namespaces nodes/topics but not frame IDs
-    # This allows us to use absolute frame IDs (robot0/odom) in params that match Isaac Sim
-    nodes.append(
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [
-                    os.path.join(
-                        get_package_share_directory("nav2_bringup"),
-                        "launch",
-                        "bringup_launch.py",
-                    )
-                ]
+    # Nav2 Navigation Stack wrapped with PushRosNamespace
+    nav2_group = GroupAction(
+        condition=IfCondition(with_nav2),
+        actions=[
+            PushRosNamespace(config.robot_namespace),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    [
+                        os.path.join(
+                            get_package_share_directory("nav2_bringup"),
+                            "launch",
+                            "bringup_launch.py",
+                        )
+                    ]
+                ),
+                launch_arguments={
+                    "namespace": "",  # Empty - namespace comes from PushRosNamespace
+                    "use_namespace": "true",  # Enables Nav2's built-in TF remappings
+                    "slam": "False",  # Don't launch SLAM from Nav2
+                    "map": "",
+                    "params_file": config.config_paths["nav2"],
+                    "use_sim_time": use_sim_time,
+                    "autostart": "True",
+                }.items(),
             ),
-            condition=IfCondition(with_nav2),
-            launch_arguments={
-                "namespace": config.robot_namespace,
-                "use_namespace": "false",  # lowercase string - Nav2 expects "true"/"false"
-                "slam": "False",  # Don't launch SLAM from Nav2
-                "map": "",
-                "params_file": config.config_paths["nav2"],
-                "use_sim_time": use_sim_time,
-                "autostart": "True",
-            }.items(),
-        )
+        ],
     )
 
-    # SLAM Toolbox (launched separately with explicit TF remappings)
-    # This ensures TF topics stay global even with namespacing
-    nodes.append(
-        Node(
-            condition=IfCondition(with_slam),
-            package="slam_toolbox",
-            executable="sync_slam_toolbox_node",
-            name="slam_toolbox",
-            namespace=config.robot_namespace,
-            output="screen",
-            parameters=[
-                config.config_paths["slam"],
-                {"use_sim_time": use_sim_time},
-            ],
-            remappings=[
-                ("/tf", "/tf"),
-                ("/tf_static", "/tf_static"),
-            ],
-        )
+    # SLAM Toolbox with explicit TF remappings
+    slam_node = Node(
+        condition=IfCondition(with_slam),
+        package="slam_toolbox",
+        executable="sync_slam_toolbox_node",
+        name="slam_toolbox",
+        namespace=config.robot_namespace,
+        output="screen",
+        parameters=[
+            config.config_paths["slam"],
+            {"use_sim_time": use_sim_time},
+        ],
+        remappings=[
+            ("tf", "/tf"),  # Remap relative tf to global /tf
+            ("tf_static", "/tf_static"),  # Remap relative tf_static to global
+        ],
     )
 
-    return nodes
+    return [nav2_group, slam_node]
 
 
 def create_visualization_nodes(config: SimAutonomyConfig) -> List:
