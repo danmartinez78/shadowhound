@@ -230,7 +230,7 @@ def create_navigation_stack(
                     ]
                 ),
                 launch_arguments={
-                    "namespace": "",  # Empty - namespace comes from PushRosNamespace
+                    "namespace": config.robot_namespace,  # MUST pass namespace for param file resolution
                     "use_namespace": "true",  # Enables Nav2's built-in TF remappings
                     "slam": "False",  # Don't launch SLAM from Nav2
                     "map": "",
