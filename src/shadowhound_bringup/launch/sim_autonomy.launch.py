@@ -52,7 +52,6 @@ from launch.substitutions import (
     PathJoinSubstitution,
     TextSubstitution,
 )
-from launch_ros.actions import PushRosNamespace
 
 
 class SimAutonomyConfig:
@@ -205,13 +204,13 @@ def create_navigation_stack(
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
-    
+
     nodes = []
-    
+
     # Nav2 Navigation Stack (without SLAM - we launch it separately)
-    # CRITICAL: Nav2's bringup with use_namespace=True doesn't properly
-    # propagate TF remappings to included launch files like SLAM.
-    # Solution: Launch Nav2 and SLAM separately, both with explicit remappings
+    # CRITICAL: We use use_namespace=False to avoid Nav2's TF remapping issues
+    # The namespace is manually specified which namespaces nodes/topics but not frame IDs
+    # This allows us to use absolute frame IDs (robot0/odom) in params that match Isaac Sim
     nodes.append(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -226,7 +225,7 @@ def create_navigation_stack(
             condition=IfCondition(with_nav2),
             launch_arguments={
                 "namespace": config.robot_namespace,
-                "use_namespace": "True",
+                "use_namespace": "False",  # Keep False to avoid frame ID issues
                 "slam": "False",  # Don't launch SLAM from Nav2
                 "map": "",
                 "params_file": config.config_paths["nav2"],
@@ -235,7 +234,7 @@ def create_navigation_stack(
             }.items(),
         )
     )
-    
+
     # SLAM Toolbox (launched separately with explicit TF remappings)
     # This ensures TF topics stay global even with namespacing
     nodes.append(
@@ -256,7 +255,7 @@ def create_navigation_stack(
             ],
         )
     )
-    
+
     return nodes
 
 
