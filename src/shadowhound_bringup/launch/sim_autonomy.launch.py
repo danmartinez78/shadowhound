@@ -29,7 +29,7 @@ NOT Launched:
 Network Requirements:
     - ROS_DOMAIN_ID=0
     - ROS_LOCALHOST_ONLY=0
-    - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+    - RMW_IMPLEMENTATION=default (FastDDS, to match Isaac Sim)
 """
 
 import os
