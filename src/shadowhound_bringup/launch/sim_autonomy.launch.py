@@ -52,6 +52,7 @@ from launch.substitutions import (
     PathJoinSubstitution,
     TextSubstitution,
 )
+from launch_ros.actions import SetRemap
 
 
 class SimAutonomyConfig:
@@ -199,7 +200,7 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
 
 def create_navigation_stack(
     config: SimAutonomyConfig,
-) -> List[IncludeLaunchDescription]:
+) -> List:
     """Create Nav2 and SLAM stack using bringup_launch.py for proper namespacing"""
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
@@ -210,29 +211,36 @@ def create_navigation_stack(
         # Using bringup_launch.py instead of navigation_launch.py because only
         # bringup_launch.py supports the use_namespace parameter for multi-robot
         #
-        # NOTE: bringup_launch.py already includes TF remappings internally:
-        #   remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
-        # This keeps TF topics global while frames remain namespaced (correct for multi-robot)
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [
-                    os.path.join(
-                        get_package_share_directory("nav2_bringup"),
-                        "launch",
-                        "bringup_launch.py",
-                    )
-                ]
-            ),
-            condition=IfCondition(with_nav2),
-            launch_arguments={
-                "namespace": config.robot_namespace,
-                "use_namespace": "True",
-                "slam": with_slam,
-                "map": "",
-                "params_file": config.config_paths["nav2"],
-                "use_sim_time": use_sim_time,
-                "autostart": "True",
-            }.items(),
+        # CRITICAL: Nav2's built-in TF remappings don't work reliably in Humble
+        # We explicitly wrap with GroupAction to force TF topics to remain global
+        GroupAction(
+            actions=[
+                # Remap namespaced TF topics back to global
+                SetRemap(src=f'/{config.robot_namespace}/tf', dst='/tf'),
+                SetRemap(src=f'/{config.robot_namespace}/tf_static', dst='/tf_static'),
+                
+                IncludeLaunchDescription(
+                    PythonLaunchDescriptionSource(
+                        [
+                            os.path.join(
+                                get_package_share_directory("nav2_bringup"),
+                                "launch",
+                                "bringup_launch.py",
+                            )
+                        ]
+                    ),
+                    condition=IfCondition(with_nav2),
+                    launch_arguments={
+                        "namespace": config.robot_namespace,
+                        "use_namespace": "True",
+                        "slam": with_slam,
+                        "map": "",
+                        "params_file": config.config_paths["nav2"],
+                        "use_sim_time": use_sim_time,
+                        "autostart": "True",
+                    }.items(),
+                ),
+            ]
         ),
     ]
 
