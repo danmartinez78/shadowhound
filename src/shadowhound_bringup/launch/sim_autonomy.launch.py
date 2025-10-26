@@ -214,32 +214,29 @@ def create_navigation_stack(
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
-    # Nav2 Navigation Stack wrapped with PushRosNamespace
-    nav2_group = GroupAction(
+    # Nav2 Navigation Stack
+    # Use namespace + use_namespace="true" WITHOUT PushRosNamespace
+    # Nav2's bringup already handles namespacing correctly with these arguments
+    nav2_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            [
+                os.path.join(
+                    get_package_share_directory("nav2_bringup"),
+                    "launch",
+                    "bringup_launch.py",
+                )
+            ]
+        ),
         condition=IfCondition(with_nav2),
-        actions=[
-            PushRosNamespace(config.robot_namespace),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(
-                    [
-                        os.path.join(
-                            get_package_share_directory("nav2_bringup"),
-                            "launch",
-                            "bringup_launch.py",
-                        )
-                    ]
-                ),
-                launch_arguments={
-                    "namespace": config.robot_namespace,  # MUST pass namespace for param file resolution
-                    "use_namespace": "true",  # Enables Nav2's built-in TF remappings
-                    "slam": "False",  # Don't launch SLAM from Nav2
-                    "map": "",
-                    "params_file": config.config_paths["nav2"],
-                    "use_sim_time": use_sim_time,
-                    "autostart": "True",
-                }.items(),
-            ),
-        ],
+        launch_arguments={
+            "namespace": config.robot_namespace,
+            "use_namespace": "true",  # Enables namespacing + TF remappings
+            "slam": "False",
+            "map": "",
+            "params_file": config.config_paths["nav2"],
+            "use_sim_time": use_sim_time,
+            "autostart": "True",
+        }.items(),
     )
 
     # SLAM Toolbox with explicit TF remappings
@@ -260,7 +257,7 @@ def create_navigation_stack(
         ],
     )
 
-    return [nav2_group, slam_node]
+    return [nav2_launch, slam_node]
 
 
 def create_visualization_nodes(config: SimAutonomyConfig) -> List:
