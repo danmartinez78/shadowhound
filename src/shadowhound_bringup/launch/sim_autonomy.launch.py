@@ -225,7 +225,7 @@ def create_navigation_stack(
             condition=IfCondition(with_nav2),
             launch_arguments={
                 "namespace": config.robot_namespace,
-                "use_namespace": "False",  # Keep False to avoid frame ID issues
+                "use_namespace": "false",  # lowercase string - Nav2 expects "true"/"false"
                 "slam": "False",  # Don't launch SLAM from Nav2
                 "map": "",
                 "params_file": config.config_paths["nav2"],
