@@ -209,6 +209,10 @@ def create_navigation_stack(
         # Nav2 Bringup (includes both navigation and optional SLAM)
         # Using bringup_launch.py instead of navigation_launch.py because only
         # bringup_launch.py supports the use_namespace parameter for multi-robot
+        #
+        # NOTE: bringup_launch.py already includes TF remappings internally:
+        #   remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
+        # This keeps TF topics global while frames remain namespaced (correct for multi-robot)
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 [
