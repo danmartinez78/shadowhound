@@ -235,71 +235,80 @@ def create_navigation_stack(
     # Rewrite Nav2 params to inject namespaced frame IDs and ensure relative scan topics
     # IMPORTANT: root_key=None below to avoid double-rooting params under <ns>.<ns>.*
     frame_remaps = {
-        # AMCL
+        # AMCL (cover flattened and explicit ros__parameters)
         "amcl.global_frame_id": [ns, TextSubstitution(text="/map")],
+        "amcl.ros__parameters.global_frame_id": [ns, TextSubstitution(text="/map")],
         "amcl.odom_frame_id": [ns, TextSubstitution(text="/odom")],
+        "amcl.ros__parameters.odom_frame_id": [ns, TextSubstitution(text="/odom")],
         "amcl.base_frame_id": [ns, TextSubstitution(text="/base_link")],
+        "amcl.ros__parameters.base_frame_id": [ns, TextSubstitution(text="/base_link")],
         # Keep scan relative so it resolves to /<ns>/scan automatically
         "amcl.scan_topic": TextSubstitution(text="scan"),
+        "amcl.ros__parameters.scan_topic": TextSubstitution(text="scan"),
+
         # BT Navigator
         "bt_navigator.global_frame": [ns, TextSubstitution(text="/map")],
+        "bt_navigator.ros__parameters.global_frame": [ns, TextSubstitution(text="/map")],
         "bt_navigator.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        "bt_navigator.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+
         # Controller Server
         "controller_server.odom_frame": [ns, TextSubstitution(text="/odom")],
+        "controller_server.ros__parameters.odom_frame": [ns, TextSubstitution(text="/odom")],
         "controller_server.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        "controller_server.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+
         # Planner Server
         "planner_server.global_frame": [ns, TextSubstitution(text="/map")],
+        "planner_server.ros__parameters.global_frame": [ns, TextSubstitution(text="/map")],
         "planner_server.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        "planner_server.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+
         # Local Costmap (single-key)
         "local_costmap.global_frame": [ns, TextSubstitution(text="/odom")],
+        "local_costmap.ros__parameters.global_frame": [ns, TextSubstitution(text="/odom")],
         "local_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
-        # Local Costmap - Scan topic for obstacle layer
-        "local_costmap.obstacle_layer.observation_sources": TextSubstitution(
-            text="scan"
-        ),
+        "local_costmap.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Local Costmap - obstacle layer scan
+        "local_costmap.obstacle_layer.observation_sources": TextSubstitution(text="scan"),
+        "local_costmap.ros__parameters.obstacle_layer.observation_sources": TextSubstitution(text="scan"),
         # Keep scan relative so it resolves to /<ns>/scan automatically
         "local_costmap.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
-        # Local Costmap (double-key - for Nav2 compatibility)
-        "local_costmap.local_costmap.global_frame": [
-            ns,
-            TextSubstitution(text="/odom"),
-        ],
-        "local_costmap.local_costmap.robot_base_frame": [
-            ns,
-            TextSubstitution(text="/base_link"),
-        ],
-        # Double-key equivalents for obstacle_layer
-        "local_costmap.local_costmap.obstacle_layer.observation_sources": TextSubstitution(
-            text="scan"
-        ),
-        "local_costmap.local_costmap.obstacle_layer.scan.topic": TextSubstitution(
-            text="scan"
-        ),
+        "local_costmap.ros__parameters.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
+
+        # Local Costmap (double-key)
+        "local_costmap.local_costmap.global_frame": [ns, TextSubstitution(text="/odom")],
+        "local_costmap.local_costmap.ros__parameters.global_frame": [ns, TextSubstitution(text="/odom")],
+        "local_costmap.local_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        "local_costmap.local_costmap.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Double-key obstacle layer scan
+        "local_costmap.local_costmap.obstacle_layer.observation_sources": TextSubstitution(text="scan"),
+        "local_costmap.local_costmap.ros__parameters.obstacle_layer.observation_sources": TextSubstitution(text="scan"),
+        "local_costmap.local_costmap.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
+        "local_costmap.local_costmap.ros__parameters.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
+
         # Global Costmap (single-key)
         "global_costmap.global_frame": [ns, TextSubstitution(text="/map")],
+        "global_costmap.ros__parameters.global_frame": [ns, TextSubstitution(text="/map")],
         "global_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
-        # Global Costmap - Scan topic for obstacle layer
-        "global_costmap.obstacle_layer.observation_sources": TextSubstitution(
-            text="scan"
-        ),
+        "global_costmap.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Global Costmap - obstacle layer scan
+        "global_costmap.obstacle_layer.observation_sources": TextSubstitution(text="scan"),
+        "global_costmap.ros__parameters.obstacle_layer.observation_sources": TextSubstitution(text="scan"),
         # Keep scan relative so it resolves to /<ns>/scan automatically
         "global_costmap.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
+        "global_costmap.ros__parameters.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
+
         # Global Costmap (double-key)
-        "global_costmap.global_costmap.global_frame": [
-            ns,
-            TextSubstitution(text="/map"),
-        ],
-        "global_costmap.global_costmap.robot_base_frame": [
-            ns,
-            TextSubstitution(text="/base_link"),
-        ],
-        # Double-key equivalents for obstacle_layer
-        "global_costmap.global_costmap.obstacle_layer.observation_sources": TextSubstitution(
-            text="scan"
-        ),
-        "global_costmap.global_costmap.obstacle_layer.scan.topic": TextSubstitution(
-            text="scan"
-        ),
+        "global_costmap.global_costmap.global_frame": [ns, TextSubstitution(text="/map")],
+        "global_costmap.global_costmap.ros__parameters.global_frame": [ns, TextSubstitution(text="/map")],
+        "global_costmap.global_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        "global_costmap.global_costmap.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Double-key obstacle layer scan
+        "global_costmap.global_costmap.obstacle_layer.observation_sources": TextSubstitution(text="scan"),
+        "global_costmap.global_costmap.ros__parameters.obstacle_layer.observation_sources": TextSubstitution(text="scan"),
+        "global_costmap.global_costmap.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
+        "global_costmap.global_costmap.ros__parameters.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
     }
 
     params = RewrittenYaml(
