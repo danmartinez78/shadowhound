@@ -175,12 +175,11 @@ local_costmap:
     resolution: 0.05
     always_send_full_costmap: true
     footprint: "[ [0.360, 0.200], [0.360, -0.200], [-0.450, -0.200], [-0.450, 0.200] ]"
-    plugins: [voxel_layer, inflation_layer]
+    plugins: [obstacle_layer, inflation_layer]
 
-    voxel_layer:
-      plugin: nav2_costmap_2d::VoxelLayer
+    obstacle_layer:
+      plugin: nav2_costmap_2d::ObstacleLayer
       enabled: true
-      publish_voxel_map: false
       observation_sources: scan
       scan:
         topic: scan
@@ -206,19 +205,29 @@ global_costmap:
     robot_base_frame: base_link
     use_maximum_range: false
     resolution: 0.05
-    track_unknown_space: false
-    static_map: true
-    width: 200.0
-    height: 200.0
-    origin_x: -100.0
-    origin_y: -100.0
+    track_unknown_space: true
+    static_map: false
+    rolling_window: false
+    width: 50.0
+    height: 50.0
     always_send_full_costmap: true
     footprint: "[ [0.360, 0.200], [0.360, -0.200], [-0.450, -0.200], [-0.450, 0.200] ]"
-    plugins: [static_layer, inflation_layer]
+    plugins: [obstacle_layer, inflation_layer]
 
-    static_layer:
-      plugin: nav2_costmap_2d::StaticLayer
-      map_subscribe_transient_local: true
+    obstacle_layer:
+      plugin: nav2_costmap_2d::ObstacleLayer
+      enabled: true
+      observation_sources: scan
+      scan:
+        topic: scan
+        max_obstacle_height: 2.0
+        clearing: true
+        marking: true
+        data_type: LaserScan
+        raytrace_max_range: 3.0
+        raytrace_min_range: 0.0
+        obstacle_max_range: 2.5
+        obstacle_min_range: 0.0
 
     inflation_layer:
       plugin: nav2_costmap_2d::InflationLayer
