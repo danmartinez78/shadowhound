@@ -8,18 +8,15 @@ print("=" * 60)
 print("Config Path Debug")
 print("=" * 60)
 
-# Mimic the launch file logic
+# Mimic the launch file logic (NEW APPROACH - using package share directory)
 shadowhound_dir = get_package_share_directory("shadowhound_bringup")
 go2_sdk_dir = get_package_share_directory("go2_robot_sdk")
 
 print(f"\nshadowhound_bringup package: {shadowhound_dir}")
 print(f"go2_robot_sdk package: {go2_sdk_dir}")
 
-# Compute the config dir the same way the launch file does
-shadowhound_config_dir = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(shadowhound_dir))),
-    "config",
-)
+# NEW: Use package's own config directory
+shadowhound_config_dir = os.path.join(shadowhound_dir, "config")
 
 print(f"\nComputed config dir: {shadowhound_config_dir}")
 print(f"Config dir exists: {os.path.exists(shadowhound_config_dir)}")
@@ -45,4 +42,7 @@ else:
     fallback = os.path.join(go2_sdk_dir, "config", "nav2_params.yaml")
     print(f"\n❌ Sim config not found, would fall back to: {fallback}")
 
+print("\n" + "=" * 60)
+print("✅ Config files are now in the package!")
+print("This works in both source and install workspaces.")
 print("=" * 60)

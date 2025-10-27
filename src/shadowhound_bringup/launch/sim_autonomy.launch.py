@@ -75,11 +75,9 @@ class SimAutonomyConfig:
 
     def _get_config_paths(self) -> dict:
         """Get all configuration file paths"""
-        # Use shadowhound custom configs where available
-        shadowhound_config_dir = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(self.shadowhound_dir))),
-            "config",
-        )
+        # Use shadowhound_bringup package's installed config directory
+        # This works correctly in both source and install workspaces
+        shadowhound_config_dir = os.path.join(self.shadowhound_dir, "config")
 
         # Prefer simulation-specific nav2 config if available (has robot0/ frames)
         # Falls back to default config if not found
@@ -93,6 +91,7 @@ class SimAutonomyConfig:
         elif os.path.exists(nav2_default_config):
             nav2_config = nav2_default_config
         else:
+            # Final fallback to go2_robot_sdk
             nav2_config = os.path.join(self.go2_sdk_dir, "config", "nav2_params.yaml")
 
         # Prefer simulation-specific slam config if available (has robot0/ frames)
@@ -107,6 +106,7 @@ class SimAutonomyConfig:
         if os.path.exists(slam_sim_config):
             slam_config = slam_sim_config
         else:
+            # Fallback to go2_robot_sdk
             slam_config = slam_default_config
 
         return {
