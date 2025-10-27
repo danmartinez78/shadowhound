@@ -255,9 +255,11 @@ def create_navigation_stack(
         # Local Costmap (single-key)
         "local_costmap.global_frame": [ns, TextSubstitution(text="/odom")],
         "local_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
-        # Local Costmap - Scan topic for voxel layer
-        "local_costmap.voxel_layer.observation_sources": TextSubstitution(text="scan"),
-        "local_costmap.voxel_layer.scan.topic": [
+        # Local Costmap - Scan topic for obstacle layer
+        "local_costmap.obstacle_layer.observation_sources": TextSubstitution(
+            text="scan"
+        ),
+        "local_costmap.obstacle_layer.scan.topic": [
             TextSubstitution(text="/"),
             ns,
             TextSubstitution(text="/scan"),
@@ -274,6 +276,15 @@ def create_navigation_stack(
         # Global Costmap (single-key)
         "global_costmap.global_frame": [ns, TextSubstitution(text="/map")],
         "global_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Global Costmap - Scan topic for obstacle layer
+        "global_costmap.obstacle_layer.observation_sources": TextSubstitution(
+            text="scan"
+        ),
+        "global_costmap.obstacle_layer.scan.topic": [
+            TextSubstitution(text="/"),
+            ns,
+            TextSubstitution(text="/scan"),
+        ],
         # Global Costmap (double-key)
         "global_costmap.global_costmap.global_frame": [
             ns,
@@ -287,7 +298,6 @@ def create_navigation_stack(
 
     params = RewrittenYaml(
         source_file=config.config_paths["nav2"],
-        root_key=ns,
         param_rewrites=frame_remaps,
         convert_types=True,
     )
@@ -306,7 +316,7 @@ def create_navigation_stack(
         launch_arguments={
             "namespace": ns,
             "use_namespace": "true",  # Namespace topics/services
-            "slam": "False",
+            "slam": "True",  # We're doing SLAM - disables map_server
             "map": "",
             "params_file": params,  # Use rewritten params with frame IDs
             "use_sim_time": use_sim_time,
