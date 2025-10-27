@@ -43,9 +43,7 @@ from nav2_common.launch import RewrittenYaml
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
 from launch.conditions import IfCondition
-from launch_ros.actions import Node as ROSNode
-from launch.actions import GroupAction
-from launch_ros.descriptions import ParameterValue as PV
+from launch_ros.actions import SetRemap
 from launch.launch_description_sources import (
     FrontendLaunchDescriptionSource,
     PythonLaunchDescriptionSource,
@@ -211,16 +209,14 @@ def create_navigation_stack(
     """
     Create Nav2 and SLAM stack with proper multi-robot namespacing.
 
-    Pattern: Namespaced TF with namespaced frames
+    Pattern: Global TF with namespaced frames (ChatGPT's recommended approach)
     - All nodes under /robot0/* namespace
-    - TF topics: /robot0/tf and /robot0/tf_static (namespaced by Nav2)
-    - SLAM TF: Remapped to GLOBAL /tf and /tf_static
+    - TF topics: GLOBAL /tf and /tf_static (forced via GroupAction + SetRemap)
     - Frame IDs: robot0/odom, robot0/base_link (injected via RewrittenYaml)
     - Topics: /robot0/* (scan, cmd_vel, costmaps, etc.)
 
-    NOTE: Nav2's use_namespace="true" namespaces TF topics to /robot0/tf.
-    Isaac Sim must publish to /robot0/tf (NOT global /tf) for Nav2 to work.
-    SLAM remaps to global /tf for map building across robots.
+    Isaac Sim publishes to global /tf with namespaced frames.
+    All Nav2 and SLAM nodes remap to global /tf via SetRemap actions.
 
     Works for multiple robots by changing robot_namespace launch arg.
     """
@@ -266,9 +262,7 @@ def create_navigation_stack(
         convert_types=True,
     )
 
-    # Nav2 launch with TF topic remapping via parameters
-    # Note: Nav2's bringup_launch.py doesn't expose TF remapping as launch args,
-    # so TF will be namespaced. Isaac Sim must publish to /robot0/tf
+    # Nav2 launch
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -281,7 +275,7 @@ def create_navigation_stack(
         ),
         launch_arguments={
             "namespace": ns,
-            "use_namespace": "true",  # Namespace topics/services AND TF
+            "use_namespace": "true",  # Namespace topics/services
             "slam": "False",
             "map": "",
             "params_file": params,  # Use rewritten params with frame IDs
@@ -290,6 +284,17 @@ def create_navigation_stack(
             "use_composition": "False",
             "use_respawn": "False",
         }.items(),
+    )
+
+    # Nav2 launch wrapped in GroupAction with TF remapping
+    # GroupAction with SetRemap forces all child nodes to use global TF
+    nav2_group = GroupAction(
+        [
+            # Force TF topics to global for every child node inside bringup
+            SetRemap(src='tf', dst='/tf'),
+            SetRemap(src='tf_static', dst='/tf_static'),
+            nav2_launch,
+        ],
         condition=IfCondition(with_nav2),
     )
 
@@ -305,14 +310,14 @@ def create_navigation_stack(
             config.config_paths["slam"],
             {"use_sim_time": use_sim_time},
         ],
-        # Force TF to global
+        # Keep TF global
         remappings=[
             ('tf', '/tf'),
             ('tf_static', '/tf_static'),
         ],
     )
 
-    return [nav2_launch, slam_node]
+    return [nav2_group, slam_node]
 
 
 def create_visualization_nodes(config: SimAutonomyConfig) -> List:
