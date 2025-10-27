@@ -217,10 +217,10 @@ def create_navigation_stack(
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
-    # Nav2 launch with TF remapping to global topics
-    # Wrap in GroupAction to apply TF remappings
+    # Nav2 launch wrapped in GroupAction to apply TF remappings
+    # This remaps /robot0/tf → /tf so Nav2 can see Isaac Sim's transforms
     nav2_launch = GroupAction(
-        actions=[
+        [
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
                     [
@@ -244,9 +244,8 @@ def create_navigation_stack(
                 }.items(),
             )
         ],
-        # Remap TF topics from /robot0/tf back to global /tf
-        # This allows Nav2 to see Isaac Sim's transforms
-        scoped_remappings=[
+        # Apply remappings to all nodes in the group
+        remappings=[
             ("/robot0/tf", "/tf"),
             ("/robot0/tf_static", "/tf_static"),
         ],
