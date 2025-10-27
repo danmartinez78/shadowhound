@@ -36,14 +36,13 @@ import os
 from typing import List
 
 from ament_index_python.packages import get_package_share_directory
-from launch_ros.actions import Node, PushRosNamespace
+from launch_ros.actions import Node, PushRosNamespace, SetRemap
 from launch_ros.parameter_descriptions import ParameterValue
 from nav2_common.launch import RewrittenYaml
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
 from launch.conditions import IfCondition
-from launch_ros.actions import SetRemap
 from launch.launch_description_sources import (
     FrontendLaunchDescriptionSource,
     PythonLaunchDescriptionSource,
@@ -176,7 +175,14 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
         output="screen",
         remappings=[
             # Absolute namespaced topic (templated for multi-robot)
-            ("cloud_in", ["/", config.robot_namespace, TextSubstitution(text="/point_cloud2_L1")]),
+            (
+                "cloud_in",
+                [
+                    "/",
+                    config.robot_namespace,
+                    TextSubstitution(text="/point_cloud2_L1"),
+                ],
+            ),
             ("scan", "scan"),  # Publishes to /robot0/scan (relative under namespace)
             # Force TF to global
             ("tf", "/tf"),
@@ -223,40 +229,52 @@ def create_navigation_stack(
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
-    
+
     ns = config.robot_namespace
 
     # Rewrite Nav2 params to inject namespace into frame IDs
     frame_remaps = {
         # AMCL
-        'amcl.global_frame_id': [ns, TextSubstitution(text='/map')],
-        'amcl.odom_frame_id': [ns, TextSubstitution(text='/odom')],
-        'amcl.base_frame_id': [ns, TextSubstitution(text='/base_link')],
+        "amcl.global_frame_id": [ns, TextSubstitution(text="/map")],
+        "amcl.odom_frame_id": [ns, TextSubstitution(text="/odom")],
+        "amcl.base_frame_id": [ns, TextSubstitution(text="/base_link")],
         # BT Navigator
-        'bt_navigator.global_frame': [ns, TextSubstitution(text='/map')],
-        'bt_navigator.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        "bt_navigator.global_frame": [ns, TextSubstitution(text="/map")],
+        "bt_navigator.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
         # Controller Server
-        'controller_server.odom_frame': [ns, TextSubstitution(text='/odom')],
-        'controller_server.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        "controller_server.odom_frame": [ns, TextSubstitution(text="/odom")],
+        "controller_server.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
         # Planner Server
-        'planner_server.global_frame': [ns, TextSubstitution(text='/map')],
-        'planner_server.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        "planner_server.global_frame": [ns, TextSubstitution(text="/map")],
+        "planner_server.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
         # Local Costmap (single-key)
-        'local_costmap.global_frame': [ns, TextSubstitution(text='/odom')],
-        'local_costmap.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        "local_costmap.global_frame": [ns, TextSubstitution(text="/odom")],
+        "local_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
         # Local Costmap (double-key - for Nav2 compatibility)
-        'local_costmap.local_costmap.global_frame': [ns, TextSubstitution(text='/odom')],
-        'local_costmap.local_costmap.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        "local_costmap.local_costmap.global_frame": [
+            ns,
+            TextSubstitution(text="/odom"),
+        ],
+        "local_costmap.local_costmap.robot_base_frame": [
+            ns,
+            TextSubstitution(text="/base_link"),
+        ],
         # Global Costmap (single-key)
-        'global_costmap.global_frame': [ns, TextSubstitution(text='/map')],
-        'global_costmap.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        "global_costmap.global_frame": [ns, TextSubstitution(text="/map")],
+        "global_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
         # Global Costmap (double-key)
-        'global_costmap.global_costmap.global_frame': [ns, TextSubstitution(text='/map')],
-        'global_costmap.global_costmap.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        "global_costmap.global_costmap.global_frame": [
+            ns,
+            TextSubstitution(text="/map"),
+        ],
+        "global_costmap.global_costmap.robot_base_frame": [
+            ns,
+            TextSubstitution(text="/base_link"),
+        ],
     }
 
     params = RewrittenYaml(
-        source_file=config.config_paths['nav2'],
+        source_file=config.config_paths["nav2"],
         root_key=ns,
         param_rewrites=frame_remaps,
         convert_types=True,
@@ -291,8 +309,8 @@ def create_navigation_stack(
     nav2_group = GroupAction(
         [
             # Force TF topics to global for every child node inside bringup
-            SetRemap(src='tf', dst='/tf'),
-            SetRemap(src='tf_static', dst='/tf_static'),
+            SetRemap(src="tf", dst="/tf"),
+            SetRemap(src="tf_static", dst="/tf_static"),
             nav2_launch,
         ],
         condition=IfCondition(with_nav2),
@@ -312,8 +330,8 @@ def create_navigation_stack(
         ],
         # Keep TF global
         remappings=[
-            ('tf', '/tf'),
-            ('tf_static', '/tf_static'),
+            ("tf", "/tf"),
+            ("tf_static", "/tf_static"),
         ],
     )
 
