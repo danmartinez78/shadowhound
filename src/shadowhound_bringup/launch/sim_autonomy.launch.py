@@ -232,17 +232,15 @@ def create_navigation_stack(
 
     ns = config.robot_namespace
 
-    # Rewrite Nav2 params to inject namespace into frame IDs and topics
+    # Rewrite Nav2 params to inject namespaced frame IDs and ensure relative scan topics
+    # IMPORTANT: root_key=None below to avoid double-rooting params under <ns>.<ns>.*
     frame_remaps = {
         # AMCL
         "amcl.global_frame_id": [ns, TextSubstitution(text="/map")],
         "amcl.odom_frame_id": [ns, TextSubstitution(text="/odom")],
         "amcl.base_frame_id": [ns, TextSubstitution(text="/base_link")],
-        "amcl.scan_topic": [
-            TextSubstitution(text="/"),
-            ns,
-            TextSubstitution(text="/scan"),
-        ],
+        # Keep scan relative so it resolves to /<ns>/scan automatically
+        "amcl.scan_topic": TextSubstitution(text="scan"),
         # BT Navigator
         "bt_navigator.global_frame": [ns, TextSubstitution(text="/map")],
         "bt_navigator.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
@@ -259,11 +257,8 @@ def create_navigation_stack(
         "local_costmap.obstacle_layer.observation_sources": TextSubstitution(
             text="scan"
         ),
-        "local_costmap.obstacle_layer.scan.topic": [
-            TextSubstitution(text="/"),
-            ns,
-            TextSubstitution(text="/scan"),
-        ],
+        # Keep scan relative so it resolves to /<ns>/scan automatically
+        "local_costmap.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
         # Local Costmap (double-key - for Nav2 compatibility)
         "local_costmap.local_costmap.global_frame": [
             ns,
@@ -273,6 +268,13 @@ def create_navigation_stack(
             ns,
             TextSubstitution(text="/base_link"),
         ],
+        # Double-key equivalents for obstacle_layer
+        "local_costmap.local_costmap.obstacle_layer.observation_sources": TextSubstitution(
+            text="scan"
+        ),
+        "local_costmap.local_costmap.obstacle_layer.scan.topic": TextSubstitution(
+            text="scan"
+        ),
         # Global Costmap (single-key)
         "global_costmap.global_frame": [ns, TextSubstitution(text="/map")],
         "global_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
@@ -280,11 +282,8 @@ def create_navigation_stack(
         "global_costmap.obstacle_layer.observation_sources": TextSubstitution(
             text="scan"
         ),
-        "global_costmap.obstacle_layer.scan.topic": [
-            TextSubstitution(text="/"),
-            ns,
-            TextSubstitution(text="/scan"),
-        ],
+        # Keep scan relative so it resolves to /<ns>/scan automatically
+        "global_costmap.obstacle_layer.scan.topic": TextSubstitution(text="scan"),
         # Global Costmap (double-key)
         "global_costmap.global_costmap.global_frame": [
             ns,
@@ -294,11 +293,19 @@ def create_navigation_stack(
             ns,
             TextSubstitution(text="/base_link"),
         ],
+        # Double-key equivalents for obstacle_layer
+        "global_costmap.global_costmap.obstacle_layer.observation_sources": TextSubstitution(
+            text="scan"
+        ),
+        "global_costmap.global_costmap.obstacle_layer.scan.topic": TextSubstitution(
+            text="scan"
+        ),
     }
 
     params = RewrittenYaml(
         source_file=config.config_paths["nav2"],
-        root_key=ns,
+        # CRITICAL: Let bringup namespacing handle the root; avoid double-rooting
+        root_key=None,
         param_rewrites=frame_remaps,
         convert_types=True,
     )
