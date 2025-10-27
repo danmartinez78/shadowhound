@@ -2,6 +2,7 @@
 """Debug script to show what config paths the launch file computes"""
 
 import os
+
 from ament_index_python.packages import get_package_share_directory
 
 print("=" * 60)
@@ -29,7 +30,7 @@ print(f"\nNav2 sim config: {nav2_sim_config}")
 print(f"  Exists: {os.path.exists(nav2_sim_config)}")
 if os.path.exists(nav2_sim_config):
     print(f"  Size: {os.path.getsize(nav2_sim_config)} bytes")
-    
+
 print(f"\nSLAM sim config: {slam_sim_config}")
 print(f"  Exists: {os.path.exists(slam_sim_config)}")
 if os.path.exists(slam_sim_config):

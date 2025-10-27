@@ -202,56 +202,46 @@ def create_navigation_stack(
     config: SimAutonomyConfig,
 ) -> List:
     """
-    Create Nav2 and SLAM stack with proper namespacing.
+    Create Nav2 and SLAM stack with proper multi-robot namespacing.
 
-    ChatGPT's multi-robot pattern:
-    - All nodes under /robot0/* namespace (matches Isaac Sim)
-    - use_namespace="true" isolates topics/services
-    - TF stays global (/tf), frames are robot0/* in params
-    - Scan publishes to /robot0/scan (matches costmap expectation)
-    
-    CRITICAL: Nav2's use_namespace="true" namespaces TF topics to /robot0/tf,
-    but Isaac Sim publishes to global /tf. We must remap TF topics back to global.
+    Clean multi-robot pattern - EVERYTHING namespaced:
+    - All nodes under /robot0/* namespace
+    - All topics under /robot0/* (including TF)
+    - All services under /robot0/*
+    - Frame IDs in params: robot0/odom, robot0/base_link
+
+    Isaac Sim must publish to /robot0/tf (not /tf) for this to work.
     """
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
-    # Nav2 launch wrapped in GroupAction to apply TF remappings
-    # This remaps /robot0/tf → /tf so Nav2 can see Isaac Sim's transforms
-    nav2_launch = GroupAction(
-        [
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(
-                    [
-                        os.path.join(
-                            get_package_share_directory("nav2_bringup"),
-                            "launch",
-                            "bringup_launch.py",
-                        )
-                    ]
-                ),
-                launch_arguments={
-                    "namespace": config.robot_namespace,  # /robot0/*
-                    "use_namespace": "true",  # Isolate topics/services
-                    "slam": "False",
-                    "map": "",
-                    "params_file": config.config_paths["nav2"],
-                    "use_sim_time": use_sim_time,
-                    "autostart": "True",
-                    "use_composition": "False",
-                    "use_respawn": "False",
-                }.items(),
-            )
-        ],
-        # Apply remappings to all nodes in the group
-        remappings=[
-            ("/robot0/tf", "/tf"),
-            ("/robot0/tf_static", "/tf_static"),
-        ],
+    # Nav2 launch - everything namespaced including TF
+    nav2_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            [
+                os.path.join(
+                    get_package_share_directory("nav2_bringup"),
+                    "launch",
+                    "bringup_launch.py",
+                )
+            ]
+        ),
+        launch_arguments={
+            "namespace": config.robot_namespace,  # /robot0
+            "use_namespace": "true",  # Namespace everything
+            "slam": "False",
+            "map": "",
+            "params_file": config.config_paths["nav2"],
+            "use_sim_time": use_sim_time,
+            "autostart": "True",
+            "use_composition": "False",
+            "use_respawn": "False",
+        }.items(),
         condition=IfCondition(with_nav2),
     )
 
+    # SLAM - everything namespaced including TF
     slam_node = Node(
         condition=IfCondition(with_slam),
         package="slam_toolbox",
@@ -263,11 +253,7 @@ def create_navigation_stack(
             config.config_paths["slam"],
             {"use_sim_time": use_sim_time},
         ],
-        # Keep TF global; frames must be robot0/* in SLAM params
-        remappings=[
-            ("tf", "/tf"),
-            ("tf_static", "/tf_static"),
-        ],
+        # No TF remapping - use namespaced /robot0/tf
     )
 
     return [nav2_launch, slam_node]
