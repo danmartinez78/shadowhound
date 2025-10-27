@@ -1,110 +1,205 @@
 #!/usr/bin/env python3
 """
-Multi-robot Simulation Autonomy Launch (global TF, namespaced nodes/topics)
-- Each robot runs under its own namespace (robot0, robot1, ...)
-- All TF topics are kept GLOBAL (/tf, /tf_static)
-- Frame IDs are prefixed with the robot namespace via RewrittenYaml
+Simulation Autonomy Stack Launch File
+
+This launch file mirrors robot.launch.py but WITHOUT the go2_driver_node.
+Isaac Sim replaces the driver by publishing topics directly.
+
+Usage:
+    # On Tower: Start Isaac Sim (publishes /robot0/* topics)
+    
+    # On Laptop: Start autonomy stack
+    ros2 launch shadowhound_bringup sim_autonomy.launch.py \
+        rviz2:=true \
+        nav2:=true \
+        slam:=true \
+        foxglove:=true
+
+Launched Components:
+    - Nav2 (navigation stack)
+    - SLAM Toolbox (mapping)
+    - Foxglove Bridge (visualization)
+    - RViz2 (3D visualization)
+    - Robot state publisher (TF transforms)
+    - Pointcloud to laserscan converter
+    
+NOT Launched:
+    - go2_driver_node (Isaac Sim publishes topics instead!)
+    
+Network Requirements:
+    - ROS_DOMAIN_ID=0
+    - ROS_LOCALHOST_ONLY=0
+    - RMW_IMPLEMENTATION=default (FastDDS, to match Isaac Sim)
 """
 
 import os
 from typing import List
 
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction, LogInfo
-from launch.conditions import IfCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource, FrontendLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, TextSubstitution
-from launch_ros.actions import Node, SetRemap
+from launch_ros.actions import Node, PushRosNamespace, SetRemap
+from launch_ros.parameter_descriptions import ParameterValue
 from nav2_common.launch import RewrittenYaml
 
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
+from launch.conditions import IfCondition
+from launch.launch_description_sources import (
+    FrontendLaunchDescriptionSource,
+    PythonLaunchDescriptionSource,
+)
+from launch.substitutions import (
+    Command,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    TextSubstitution,
+)
 
-def _share_dir(pkg: str) -> str:
-    return get_package_share_directory(pkg)
+
+class SimAutonomyConfig:
+    """Configuration for simulation autonomy stack"""
+
+    def __init__(self):
+        # Robot namespace from launch argument (defaults to "tachi")
+        self.robot_namespace = LaunchConfiguration("robot_namespace")
+
+        # Package paths
+        self.shadowhound_dir = get_package_share_directory("shadowhound_bringup")
+        self.go2_sdk_dir = get_package_share_directory("go2_robot_sdk")
+
+        # Config file paths
+        self.config_paths = self._get_config_paths()
+
+        print("🤖 Simulation Autonomy Stack Configuration:")
+        print(f"   Robot namespace: {self.robot_namespace} (from launch arg)")
+        print(f"   Nav2 params: {self.config_paths['nav2']}")
+        print(f"   SLAM params: {self.config_paths['slam']}")
+
+    def _get_config_paths(self) -> dict:
+        """Get all configuration file paths"""
+        # Use shadowhound_bringup package's installed config directory
+        # This works correctly in both source and install workspaces
+        shadowhound_config_dir = os.path.join(self.shadowhound_dir, "config")
+
+        # Prefer simulation-specific nav2 config if available (has robot0/ frames)
+        # Falls back to default config if not found
+        nav2_sim_config = os.path.join(
+            shadowhound_config_dir, "nav2_params_simulation.yaml"
+        )
+        nav2_default_config = os.path.join(shadowhound_config_dir, "nav2_params.yaml")
+
+        if os.path.exists(nav2_sim_config):
+            nav2_config = nav2_sim_config
+        elif os.path.exists(nav2_default_config):
+            nav2_config = nav2_default_config
+        else:
+            # Final fallback to go2_robot_sdk
+            nav2_config = os.path.join(self.go2_sdk_dir, "config", "nav2_params.yaml")
+
+        # Prefer simulation-specific slam config if available (has robot0/ frames)
+        # Falls back to default config if not found
+        slam_sim_config = os.path.join(
+            shadowhound_config_dir, "mapper_params_simulation.yaml"
+        )
+        slam_default_config = os.path.join(
+            self.go2_sdk_dir, "config", "mapper_params_online_async.yaml"
+        )
+
+        if os.path.exists(slam_sim_config):
+            slam_config = slam_sim_config
+        else:
+            # Fallback to go2_robot_sdk
+            slam_config = slam_default_config
+
+        return {
+            "nav2": nav2_config,
+            "slam": slam_config,
+            "rviz": os.path.join(self.go2_sdk_dir, "config", "single_robot_conf.rviz"),
+            "urdf": os.path.join(self.go2_sdk_dir, "urdf", "go2.urdf"),
+        }
 
 
-def generate_launch_description():
-    # --- Launch args ---
-    robot_ns = LaunchConfiguration("robot_namespace")
-    with_rviz2 = LaunchConfiguration("rviz2")
-    with_nav2 = LaunchConfiguration("nav2")
-    with_slam = LaunchConfiguration("slam")
-    with_foxglove = LaunchConfiguration("foxglove")
-    use_sim_time = LaunchConfiguration("use_sim_time")
-    pointcloud_topic = LaunchConfiguration("pointcloud_topic")  # per-robot topic name under the namespace
+def create_launch_arguments() -> List[DeclareLaunchArgument]:
+    """Create launch arguments for optional components"""
+    return [
+        DeclareLaunchArgument(
+            "robot_namespace",
+            default_value="robot0",
+            description="Robot namespace (e.g., robot0, robot1)",
+        ),
+        DeclareLaunchArgument(
+            "rviz2", default_value="True", description="Launch RViz2 for visualization"
+        ),
+        DeclareLaunchArgument(
+            "nav2", default_value="True", description="Launch Nav2 navigation stack"
+        ),
+        DeclareLaunchArgument(
+            "slam", default_value="True", description="Launch SLAM Toolbox for mapping"
+        ),
+        DeclareLaunchArgument(
+            "foxglove", default_value="True", description="Launch Foxglove Bridge"
+        ),
+        DeclareLaunchArgument(
+            "use_sim_time",
+            default_value="false",
+            description="Use simulation time (set true if sim provides clock)",
+        ),
+    ]
 
-    shadowhound_bringup_dir = _share_dir("shadowhound_bringup")
-    go2_sdk_dir = _share_dir("go2_robot_sdk")
 
-    # Default config file paths from installed package share
-    default_nav2_yaml = os.path.join(shadowhound_bringup_dir, "config", "nav2_params_simulation.yaml")
-    default_slam_yaml = os.path.join(shadowhound_bringup_dir, "config", "mapper_params_simulation.yaml")
-    rviz_file = os.path.join(go2_sdk_dir, "config", "single_robot_conf.rviz")
+def create_robot_state_publisher(config: SimAutonomyConfig) -> None:
+    """
+    Robot state publisher NOT NEEDED for simulation.
 
-    nav2_params_file = LaunchConfiguration("nav2_params_file")
-    slam_params_file = LaunchConfiguration("slam_params_file")
+    Isaac Sim on Tower already publishes TF frames (robot0/base_link, robot0/UnitreeL1_link, etc.)
+    Launching robot_state_publisher here would create conflicting TF publishers.
 
-    # RewrittenYaml to inject namespace prefixes into frame IDs at runtime
-    # We cover both single-key and double-key costmap node-name styles.
-    prefixed_params = RewrittenYaml(
-        source_file=nav2_params_file,
-        root_key=robot_ns,                    # nav2_bringup expects params rooted at the namespace
-        param_rewrites={
-            # AMCL
-            "amcl.global_frame_id": [robot_ns, TextSubstitution(text="/map")],
-            "amcl.odom_frame_id":   [robot_ns, TextSubstitution(text="/odom")],
-            "amcl.base_frame_id":   [robot_ns, TextSubstitution(text="/base_link")],
-            # BT Nav
-            "bt_navigator.global_frame":     [robot_ns, TextSubstitution(text="/map")],
-            "bt_navigator.robot_base_frame": [robot_ns, TextSubstitution(text="/base_link")],
-            # Controller / Planner / Smoother
-            "controller_server.odom_frame":        [robot_ns, TextSubstitution(text="/odom")],
-            "controller_server.robot_base_frame":  [robot_ns, TextSubstitution(text="/base_link")],
-            "planner_server.global_frame":         [robot_ns, TextSubstitution(text="/map")],
-            "planner_server.robot_base_frame":     [robot_ns, TextSubstitution(text="/base_link")],
-            "smoother_server.global_frame":        [robot_ns, TextSubstitution(text="/map")],
-            "smoother_server.robot_base_frame":    [robot_ns, TextSubstitution(text="/base_link")],
-            "behavior_server.global_frame":        [robot_ns, TextSubstitution(text="/map")],
-            "behavior_server.robot_base_frame":    [robot_ns, TextSubstitution(text="/base_link")],
-            # Costmaps (single-key)
-            "local_costmap.global_frame":          [robot_ns, TextSubstitution(text="/odom")],
-            "local_costmap.robot_base_frame":      [robot_ns, TextSubstitution(text="/base_link")],
-            "global_costmap.global_frame":         [robot_ns, TextSubstitution(text="/map")],
-            "global_costmap.robot_base_frame":     [robot_ns, TextSubstitution(text="/base_link")],
-            # Costmaps (double-key)
-            "local_costmap.local_costmap.global_frame":        [robot_ns, TextSubstitution(text="/odom")],
-            "local_costmap.local_costmap.robot_base_frame":    [robot_ns, TextSubstitution(text="/base_link")],
-            "global_costmap.global_costmap.global_frame":      [robot_ns, TextSubstitution(text="/map")],
-            "global_costmap.global_costmap.robot_base_frame":  [robot_ns, TextSubstitution(text="/base_link")],
-        },
-        convert_types=True,
-    )
+    Tower's TF frames will propagate over the network to laptop.
 
-    # --- Nodes ---
+    Returns None to skip this component.
+    """
+    return None
 
-    # Pointcloud -> Laserscan (namespaced node; subscribes to absolute robot topic; TF global)
-    pcl_to_scan = Node(
+
+def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
+    """
+    Convert LiDAR pointcloud to laserscan for Nav2
+
+    Subscribes to: /robot0/point_cloud2_L1 (from Isaac Sim - namespaced)
+    Publishes to: /robot0/scan (namespaced, for Nav2)
+    """
+    return Node(
         package="pointcloud_to_laserscan",
         executable="pointcloud_to_laserscan_node",
         name="pointcloud_to_laserscan",
-        namespace=robot_ns,
+        namespace=config.robot_namespace,
         output="screen",
         remappings=[
-            # "/<ns>/<pointcloud_topic>"
-            ("cloud_in", [TextSubstitution(text="/"), robot_ns, TextSubstitution(text="/"), pointcloud_topic]),
-            ("scan", "scan"),
+            # Absolute namespaced topic (templated for multi-robot)
+            (
+                "cloud_in",
+                [
+                    "/",
+                    config.robot_namespace,
+                    TextSubstitution(text="/point_cloud2_L1"),
+                ],
+            ),
+            ("scan", "scan"),  # Publishes to /robot0/scan (relative under namespace)
+            # Force TF to global
             ("tf", "/tf"),
             ("tf_static", "/tf_static"),
         ],
         parameters=[
             {
-                "target_frame": [robot_ns, TextSubstitution(text="/base_link")],
+                "target_frame": [
+                    config.robot_namespace,
+                    TextSubstitution(text="/base_link"),
+                ],
                 "transform_tolerance": 0.05,
                 "min_height": -0.2,
                 "max_height": 1.5,
                 "angle_min": -3.14159,
                 "angle_max": 3.14159,
-                "angle_increment": 0.0087,
+                "angle_increment": 0.0087,  # ~0.5 degrees
                 "scan_time": 0.1,
                 "range_min": 0.1,
                 "range_max": 30.0,
@@ -113,18 +208,107 @@ def generate_launch_description():
         ],
     )
 
-    # Nav2 bringup (wrapped so TF topics are forced to global)
-    nav2_include = IncludeLaunchDescription(
+
+def create_navigation_stack(
+    config: SimAutonomyConfig,
+) -> List:
+    """
+    Create Nav2 and SLAM stack with proper multi-robot namespacing.
+
+    Pattern: Global TF with namespaced frames (ChatGPT's recommended approach)
+    - All nodes under /robot0/* namespace
+    - TF topics: GLOBAL /tf and /tf_static (forced via GroupAction + SetRemap)
+    - Frame IDs: robot0/odom, robot0/base_link (injected via RewrittenYaml)
+    - Topics: /robot0/* (scan, cmd_vel, costmaps, etc.)
+
+    Isaac Sim publishes to global /tf with namespaced frames.
+    All Nav2 and SLAM nodes remap to global /tf via SetRemap actions.
+
+    Works for multiple robots by changing robot_namespace launch arg.
+    """
+    use_sim_time = LaunchConfiguration("use_sim_time")
+    with_nav2 = LaunchConfiguration("nav2")
+    with_slam = LaunchConfiguration("slam")
+
+    ns = config.robot_namespace
+
+    # Rewrite Nav2 params to inject namespace into frame IDs and topics
+    frame_remaps = {
+        # AMCL
+        "amcl.global_frame_id": [ns, TextSubstitution(text="/map")],
+        "amcl.odom_frame_id": [ns, TextSubstitution(text="/odom")],
+        "amcl.base_frame_id": [ns, TextSubstitution(text="/base_link")],
+        "amcl.scan_topic": [
+            TextSubstitution(text="/"),
+            ns,
+            TextSubstitution(text="/scan"),
+        ],
+        # BT Navigator
+        "bt_navigator.global_frame": [ns, TextSubstitution(text="/map")],
+        "bt_navigator.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Controller Server
+        "controller_server.odom_frame": [ns, TextSubstitution(text="/odom")],
+        "controller_server.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Planner Server
+        "planner_server.global_frame": [ns, TextSubstitution(text="/map")],
+        "planner_server.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Local Costmap (single-key)
+        "local_costmap.global_frame": [ns, TextSubstitution(text="/odom")],
+        "local_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Local Costmap - Scan topic for voxel layer
+        "local_costmap.voxel_layer.observation_sources": TextSubstitution(text="scan"),
+        "local_costmap.voxel_layer.scan.topic": [
+            TextSubstitution(text="/"),
+            ns,
+            TextSubstitution(text="/scan"),
+        ],
+        # Local Costmap (double-key - for Nav2 compatibility)
+        "local_costmap.local_costmap.global_frame": [
+            ns,
+            TextSubstitution(text="/odom"),
+        ],
+        "local_costmap.local_costmap.robot_base_frame": [
+            ns,
+            TextSubstitution(text="/base_link"),
+        ],
+        # Global Costmap (single-key)
+        "global_costmap.global_frame": [ns, TextSubstitution(text="/map")],
+        "global_costmap.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
+        # Global Costmap (double-key)
+        "global_costmap.global_costmap.global_frame": [
+            ns,
+            TextSubstitution(text="/map"),
+        ],
+        "global_costmap.global_costmap.robot_base_frame": [
+            ns,
+            TextSubstitution(text="/base_link"),
+        ],
+    }
+
+    params = RewrittenYaml(
+        source_file=config.config_paths["nav2"],
+        root_key=ns,
+        param_rewrites=frame_remaps,
+        convert_types=True,
+    )
+
+    # Nav2 launch
+    nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(_share_dir("nav2_bringup"), "launch", "bringup_launch.py")
+            [
+                os.path.join(
+                    get_package_share_directory("nav2_bringup"),
+                    "launch",
+                    "bringup_launch.py",
+                )
+            ]
         ),
-        condition=IfCondition(with_nav2),
         launch_arguments={
-            "namespace": robot_ns,
-            "use_namespace": "true",
+            "namespace": ns,
+            "use_namespace": "true",  # Namespace topics/services
             "slam": "False",
             "map": "",
-            "params_file": prefixed_params,
+            "params_file": params,  # Use rewritten params with frame IDs
             "use_sim_time": use_sim_time,
             "autostart": "True",
             "use_composition": "False",
@@ -132,79 +316,121 @@ def generate_launch_description():
         }.items(),
     )
 
-    nav2_group = GroupAction([
-        SetRemap("tf", "/tf"),
-        SetRemap("tf_static", "/tf_static"),
-        nav2_include
-    ])
+    # Nav2 launch wrapped in GroupAction with TF remapping
+    # GroupAction with SetRemap forces all child nodes to use global TF
+    nav2_group = GroupAction(
+        [
+            # Force TF topics to global for every child node inside bringup
+            SetRemap(src="tf", dst="/tf"),
+            SetRemap(src="tf_static", dst="/tf_static"),
+            nav2_launch,
+        ],
+        condition=IfCondition(with_nav2),
+    )
 
-    # SLAM Toolbox (kept optional; also TF global)
+    # SLAM - with global TF remapping
     slam_node = Node(
         condition=IfCondition(with_slam),
         package="slam_toolbox",
         executable="sync_slam_toolbox_node",
         name="slam_toolbox",
-        namespace=robot_ns,
+        namespace=ns,  # /robotX/*
         output="screen",
         parameters=[
-            RewrittenYaml(
-                source_file=slam_params_file,
-                root_key=robot_ns,
-                param_rewrites={
-                    "slam_toolbox.map_frame":  [robot_ns, TextSubstitution(text="/map")],
-                    "slam_toolbox.odom_frame": [robot_ns, TextSubstitution(text="/odom")],
-                    "slam_toolbox.base_frame": [robot_ns, TextSubstitution(text="/base_link")],
-                },
-                convert_types=True,
-            ),
+            config.config_paths["slam"],
             {"use_sim_time": use_sim_time},
         ],
-        remappings=[("tf", "/tf"), ("tf_static", "/tf_static")],
+        # Keep TF global
+        remappings=[
+            ("tf", "/tf"),
+            ("tf_static", "/tf_static"),
+        ],
     )
 
-    # Foxglove Bridge (optional)
-    foxglove_launch = os.path.join(_share_dir("foxglove_bridge"), "launch", "foxglove_bridge_launch.xml")
-    foxglove = IncludeLaunchDescription(
-        FrontendLaunchDescriptionSource(foxglove_launch),
-        condition=IfCondition(with_foxglove),
+    return [nav2_group, slam_node]
+
+
+def create_visualization_nodes(config: SimAutonomyConfig) -> List:
+    """Create visualization nodes (Foxglove, RViz2)"""
+    with_rviz2 = LaunchConfiguration("rviz2")
+    with_foxglove = LaunchConfiguration("foxglove")
+
+    nodes = []
+
+    # Foxglove Bridge
+    foxglove_launch = os.path.join(
+        get_package_share_directory("foxglove_bridge"),
+        "launch",
+        "foxglove_bridge_launch.xml",
     )
 
-    # RViz2 (optional)
-    rviz = Node(
-        condition=IfCondition(with_rviz2),
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2_laptop",
-        output="screen",
-        arguments=["-d", rviz_file],
+    nodes.append(
+        IncludeLaunchDescription(
+            FrontendLaunchDescriptionSource(foxglove_launch),
+            condition=IfCondition(with_foxglove),
+        )
     )
 
-    # Logs to confirm which files are used
-    log1 = LogInfo(msg=["Using Nav2 params: ", nav2_params_file])
-    log2 = LogInfo(msg=["Using SLAM params: ", slam_params_file])
-    log3 = LogInfo(msg=["Robot namespace: ", robot_ns])
-    log4 = LogInfo(msg=["Pointcloud topic (under ns): ", pointcloud_topic])
+    # RViz2
+    nodes.append(
+        Node(
+            package="rviz2",
+            executable="rviz2",
+            name="rviz2_laptop",  # Unique name to avoid conflict with Tower's RViz
+            output="screen",
+            arguments=["-d", config.config_paths["rviz"]],
+            condition=IfCondition(with_rviz2),
+        )
+    )
 
-    return LaunchDescription([
-        # Arguments
-        DeclareLaunchArgument("robot_namespace", default_value="robot0",
-                              description="Robot namespace (robot0, robot1, ...)"),
-        DeclareLaunchArgument("rviz2", default_value="True"),
-        DeclareLaunchArgument("nav2", default_value="True"),
-        DeclareLaunchArgument("slam", default_value="True"),
-        DeclareLaunchArgument("foxglove", default_value="True"),
-        DeclareLaunchArgument("use_sim_time", default_value="false"),
-        DeclareLaunchArgument("nav2_params_file", default_value=default_nav2_yaml,
-                              description="Path to Nav2 params YAML (namespace-agnostic)"),
-        DeclareLaunchArgument("slam_params_file", default_value=default_slam_yaml,
-                              description="Path to SLAM params YAML (namespace-agnostic)"),
-        DeclareLaunchArgument("pointcloud_topic", default_value="point_cloud2_L1",
-                              description="Per-robot pointcloud topic name under the namespace"),
-        log1, log2, log3, log4,
-        # Nodes
-        pcl_to_scan,
-        nav2_group,
-        slam_node,
-        foxglove,
-        rviz,
-    ])
+    return nodes
+
+
+def generate_launch_description():
+    """
+    Generate launch description for simulation autonomy stack.
+
+    This mirrors robot.launch.py but WITHOUT go2_driver_node.
+    Isaac Sim replaces the driver by publishing standard ROS2 topics.
+    """
+
+    # Initialize configuration
+    config = SimAutonomyConfig()
+
+    # Create all components
+    launch_args = create_launch_arguments()
+    robot_state_pub = create_robot_state_publisher(config)
+    pointcloud_converter = create_pointcloud_to_laserscan(config)
+    nav_stack = create_navigation_stack(config)
+    viz_nodes = create_visualization_nodes(config)
+
+    print("\n" + "=" * 60)
+    print("🚀 SIMULATION AUTONOMY STACK")
+    print("=" * 60)
+    print("Prerequisites:")
+    print("  1. Isaac Sim running on Tower (publishing /robot0/* topics)")
+    print("  2. Network ROS2 configured:")
+    print("     - ROS_DOMAIN_ID=0")
+    print("     - ROS_LOCALHOST_ONLY=0")
+    print("     - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp")
+    print("\nLaunching:")
+    print("  ✅ Pointcloud to laserscan converter")
+    print("  ✅ Nav2 (if enabled)")
+    print("  ✅ SLAM Toolbox (if enabled)")
+    print("  ✅ Foxglove Bridge (if enabled)")
+    print("  ✅ RViz2 (if enabled)")
+    print("\nNOT Launching:")
+    print("  ❌ go2_driver_node (Isaac Sim replaces this!)")
+    print("  ❌ robot_state_publisher (Tower provides TF frames)")
+    print("=" * 60 + "\n")
+
+    # Combine all elements (filter out None values)
+    launch_entities = (
+        launch_args
+        + ([robot_state_pub] if robot_state_pub is not None else [])
+        + [pointcloud_converter]
+        + nav_stack
+        + viz_nodes
+    )
+
+    return LaunchDescription(launch_entities)
