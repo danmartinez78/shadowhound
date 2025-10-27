@@ -15,7 +15,7 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, Grou
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource, FrontendLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, TextSubstitution
-from launch_ros.actions import Node, Remap
+from launch_ros.actions import Node, SetRemap
 from nav2_common.launch import RewrittenYaml
 
 
@@ -133,8 +133,8 @@ def generate_launch_description():
     )
 
     nav2_group = GroupAction([
-        Remap("tf", "/tf"),
-        Remap("tf_static", "/tf_static"),
+        SetRemap("tf", "/tf"),
+        SetRemap("tf_static", "/tf_static"),
         nav2_include
     ])
 
