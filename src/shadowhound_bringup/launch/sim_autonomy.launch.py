@@ -209,33 +209,48 @@ def create_navigation_stack(
     - use_namespace="true" isolates topics/services
     - TF stays global (/tf), frames are robot0/* in params
     - Scan publishes to /robot0/scan (matches costmap expectation)
+    
+    CRITICAL: Nav2's use_namespace="true" namespaces TF topics to /robot0/tf,
+    but Isaac Sim publishes to global /tf. We must remap TF topics back to global.
     """
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
 
-    nav2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [
-                os.path.join(
-                    get_package_share_directory("nav2_bringup"),
-                    "launch",
-                    "bringup_launch.py",
-                )
-            ]
-        ),
+    # Nav2 launch with TF remapping to global topics
+    # Wrap in GroupAction to apply TF remappings
+    nav2_launch = GroupAction(
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    [
+                        os.path.join(
+                            get_package_share_directory("nav2_bringup"),
+                            "launch",
+                            "bringup_launch.py",
+                        )
+                    ]
+                ),
+                launch_arguments={
+                    "namespace": config.robot_namespace,  # /robot0/*
+                    "use_namespace": "true",  # Isolate topics/services
+                    "slam": "False",
+                    "map": "",
+                    "params_file": config.config_paths["nav2"],
+                    "use_sim_time": use_sim_time,
+                    "autostart": "True",
+                    "use_composition": "False",
+                    "use_respawn": "False",
+                }.items(),
+            )
+        ],
+        # Remap TF topics from /robot0/tf back to global /tf
+        # This allows Nav2 to see Isaac Sim's transforms
+        scoped_remappings=[
+            ("/robot0/tf", "/tf"),
+            ("/robot0/tf_static", "/tf_static"),
+        ],
         condition=IfCondition(with_nav2),
-        launch_arguments={
-            "namespace": config.robot_namespace,  # /robot0/*
-            "use_namespace": "true",  # Isolate topics/services
-            "slam": "False",
-            "map": "",
-            "params_file": config.config_paths["nav2"],
-            "use_sim_time": use_sim_time,
-            "autostart": "True",
-            "use_composition": "False",
-            "use_respawn": "False",
-        }.items(),
     )
 
     slam_node = Node(
