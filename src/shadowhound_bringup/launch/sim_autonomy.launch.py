@@ -298,6 +298,7 @@ def create_navigation_stack(
 
     params = RewrittenYaml(
         source_file=config.config_paths["nav2"],
+        root_key=ns,
         param_rewrites=frame_remaps,
         convert_types=True,
     )
