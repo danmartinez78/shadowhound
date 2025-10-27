@@ -38,10 +38,14 @@ from typing import List
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.parameter_descriptions import ParameterValue
+from nav2_common.launch import RewrittenYaml
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
 from launch.conditions import IfCondition
+from launch_ros.actions import Node as ROSNode
+from launch.actions import GroupAction
+from launch_ros.descriptions import ParameterValue as PV
 from launch.launch_description_sources import (
     FrontendLaunchDescriptionSource,
     PythonLaunchDescriptionSource,
@@ -163,7 +167,7 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
     """
     Convert LiDAR pointcloud to laserscan for Nav2
 
-    Subscribes to: /robot0/point_cloud2_L1 (from Isaac Sim - absolute path)
+    Subscribes to: /robot0/point_cloud2_L1 (from Isaac Sim - namespaced)
     Publishes to: /robot0/scan (namespaced, for Nav2)
     """
     return Node(
@@ -173,9 +177,12 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
         namespace=config.robot_namespace,
         output="screen",
         remappings=[
-            # Absolute path to Isaac Sim's topic
-            ("cloud_in", "/robot0/point_cloud2_L1"),
+            # Absolute namespaced topic (templated for multi-robot)
+            ("cloud_in", ["/", config.robot_namespace, TextSubstitution(text="/point_cloud2_L1")]),
             ("scan", "scan"),  # Publishes to /robot0/scan (relative under namespace)
+            # Force TF to global
+            ("tf", "/tf"),
+            ("tf_static", "/tf_static"),
         ],
         parameters=[
             {
@@ -204,19 +211,64 @@ def create_navigation_stack(
     """
     Create Nav2 and SLAM stack with proper multi-robot namespacing.
 
-    Clean multi-robot pattern - EVERYTHING namespaced:
+    Pattern: Namespaced TF with namespaced frames
     - All nodes under /robot0/* namespace
-    - All topics under /robot0/* (including TF)
-    - All services under /robot0/*
-    - Frame IDs in params: robot0/odom, robot0/base_link
+    - TF topics: /robot0/tf and /robot0/tf_static (namespaced by Nav2)
+    - SLAM TF: Remapped to GLOBAL /tf and /tf_static
+    - Frame IDs: robot0/odom, robot0/base_link (injected via RewrittenYaml)
+    - Topics: /robot0/* (scan, cmd_vel, costmaps, etc.)
 
-    Isaac Sim must publish to /robot0/tf (not /tf) for this to work.
+    NOTE: Nav2's use_namespace="true" namespaces TF topics to /robot0/tf.
+    Isaac Sim must publish to /robot0/tf (NOT global /tf) for Nav2 to work.
+    SLAM remaps to global /tf for map building across robots.
+
+    Works for multiple robots by changing robot_namespace launch arg.
     """
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
     with_slam = LaunchConfiguration("slam")
+    
+    ns = config.robot_namespace
 
-    # Nav2 launch - everything namespaced including TF
+    # Rewrite Nav2 params to inject namespace into frame IDs
+    frame_remaps = {
+        # AMCL
+        'amcl.global_frame_id': [ns, TextSubstitution(text='/map')],
+        'amcl.odom_frame_id': [ns, TextSubstitution(text='/odom')],
+        'amcl.base_frame_id': [ns, TextSubstitution(text='/base_link')],
+        # BT Navigator
+        'bt_navigator.global_frame': [ns, TextSubstitution(text='/map')],
+        'bt_navigator.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        # Controller Server
+        'controller_server.odom_frame': [ns, TextSubstitution(text='/odom')],
+        'controller_server.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        # Planner Server
+        'planner_server.global_frame': [ns, TextSubstitution(text='/map')],
+        'planner_server.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        # Local Costmap (single-key)
+        'local_costmap.global_frame': [ns, TextSubstitution(text='/odom')],
+        'local_costmap.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        # Local Costmap (double-key - for Nav2 compatibility)
+        'local_costmap.local_costmap.global_frame': [ns, TextSubstitution(text='/odom')],
+        'local_costmap.local_costmap.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        # Global Costmap (single-key)
+        'global_costmap.global_frame': [ns, TextSubstitution(text='/map')],
+        'global_costmap.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+        # Global Costmap (double-key)
+        'global_costmap.global_costmap.global_frame': [ns, TextSubstitution(text='/map')],
+        'global_costmap.global_costmap.robot_base_frame': [ns, TextSubstitution(text='/base_link')],
+    }
+
+    params = RewrittenYaml(
+        source_file=config.config_paths['nav2'],
+        root_key=ns,
+        param_rewrites=frame_remaps,
+        convert_types=True,
+    )
+
+    # Nav2 launch with TF topic remapping via parameters
+    # Note: Nav2's bringup_launch.py doesn't expose TF remapping as launch args,
+    # so TF will be namespaced. Isaac Sim must publish to /robot0/tf
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -228,11 +280,11 @@ def create_navigation_stack(
             ]
         ),
         launch_arguments={
-            "namespace": config.robot_namespace,  # /robot0
-            "use_namespace": "true",  # Namespace everything
+            "namespace": ns,
+            "use_namespace": "true",  # Namespace topics/services AND TF
             "slam": "False",
             "map": "",
-            "params_file": config.config_paths["nav2"],
+            "params_file": params,  # Use rewritten params with frame IDs
             "use_sim_time": use_sim_time,
             "autostart": "True",
             "use_composition": "False",
@@ -241,19 +293,23 @@ def create_navigation_stack(
         condition=IfCondition(with_nav2),
     )
 
-    # SLAM - everything namespaced including TF
+    # SLAM - with global TF remapping
     slam_node = Node(
         condition=IfCondition(with_slam),
         package="slam_toolbox",
         executable="sync_slam_toolbox_node",
         name="slam_toolbox",
-        namespace=config.robot_namespace,  # /robot0/*
+        namespace=ns,  # /robotX/*
         output="screen",
         parameters=[
             config.config_paths["slam"],
             {"use_sim_time": use_sim_time},
         ],
-        # No TF remapping - use namespaced /robot0/tf
+        # Force TF to global
+        remappings=[
+            ('tf', '/tf'),
+            ('tf_static', '/tf_static'),
+        ],
     )
 
     return [nav2_launch, slam_node]
