@@ -331,8 +331,9 @@ def create_navigation_stack(
             ]
         ),
         launch_arguments={
-            "namespace": ns,
-            "use_namespace": "true",  # Namespace topics/services
+            # We'll apply namespacing ourselves with PushRosNamespace to ensure remaps propagate
+            "namespace": "",
+            "use_namespace": "false",
             "slam": "True",  # We're doing SLAM - disables map_server
             "map": "",
             "params_file": params,  # Use rewritten params with frame IDs
@@ -346,10 +347,12 @@ def create_navigation_stack(
     # Nav2 launch wrapped in GroupAction with TF remapping
     # GroupAction with SetRemap forces all child nodes to use global TF
     nav2_group = GroupAction(
-        [
+        actions=[
+            # Apply namespace here so SetRemap applies to all child nodes created by bringup
+            PushRosNamespace(ns),
             # Force TF topics to global for every child node inside bringup
-            SetRemap(src="tf", dst="/tf"),
-            SetRemap(src="tf_static", dst="/tf_static"),
+            SetRemap("tf", "/tf"),
+            SetRemap("tf_static", "/tf_static"),
             nav2_launch,
         ],
         condition=IfCondition(with_nav2),
