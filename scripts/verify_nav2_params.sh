@@ -42,19 +42,24 @@ echo ""
 
 # Check local_costmap frame parameters
 echo "3. Checking local_costmap frame parameters..."
-LOCAL_GLOBAL=$(ros2 param get /${ROBOT_NS}/local_costmap global_frame 2>/dev/null | grep -oP "String value is: '\K[^']+")
-LOCAL_BASE=$(ros2 param get /${ROBOT_NS}/local_costmap robot_base_frame 2>/dev/null | grep -oP "String value is: '\K[^']+")
+# Nav2 versions differ on node naming: try both /robot0/local_costmap and /robot0/local_costmap/local_costmap
+LOCAL_GLOBAL=$(ros2 param get /${ROBOT_NS}/local_costmap/local_costmap global_frame 2>/dev/null | grep -oP "String value is: '\K[^']+" || \
+               ros2 param get /${ROBOT_NS}/local_costmap global_frame 2>/dev/null | grep -oP "String value is: '\K[^']+")
+LOCAL_BASE=$(ros2 param get /${ROBOT_NS}/local_costmap/local_costmap robot_base_frame 2>/dev/null | grep -oP "String value is: '\K[^']+" || \
+             ros2 param get /${ROBOT_NS}/local_costmap robot_base_frame 2>/dev/null | grep -oP "String value is: '\K[^']+")
 
 if [[ "$LOCAL_GLOBAL" == "${ROBOT_NS}/odom" ]]; then
     echo "   ✅ global_frame: $LOCAL_GLOBAL"
 else
     echo "   ❌ global_frame: $LOCAL_GLOBAL (expected ${ROBOT_NS}/odom)"
+    echo "      Run: ros2 param set /${ROBOT_NS}/local_costmap/local_costmap global_frame ${ROBOT_NS}/odom"
 fi
 
 if [[ "$LOCAL_BASE" == "${ROBOT_NS}/base_link" ]]; then
     echo "   ✅ robot_base_frame: $LOCAL_BASE"
 else
     echo "   ❌ robot_base_frame: $LOCAL_BASE (expected ${ROBOT_NS}/base_link)"
+    echo "      Run: ros2 param set /${ROBOT_NS}/local_costmap/local_costmap robot_base_frame ${ROBOT_NS}/base_link"
 fi
 echo ""
 

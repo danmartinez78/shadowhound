@@ -192,6 +192,48 @@ controller_server:
       RotateToGoal.slowing_factor: 5.0
       RotateToGoal.lookahead_time: -1.0
 
+# COMPAT SHIM: Nav2 versions differ on whether costmap nodes read params at single or double key
+# Include BOTH to ensure parameters load regardless of Nav2 version
+local_costmap:
+  ros__parameters:
+    update_frequency: 1.0
+    publish_frequency: 1.0
+    global_frame: robot0/odom
+    robot_base_frame: robot0/base_link
+    use_sim_time: False
+    rolling_window: true
+    width: 6
+    height: 6
+    resolution: 0.05
+    always_send_full_costmap: true
+    footprint: "[ [0.360, 0.200], [0.360, -0.200], [-0.450, -0.200], [-0.450, 0.200] ]"
+    plugins: ["static_layer", "voxel_layer", "inflation_layer"]
+
+    static_layer:
+      plugin: "nav2_costmap_2d::StaticLayer"
+      map_subscribe_transient_local: True
+
+    voxel_layer:
+      plugin: "nav2_costmap_2d::VoxelLayer"
+      enabled: True
+      publish_voxel_map: True
+      observation_sources: scan
+      scan:
+        topic: scan
+        max_obstacle_height: 2.0
+        clearing: True
+        marking: True
+        data_type: "LaserScan"
+        raytrace_max_range: 3.0
+        raytrace_min_range: 0.0
+        obstacle_max_range: 2.5
+        obstacle_min_range: 0.0
+
+    inflation_layer:
+      plugin: "nav2_costmap_2d::InflationLayer"
+      cost_scaling_factor: 1.0
+      inflation_radius: 0.25
+
 local_costmap:
   local_costmap:
     ros__parameters:
@@ -232,6 +274,51 @@ local_costmap:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 1.0
         inflation_radius: 0.25
+
+# COMPAT SHIM: Nav2 versions differ on whether costmap nodes read params at single or double key
+# Include BOTH to ensure parameters load regardless of Nav2 version
+global_costmap:
+  ros__parameters:
+    update_frequency: 1.0
+    publish_frequency: 1.0
+    global_frame: robot0/odom
+    robot_base_frame: robot0/base_link
+    use_sim_time: False
+    resolution: 0.05
+    track_unknown_space: False
+    static_map: True
+    width: 500
+    height: 500
+    origin_x: -250.0 
+    origin_y: -250.0
+    always_send_full_costmap: true
+    footprint: "[ [0.360, 0.200], [0.360, -0.200], [-0.450, -0.200], [-0.450, 0.200] ]"
+    plugins: ["static_layer", "voxel_layer", "inflation_layer"]
+
+    static_layer:
+      plugin: "nav2_costmap_2d::StaticLayer"
+      map_subscribe_transient_local: True
+
+    voxel_layer:
+      plugin: "nav2_costmap_2d::VoxelLayer"
+      enabled: True
+      publish_voxel_map: True
+      observation_sources: scan
+      scan:
+        topic: scan
+        max_obstacle_height: 2.0
+        clearing: True
+        marking: True
+        data_type: "LaserScan"
+        raytrace_max_range: 3.0
+        raytrace_min_range: 0.0
+        obstacle_max_range: 2.5
+        obstacle_min_range: 0.0
+
+    inflation_layer:
+      plugin: "nav2_costmap_2d::InflationLayer"
+      cost_scaling_factor: 1.0
+      inflation_radius: 0.25
 
 global_costmap:
   global_costmap:
