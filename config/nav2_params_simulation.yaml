@@ -1,9 +1,13 @@
 # Nav2 Parameters for Simulation Mode
 # This file is used when running with Isaac Sim (ROBOT_MODE=simulation)
 # 
-# IMPORTANT: This config is namespace-agnostic. The robot namespace (e.g., robot0, robot1, tachi)
-# is applied by the launch system. Frame IDs and topic names should NOT include namespace prefixes.
-# Nav2 will automatically prepend the namespace to all topics and properly handle TF frames.
+# IMPORTANT: Frame IDs are hard-coded to robot0/* to match Isaac Sim's TF publishing.
+# This file assumes:
+#   - Isaac Sim publishes TF frames: robot0/odom → robot0/base_link
+#   - Nav2 is launched under /robot0 namespace (namespace:=robot0 use_namespace:=true)
+#   - All topics become /robot0/* (e.g., /robot0/scan, /robot0/cmd_vel)
+#
+# For multi-robot: Create robot1_params.yaml, robot2_params.yaml with respective prefixes.
 
 amcl:
   ros__parameters:
@@ -125,6 +129,9 @@ controller_server:
     progress_checker_plugin: "progress_checker"
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
     controller_plugins: ["FollowPath"]
+    # Frame IDs - must match TF tree (robot0/base_link, robot0/odom from Isaac Sim)
+    robot_base_frame: robot0/base_link
+    odom_frame: robot0/odom
 
     # Progress checker parameters
     progress_checker:
