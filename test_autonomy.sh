@@ -55,6 +55,7 @@ fi
 MODE="launch"
 ROBOT_NS="${ROBOT_NAMESPACE:-robot0}"
 TIMEOUT="8.0"
+INIT_WAIT="10"
 AUTO_EXIT="false"
 
 while [[ $# -gt 0 ]]; do
@@ -69,6 +70,8 @@ while [[ $# -gt 0 ]]; do
             MODE="both"; shift 1;;
         --auto-exit)
             AUTO_EXIT="true"; shift 1;;
+            --init-wait)
+                INIT_WAIT="$2"; shift 2;;
         -h|--help)
             echo "Usage: $0 [--ns <robot_namespace>] [--timeout <seconds>] [--validate-only|--both] [--auto-exit]"; exit 0;;
         *)
@@ -144,8 +147,8 @@ case "$MODE" in
         LAUNCH_PID=$!
         set -e
         echo "Launch PID: $LAUNCH_PID"
-        echo "Waiting for stack to initialize..."
-        sleep 8
+        echo "Waiting for stack to initialize (${INIT_WAIT}s)..."
+        sleep "$INIT_WAIT"
         run_validator "$ROBOT_NS" "$TIMEOUT"
         VALID_RC=$?
         if [ "$AUTO_EXIT" = "true" ]; then
