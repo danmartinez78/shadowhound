@@ -23,10 +23,10 @@ from dataclasses import dataclass
 from typing import List, Tuple
 
 import rclpy
-from rclpy.node import Node
+from rcl_interfaces.msg import ParameterType, ParameterValue
 from rcl_interfaces.srv import GetParameters
-from rcl_interfaces.msg import ParameterValue, ParameterType
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+from rclpy.node import Node
+from rclpy.qos import HistoryPolicy, QoSProfile, ReliabilityPolicy
 
 
 @dataclass
@@ -66,7 +66,9 @@ class AutonomyTester(Node):
         return [f"{i.node_namespace}/{i.node_name}".replace("//", "/") for i in infos]
 
     # ------------- Param helpers -------------
-    def get_params(self, node_name: str, names: List[str]) -> Tuple[bool, List[ParameterValue]]:
+    def get_params(
+        self, node_name: str, names: List[str]
+    ) -> Tuple[bool, List[ParameterValue]]:
         client = self.create_client(GetParameters, f"{node_name}/get_parameters")
         if not client.wait_for_service(timeout_sec=self.timeout):
             return False, []
@@ -140,22 +142,18 @@ def run_checks(ns: str, timeout: float) -> List[CheckResult]:
         f"/{ns}/slam_toolbox",
     ]
     for n in required_nodes:
-        results.append(
-            CheckResult(name=f"Node up: {n}", success=node.node_exists(n))
-        )
+        results.append(CheckResult(name=f"Node up: {n}", success=node.node_exists(n)))
 
     # 3) Local costmap params (double-key node)
     lcm_node = f"/{ns}/local_costmap/local_costmap"
-    ok, params = node.get_params(
-        lcm_node,
-        [
-            "plugins",
-            "obstacle_layer.observation_sources",
-            "obstacle_layer.scan.topic",
-            "global_frame",
-            "robot_base_frame",
-        ],
-    )
+    expected_param_names = [
+        "plugins",
+        "obstacle_layer.observation_sources",
+        "obstacle_layer.scan.topic",
+        "global_frame",
+        "robot_base_frame",
+    ]
+    ok, params = node.get_params(lcm_node, expected_param_names)
     if not ok:
         results.append(
             CheckResult(
@@ -165,66 +163,76 @@ def run_checks(ns: str, timeout: float) -> List[CheckResult]:
             )
         )
     else:
+        if len(params) != len(expected_param_names):
+            results.append(
+                CheckResult(
+                    name="Local costmap: parameter query",
+                    success=False,
+                    detail=f"returned {len(params)} of {len(expected_param_names)}",
+                )
+            )
+            # Skip detailed param assertions to avoid index errors
+        else:
         # plugins list contains both layers
-        p0 = params[0]
-        p_plugins = (
-            list(p0.string_array_value)
-            if p0.type == ParameterType.PARAMETER_STRING_ARRAY
-            else []
-        )
-        results.append(
-            CheckResult(
-                name="Local costmap plugins",
-                success=set(["obstacle_layer", "inflation_layer"]).issubset(
-                    set(p_plugins)
-                ),
-                detail=str(p_plugins),
+            p0 = params[0]
+            p_plugins = (
+                list(p0.string_array_value)
+                if p0.type == ParameterType.PARAMETER_STRING_ARRAY
+                else []
             )
-        )
-        # observation_sources == scan
-        obs = (
-            params[1].string_value
-            if params[1].type == ParameterType.PARAMETER_STRING
-            else None
-        )
-        results.append(
-            CheckResult(
-                name="Local costmap observation_sources",
-                success=(obs == "scan"),
-                detail=f"got={obs}",
+            results.append(
+                CheckResult(
+                    name="Local costmap plugins",
+                    success=set(["obstacle_layer", "inflation_layer"]).issubset(
+                        set(p_plugins)
+                    ),
+                    detail=str(p_plugins),
+                )
             )
-        )
-        # scan.topic == scan
-        scan_topic = (
-            params[2].string_value
-            if params[2].type == ParameterType.PARAMETER_STRING
-            else None
-        )
-        results.append(
-            CheckResult(
-                name="Local costmap scan.topic",
-                success=(scan_topic == "scan"),
-                detail=f"got={scan_topic}",
+            # observation_sources == scan
+            obs = (
+                params[1].string_value
+                if params[1].type == ParameterType.PARAMETER_STRING
+                else None
             )
-        )
-        # frames prefixed
-        gf = (
-            params[3].string_value
-            if params[3].type == ParameterType.PARAMETER_STRING
-            else None
-        )
-        rbf = (
-            params[4].string_value
-            if params[4].type == ParameterType.PARAMETER_STRING
-            else None
-        )
-        results.append(
-            CheckResult(
-                name="Local costmap frames prefixed",
-                success=(gf == f"{ns}/odom" and rbf == f"{ns}/base_link"),
-                detail=f"global_frame={gf}, robot_base_frame={rbf}",
+            results.append(
+                CheckResult(
+                    name="Local costmap observation_sources",
+                    success=(obs == "scan"),
+                    detail=f"got={obs}",
+                )
             )
-        )
+            # scan.topic == scan
+            scan_topic = (
+                params[2].string_value
+                if params[2].type == ParameterType.PARAMETER_STRING
+                else None
+            )
+            results.append(
+                CheckResult(
+                    name="Local costmap scan.topic",
+                    success=(scan_topic == "scan"),
+                    detail=f"got={scan_topic}",
+                )
+            )
+            # frames prefixed
+            gf = (
+                params[3].string_value
+                if params[3].type == ParameterType.PARAMETER_STRING
+                else None
+            )
+            rbf = (
+                params[4].string_value
+                if params[4].type == ParameterType.PARAMETER_STRING
+                else None
+            )
+            results.append(
+                CheckResult(
+                    name="Local costmap frames prefixed",
+                    success=(gf == f"{ns}/odom" and rbf == f"{ns}/base_link"),
+                    detail=f"global_frame={gf}, robot_base_frame={rbf}",
+                )
+            )
 
     # 4) Local costmap subscribes to /<ns>/scan
     subs = node.subscribers_for(f"/{ns}/scan")
@@ -241,7 +249,10 @@ def run_checks(ns: str, timeout: float) -> List[CheckResult]:
     start = time.time()
     while time.time() - start < timeout:
         rclpy.spin_once(node, timeout_sec=0.2)
-        if node._costmap_msg_counts["local"] > 0 and node._costmap_msg_counts["global"] > 0:
+        if (
+            node._costmap_msg_counts["local"] > 0
+            and node._costmap_msg_counts["global"] > 0
+        ):
             break
     results.append(
         CheckResult(
