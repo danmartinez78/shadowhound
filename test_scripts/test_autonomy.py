@@ -48,6 +48,7 @@ class AutonomyTester(Node):
             depth=10,
         )
         self._costmap_msg_counts = {"local": 0, "global": 0}
+        self._scan_msg_count = 0
 
     # ------------- Graph helpers -------------
     def topic_exists(self, topic: str) -> bool:
@@ -108,6 +109,22 @@ class AutonomyTester(Node):
 
         return get_message(type_str)
 
+    # Scan subscription for message presence check
+    def _scan_cb(self, msg):  # noqa: ARG002
+        self._scan_msg_count += 1
+
+    def subscribe_scan(self):
+        self.create_subscription(
+            msg_type=self.resolve_message_type("sensor_msgs/msg/LaserScan"),
+            topic=f"/{self.ns}/scan",
+            callback=self._scan_cb,
+            qos_profile=QoSProfile(
+                reliability=ReliabilityPolicy.RELIABLE,
+                history=HistoryPolicy.KEEP_LAST,
+                depth=10,
+            ),
+        )
+
 
 def run_checks(ns: str, timeout: float) -> List[CheckResult]:
     rclpy.init()
@@ -143,6 +160,21 @@ def run_checks(ns: str, timeout: float) -> List[CheckResult]:
     ]
     for n in required_nodes:
         results.append(CheckResult(name=f"Node up: {n}", success=node.node_exists(n)))
+
+    # 2b) Scan topic publishing
+    node.subscribe_scan()
+    start_scan = time.time()
+    while time.time() - start_scan < timeout:
+        rclpy.spin_once(node, timeout_sec=0.2)
+        if node._scan_msg_count > 0:
+            break
+    results.append(
+        CheckResult(
+            name="Scan topic publishing",
+            success=node._scan_msg_count > 0,
+            detail=f"msgs={node._scan_msg_count}",
+        )
+    )
 
     # 3) Local costmap params (double-key node)
     lcm_node = f"/{ns}/local_costmap/local_costmap"
