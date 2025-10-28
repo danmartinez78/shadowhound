@@ -13,6 +13,18 @@
 
 set -euo pipefail
 
+# Helper to source files safely under 'set -u' (ROS setup uses unset vars)
+source_if_exists() {
+    local file="$1"
+    if [ -f "$file" ]; then
+        # Temporarily disable nounset for setup scripts
+        set +u
+        # shellcheck disable=SC1090
+        source "$file"
+        set -u
+    fi
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "========================================"
@@ -21,19 +33,13 @@ echo "========================================"
 echo ""
 
 # Source environment
-if [ -f "$SCRIPT_DIR/.env" ]; then
-    source "$SCRIPT_DIR/.env"
-fi
+source_if_exists "$SCRIPT_DIR/.env"
 
 # Source ROS2
-if [ -f "/opt/ros/humble/setup.bash" ]; then
-    source /opt/ros/humble/setup.bash
-fi
+source_if_exists "/opt/ros/humble/setup.bash"
 
 # Source workspace
-if [ -f "$SCRIPT_DIR/install/setup.bash" ]; then
-    source "$SCRIPT_DIR/install/setup.bash"
-fi
+source_if_exists "$SCRIPT_DIR/install/setup.bash"
 
 # Set ROS environment
 export ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
