@@ -113,7 +113,16 @@ class SimAutonomyConfig:
         return {
             "nav2": nav2_config,
             "slam": slam_config,
-            "rviz": os.path.join(self.go2_sdk_dir, "config", "single_robot_conf.rviz"),
+            # Prefer our custom RViz tuned for namespaced topics/frames; fallback to SDK config
+            "rviz": (
+                os.path.join(self.shadowhound_dir, "config", "rviz", "sim_autonomy_robot0.rviz")
+                if os.path.exists(
+                    os.path.join(
+                        self.shadowhound_dir, "config", "rviz", "sim_autonomy_robot0.rviz"
+                    )
+                )
+                else os.path.join(self.go2_sdk_dir, "config", "single_robot_conf.rviz")
+            ),
             "urdf": os.path.join(self.go2_sdk_dir, "urdf", "go2.urdf"),
         }
 
