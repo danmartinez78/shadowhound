@@ -115,10 +115,15 @@ class SimAutonomyConfig:
             "slam": slam_config,
             # Prefer our custom RViz tuned for namespaced topics/frames; fallback to SDK config
             "rviz": (
-                os.path.join(self.shadowhound_dir, "config", "rviz", "sim_autonomy_robot0.rviz")
+                os.path.join(
+                    self.shadowhound_dir, "config", "rviz", "sim_autonomy_robot0.rviz"
+                )
                 if os.path.exists(
                     os.path.join(
-                        self.shadowhound_dir, "config", "rviz", "sim_autonomy_robot0.rviz"
+                        self.shadowhound_dir,
+                        "config",
+                        "rviz",
+                        "sim_autonomy_robot0.rviz",
                     )
                 )
                 else os.path.join(self.go2_sdk_dir, "config", "single_robot_conf.rviz")
@@ -454,7 +459,9 @@ def create_navigation_stack(
             # We'll apply namespacing ourselves with PushRosNamespace to ensure remaps propagate
             "namespace": "",
             "use_namespace": "false",
-            "slam": "True",  # We're doing SLAM - disables map_server
+            # Let this launch file manage SLAM explicitly; avoid double-launching SLAM Toolbox
+            # Setting slam to False prevents nav2_bringup from launching its own slam_toolbox
+            "slam": "False",
             "map": "",
             "params_file": params,  # Use rewritten params with frame IDs
             "use_sim_time": use_sim_time,

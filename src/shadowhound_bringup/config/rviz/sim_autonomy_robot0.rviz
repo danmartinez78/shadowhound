@@ -65,7 +65,7 @@ Visualization Manager:
       Size (m): 0.03
       Style: Flat Squares
       Topic: /robot0/scan
-      Unreliable: false
+  Unreliable: true
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
