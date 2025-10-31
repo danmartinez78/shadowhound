@@ -37,5 +37,7 @@
         "**/install": true,
         "**/log": true,
         "**/src/dimos-unitree/dimos/robot/unitree/external/**": true
-    }
+    },
+    "chatgpt.openOnStartup": true,
+    "ROS2.distro": "humble"
 }
