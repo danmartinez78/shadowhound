@@ -56,7 +56,8 @@ class Go2LaunchConfig:
     def _get_rviz_config(self) -> str:
         """Get appropriate RViz configuration file"""
         if self.conn_type == "cyclonedx":
-            return "cyclonedx_config.rviz"
+            # Correct file name is 'cyclonedds_config.rviz' in go2_robot_sdk/config
+            return "cyclonedds_config.rviz"
         elif self.conn_mode == "single":
             return "single_robot_conf.rviz"
         else:

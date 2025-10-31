@@ -74,3 +74,15 @@ patches/
 /docs_obs/
 /wiki/
 /site/
+
+# Simulation data (ROS 2 bags)
+# Ignore bag outputs produced during simulation runs
+./sim_data/**/*.db3
+sim_data/**/*.mcap
+sim_data/**/metadata.yaml
+sim_data/rosbag2_*/
+sim_data/*.db3
+sim_data/*.mcap
+sim_data/metadata.yaml
+yolo11n.pt
+.env.original
