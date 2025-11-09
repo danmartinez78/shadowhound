@@ -44,9 +44,10 @@ else
     echo -e "${YELLOW}⚠${NC} .shadowhound_env not found (start.sh hasn't run yet)"
     echo -e "${YELLOW}⚠${NC} Using default values"
     
-    export ROS_DOMAIN_ID=0
+    export ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
     export ROBOT_IP=${ROBOT_IP:-192.168.10.167}
-    export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+    export RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION:-rmw_cyclonedds_cpp}
+    export ROS_LOCALHOST_ONLY=${ROS_LOCALHOST_ONLY:-0}
     
     # Source ROS2
     if [ -f "/opt/ros/humble/setup.bash" ]; then
@@ -65,11 +66,19 @@ else
     fi
 fi
 
+# If CycloneDDS config exists, set CYCLONEDDS_URI unless already set
+if [ -z "${CYCLONEDDS_URI:-}" ] && [ -f "$SCRIPT_DIR/config/cyclonedds_network.xml" ]; then
+    export CYCLONEDDS_URI="file://$SCRIPT_DIR/config/cyclonedds_network.xml"
+    echo -e "${GREEN}✓${NC} Using CycloneDDS config: $CYCLONEDDS_URI"
+fi
+
 echo ""
 echo "Environment:"
 echo "  • ROS_DOMAIN_ID: $ROS_DOMAIN_ID"
 echo "  • ROBOT_IP: $ROBOT_IP"
 echo "  • RMW: $RMW_IMPLEMENTATION"
+echo "  • ROS_LOCALHOST_ONLY: ${ROS_LOCALHOST_ONLY:-}"
+echo "  • CYCLONEDDS_URI: ${CYCLONEDDS_URI:-}" 
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
