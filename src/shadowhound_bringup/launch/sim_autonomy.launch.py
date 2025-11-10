@@ -35,19 +35,16 @@ import os
 from typing import List
 
 from ament_index_python.packages import get_package_share_directory
-from launch_ros.actions import Node, PushRosNamespace, SetRemap
+from launch_ros.actions import Node
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import (
     FrontendLaunchDescriptionSource,
     PythonLaunchDescriptionSource,
 )
-from launch.substitutions import (
-    LaunchConfiguration,
-    TextSubstitution,
-)
+from launch.substitutions import LaunchConfiguration
 
 
 class SimAutonomyConfig:
@@ -73,13 +70,18 @@ class SimAutonomyConfig:
         """Get all configuration file paths"""
         shadowhound_config_dir = os.path.join(self.shadowhound_dir, "config")
 
-        # Prefer simulation-specific nav2 config
+        # Prefer namespaced nav2 config (clean unprefixed frames)
+        nav2_namespaced_config = os.path.join(
+            shadowhound_config_dir, "nav2_params_namespaced.yaml"
+        )
         nav2_sim_config = os.path.join(
             shadowhound_config_dir, "nav2_params_simulation.yaml"
         )
         nav2_default_config = os.path.join(shadowhound_config_dir, "nav2_params.yaml")
 
-        if os.path.exists(nav2_sim_config):
+        if os.path.exists(nav2_namespaced_config):
+            nav2_config = nav2_namespaced_config
+        elif os.path.exists(nav2_sim_config):
             nav2_config = nav2_sim_config
         elif os.path.exists(nav2_default_config):
             nav2_config = nav2_default_config
@@ -130,8 +132,11 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
     """
     Convert LiDAR pointcloud to laserscan for Nav2
 
-    Subscribes to: /robot0/point_cloud2_L1 (from Isaac Sim - namespaced)
-    Publishes to: /robot0/scan (namespaced, for Nav2)
+    Subscribes to: point_cloud2_L1 (namespace-relative from Isaac Sim)
+    Publishes to: scan (namespace-relative for Nav2)
+    
+    All topics are namespace-relative. Node runs under /robotN namespace,
+    so point_cloud2_L1 becomes /robotN/point_cloud2_L1 automatically.
     """
     return Node(
         package="pointcloud_to_laserscan",
@@ -140,17 +145,12 @@ def create_pointcloud_to_laserscan(config: SimAutonomyConfig) -> Node:
         namespace=config.robot_namespace,
         output="screen",
         remappings=[
-            (
-                "cloud_in",
-                ["/", config.robot_namespace, TextSubstitution(text="/point_cloud2_L1")],
-            ),
-            ("scan", "scan"),
-            ("tf", "/tf"),
-            ("tf_static", "/tf_static"),
+            ("cloud_in", "point_cloud2_L1"),  # Namespace-relative
+            ("scan", "scan"),  # Namespace-relative
         ],
         parameters=[
             {
-                "target_frame": [config.robot_namespace, TextSubstitution(text="/base_link")],
+                "target_frame": "base_link",  # Unprefixed - isolated by namespace
                 "transform_tolerance": 0.05,
                 "min_height": -0.2,
                 "max_height": 1.5,
@@ -170,13 +170,16 @@ def create_navigation_stack(
     config: SimAutonomyConfig,
 ) -> List:
     """
-    Create Nav2 and SLAM stack with proper multi-robot namespacing.
+    Create Nav2 and SLAM stack with fully namespaced architecture.
 
-    Pattern: Global TF with namespaced frames
-    - All nodes under /robot0/* namespace
-    - TF topics: GLOBAL /tf and /tf_static (forced via GroupAction + SetRemap)
-    - Frame IDs: robot0/odom, robot0/base_link (injected via RewrittenYaml)
-    - Topics: /robot0/* (scan, cmd_vel, costmaps, etc.)
+    Pattern: Namespaced TF topics with unprefixed frames
+    - All nodes under /robotN/* namespace
+    - TF topics: /robotN/tf and /robotN/tf_static (namespaced)
+    - Frame IDs: map, odom, base_link (unprefixed, isolated by namespace)
+    - Topics: /robotN/* (scan, cmd_vel, costmaps, etc.)
+    
+    NO RewrittenYaml needed - params file has unprefixed frames already.
+    Nav2's use_namespace=true handles TF topic namespacing automatically.
     """
     use_sim_time = LaunchConfiguration("use_sim_time")
     with_nav2 = LaunchConfiguration("nav2")
@@ -184,37 +187,7 @@ def create_navigation_stack(
 
     ns = config.robot_namespace
 
-    # Rewrite Nav2 params to inject namespace-specific frame IDs
-    frame_remaps = {
-        # AMCL
-        "amcl.ros__parameters.global_frame_id": [ns, TextSubstitution(text="/map")],
-        "amcl.ros__parameters.odom_frame_id": [ns, TextSubstitution(text="/odom")],
-        "amcl.ros__parameters.base_frame_id": [ns, TextSubstitution(text="/base_link")],
-        # BT Navigator
-        "bt_navigator.ros__parameters.global_frame": [ns, TextSubstitution(text="/map")],
-        "bt_navigator.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
-        # Controller Server
-        "controller_server.ros__parameters.odom_frame": [ns, TextSubstitution(text="/odom")],
-        "controller_server.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
-        # Behavior server
-        "behavior_server.ros__parameters.global_frame": [ns, TextSubstitution(text="/map")],
-        "behavior_server.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
-        # Planner Server / global costmap
-        "global_costmap.global_costmap.ros__parameters.global_frame": [ns, TextSubstitution(text="/map")],
-        "global_costmap.global_costmap.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
-        # Local costmap
-        "local_costmap.local_costmap.ros__parameters.global_frame": [ns, TextSubstitution(text="/odom")],
-        "local_costmap.local_costmap.ros__parameters.robot_base_frame": [ns, TextSubstitution(text="/base_link")],
-    }
-
-    params = RewrittenYaml(
-        source_file=config.config_paths["nav2"],
-        root_key=None,
-        param_rewrites=frame_remaps,
-        convert_types=True,
-    )
-
-    # Nav2 launch (our minimal launcher for precise param control)
+    # Nav2 launch with namespace support (no RewrittenYaml!)
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -226,25 +199,16 @@ def create_navigation_stack(
             ]
         ),
         launch_arguments={
-            "namespace": "",
+            "namespace": ns,  # Set namespace
+            "use_namespace": "true",  # Enable namespaced TF topics
             "params_file": config.config_paths["nav2"],
             "use_sim_time": use_sim_time,
             "autostart": "True",
         }.items(),
-    )
-
-    # Nav2 wrapped with TF remaps
-    nav2_group = GroupAction(
-        actions=[
-            PushRosNamespace(ns),
-            SetRemap("tf", "/tf"),
-            SetRemap("tf_static", "/tf_static"),
-            nav2_launch,
-        ],
         condition=IfCondition(with_nav2),
     )
 
-    # SLAM - with global TF remapping
+    # SLAM - namespaced (no global TF remapping)
     slam_node = Node(
         condition=IfCondition(with_slam),
         package="slam_toolbox",
@@ -256,10 +220,7 @@ def create_navigation_stack(
             config.config_paths["slam"],
             {"use_sim_time": use_sim_time},
         ],
-        remappings=[
-            ("tf", "/tf"),
-            ("tf_static", "/tf_static"),
-        ],
+        # NO TF remaps - use namespaced TF
     )
 
     slam_lifecycle = Node(
@@ -276,7 +237,7 @@ def create_navigation_stack(
         ],
     )
 
-    return [nav2_group, slam_node, slam_lifecycle]
+    return [nav2_launch, slam_node, slam_lifecycle]
 
 
 def create_visualization_nodes(config: SimAutonomyConfig) -> List:
@@ -334,23 +295,28 @@ def generate_launch_description():
     viz_nodes = create_visualization_nodes(config)
 
     print("\n" + "=" * 60)
-    print("🚀 SIMULATION AUTONOMY STACK")
+    print("🚀 SIMULATION AUTONOMY STACK - NAMESPACED TF")
     print("=" * 60)
     print("Prerequisites:")
-    print("  1. Isaac Sim running on Tower (publishing /robot0/* topics)")
+    print("  1. Isaac Sim running on Tower (publishing /robotN/* topics)")
     print("  2. Network ROS2 configured:")
     print("     - ROS_DOMAIN_ID=0")
     print("     - ROS_LOCALHOST_ONLY=0")
     print("     - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp")
+    print("\nArchitecture:")
+    print("  📡 TF Topics: /robotN/tf and /robotN/tf_static (namespaced)")
+    print("  🏷️  Frame IDs: map, odom, base_link (unprefixed)")
+    print("  🎯 Isolation: Each robot in separate namespace")
     print("\nLaunching:")
-    print("  ✅ Pointcloud to laserscan converter")
-    print("  ✅ Nav2 (if enabled)")
-    print("  ✅ SLAM Toolbox (if enabled)")
+    print("  ✅ Pointcloud to laserscan converter (namespaced)")
+    print("  ✅ Nav2 with use_namespace=true (if enabled)")
+    print("  ✅ SLAM Toolbox namespaced (if enabled)")
     print("  ✅ Foxglove Bridge (if enabled)")
     print("  ✅ RViz2 (if enabled)")
     print("\nNOT Launching:")
     print("  ❌ go2_driver_node (Isaac Sim replaces this!)")
     print("  ❌ robot_state_publisher (Tower provides TF frames)")
+    print("  ❌ RewrittenYaml (removed for simplicity)")
     print("=" * 60 + "\n")
 
     # Combine all elements (filter out None values)
