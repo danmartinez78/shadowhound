@@ -352,17 +352,27 @@ ros2 run tf2_tools view_frames
    - **CRITICAL**: Frame ID unprefixing when `tf_namespace` is set
 3. ✅ Create custom launch script: `~/go2_omniverse/run_sim_shadowhound.sh`
 
-### After PR #6 Merges
-1. Test sim launch on Tower with `--tf_namespace robot0`
-2. Validate frame IDs are unprefixed: `ros2 topic echo /robot0/tf --once`
-3. Launch ShadowHound autonomy stack on laptop
-4. Run runtime validation checklist
-5. Document any additional config tweaks needed
+### ✅ PR #6 Status: READY TO TEST
 
-### If Frame IDs Remain Prefixed (Fallback)
-1. Create `nav2_params_namespaced_prefixed.yaml` with prefixed frame IDs
-2. Update `sim_autonomy.launch.py` config selection to use prefixed version for sim mode
-3. Document this as temporary workaround until sim alignment
+**Copilot has fixed all issues**:
+- ✅ Namespaced TF publishers (`/robot0/tf`)
+- ✅ Unprefixed frame IDs when using `--tf_namespace` (`odom → base_link`)
+- ✅ Backward compatible (prefixed frames on global `/tf` without flag)
+- ✅ Documentation updated (README + CLI help)
+
+**Implementation verified**:
+- `_get_frame_id()` helper returns unprefixed frames when `tf_namespaces[robot_num]` is set
+- Help text correctly documents behavior (no `/tf_static` mention)
+- README has clear usage examples
+
+### Testing Plan
+1. Checkout PR branch on Tower: `git checkout copilot/add-per-robot-namespaced-tf-support`
+2. Launch sim: `python main.py --robot_amount 1 --robot go2 --robot_namespace robot0 --tf_namespace robot0 --device cuda`
+3. Verify TF topic: `ros2 topic list | grep /robot0/tf`
+4. **Critical test**: `ros2 topic echo /robot0/tf --once` → frames should be `odom` and `base_link` (unprefixed)
+5. Launch ShadowHound stack on laptop: `./start.sh --mode sim`
+6. Verify Nav2 nodes start without TF errors
+7. Check costmap activation
 
 ---
 
